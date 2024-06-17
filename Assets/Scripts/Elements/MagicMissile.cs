@@ -28,7 +28,7 @@ public class MagicMissile : Element {
         if (!player.IsGrounded()) return;
 
         if (isBarrierDeployed)
-            player.DeployBarrier();
+            player.DeployBarrier(maxBarrierDuration);
         else
             player.RetractBarrier();
 

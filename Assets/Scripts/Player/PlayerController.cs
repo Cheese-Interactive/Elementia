@@ -35,9 +35,9 @@ public class PlayerController : MonoBehaviour {
     [Header("Barrier")]
     [SerializeField] private SpriteRenderer barrier;
     private float barrierAlpha;
-    private bool isBarrierDeployed;
     private Coroutine barrierCoroutine;
     private Tweener barrierTweener;
+    private bool retracted; // for barrier max duration
 
     [Header("Ground Check")]
     [SerializeField] private float groundCheckRadius;
@@ -135,42 +135,26 @@ public class PlayerController : MonoBehaviour {
 
     #region Barrier
 
-    public void DeployBarrier() {
+    public void DeployBarrier(float duration) {
 
-        if (barrierCoroutine != null) {
+        if (barrierCoroutine != null) StopCoroutine(barrierCoroutine); // stop barrier coroutine if it's running
 
-            StopCoroutine(barrierCoroutine); // stop barrier coroutine if it's running
-            isBarrierDeployed = false; // set barrier to not deployed
-
-        }
-
-        if (barrierTweener != null && barrierTweener.IsActive()) {
-
-            barrierTweener.Kill(); // kill barrier tweener if it's active
-            isBarrierDeployed = false; // set barrier to not deployed
-
-        }
+        if (barrierTweener != null && barrierTweener.IsActive()) barrierTweener.Kill(); // kill barrier tweener if it's active
 
         barrierCoroutine = StartCoroutine(HandleDeployBarrier());
+
+        retracted = false; // barrier is not retracted yet (for max duration)
+        StartCoroutine(HandleBarrierDuration(duration));
 
     }
 
     public void RetractBarrier() {
 
-        if (barrierCoroutine != null) {
+        if (barrierCoroutine != null) StopCoroutine(barrierCoroutine); // stop barrier coroutine if it's running
 
-            StopCoroutine(barrierCoroutine); // stop barrier coroutine if it's running
-            isBarrierDeployed = true; // set barrier to deployed
+        if (barrierTweener != null && barrierTweener.IsActive()) barrierTweener.Kill(); // kill barrier tweener if it's active
 
-        }
-
-        if (barrierTweener != null && barrierTweener.IsActive()) {
-
-            barrierTweener.Kill(); // kill barrier tweener if it's active
-            isBarrierDeployed = true; // set barrier to deployed
-
-        }
-
+        retracted = true; // barrier is retracted (for max duration)
         barrierCoroutine = StartCoroutine(HandleRetractBarrier());
 
         /* the following is done without a fade animation */
@@ -192,12 +176,8 @@ public class PlayerController : MonoBehaviour {
         anim.SetBool("isBarrierDeployed", true); // play barrier deploy animation
         yield return null; // wait for animation to start
 
-        barrierTweener = barrier.DOFade(barrierAlpha, anim.GetCurrentAnimatorStateInfo(0).length).SetEase(Ease.InBounce).OnComplete(() => {
+        barrierTweener = barrier.DOFade(barrierAlpha, anim.GetCurrentAnimatorStateInfo(0).length).SetEase(Ease.InBounce).OnComplete(() => barrierCoroutine = null); // fade barrier in based on animation length
 
-            isBarrierDeployed = true; // flip bool after animation is done
-            barrierCoroutine = null;
-
-        }); // fade barrier in based on animation length
     }
 
     private IEnumerator HandleRetractBarrier() {
@@ -209,11 +189,32 @@ public class PlayerController : MonoBehaviour {
         barrierTweener = barrier.DOFade(0f, anim.GetCurrentAnimatorStateInfo(0).length).SetEase(Ease.OutBounce).OnComplete(() => {
 
             barrier.gameObject.SetActive(false); // hide barrier
-            isBarrierDeployed = false;
             EnableAllMechanics(); // enable all mechanics after barrier is retracted
             barrierCoroutine = null;
 
         }); // fade barrier in based on animation length
+    }
+
+    private IEnumerator HandleBarrierDuration(float duration) {
+
+        float timer = 0f;
+
+        while (timer < duration) {
+
+            if (retracted) { // barrier is retracted before max duration
+
+                retracted = false; // reset retracted status
+                yield break;
+
+            }
+
+            timer += Time.deltaTime;
+            yield return null;
+
+        }
+
+        RetractBarrier();
+
     }
 
     #endregion
