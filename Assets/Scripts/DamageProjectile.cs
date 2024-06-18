@@ -27,8 +27,13 @@ public class DamageProjectile : MonoBehaviour {
         if (collision.collider.gameObject.TryGetComponent<SpellCollider>(out SpellCollider collider))
             collider.GetEntityController().TakeDamage(damage);
 
-        Instantiate(impactEffectPrefab, transform.position, transform.rotation);
         Destroy(gameObject);
+
+    }
+
+    private void OnDestroy() {
+
+        Instantiate(impactEffectPrefab, transform.position, transform.rotation);
 
     }
 }

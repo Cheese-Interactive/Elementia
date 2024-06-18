@@ -365,6 +365,7 @@ MonoBehaviour:
   leftFoot: {fileID: 744130715}
   rightFoot: {fileID: 711429365}
   maxHealth: 50
+  deathExplosionPrefab: {fileID: 1714456475073422960, guid: ddfcc125aaee66f4f943641ab827e689, type: 3}
   waypoints:
   - {fileID: 978924601}
   - {fileID: 1250513654}
@@ -378,7 +379,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 34265422}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: c39f6cd4a2bc21a47985af3ab64a59b5, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -1173,6 +1174,7 @@ MonoBehaviour:
   leftFoot: {fileID: 1119576955}
   rightFoot: {fileID: 1792642953}
   maxHealth: 100
+  deathExplosionPrefab: {fileID: 1714456475073422960, guid: ddfcc125aaee66f4f943641ab827e689, type: 3}
   moveSpeed: 3
   jumpForce: 8
   castPoint: {fileID: 1451105437}
@@ -1220,6 +1222,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 958a324da1cbf49428c90fc347cf29e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPrimaryAuto: 1
+  primaryCooldown: 0.25
+  isPrimaryToggle: 0
+  isSecondaryAuto: 0
+  secondaryCooldown: 0
+  isSecondaryToggle: 1
   projectilePrefab: {fileID: -8627497848772355392, guid: 4f0f925c82a8e4140bbb0a6443946f8b, type: 3}
   projectileDamage: 10
   projectileSpeed: 8
@@ -1234,7 +1242,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 831374800}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: c39f6cd4a2bc21a47985af3ab64a59b5, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -1418,7 +1426,7 @@ Transform:
   m_GameObject: {fileID: 1451105436}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.34375, z: 0}
+  m_LocalPosition: {x: 0, y: 0.28125, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1640,7 +1648,7 @@ PolygonCollider2D:
   m_GameObject: {fileID: 1710092315}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: c39f6cd4a2bc21a47985af3ab64a59b5, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -6714,7 +6722,7 @@ PolygonCollider2D:
   m_GameObject: {fileID: 1897691487}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: c39f6cd4a2bc21a47985af3ab64a59b5, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0

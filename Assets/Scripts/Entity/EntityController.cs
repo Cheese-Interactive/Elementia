@@ -16,8 +16,9 @@ public abstract class EntityController : MonoBehaviour {
     protected bool isFacingRight;
 
     [Header("Health")]
-    [SerializeField] protected float maxHealth;
-    protected float currHealth;
+    [SerializeField] private float maxHealth;
+    [SerializeField] private ParticleSystem deathExplosionPrefab;
+    private float currHealth;
 
     protected void Awake() {
 
@@ -43,8 +44,8 @@ public abstract class EntityController : MonoBehaviour {
 
     public void Die() {
 
-        // TODO: death stuff
         Destroy(gameObject);
+        Instantiate(deathExplosionPrefab, transform.position, transform.rotation);
 
     }
 

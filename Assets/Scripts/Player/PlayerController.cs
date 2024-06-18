@@ -17,6 +17,9 @@ public class PlayerController : EntityController {
     [Header("Jumping")]
     [SerializeField] private float jumpForce;
 
+    [Header("Elements")]
+    private Element element; // make sure to update this variable when the element changes
+
     [Header("Spells")]
     [SerializeField] private Transform castPoint;
 
@@ -48,6 +51,8 @@ public class PlayerController : EntityController {
 
     private void Start() {
 
+        element = GetComponent<Element>();
+
         barrierAlpha = barrier.color.a;
         barrier.gameObject.SetActive(false); // barrier is not deployed by default
 
@@ -68,15 +73,23 @@ public class PlayerController : EntityController {
         CheckFlip();
 
         /* SPELLS */
-        if (Input.GetMouseButtonDown(0) && IsMechanicEnabled(MechanicType.PrimaryAction)) {
+        if ((((element.IsPrimaryAuto() && Input.GetMouseButton(0)) // primary action is auto
+            || (!element.IsPrimaryAuto() && Input.GetMouseButtonDown(0))) // primary action is not auto
+            || (element.IsPrimaryToggle() && (Input.GetMouseButtonDown(0) || Input.GetMouseButtonUp(0)))) // primary action is toggle
+            && IsMechanicEnabled(MechanicType.PrimaryAction)) { // checks if mechanic is enabled
 
             // primary action
-            GetComponent<Element>().PrimaryAction();
+            // GetComponent<Element>().PrimaryAction(); <- use if updating element variable is inconvenient
+            element.PrimaryAction();
 
-        } else if ((Input.GetMouseButtonDown(1) || Input.GetMouseButtonUp(1)) && IsMechanicEnabled(MechanicType.SecondaryAction)) {
+        } else if ((((element.IsSecondaryAuto() && Input.GetMouseButton(1)) // secondary action is auto
+            || (!element.IsSecondaryAuto() && Input.GetMouseButtonDown(1))) // secondary action is not auto
+            || (element.IsSecondaryToggle() && (Input.GetMouseButtonDown(1) || Input.GetMouseButtonUp(1)))) // secondary action is toggle
+            && IsMechanicEnabled(MechanicType.SecondaryAction)) { // checks if mechanic is enabled
 
             // secondary action
-            GetComponent<Element>().SecondaryAction();
+            // GetComponent<Element>().SecondaryAction(); <- use if updating element variable is inconvenient
+            element.SecondaryAction();
 
         }
     }
