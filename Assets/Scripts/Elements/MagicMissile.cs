@@ -17,7 +17,7 @@ public class MagicMissile : Element {
     public override void PrimaryAction() {
 
         DamageProjectile projectile = Instantiate(projectilePrefab, player.GetCastPoint().position, Quaternion.identity);
-        projectile.Initialize(projectileDamage, projectileSpeed, projectileDuration, player.IsFacingRight());
+        projectile.Initialize(player.GetSpellCollider().GetComponent<Collider2D>(), projectileDamage, projectileSpeed, projectileDuration, player.IsFacingRight());
 
     }
 

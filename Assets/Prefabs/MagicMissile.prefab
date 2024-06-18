@@ -10,10 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 6480503710787827160}
   - component: {fileID: 707466406057060731}
+  - component: {fileID: 8257704177478986382}
   - component: {fileID: 1855923281916203854}
   - component: {fileID: -8627497848772355392}
   - component: {fileID: 918631311289758517}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: MagicMissile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -87,6 +88,41 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!58 &8257704177478986382
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7721906144373790349}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.08
 --- !u!50 &1855923281916203854
 Rigidbody2D:
   serializedVersion: 4
@@ -126,6 +162,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7415416db28b37b4eb9d1dd0aade5b68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  impactEffectPrefab: {fileID: 1003138975304158864, guid: a6541fb7295f6fb47908d14613bcea29, type: 3}
 --- !u!96 &918631311289758517
 TrailRenderer:
   serializedVersion: 3

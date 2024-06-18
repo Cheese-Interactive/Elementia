@@ -5,29 +5,17 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour {
-
-    [Header("References")]
-    [SerializeField] private Transform leftFoot;
-    [SerializeField] private Transform rightFoot;
-    private Rigidbody2D rb;
-    private Animator anim;
+public class PlayerController : EntityController {
 
     [Header("Mechanics")]
     private Dictionary<MechanicType, bool> mechanicStatuses;
 
     [Header("Movement")]
-    [SerializeField] private float walkSpeed;
-    [SerializeField] private float sprintSpeed;
+    [SerializeField] private float moveSpeed;
     private float horizontalInput;
-    private bool isFacingRight;
 
     [Header("Jumping")]
     [SerializeField] private float jumpForce;
-
-    [Header("Health")]
-    [SerializeField] private float maxHealth;
-    private float currHealth;
 
     [Header("Spells")]
     [SerializeField] private Transform castPoint;
@@ -40,11 +28,13 @@ public class PlayerController : MonoBehaviour {
     private bool retracted; // for barrier max duration
 
     [Header("Ground Check")]
-    [SerializeField] private float groundCheckRadius;
+    [SerializeField] private float groundCheckDistance;
     [SerializeField] private LayerMask environmentMask;
     private bool isGrounded;
 
-    private void Awake() {
+    private new void Awake() {
+
+        base.Awake(); // call base awake method
 
         // set up mechanic statuses early so scripts can change them earlier too
         mechanicStatuses = new Dictionary<MechanicType, bool>();
@@ -58,13 +48,6 @@ public class PlayerController : MonoBehaviour {
 
     private void Start() {
 
-        rb = GetComponent<Rigidbody2D>();
-        anim = GetComponent<Animator>();
-
-        currHealth = maxHealth; // set current health to max health
-
-        isFacingRight = true; // player faces right by default
-
         barrierAlpha = barrier.color.a;
         barrier.gameObject.SetActive(false); // barrier is not deployed by default
 
@@ -73,7 +56,7 @@ public class PlayerController : MonoBehaviour {
     private void Update() {
 
         /* GROUND CHECK */
-        isGrounded = Physics2D.OverlapCircle(leftFoot.position, groundCheckRadius, environmentMask) || Physics2D.OverlapCircle(rightFoot.position, groundCheckRadius, environmentMask); // check both feet for ground check
+        isGrounded = Physics2D.Raycast(leftFoot.position, Vector2.down, groundCheckDistance, environmentMask) | Physics2D.Raycast(rightFoot.position, Vector2.down, groundCheckDistance, environmentMask); // check both feet for ground check
 
         /* MOVEMENT */
         horizontalInput = Input.GetAxisRaw("Horizontal");
@@ -102,7 +85,7 @@ public class PlayerController : MonoBehaviour {
 
         if (IsMechanicEnabled(MechanicType.Movement)) {
 
-            rb.velocity = new Vector2(horizontalInput * walkSpeed, rb.velocity.y); // adjust input based on rotation (if wand is out, player walks, else sprint)
+            rb.velocity = new Vector2(horizontalInput * moveSpeed, rb.velocity.y); // adjust input based on rotation (if wand is out, player walks, else sprint)
             anim.SetBool("isMoving", horizontalInput != 0f && isGrounded); // player is moving on ground
 
         } else {
@@ -133,7 +116,7 @@ public class PlayerController : MonoBehaviour {
 
     }
 
-    #region Barrier
+    #region BARRIER
 
     public void DeployBarrier(float duration) {
 
@@ -214,25 +197,6 @@ public class PlayerController : MonoBehaviour {
         }
 
         RetractBarrier();
-
-    }
-
-    #endregion
-
-    #region HEALTH
-
-    public void TakeDamage(float damage) {
-
-        currHealth -= damage;
-
-        if (currHealth <= 0f)
-            Die();
-
-    }
-
-    public void Die() {
-
-        // TODO: death stuff
 
     }
 
