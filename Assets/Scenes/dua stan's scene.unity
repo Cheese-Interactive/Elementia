@@ -145,7 +145,6 @@ GameObject:
   - component: {fileID: 224917271}
   - component: {fileID: 224917270}
   - component: {fileID: 224917269}
-  - component: {fileID: 224917268}
   - component: {fileID: 224917267}
   - component: {fileID: 224917266}
   - component: {fileID: 224917265}
@@ -180,7 +179,8 @@ MonoBehaviour:
   BlockingMovementStates: 
   BlockingConditionStates: 
   BlockingWeaponStates: 
-  InitialWeapon: {fileID: 0}
+  InitialWeapon: {fileID: 4237984674334015922, guid: 1146d9a50fe8cfb4491f14c86a6845dc,
+    type: 3}
   CanPickupWeapons: 1
   WeaponAttachment: {fileID: 0}
   ForceWeaponScaleResetOnEquip: 0
@@ -381,37 +381,13 @@ MonoBehaviour:
   MovingPlatformsJumpCollisionOffDuration: 0.05
   ParticleEmitter: {fileID: 0}
   JetpackForce: 2.5
-  JetpackUnlimited: 0
+  JetpackUnlimited: 1
   JetpackFuelDuration: 5
   JetpackRefuelCooldown: 1
   RefuelSpeed: 0.5
   MinimumFuelRequirement: 0.2
   JetpackRefueledSfx: {fileID: 0}
   JetpackFuelDurationLeft: 0
---- !u!114 &224917268
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 224917258}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1fd71e945bfcd4897b3a95607989c7d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  AbilityStartFeedbacks: {fileID: 0}
-  AbilityStopFeedbacks: {fileID: 0}
-  AbilityPermitted: 1
-  BlockingMovementStates: 
-  BlockingConditionStates: 
-  BlockingWeaponStates: 
-  RunSpeed: 16
-  StopRunAtLowSpeed: 0
-  RunLowSpeedThreshold: 1
-  ReadInput: 1
-  AutoRun: 0
-  AutoRunThreshold: 0.6
 --- !u!114 &224917269
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -431,12 +407,12 @@ MonoBehaviour:
   BlockingConditionStates: 
   BlockingWeaponStates: 
   NumberOfJumps: 2
-  JumpHeight: 3.025
+  JumpHeight: 2
   JumpRestrictions: 2
   ResetCameraOffsetOnJump: 0
   CanJumpDownOneWayPlatforms: 1
   FixedAerialJumpCount: 0
-  JumpIsProportionalToThePressTime: 1
+  JumpIsProportionalToThePressTime: 0
   JumpMinimumAirTime: 0.1
   JumpReleaseForceFactor: 2
   CoyoteTime: 0
@@ -620,8 +596,8 @@ MonoBehaviour:
   CurrentHealth: 0
   TemporarilyInvulnerable: 0
   PostDamageInvulnerable: 0
-  InitialHealth: 10
-  MaximumHealth: 10
+  InitialHealth: 100
+  MaximumHealth: 100
   Invulnerable: 0
   ImmuneToDamage: 0
   DamageFeedbacks: {fileID: 0}
@@ -1822,7 +1798,7 @@ MonoBehaviour:
   AutomaticallyBindAnimator: 1
   AmmoDisplayID: 0
   ContinuousPress: 0
-  GettingHitInterruptsAttack: 0
+  GettingHitInterruptsAttack: 1
   CanShootFromLadders: 0
   FaceWeaponDirection: 0
   InvertHorizontalAimWhenWallclinging: 0
@@ -2325,7 +2301,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2722c8e06c7fe46bbbd264ab655e2c4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShootDistance: 10
+  ShootDistance: 5
   RaycastOriginOffset: {x: 0, y: 0}
   TargetLayerMask:
     serializedVersion: 2
