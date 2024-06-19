@@ -12,10 +12,10 @@ GameObject:
   - component: {fileID: 707466406057060731}
   - component: {fileID: 8257704177478986382}
   - component: {fileID: 1855923281916203854}
-  - component: {fileID: -8627497848772355392}
+  - component: {fileID: 9170074295773249695}
   - component: {fileID: 918631311289758517}
   m_Layer: 12
-  m_Name: MagicMissile
+  m_Name: Ice
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -76,9 +76,9 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 653303c0a92a30549bb1784d5d5c9e56, type: 3}
-  m_Color: {r: 0.627451, g: 0, b: 1, a: 1}
+  m_SortingOrder: 1
+  m_Sprite: {fileID: 21300000, guid: feb792d5698811f4aabe85639cadd558, type: 3}
+  m_Color: {r: 0.5801887, g: 0.98847574, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -150,7 +150,7 @@ Rigidbody2D:
   m_SleepingMode: 0
   m_CollisionDetection: 1
   m_Constraints: 0
---- !u!114 &-8627497848772355392
+--- !u!114 &9170074295773249695
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -159,10 +159,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7721906144373790349}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7415416db28b37b4eb9d1dd0aade5b68, type: 3}
+  m_Script: {fileID: 11500000, guid: b83704c43e010ca42b1d68fe0ca331a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  impactEffectPrefab: {fileID: 1003138975304158864, guid: a6541fb7295f6fb47908d14613bcea29, type: 3}
+  impactEffectPrefab: {fileID: 1003138975304158864, guid: eff10830474765849bb6b572567c9021, type: 3}
 --- !u!96 &918631311289758517
 TrailRenderer:
   serializedVersion: 3
@@ -227,8 +227,8 @@ TrailRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 0.62895584, g: 0, b: 1, a: 1}
-      key1: {r: 0.28535873, g: 0, b: 0.41509432, a: 1}
+      key0: {r: 0.5803922, g: 0.9882353, b: 1, a: 1}
+      key1: {r: 0, g: 0.44253862, b: 0.4528302, a: 1}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}

@@ -6,7 +6,6 @@ public abstract class EntityController : MonoBehaviour {
 
     [Header("References")]
     [SerializeField] protected SpellCollider spellCollider;
-    [SerializeField] protected GameManager gameManager;
     [SerializeField] protected Transform leftFoot;
     [SerializeField] protected Transform rightFoot;
     protected Rigidbody2D rb;

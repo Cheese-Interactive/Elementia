@@ -361,7 +361,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellCollider: {fileID: 1897691490}
-  gameManager: {fileID: 11400000, guid: ed51b242712dcb0498827dfe037493dd, type: 2}
   leftFoot: {fileID: 744130715}
   rightFoot: {fileID: 711429365}
   maxHealth: 50
@@ -1056,6 +1055,8 @@ GameObject:
   - component: {fileID: 831374804}
   - component: {fileID: 831374803}
   - component: {fileID: 831374807}
+  - component: {fileID: 831374809}
+  - component: {fileID: 831374810}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -1170,7 +1171,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellCollider: {fileID: 1710092318}
-  gameManager: {fileID: 11400000, guid: ed51b242712dcb0498827dfe037493dd, type: 2}
   leftFoot: {fileID: 1119576955}
   rightFoot: {fileID: 1792642953}
   maxHealth: 100
@@ -1217,7 +1217,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 831374800}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 958a324da1cbf49428c90fc347cf29e5, type: 3}
   m_Name: 
@@ -1231,7 +1231,7 @@ MonoBehaviour:
   projectilePrefab: {fileID: -8627497848772355392, guid: 4f0f925c82a8e4140bbb0a6443946f8b, type: 3}
   projectileDamage: 10
   projectileSpeed: 8
-  projectileDuration: 1
+  projectileLifetime: 1
   maxBarrierDuration: 5
 --- !u!61 &831374808
 BoxCollider2D:
@@ -1278,6 +1278,54 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.8125, y: 0.9375}
   m_EdgeRadius: 0
+--- !u!114 &831374809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 831374800}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7224facf08913844c94a7d403dd8ad8d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPrimaryAuto: 1
+  primaryCooldown: 1
+  isPrimaryToggle: 0
+  isSecondaryAuto: 0
+  secondaryCooldown: 0
+  isSecondaryToggle: 0
+  projectilePrefab: {fileID: 9170074295773249695, guid: abcc663d79bffca4fadccacca842a1a3, type: 3}
+  projectileDamage: 3
+  projectileSpeed: 5
+  projectileLifetime: 1
+  iceBlastRadius: 5
+  waterMask:
+    serializedVersion: 2
+    m_Bits: 16
+--- !u!114 &831374810
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 831374800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae167589ce8e1c647bb4c11e769670fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPrimaryAuto: 0
+  primaryCooldown: 1
+  isPrimaryToggle: 0
+  isSecondaryAuto: 0
+  secondaryCooldown: 0
+  isSecondaryToggle: 0
+  projectilePrefab: {fileID: 9170074295773249695, guid: eef70615a7fa1eb4ca59cdd31601fe4b, type: 3}
+  projectileDamage: 5
+  projectileSpeed: 10
+  projectileLifetime: 1
 --- !u!1 &978924599
 GameObject:
   m_ObjectHideFlags: 0

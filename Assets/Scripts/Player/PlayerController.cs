@@ -54,7 +54,9 @@ public class PlayerController : EntityController {
 
     private void Start() {
 
-        element = GetComponent<Element>();
+        // set element to active element
+        foreach (Element element in GetComponents<Element>())
+            if (element.enabled) this.element = element;
 
         barrierAlpha = barrier.color.a;
         barrier.gameObject.SetActive(false); // barrier is not deployed by default
@@ -86,11 +88,10 @@ public class PlayerController : EntityController {
             // GetComponent<Element>().PrimaryAction(); <- use if updating element variable is inconvenient
             element.PrimaryAction();
 
-        }
-        else if ((((element.IsSecondaryAuto() && Input.GetMouseButton(1)) // secondary action is auto
-            || (!element.IsSecondaryAuto() && Input.GetMouseButtonDown(1))) // secondary action is not auto
-            || (element.IsSecondaryToggle() && (Input.GetMouseButtonDown(1) || Input.GetMouseButtonUp(1)))) // secondary action is toggle
-            && IsMechanicEnabled(MechanicType.SecondaryAction)) { // checks if mechanic is enabled
+        } else if ((((element.IsSecondaryAuto() && Input.GetMouseButton(1)) // secondary action is auto
+              || (!element.IsSecondaryAuto() && Input.GetMouseButtonDown(1))) // secondary action is not auto
+              || (element.IsSecondaryToggle() && (Input.GetMouseButtonDown(1) || Input.GetMouseButtonUp(1)))) // secondary action is toggle
+              && IsMechanicEnabled(MechanicType.SecondaryAction)) { // checks if mechanic is enabled
 
             // secondary action
             // GetComponent<Element>().SecondaryAction(); <- use if updating element variable is inconvenient
@@ -106,8 +107,7 @@ public class PlayerController : EntityController {
             rb.velocity = new Vector2(horizontalInput * moveSpeed, rb.velocity.y); // adjust input based on rotation (if wand is out, player walks, else sprint)
             anim.SetBool("isMoving", horizontalInput != 0f && isGrounded); // player is moving on ground
 
-        }
-        else {
+        } else {
 
             rb.velocity = new Vector2(0f, rb.velocity.y); // stop player horizontal movement
             anim.SetBool("isMoving", false); // player is not moving
@@ -119,7 +119,9 @@ public class PlayerController : EntityController {
 
         if (!IsMechanicEnabled(MechanicType.Movement)) return; // movement mechanic is disabled
 
-        if (isFacingRight && horizontalInput < 0f || !isFacingRight && horizontalInput > 0f) {
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition); // get mouse position in world space
+
+        if ((isFacingRight && mousePos.x < transform.position.x) || (!isFacingRight && mousePos.x >= transform.position.x)) {
 
             transform.Rotate(0f, 180f, 0f);
             isFacingRight = !isFacingRight;
@@ -136,7 +138,7 @@ public class PlayerController : EntityController {
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
-        print("hi");
+
         if (other.gameObject.GetComponent<CameraZone>())
             camera.ChangeCamState(other.gameObject.GetComponent<CameraZone>());
 
@@ -150,6 +152,7 @@ public class PlayerController : EntityController {
 
         if (barrierTweener != null && barrierTweener.IsActive()) barrierTweener.Kill(); // kill barrier tweener if it's active
 
+        spellCollider.gameObject.SetActive(false); // hide spell collider while barrier is deployed (so player can't get hit)
         barrierCoroutine = StartCoroutine(HandleDeployBarrier());
 
         retracted = false; // barrier is not retracted yet (for max duration)
@@ -197,6 +200,7 @@ public class PlayerController : EntityController {
 
         barrierTweener = barrier.DOFade(0f, anim.GetCurrentAnimatorStateInfo(0).length).SetEase(Ease.OutBounce).OnComplete(() => {
 
+            spellCollider.gameObject.SetActive(true); // show spell collider once barrier is gone
             barrier.gameObject.SetActive(false); // hide barrier
             EnableAllMechanics(); // enable all mechanics after barrier is retracted
             barrierCoroutine = null;
