@@ -1,27 +1,39 @@
 using DG.Tweening;
+using MoreMountains.CorgiEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class PlayerController : EntityController {
+public class PlayerController : MonoBehaviour {
+
+    [Header("References")]
+    private Animator anim;
 
     [Header("Mechanics")]
     private Dictionary<MechanicType, bool> mechanicStatuses;
-
-    [Header("Movement")]
-    [SerializeField] private float moveSpeed;
-    private float horizontalInput;
-
-    [Header("Jumping")]
-    [SerializeField] private float jumpForce;
+    private CorgiController corgiController;
+    private Health health;
+    private CharacterHorizontalMovement charMovement;
+    private CharacterCrouch charCrouch;
+    private CharacterDash charDash;
+    private CharacterDive charDive;
+    private CharacterDangling charDangling;
+    private CharacterJump charJump;
+    private CharacterJetpack charJetpack;
+    private CharacterLookUp charLookUp;
+    private CharacterGrip charGrip;
+    private CharacterWallClinging charWallCling;
+    private CharacterWalljump charWallJump;
+    private CharacterLadder charLadder;
+    private CharacterButtonActivation charButton;
+    private CharacterHandleWeapon charWeapon;
+    private WeaponAim weaponAim;
+    private WeaponRest weaponRest;
 
     [Header("Elements")]
-    private Element element; // make sure to update this variable when the element changes
-
-    [Header("Spells")]
-    [SerializeField] private Transform castPoint;
+    private SecondaryAction secondaryAction; // make sure to update this variable when the element changes
 
     [Header("Barrier")]
     [SerializeField] private SpriteRenderer barrier;
@@ -30,17 +42,7 @@ public class PlayerController : EntityController {
     private Tweener barrierTweener;
     private bool retracted; // for barrier max duration
 
-    [Header("Ground Check")]
-    [SerializeField] private float groundCheckDistance;
-    [SerializeField] private LayerMask environmentMask;
-    private bool isGrounded;
-
-    [Header("Camera")]
-    new private CameraController camera;
-
-    private new void Awake() {
-
-        base.Awake(); // call base awake method
+    private void Awake() {
 
         // set up mechanic statuses early so scripts can change them earlier too
         mechanicStatuses = new Dictionary<MechanicType, bool>();
@@ -54,94 +56,45 @@ public class PlayerController : EntityController {
 
     private void Start() {
 
+        anim = GetComponent<Animator>();
+
+        corgiController = GetComponent<CorgiController>();
+        health = GetComponent<Health>();
+        charMovement = GetComponent<CharacterHorizontalMovement>();
+        charCrouch = GetComponent<CharacterCrouch>();
+        charDash = GetComponent<CharacterDash>();
+        charDive = GetComponent<CharacterDive>();
+        charDangling = GetComponent<CharacterDangling>();
+        charJump = GetComponent<CharacterJump>();
+        charJetpack = GetComponent<CharacterJetpack>();
+        charLookUp = GetComponent<CharacterLookUp>();
+        charGrip = GetComponent<CharacterGrip>();
+        charWallCling = GetComponent<CharacterWallClinging>();
+        charWallJump = GetComponent<CharacterWalljump>();
+        charLadder = GetComponent<CharacterLadder>();
+        charButton = GetComponent<CharacterButtonActivation>();
+        charWeapon = GetComponent<CharacterHandleWeapon>();
+
         // set element to active element
-        foreach (Element element in GetComponents<Element>())
-            if (element.enabled) this.element = element;
+        foreach (SecondaryAction action in GetComponents<SecondaryAction>())
+            if (action.enabled) this.secondaryAction = action;
 
         barrierAlpha = barrier.color.a;
         barrier.gameObject.SetActive(false); // barrier is not deployed by default
-
-        camera = FindObjectOfType<CameraController>();
     }
 
     private void Update() {
 
-        /* GROUND CHECK */
-        isGrounded = Physics2D.Raycast(leftFoot.position, Vector2.down, groundCheckDistance, environmentMask) | Physics2D.Raycast(rightFoot.position, Vector2.down, groundCheckDistance, environmentMask); // check both feet for ground check
-
-        /* MOVEMENT */
-        horizontalInput = Input.GetAxisRaw("Horizontal");
-
-        if (Input.GetKey(KeyCode.Space) && isGrounded)
-            Jump();
-
-        /* FLIPPING */
-        CheckFlip();
-
-        /* SPELLS */
-        if ((((element.IsPrimaryAuto() && Input.GetMouseButton(0)) // primary action is auto
-            || (!element.IsPrimaryAuto() && Input.GetMouseButtonDown(0))) // primary action is not auto
-            || (element.IsPrimaryToggle() && (Input.GetMouseButtonDown(0) || Input.GetMouseButtonUp(0)))) // primary action is toggle
-            && IsMechanicEnabled(MechanicType.PrimaryAction)) { // checks if mechanic is enabled
-
-            // primary action
-            // GetComponent<Element>().PrimaryAction(); <- use if updating element variable is inconvenient
-            element.PrimaryAction();
-
-        }
-        else if ((((element.IsSecondaryAuto() && Input.GetMouseButton(1)) // secondary action is auto
-              || (!element.IsSecondaryAuto() && Input.GetMouseButtonDown(1))) // secondary action is not auto
-              || (element.IsSecondaryToggle() && (Input.GetMouseButtonDown(1) || Input.GetMouseButtonUp(1)))) // secondary action is toggle
-              && IsMechanicEnabled(MechanicType.SecondaryAction)) { // checks if mechanic is enabled
+        /* SECONDARY ACTIONS */
+        if ((((secondaryAction.IsAuto() && Input.GetMouseButton(1)) // secondary action is auto
+                || (!secondaryAction.IsAuto() && Input.GetMouseButtonDown(1))) // secondary action is not auto
+                || (secondaryAction.IsToggle() && (Input.GetMouseButtonDown(1) || Input.GetMouseButtonUp(1)))) // secondary action is toggle
+                && IsMechanicEnabled(MechanicType.SecondaryAction)) { // checks if mechanic is enabled
 
             // secondary action
             // GetComponent<Element>().SecondaryAction(); <- use if updating element variable is inconvenient
-            element.SecondaryAction();
+            secondaryAction.OnTrigger();
 
-        }
-    }
-
-    private void FixedUpdate() {
-
-        if (IsMechanicEnabled(MechanicType.Movement)) {
-
-            rb.velocity = new Vector2(horizontalInput * moveSpeed, rb.velocity.y); // adjust input based on rotation (if wand is out, player walks, else sprint)
-            anim.SetBool("isMoving", horizontalInput != 0f && isGrounded); // player is moving on ground
-
-        }
-        else {
-
-            rb.velocity = new Vector2(0f, rb.velocity.y); // stop player horizontal movement
-            anim.SetBool("isMoving", false); // player is not moving
-
-        }
-    }
-
-    private void CheckFlip() {
-
-        if (!IsMechanicEnabled(MechanicType.Movement)) return; // movement mechanic is disabled
-
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition); // get mouse position in world space
-
-        if ((isFacingRight && mousePos.x < transform.position.x) || (!isFacingRight && mousePos.x >= transform.position.x)) {
-
-            transform.Rotate(0f, 180f, 0f);
-            isFacingRight = !isFacingRight;
-
-        }
-    }
-
-    private void Jump() {
-
-        if (!IsMechanicEnabled(MechanicType.Jump)) return;
-
-        rb.velocity = transform.up * new Vector2(rb.velocity.x, jumpForce);
-
-    }
-
-    private void OnTriggerEnter2D(Collider2D other) {
-        if (other.gameObject.GetComponent<CameraZone>()) {
-            camera.ChangeCamState(other.gameObject.GetComponent<CameraZone>());
         }
     }
 
@@ -153,9 +106,9 @@ public class PlayerController : EntityController {
 
         if (barrierTweener != null && barrierTweener.IsActive()) barrierTweener.Kill(); // kill barrier tweener if it's active
 
-        spellCollider.gameObject.SetActive(false); // hide spell collider while barrier is deployed (so player can't get hit)
         barrierCoroutine = StartCoroutine(HandleDeployBarrier());
 
+        DisableAllScripts(); // disable all scripts while barrier is deployed
         retracted = false; // barrier is not retracted yet (for max duration)
         StartCoroutine(HandleBarrierDuration(duration));
 
@@ -201,8 +154,8 @@ public class PlayerController : EntityController {
 
         barrierTweener = barrier.DOFade(0f, anim.GetCurrentAnimatorStateInfo(0).length).SetEase(Ease.OutBounce).OnComplete(() => {
 
-            spellCollider.gameObject.SetActive(true); // show spell collider once barrier is gone
             barrier.gameObject.SetActive(false); // hide barrier
+            EnableAllScripts(); // enable all scripts after barrier is retracted
             EnableAllMechanics(); // enable all mechanics after barrier is retracted
             barrierCoroutine = null;
 
@@ -272,11 +225,59 @@ public class PlayerController : EntityController {
 
     #region UTILITIES
 
-    public bool IsGrounded() => isGrounded;
+    public bool IsGrounded() => corgiController.State.IsGrounded;
 
-    public bool IsFacingRight() => isFacingRight;
+    private void EnableAllScripts() {
 
-    public Transform GetCastPoint() => castPoint;
+        weaponAim.enabled = true;
+        weaponRest.enabled = true;
+
+        corgiController.enabled = true;
+        health.enabled = true;
+        charMovement.enabled = true;
+        charCrouch.enabled = true;
+        charDash.enabled = true;
+        charDive.enabled = true;
+        charDangling.enabled = true;
+        charJump.enabled = true;
+        charJetpack.enabled = true;
+        charLookUp.enabled = true;
+        charGrip.enabled = true;
+        charWallCling.enabled = true;
+        charWallJump.enabled = true;
+        charLadder.enabled = true;
+        charButton.enabled = true;
+        charWeapon.enabled = true;
+
+    }
+
+    private void DisableAllScripts() {
+
+        weaponAim = GetComponentInChildren<WeaponAim>();
+        weaponAim.enabled = false;
+
+        weaponRest = weaponAim.GetComponent<WeaponRest>();
+        weaponRest.transform.rotation = Quaternion.Euler(weaponRest.GetRestRotation());
+        weaponRest.enabled = false;
+
+        corgiController.enabled = false;
+        health.enabled = false;
+        charMovement.enabled = false;
+        charCrouch.enabled = false;
+        charDash.enabled = false;
+        charDive.enabled = false;
+        charDangling.enabled = false;
+        charJump.enabled = false;
+        charJetpack.enabled = false;
+        charLookUp.enabled = false;
+        charGrip.enabled = false;
+        charWallCling.enabled = false;
+        charWallJump.enabled = false;
+        charLadder.enabled = false;
+        charButton.enabled = false;
+        charWeapon.enabled = false;
+
+    }
 
     #endregion
 }
