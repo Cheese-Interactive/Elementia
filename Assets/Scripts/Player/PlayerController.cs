@@ -88,7 +88,8 @@ public class PlayerController : EntityController {
             // GetComponent<Element>().PrimaryAction(); <- use if updating element variable is inconvenient
             element.PrimaryAction();
 
-        } else if ((((element.IsSecondaryAuto() && Input.GetMouseButton(1)) // secondary action is auto
+        }
+        else if ((((element.IsSecondaryAuto() && Input.GetMouseButton(1)) // secondary action is auto
               || (!element.IsSecondaryAuto() && Input.GetMouseButtonDown(1))) // secondary action is not auto
               || (element.IsSecondaryToggle() && (Input.GetMouseButtonDown(1) || Input.GetMouseButtonUp(1)))) // secondary action is toggle
               && IsMechanicEnabled(MechanicType.SecondaryAction)) { // checks if mechanic is enabled
@@ -107,7 +108,8 @@ public class PlayerController : EntityController {
             rb.velocity = new Vector2(horizontalInput * moveSpeed, rb.velocity.y); // adjust input based on rotation (if wand is out, player walks, else sprint)
             anim.SetBool("isMoving", horizontalInput != 0f && isGrounded); // player is moving on ground
 
-        } else {
+        }
+        else {
 
             rb.velocity = new Vector2(0f, rb.velocity.y); // stop player horizontal movement
             anim.SetBool("isMoving", false); // player is not moving
@@ -138,10 +140,9 @@ public class PlayerController : EntityController {
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
-
-        if (other.gameObject.GetComponent<CameraZone>())
+        if (other.gameObject.GetComponent<CameraZone>()) {
             camera.ChangeCamState(other.gameObject.GetComponent<CameraZone>());
-
+        }
     }
 
     #region BARRIER

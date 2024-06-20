@@ -13,20 +13,21 @@ public class CameraController : MonoBehaviour {
     private float zPos;
     [Header("Zones")]
     [SerializeField] private CameraZone[] zones;
+    [SerializeField] private CameraZone startZone;
     [Header("Customization")]
     [SerializeField] private float shiftTime;
 
     void Start() {
         camera = GetComponent<Camera>();
         zPos = transform.position.z;
+        SetCam(startZone);
     }
 
     void Update() {
-        //transform.position = new Vector3(transform.position.x, transform.position.y, zPos);
     }
 
     public void SetCam(Vector3 pos, float size) {
-        transform.position = pos;
+        transform.position = new Vector3(pos.x, pos.y, zPos);
         camera.orthographicSize = size;
     }
 
@@ -35,6 +36,7 @@ public class CameraController : MonoBehaviour {
     }
 
     public IEnumerator ChangeCamState(Vector3 pos, float size) {
+        pos = new Vector3(pos.x, pos.y, zPos);
         float elapsed = 0;
         float t = 0; //smoothing formula
         float startSize = camera.orthographicSize;

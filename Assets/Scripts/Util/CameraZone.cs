@@ -6,7 +6,7 @@ public class CameraZone : MonoBehaviour {
 
     void Start() {
         if (!GetComponent<Collider2D>())
-            print("ERROR: CAMERA ZONE " + gameObject.name + " IS MISSING A TRIGGER!");
+            print("ERROR: CAMERA ZONE " + gameObject.name + " IS MISSING A TRIGGER!!!!!");
     }
 
     public float getSize() { return camSize; }

@@ -218,7 +218,7 @@ MonoBehaviour:
   TypedDamages: []
   DamageCausedKnockbackType: 1
   DamageCausedKnockbackDirection: 0
-  DamageCausedKnockbackForce: {x: 10, y: 2}
+  DamageCausedKnockbackForce: {x: 2, y: 2}
   InvincibilityDuration: 0.5
   RepeatDamageOverTime: 0
   AmountOfRepeats: 3
