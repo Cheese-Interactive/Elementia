@@ -106,7 +106,7 @@ MonoBehaviour:
   PreventAimWhileWeaponIsInUse: 0
   MinimumAngle: -180
   MaximumAngle: 180
-  IgnoreSlopeRotation: 0
+  IgnoreSlopeRotation: 1
   IgnoreDownWhenGrounded: 0
   Reticle: {fileID: 1000010525066036, guid: fdff91f9c641e4bc4ae800f161c07e1f, type: 3}
   DisplayReticle: 1
@@ -189,9 +189,9 @@ MonoBehaviour:
   WeaponOnHitDamageableFeedback: {fileID: 0}
   WeaponOnHitNonDamageableFeedback: {fileID: 0}
   WeaponOnKillFeedback: {fileID: 0}
-  ApplyRecoilOnUse: 0
+  ApplyRecoilOnUse: 1
   RecoilOnUseProperties:
-    RecoilForceGrounded: 10
+    RecoilForceGrounded: 15
     RecoilForceAirborne: 10
     RecoilAngleModifier: 0
     DirectionMultiplier: {x: 1, y: 1}
