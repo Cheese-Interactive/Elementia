@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
@@ -32,8 +33,9 @@ public class PlayerController : MonoBehaviour {
     private WeaponAim weaponAim;
     private Weapon weapon;
 
-    [Header("Elements")]
-    private SecondaryAction secondaryAction; // make sure to update this variable when the element changes
+    [Header("Weapons/Secondary Actions")]
+    [SerializeField] private WeaponActionPair[] weaponActionPairs;
+    private int currWeaponIndex;
 
     [Header("Barrier")]
     [SerializeField] private SpriteRenderer barrier;
@@ -81,12 +83,19 @@ public class PlayerController : MonoBehaviour {
 
         deathSubscriptions = new List<SecondaryAction>();
 
-        // set element to active element
-        foreach (SecondaryAction action in GetComponents<SecondaryAction>()) {
+        // pick the first secondary action as the default & subscribe to death event
+        foreach (WeaponActionPair action in weaponActionPairs) {
 
-            if (action.enabled) this.secondaryAction = action;
-            health.OnDeath += action.OnDeath;
-            deathSubscriptions.Add(action);
+            SecondaryAction secondaryAction = action.GetSecondaryAction();
+
+            // enable current secondary action, disable the rest
+            if (action == weaponActionPairs[0])
+                secondaryAction.enabled = true;
+            else
+                secondaryAction.enabled = false;
+
+            health.OnDeath += secondaryAction.OnDeath;
+            deathSubscriptions.Add(secondaryAction);
 
         }
 
@@ -98,21 +107,47 @@ public class PlayerController : MonoBehaviour {
     private void OnDisable() {
 
         foreach (SecondaryAction action in deathSubscriptions)
-            health.OnDeath -= secondaryAction.OnDeath;
+            health.OnDeath -= weaponActionPairs[currWeaponIndex].GetSecondaryAction().OnDeath;
 
     }
 
     private void Update() {
 
         /* SECONDARY ACTIONS */
-        if ((((secondaryAction.IsAuto() && Input.GetMouseButton(1)) // secondary action is auto
-                || (!secondaryAction.IsAuto() && Input.GetMouseButtonDown(1))) // secondary action is not auto
-                || (secondaryAction.IsToggle() && (Input.GetMouseButtonDown(1) || Input.GetMouseButtonUp(1)))) // secondary action is toggle
+        SecondaryAction currSecondaryAction = weaponActionPairs[currWeaponIndex].GetSecondaryAction();
+
+        if ((((currSecondaryAction.IsAuto() && Input.GetMouseButton(1)) // secondary action is auto
+                || (!currSecondaryAction.IsAuto() && Input.GetMouseButtonDown(1))) // secondary action is not auto
+                || (currSecondaryAction.IsToggle() && (Input.GetMouseButtonDown(1) || Input.GetMouseButtonUp(1)))) // secondary action is toggle
                 && IsMechanicEnabled(MechanicType.SecondaryAction)) { // checks if mechanic is enabled
 
             // secondary action
             // GetComponent<Element>().SecondaryAction(); <- use if updating element variable is inconvenient
-            secondaryAction.OnTrigger();
+            currSecondaryAction.OnTrigger();
+
+        }
+
+        if (Input.mouseScrollDelta.y > 0f && !barrierDeployed) { // make sure barrier is not deployed before switching
+
+            currSecondaryAction.enabled = false; // disable current action
+
+            currWeaponIndex++; // increment index
+            currWeaponIndex %= weaponActionPairs.Length; // wrap around
+
+            Weapon currWeapon = weaponActionPairs[currWeaponIndex].GetWeapon();
+            charWeapon.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
+            weaponActionPairs[currWeaponIndex].GetSecondaryAction().enabled = true; // enable new action
+
+        } else if (Input.mouseScrollDelta.y < 0f && !barrierDeployed) { // make sure barrier is not deployed before switching
+
+            currSecondaryAction.enabled = false; // disable current action
+
+            currWeaponIndex--; // decrement index
+            currWeaponIndex = currWeaponIndex < 0 ? weaponActionPairs.Length - 1 : currWeaponIndex; // wrap around
+
+            Weapon currWeapon = weaponActionPairs[currWeaponIndex].GetWeapon();
+            charWeapon.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
+            weaponActionPairs[currWeaponIndex].GetSecondaryAction().enabled = true; // enable new action
 
         }
     }

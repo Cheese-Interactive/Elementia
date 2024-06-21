@@ -6,12 +6,11 @@ using UnityEngine.Tilemaps;
 public class IceBlastAction : SecondaryAction {
 
     [Header("References")]
-    [SerializeField] private Tilemap waterTilemap;
     private TilemapManager tilemapManager;
 
     [Header("Blast")]
     [SerializeField] private ParticleSystem iceBlastParticles;
-    [SerializeField] private float blastRadius;
+    [SerializeField] private int blastRadius;
     [SerializeField][Tooltip("Must be >= particle duration")] private float freezeDuration; // in order to prevent overlapping blasts
     [SerializeField] private LayerMask waterMask;
 
@@ -32,28 +31,20 @@ public class IceBlastAction : SecondaryAction {
 
         if (!isReady) return;
 
+        iceBlastParticles.gameObject.SetActive(false); // set to false to make sure particle activates on awake
         iceBlastParticles.gameObject.SetActive(true); // show ice blast particles (disables itself after duration) | to modify duration check particle settings
+        iceBlastParticles.transform.localScale = new Vector2(blastRadius, blastRadius); // scale particles to match blast radius
 
         // TODO: possibly make the position the wand tip
-        Vector3Int centerCell = waterTilemap.WorldToCell(transform.position); // get center cell
-
-        // calculate the bounds in which to check for water tiles
-        int cellRadius = Mathf.CeilToInt(blastRadius / waterTilemap.cellSize.x);
+        Vector3Int centerCell = tilemapManager.WorldToCell(transform.position); // get center cell
 
         // loop through bounds
-        for (int x = -cellRadius; x <= cellRadius; x++) {
+        for (int x = -blastRadius; x <= blastRadius; x++) {
 
-            for (int y = -cellRadius; y <= cellRadius; y++) {
+            for (int y = -blastRadius; y <= blastRadius; y++) {
 
-                Vector3Int offset = new Vector3Int(x, y, 0);
-                Vector3Int tilePos = centerCell + offset;
-
-                if (waterTilemap.GetTile(tilePos) == null) continue; // skip if the tile is null
-
-                Vector3 tileWorldPos = waterTilemap.GetCellCenterWorld(tilePos); // calculate the world position of the tile's center
-
-                if (Vector3.Distance(transform.position, tileWorldPos) <= blastRadius) // check if the tile is within the radius
-                    tilemapManager.Freeze(tilePos, freezeDuration); // freeze the water tile
+                Vector3Int tilePos = centerCell + new Vector3Int(x, y, 0);
+                tilemapManager.Freeze(transform.position, tilePos, freezeDuration, blastRadius); // freeze water tile
 
             }
         }
@@ -61,6 +52,13 @@ public class IceBlastAction : SecondaryAction {
         // begin cooldown
         isReady = false;
         Invoke("ReadyAction", secondaryCooldown);
+
+    }
+
+    private void OnDrawGizmosSelected() {
+
+        Gizmos.color = new Color(100f / 255f, 180f / 255f, 220f / 255f, 0.3f);
+        Gizmos.DrawSphere(transform.position, blastRadius);
 
     }
 }

@@ -41,10 +41,17 @@ public class TilemapManager : MonoBehaviour {
         }
     }
 
-    public void Freeze(Vector3Int tilePos, float freezeDuration) {
+    public void Freeze(Vector3 origin, Vector3Int tilePos, float freezeDuration, float radius) {
 
-        if (frozen.ContainsKey(tilePos))
+        if (waterTilemap.GetTile(tilePos) == null) return; // skip if the tile is null
+
+        Vector3 tileWorldPos = waterTilemap.GetCellCenterWorld(tilePos); // calculate the world position of the tile's center
+
+        if (Vector3.Distance(origin, tileWorldPos) <= radius && frozen.ContainsKey(tilePos)) // check if the tile is within the radius and tile exists in the dictionary
             frozen[tilePos].Freeze(freezeDuration);
 
     }
+
+    public Vector3Int WorldToCell(Vector3 worldPos) => waterTilemap.WorldToCell(worldPos);
+
 }
