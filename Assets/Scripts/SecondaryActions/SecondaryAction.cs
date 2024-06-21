@@ -29,4 +29,11 @@ public abstract class SecondaryAction : MonoBehaviour {
 
     protected void ReadyAction() => isReady = true;
 
+    public void OnDeath() {
+
+        // cancel all secondary action cooldowns if player dies
+        CancelInvoke("ReadyAction");
+        isReady = true;
+
+    }
 }

@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour {
     private CharacterButtonActivation charButton;
     private CharacterHandleWeapon charWeapon;
     private WeaponAim weaponAim;
-    private WeaponRest weaponRest;
+    private Weapon weapon;
 
     [Header("Elements")]
     private SecondaryAction secondaryAction; // make sure to update this variable when the element changes
@@ -40,7 +40,11 @@ public class PlayerController : MonoBehaviour {
     private float barrierAlpha;
     private Coroutine barrierCoroutine;
     private Tweener barrierTweener;
+    private bool barrierDeployed;
     private bool retracted; // for barrier max duration
+
+    [Header("Health")]
+    private List<SecondaryAction> deathSubscriptions; // for unsubscribing later
 
     private void Awake() {
 
@@ -75,12 +79,27 @@ public class PlayerController : MonoBehaviour {
         charButton = GetComponent<CharacterButtonActivation>();
         charWeapon = GetComponent<CharacterHandleWeapon>();
 
+        deathSubscriptions = new List<SecondaryAction>();
+
         // set element to active element
-        foreach (SecondaryAction action in GetComponents<SecondaryAction>())
+        foreach (SecondaryAction action in GetComponents<SecondaryAction>()) {
+
             if (action.enabled) this.secondaryAction = action;
+            health.OnDeath += action.OnDeath;
+            deathSubscriptions.Add(action);
+
+        }
 
         barrierAlpha = barrier.color.a;
         barrier.gameObject.SetActive(false); // barrier is not deployed by default
+
+    }
+
+    private void OnDisable() {
+
+        foreach (SecondaryAction action in deathSubscriptions)
+            health.OnDeath -= secondaryAction.OnDeath;
+
     }
 
     private void Update() {
@@ -102,6 +121,8 @@ public class PlayerController : MonoBehaviour {
 
     public void DeployBarrier(float duration) {
 
+        if (barrierDeployed) return; // barrier is already deployed
+
         if (barrierCoroutine != null) StopCoroutine(barrierCoroutine); // stop barrier coroutine if it's running
 
         if (barrierTweener != null && barrierTweener.IsActive()) barrierTweener.Kill(); // kill barrier tweener if it's active
@@ -111,15 +132,19 @@ public class PlayerController : MonoBehaviour {
         DisableAllScripts(); // disable all scripts while barrier is deployed
         retracted = false; // barrier is not retracted yet (for max duration)
         StartCoroutine(HandleBarrierDuration(duration));
+        barrierDeployed = true;
 
     }
 
     public void RetractBarrier() {
 
+        if (!barrierDeployed) return; // barrier is not deployed (no need to retract)
+
         if (barrierCoroutine != null) StopCoroutine(barrierCoroutine); // stop barrier coroutine if it's running
 
         if (barrierTweener != null && barrierTweener.IsActive()) barrierTweener.Kill(); // kill barrier tweener if it's active
 
+        weapon.gameObject.SetActive(true);
         retracted = true; // barrier is retracted (for max duration)
         barrierCoroutine = StartCoroutine(HandleRetractBarrier());
 
@@ -157,6 +182,7 @@ public class PlayerController : MonoBehaviour {
             barrier.gameObject.SetActive(false); // hide barrier
             EnableAllScripts(); // enable all scripts after barrier is retracted
             EnableAllMechanics(); // enable all mechanics after barrier is retracted
+            barrierDeployed = false;
             barrierCoroutine = null;
 
         }); // fade barrier in based on animation length
@@ -229,53 +255,58 @@ public class PlayerController : MonoBehaviour {
 
     private void EnableAllScripts() {
 
-        weaponAim.enabled = true;
-        weaponRest.enabled = true;
-
         corgiController.enabled = true;
-        health.enabled = true;
-        charMovement.enabled = true;
-        charCrouch.enabled = true;
-        charDash.enabled = true;
-        charDive.enabled = true;
-        charDangling.enabled = true;
-        charJump.enabled = true;
-        charJetpack.enabled = true;
-        charLookUp.enabled = true;
-        charGrip.enabled = true;
-        charWallCling.enabled = true;
-        charWallJump.enabled = true;
-        charLadder.enabled = true;
-        charButton.enabled = true;
-        charWeapon.enabled = true;
+        charMovement.AbilityPermitted = true;
+        charCrouch.AbilityPermitted = true;
+        charDash.AbilityPermitted = true;
+        charDive.AbilityPermitted = true;
+        charDangling.AbilityPermitted = true;
+        charJump.AbilityPermitted = true;
+        charJetpack.AbilityPermitted = true;
+        charLookUp.AbilityPermitted = true;
+        charGrip.AbilityPermitted = true;
+        charWallCling.AbilityPermitted = true;
+        charWallJump.AbilityPermitted = true;
+        charLadder.AbilityPermitted = true;
+        charButton.AbilityPermitted = true;
+        charWeapon.AbilityPermitted = true;
+
+        //weapon.enabled = true;
+        //weaponAim.enabled = true;
+        //weaponRest.enabled = true;
 
     }
 
     private void DisableAllScripts() {
 
-        weaponAim = GetComponentInChildren<WeaponAim>();
-        weaponAim.enabled = false;
-
-        weaponRest = weaponAim.GetComponent<WeaponRest>();
-        weaponRest.transform.rotation = Quaternion.Euler(weaponRest.GetRestRotation());
-        weaponRest.enabled = false;
-
         corgiController.enabled = false;
-        health.enabled = false;
-        charMovement.enabled = false;
-        charCrouch.enabled = false;
-        charDash.enabled = false;
-        charDive.enabled = false;
-        charDangling.enabled = false;
-        charJump.enabled = false;
-        charJetpack.enabled = false;
-        charLookUp.enabled = false;
-        charGrip.enabled = false;
-        charWallCling.enabled = false;
-        charWallJump.enabled = false;
-        charLadder.enabled = false;
-        charButton.enabled = false;
-        charWeapon.enabled = false;
+        charMovement.AbilityPermitted = false;
+        charCrouch.AbilityPermitted = false;
+        charDash.AbilityPermitted = false;
+        charDive.AbilityPermitted = false;
+        charDangling.AbilityPermitted = false;
+        charJump.AbilityPermitted = false;
+        charJetpack.AbilityPermitted = false;
+        charLookUp.AbilityPermitted = false;
+        charGrip.AbilityPermitted = false;
+        charWallCling.AbilityPermitted = false;
+        charWallJump.AbilityPermitted = false;
+        charLadder.AbilityPermitted = false;
+        charButton.AbilityPermitted = false;
+        charWeapon.AbilityPermitted = false;
+
+        weapon = GetComponentInChildren<Weapon>();
+        //weaponAim = weapon.GetComponent<WeaponAim>();
+        //weaponRest = weaponAim.GetComponent<WeaponRest>();
+
+        //weapon.enabled = false;
+        //weaponAim.enabled = false;
+        //weaponRest.enabled = false;
+
+        //weaponRest.transform.localPosition = weaponRest.GetRestLocalPos();
+        //weaponRest.transform.rotation = Quaternion.Euler(weaponRest.GetRestRotation());
+
+        weapon.gameObject.SetActive(false);
 
     }
 

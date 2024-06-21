@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: -3601002809632648221}
   - component: {fileID: 4237984674334015922}
   - component: {fileID: -3073912655475901205}
-  - component: {fileID: 1280211318125444050}
   m_Layer: 0
   m_Name: MagicMissile
   m_TagString: Untagged
@@ -209,19 +208,6 @@ MonoBehaviour:
   GameObjectToPool: {fileID: 100002, guid: 92101151a982ae142b34ea938449fc8e, type: 3}
   PoolSize: 20
   PoolCanExpand: 1
---- !u!114 &1280211318125444050
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1147189493814074718}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a209fcda31e422848939fa5d0fddd4a1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  restRotation: {x: 0, y: 0, z: 90}
 --- !u!1 &5294270777027740188
 GameObject:
   m_ObjectHideFlags: 0

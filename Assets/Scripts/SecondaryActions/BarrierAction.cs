@@ -21,6 +21,7 @@ public class BarrierAction : SecondaryAction {
         else
             player.RetractBarrier();
 
+        // begin cooldown
         isReady = false;
         Invoke("ReadyAction", secondaryCooldown);
 
