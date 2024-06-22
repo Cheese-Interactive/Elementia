@@ -3,29 +3,29 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class WaterTile : MonoBehaviour {
+public class IceTile : MonoBehaviour {
 
     [Header("References")]
-    private Tilemap waterTilemap;
+    private Tilemap iceTilemap;
 
     [Header("Data")]
     private Vector3Int tilePos;
-    private TileBase waterTile;
+    private TileBase iceTile;
 
     [Header("Freeze")]
     private Coroutine freezeResetCoroutine;
 
-    public void Initialize(Tilemap waterTilemap, Vector3Int tilePos, TileBase waterTile) {
+    public void Initialize(Tilemap iceTilemap, Vector3Int tilePos, TileBase iceTile) {
 
-        this.waterTilemap = waterTilemap;
+        this.iceTilemap = iceTilemap;
         this.tilePos = tilePos;
-        this.waterTile = waterTile;
+        this.iceTile = iceTile;
 
     }
 
     public void Freeze(float freezeDuration) {
 
-        waterTilemap.SetTile(tilePos, null);
+        iceTilemap.SetTile(tilePos, iceTile);
 
         if (freezeResetCoroutine != null) StopCoroutine(freezeResetCoroutine); // stop coroutine if it's already running (reset freeze timer)
 
@@ -36,7 +36,7 @@ public class WaterTile : MonoBehaviour {
     private IEnumerator ResetFreeze(float freezeDuration) {
 
         yield return new WaitForSeconds(freezeDuration);
-        waterTilemap.SetTile(tilePos, waterTile);
+        iceTilemap.SetTile(tilePos, null);
 
         freezeResetCoroutine = null;
 

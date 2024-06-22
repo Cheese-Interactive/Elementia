@@ -78,7 +78,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TriggerMode: 1
   Interruptable: 0
-  InitializeOnStart: 0
+  InitializeOnStart: 1
   DelayBeforeUse: 0
   DelayBeforeUseReleaseInterruption: 1
   TimeBetweenUses: 0.8
@@ -202,7 +202,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b7277539b95c0d45895792ecc99ce66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MutualizeWaitingPools: 0
+  MutualizeWaitingPools: 1
   NestWaitingPool: 1
   NestUnderThis: 0
   GameObjectToPool: {fileID: 100002, guid: 92101151a982ae142b34ea938449fc8e, type: 3}

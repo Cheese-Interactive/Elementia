@@ -137,7 +137,7 @@ MonoBehaviour:
   WeaponOnHitDamageableFeedback: {fileID: 0}
   WeaponOnHitNonDamageableFeedback: {fileID: 0}
   WeaponOnKillFeedback: {fileID: 0}
-  ApplyRecoilOnUse: 1
+  ApplyRecoilOnUse: 0
   RecoilOnUseProperties:
     RecoilForceGrounded: 15
     RecoilForceAirborne: 10
@@ -202,7 +202,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b7277539b95c0d45895792ecc99ce66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MutualizeWaitingPools: 0
+  MutualizeWaitingPools: 1
   NestWaitingPool: 1
   NestUnderThis: 0
   GameObjectToPool: {fileID: 100002, guid: e38dd38f6313bbb47a11c0fd83fd271b, type: 3}

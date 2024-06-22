@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 114000012788668036}
   - component: {fileID: 114000010281602892}
   - component: {fileID: -6513195632682728618}
+  - component: {fileID: -5137451317147787246}
   m_Layer: 16
   m_Name: IceProjectile
   m_TagString: Untagged
@@ -213,13 +214,13 @@ MonoBehaviour:
     m_Bits: 271104
   ApplyDamageOnTriggerEnter: 1
   ApplyDamageOnTriggerStay: 1
-  MinDamageCaused: 25
-  MaxDamageCaused: 25
+  MinDamageCaused: 10
+  MaxDamageCaused: 10
   TypedDamages: []
   DamageCausedKnockbackType: 1
   DamageCausedKnockbackDirection: 0
   DamageCausedKnockbackForce: {x: 2, y: 2}
-  InvincibilityDuration: 0.5
+  InvincibilityDuration: 0
   RepeatDamageOverTime: 0
   AmountOfRepeats: 3
   DurationBetweenRepeats: 1
@@ -383,6 +384,20 @@ TrailRenderer:
   m_Autodestruct: 0
   m_Emitting: 1
   m_ApplyActiveColorSpace: 1
+--- !u!114 &-5137451317147787246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4e14f81bb9a181429eb933e5568ab99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movementMultiplier: 0.2
+  slowDuration: 5
 --- !u!1 &8257993252936020629
 GameObject:
   m_ObjectHideFlags: 0
@@ -586,7 +601,7 @@ MonoBehaviour:
         MutualizePools: 0
         ParentTransform: {fileID: 0}
         CachedRecycle: 0
-        ParticlesPrefab: {fileID: 19800000, guid: bea1a9a53d3f3e5419a21bf5a17b7d62,
+        ParticlesPrefab: {fileID: 19800000, guid: 4c910bfa3a5800543a9cf7173a230853,
           type: 3}
         RandomParticlePrefabs: []
         ForceSetActiveOnPlay: 0

@@ -14,16 +14,22 @@ public class IceBlastAction : SecondaryAction {
     [SerializeField][Tooltip("Must be >= particle duration")] private float freezeDuration; // in order to prevent overlapping blasts
     [SerializeField] private LayerMask waterMask;
 
+    private new void Awake() {
+
+        base.Awake();
+
+        iceBlastParticles.gameObject.SetActive(false); // ice blast particles are not active by default (done in awake so it runs when game starts)
+
+        if (iceBlastParticles.main.duration > freezeDuration)
+            Debug.LogWarning("Particle duration must be less than or equal to freeze duration"); // in order to prevent overlapping blasts
+
+    }
+
     private new void Start() {
 
         base.Start();
 
         tilemapManager = FindObjectOfType<TilemapManager>();
-
-        iceBlastParticles.gameObject.SetActive(false); // ice blast particles are not active by default
-
-        if (iceBlastParticles.main.duration > freezeDuration)
-            Debug.LogWarning("Particle duration must be less than or equal to freeze duration"); // in order to prevent overlapping blasts
 
     }
 

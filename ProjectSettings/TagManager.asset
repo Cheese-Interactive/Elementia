@@ -8,6 +8,8 @@ TagManager:
   - Music
   - Background
   - NoMask
+  - Enemy
+  - Water
   layers:
   - Default
   - TransparentFX

@@ -1,15 +1,19 @@
 using DG.Tweening;
 using MoreMountains.CorgiEngine;
+using MoreMountains.InventoryEngine;
+using MoreMountains.Tools;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class PlayerController : MonoBehaviour {
 
     [Header("References")]
+    private TilemapManager tilemapManager;
     private Animator anim;
 
     [Header("Mechanics")]
@@ -22,7 +26,6 @@ public class PlayerController : MonoBehaviour {
     private CharacterDive charDive;
     private CharacterDangling charDangling;
     private CharacterJump charJump;
-    private CharacterJetpack charJetpack;
     private CharacterLookUp charLookUp;
     private CharacterGrip charGrip;
     private CharacterWallClinging charWallCling;
@@ -31,11 +34,13 @@ public class PlayerController : MonoBehaviour {
     private CharacterButtonActivation charButton;
     private CharacterHandleWeapon charWeapon;
     private WeaponAim weaponAim;
-    private Weapon weapon;
+    private Weapon currWeapon;
+
+    [Header("Hotbar")]
+    [SerializeField] private Hotbar hotbar;
 
     [Header("Weapons/Secondary Actions")]
     [SerializeField] private WeaponActionPair[] weaponActionPairs;
-    private int currWeaponIndex;
 
     [Header("Barrier")]
     [SerializeField] private SpriteRenderer barrier;
@@ -44,6 +49,9 @@ public class PlayerController : MonoBehaviour {
     private Tweener barrierTweener;
     private bool barrierDeployed;
     private bool retracted; // for barrier max duration
+
+    [Header("Tile Detection")]
+    [SerializeField] private Transform tileDetector;
 
     [Header("Health")]
     private List<SecondaryAction> deathSubscriptions; // for unsubscribing later
@@ -62,6 +70,7 @@ public class PlayerController : MonoBehaviour {
 
     private void Start() {
 
+        tilemapManager = FindObjectOfType<TilemapManager>();
         anim = GetComponent<Animator>();
 
         corgiController = GetComponent<CorgiController>();
@@ -72,7 +81,6 @@ public class PlayerController : MonoBehaviour {
         charDive = GetComponent<CharacterDive>();
         charDangling = GetComponent<CharacterDangling>();
         charJump = GetComponent<CharacterJump>();
-        charJetpack = GetComponent<CharacterJetpack>();
         charLookUp = GetComponent<CharacterLookUp>();
         charGrip = GetComponent<CharacterGrip>();
         charWallCling = GetComponent<CharacterWallClinging>();
@@ -83,9 +91,10 @@ public class PlayerController : MonoBehaviour {
 
         deathSubscriptions = new List<SecondaryAction>();
 
-        // pick the first secondary action as the default & subscribe to death event
-        foreach (WeaponActionPair action in weaponActionPairs) {
+        // pick the first secondary action as the default, subscribe to death event, initialize hotbar
+        for (int i = 0; i < weaponActionPairs.Length; i++) {
 
+            WeaponActionPair action = weaponActionPairs[i];
             SecondaryAction secondaryAction = action.GetSecondaryAction();
 
             // enable current secondary action, disable the rest
@@ -93,6 +102,8 @@ public class PlayerController : MonoBehaviour {
                 secondaryAction.enabled = true;
             else
                 secondaryAction.enabled = false;
+
+            hotbar.SetWeapon(action.GetWeaponData(), i); // add weapon item to hotbar
 
             health.OnDeath += secondaryAction.OnDeath;
             deathSubscriptions.Add(secondaryAction);
@@ -104,52 +115,329 @@ public class PlayerController : MonoBehaviour {
 
     }
 
-    private void OnDisable() {
+    private void Update() {
 
-        foreach (SecondaryAction action in deathSubscriptions)
-            health.OnDeath -= weaponActionPairs[currWeaponIndex].GetSecondaryAction().OnDeath;
+        currWeapon = null;
+        SecondaryAction currSecondaryAction = null;
+
+        if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+
+            currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
+            currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction();
+
+        }
+
+        /* SCROLL WHEEL WEAPON SWITCHING */
+        if (Input.mouseScrollDelta.y > 0f && !barrierDeployed) { // make sure barrier is not deployed before switching
+
+            if (currWeapon)
+                currSecondaryAction.enabled = false; // disable current secondary action
+
+            hotbar.CycleSlot(-1); // cycle hotbar slot backwards
+
+            if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+
+                currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
+                charWeapon.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
+
+                if (currWeapon) {
+
+                    currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
+                    currSecondaryAction.enabled = true; // enable new action
+
+                }
+            } else {
+
+                charWeapon.ChangeWeapon(null, null); // remove weapon
+
+            }
+        } else if (Input.mouseScrollDelta.y < 0f && !barrierDeployed) { // make sure barrier is not deployed before switching
+
+            if (currWeapon)
+                currSecondaryAction.enabled = false; // disable current secondary action
+
+            hotbar.CycleSlot(1); // cycle hotbar slot forwards
+
+            if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+
+                currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
+                charWeapon.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
+
+                if (currWeapon) {
+
+                    currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
+                    currSecondaryAction.enabled = true; // enable new action
+
+                }
+            } else {
+
+                charWeapon.ChangeWeapon(null, null); // remove weapon
+
+            }
+        }
+
+        /* KEY WEAPON SWITCHING */
+        if (Input.GetKeyDown(KeyCode.Alpha1) && !barrierDeployed) {
+
+            if (currWeapon)
+                currSecondaryAction.enabled = false; // disable current secondary action
+
+            hotbar.SelectSlot(0);
+
+            if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+
+                currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
+                charWeapon.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
+
+                if (currWeapon) {
+
+                    currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
+                    currSecondaryAction.enabled = true; // enable new action
+
+                }
+            } else {
+
+                charWeapon.ChangeWeapon(null, null); // remove weapon
+
+            }
+        } else if (Input.GetKeyDown(KeyCode.Alpha2) && !barrierDeployed) {
+
+            if (currWeapon)
+                currSecondaryAction.enabled = false; // disable current secondary action
+
+            hotbar.SelectSlot(1);
+
+            if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+
+                currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
+                charWeapon.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
+
+                if (currWeapon) {
+
+                    currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
+                    currSecondaryAction.enabled = true; // enable new action
+
+                }
+            } else {
+
+                charWeapon.ChangeWeapon(null, null); // remove weapon
+
+            }
+        } else if (Input.GetKeyDown(KeyCode.Alpha3) && !barrierDeployed) {
+
+            if (currWeapon)
+                currSecondaryAction.enabled = false; // disable current secondary action
+
+            hotbar.SelectSlot(2);
+
+            if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+
+                currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
+                charWeapon.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
+
+                if (currWeapon) {
+
+                    currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
+                    currSecondaryAction.enabled = true; // enable new action
+
+                }
+            } else {
+
+                charWeapon.ChangeWeapon(null, null); // remove weapon
+
+            }
+        } else if (Input.GetKeyDown(KeyCode.Alpha4) && !barrierDeployed) {
+
+            if (currWeapon)
+                currSecondaryAction.enabled = false; // disable current secondary action
+
+            hotbar.SelectSlot(3);
+
+            if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+
+                currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
+                charWeapon.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
+
+                if (currWeapon) {
+
+                    currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
+                    currSecondaryAction.enabled = true; // enable new action
+
+                }
+            } else {
+
+                charWeapon.ChangeWeapon(null, null); // remove weapon
+
+            }
+        } else if (Input.GetKeyDown(KeyCode.Alpha5) && !barrierDeployed) {
+
+            if (currWeapon)
+                currSecondaryAction.enabled = false; // disable current secondary action
+
+            hotbar.SelectSlot(4);
+
+            if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+
+                currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
+                charWeapon.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
+
+                if (currWeapon) {
+
+                    currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
+                    currSecondaryAction.enabled = true; // enable new action
+
+                }
+            } else {
+
+                charWeapon.ChangeWeapon(null, null); // remove weapon
+
+            }
+        } else if (Input.GetKeyDown(KeyCode.Alpha6) && !barrierDeployed) {
+
+            if (currWeapon)
+                currSecondaryAction.enabled = false; // disable current secondary action
+
+            hotbar.SelectSlot(5);
+
+            if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+
+                currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
+                charWeapon.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
+
+                if (currWeapon) {
+
+                    currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
+                    currSecondaryAction.enabled = true; // enable new action
+
+                }
+            } else {
+
+                charWeapon.ChangeWeapon(null, null); // remove weapon
+
+            }
+        } else if (Input.GetKeyDown(KeyCode.Alpha7) && !barrierDeployed) {
+
+            if (currWeapon)
+                currSecondaryAction.enabled = false; // disable current secondary action
+
+            hotbar.SelectSlot(6);
+
+            if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+
+                currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
+                charWeapon.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
+
+                if (currWeapon) {
+
+                    currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
+                    currSecondaryAction.enabled = true; // enable new action
+
+                }
+            } else {
+
+                charWeapon.ChangeWeapon(null, null); // remove weapon
+
+            }
+        } else if (Input.GetKeyDown(KeyCode.Alpha8) && !barrierDeployed) {
+
+            if (currWeapon)
+                currSecondaryAction.enabled = false; // disable current secondary action
+
+            hotbar.SelectSlot(7);
+
+            if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+
+                currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
+                charWeapon.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
+
+                if (currWeapon) {
+
+                    currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
+                    currSecondaryAction.enabled = true; // enable new action
+
+                }
+            } else {
+
+                charWeapon.ChangeWeapon(null, null); // remove weapon
+
+            }
+        } else if (Input.GetKeyDown(KeyCode.Alpha9) && !barrierDeployed) {
+
+            if (currWeapon)
+                currSecondaryAction.enabled = false; // disable current secondary action
+
+            hotbar.SelectSlot(8);
+
+            if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+
+                currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
+                charWeapon.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
+
+                if (currWeapon) {
+
+                    currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
+                    currSecondaryAction.enabled = true; // enable new action
+
+                }
+            } else {
+
+                charWeapon.ChangeWeapon(null, null); // remove weapon
+
+            }
+        } else if (Input.GetKeyDown(KeyCode.Alpha0) && !barrierDeployed) {
+
+            if (currWeapon)
+                currSecondaryAction.enabled = false; // disable current secondary action
+
+            hotbar.SelectSlot(9);
+
+            if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+
+                currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
+                charWeapon.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
+
+                if (currWeapon) {
+
+                    currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
+                    currSecondaryAction.enabled = true; // enable new action
+
+                }
+            } else {
+
+                charWeapon.ChangeWeapon(null, null); // remove weapon
+
+            }
+        }
+
+        /* SECONDARY ACTIONS */
+        // IMPORTANT: do this after weapon switching to make sure the right secondary action is used
+        if (currWeapon) { // make sure slot has a weapon/secondary action in it
+
+            if ((((currSecondaryAction.IsAuto() && Input.GetMouseButton(1)) // secondary action is auto
+                    || (!currSecondaryAction.IsAuto() && Input.GetMouseButtonDown(1))) // secondary action is not auto
+                    || (currSecondaryAction.IsToggle() && (Input.GetMouseButtonDown(1) || Input.GetMouseButtonUp(1)))) // secondary action is toggle
+                    && IsMechanicEnabled(MechanicType.SecondaryAction)) { // checks if mechanic is enabled
+
+                // secondary action
+                // GetComponent<Element>().SecondaryAction(); <- use if updating element variable is inconvenient
+                currSecondaryAction.OnTrigger();
+
+            }
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision) {
+
+        if (collision.CompareTag("Water"))
+            health.Kill();
 
     }
 
-    private void Update() {
+    private void OnDisable() {
 
-        /* SECONDARY ACTIONS */
-        SecondaryAction currSecondaryAction = weaponActionPairs[currWeaponIndex].GetSecondaryAction();
+        foreach (SecondaryAction action in deathSubscriptions)
+            health.OnDeath -= action.OnDeath;
 
-        if ((((currSecondaryAction.IsAuto() && Input.GetMouseButton(1)) // secondary action is auto
-                || (!currSecondaryAction.IsAuto() && Input.GetMouseButtonDown(1))) // secondary action is not auto
-                || (currSecondaryAction.IsToggle() && (Input.GetMouseButtonDown(1) || Input.GetMouseButtonUp(1)))) // secondary action is toggle
-                && IsMechanicEnabled(MechanicType.SecondaryAction)) { // checks if mechanic is enabled
-
-            // secondary action
-            // GetComponent<Element>().SecondaryAction(); <- use if updating element variable is inconvenient
-            currSecondaryAction.OnTrigger();
-
-        }
-
-        if (Input.mouseScrollDelta.y > 0f && !barrierDeployed) { // make sure barrier is not deployed before switching
-
-            currSecondaryAction.enabled = false; // disable current action
-
-            currWeaponIndex++; // increment index
-            currWeaponIndex %= weaponActionPairs.Length; // wrap around
-
-            Weapon currWeapon = weaponActionPairs[currWeaponIndex].GetWeapon();
-            charWeapon.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
-            weaponActionPairs[currWeaponIndex].GetSecondaryAction().enabled = true; // enable new action
-
-        } else if (Input.mouseScrollDelta.y < 0f && !barrierDeployed) { // make sure barrier is not deployed before switching
-
-            currSecondaryAction.enabled = false; // disable current action
-
-            currWeaponIndex--; // decrement index
-            currWeaponIndex = currWeaponIndex < 0 ? weaponActionPairs.Length - 1 : currWeaponIndex; // wrap around
-
-            Weapon currWeapon = weaponActionPairs[currWeaponIndex].GetWeapon();
-            charWeapon.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
-            weaponActionPairs[currWeaponIndex].GetSecondaryAction().enabled = true; // enable new action
-
-        }
     }
 
     #region BARRIER
@@ -179,7 +467,7 @@ public class PlayerController : MonoBehaviour {
 
         if (barrierTweener != null && barrierTweener.IsActive()) barrierTweener.Kill(); // kill barrier tweener if it's active
 
-        weapon.gameObject.SetActive(true);
+        currWeapon.gameObject.SetActive(true);
         retracted = true; // barrier is retracted (for max duration)
         barrierCoroutine = StartCoroutine(HandleRetractBarrier());
 
@@ -297,7 +585,6 @@ public class PlayerController : MonoBehaviour {
         charDive.AbilityPermitted = true;
         charDangling.AbilityPermitted = true;
         charJump.AbilityPermitted = true;
-        charJetpack.AbilityPermitted = true;
         charLookUp.AbilityPermitted = true;
         charGrip.AbilityPermitted = true;
         charWallCling.AbilityPermitted = true;
@@ -321,7 +608,6 @@ public class PlayerController : MonoBehaviour {
         charDive.AbilityPermitted = false;
         charDangling.AbilityPermitted = false;
         charJump.AbilityPermitted = false;
-        charJetpack.AbilityPermitted = false;
         charLookUp.AbilityPermitted = false;
         charGrip.AbilityPermitted = false;
         charWallCling.AbilityPermitted = false;
@@ -330,7 +616,6 @@ public class PlayerController : MonoBehaviour {
         charButton.AbilityPermitted = false;
         charWeapon.AbilityPermitted = false;
 
-        weapon = GetComponentInChildren<Weapon>();
         //weaponAim = weapon.GetComponent<WeaponAim>();
         //weaponRest = weaponAim.GetComponent<WeaponRest>();
 
@@ -341,7 +626,7 @@ public class PlayerController : MonoBehaviour {
         //weaponRest.transform.localPosition = weaponRest.GetRestLocalPos();
         //weaponRest.transform.rotation = Quaternion.Euler(weaponRest.GetRestRotation());
 
-        weapon.gameObject.SetActive(false);
+        currWeapon.gameObject.SetActive(false);
 
     }
 
