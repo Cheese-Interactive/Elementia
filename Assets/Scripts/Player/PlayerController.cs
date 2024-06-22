@@ -13,7 +13,7 @@ using UnityEngine.Tilemaps;
 public class PlayerController : MonoBehaviour {
 
     [Header("References")]
-    private TilemapManager tilemapManager;
+    private SlowEffect slowEffect;
     private Animator anim;
 
     [Header("Mechanics")]
@@ -50,8 +50,8 @@ public class PlayerController : MonoBehaviour {
     private bool barrierDeployed;
     private bool retracted; // for barrier max duration
 
-    [Header("Tile Detection")]
-    [SerializeField] private Transform tileDetector;
+    [Header("Death")]
+    private bool isDead; // to deal with death delay
 
     [Header("Health")]
     private List<SecondaryAction> deathSubscriptions; // for unsubscribing later
@@ -70,7 +70,7 @@ public class PlayerController : MonoBehaviour {
 
     private void Start() {
 
-        tilemapManager = FindObjectOfType<TilemapManager>();
+        slowEffect = GetComponent<SlowEffect>();
         anim = GetComponent<Animator>();
 
         corgiController = GetComponent<CorgiController>();
@@ -110,12 +110,17 @@ public class PlayerController : MonoBehaviour {
 
         }
 
+        health.OnDeath += slowEffect.RemoveEffect; // remove slow effect on death
+        health.OnDeath += OnDeath; // to flag death bool to deal with death delay
+
         barrierAlpha = barrier.color.a;
         barrier.gameObject.SetActive(false); // barrier is not deployed by default
 
     }
 
     private void Update() {
+
+        if (isDead) return; // player is dead, no need to update
 
         currWeapon = null;
         SecondaryAction currSecondaryAction = null;
@@ -428,7 +433,7 @@ public class PlayerController : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D collision) {
 
-        if (collision.CompareTag("Water"))
+        if (collision.CompareTag("Water") && !barrierDeployed) // barrier can save player from water
             health.Kill();
 
     }
@@ -437,6 +442,8 @@ public class PlayerController : MonoBehaviour {
 
         foreach (SecondaryAction action in deathSubscriptions)
             health.OnDeath -= action.OnDeath;
+
+        health.OnDeath -= slowEffect.RemoveEffect;
 
     }
 
@@ -629,6 +636,8 @@ public class PlayerController : MonoBehaviour {
         currWeapon.gameObject.SetActive(false);
 
     }
+
+    private void OnDeath() => isDead = true;
 
     #endregion
 }

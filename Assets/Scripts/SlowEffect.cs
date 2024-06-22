@@ -9,6 +9,7 @@ public class SlowEffect : MonoBehaviour {
     private CharacterHorizontalMovement charMovement;
 
     [Header("Slow")]
+    private float initialMultiplier;
     private Coroutine slowResetCoroutine;
 
     private void Start() {
@@ -19,21 +20,26 @@ public class SlowEffect : MonoBehaviour {
 
     public void Slow(float multiplier, float duration) {
 
-        float initialMultiplier = charMovement.MovementSpeedMultiplier;
-        charMovement.MovementSpeedMultiplier = multiplier;
-
         if (slowResetCoroutine != null) StopCoroutine(slowResetCoroutine);
+        else initialMultiplier = charMovement.MovementSpeedMultiplier; // only set if coroutine wasn't already running (to prevent resetting to slow speed)
 
-        slowResetCoroutine = StartCoroutine(ResetSlow(initialMultiplier, duration));
+        charMovement.MovementSpeedMultiplier = multiplier;
+        slowResetCoroutine = StartCoroutine(ResetSlow(duration));
 
     }
 
-    private IEnumerator ResetSlow(float initialMultiplier, float duration) {
+    private IEnumerator ResetSlow(float duration) {
 
         yield return new WaitForSeconds(duration);
-        charMovement.MovementSpeedMultiplier = initialMultiplier;
+        RemoveEffect();
 
-        slowResetCoroutine = null;
+    }
+
+    public void RemoveEffect() {
+
+        if (slowResetCoroutine != null) StopCoroutine(slowResetCoroutine);
+
+        charMovement.MovementSpeedMultiplier = initialMultiplier;
 
     }
 }

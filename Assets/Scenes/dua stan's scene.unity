@@ -765,17 +765,17 @@ CompositeCollider2D:
   - m_Collider: {fileID: 38393260}
     m_ColliderPaths:
     - - X: 90000000
-        Y: -10000000
+        Y: -10312500
       - X: 70000000
-        Y: -10000000
+        Y: -10312500
       - X: 70000000
         Y: -40000000
       - X: 90000000
         Y: -40000000
     - - X: 0
-        Y: -30000000
+        Y: -30312500
       - X: -20000000
-        Y: -30000000
+        Y: -30312500
       - X: -20000000
         Y: -40000000
       - X: 0
@@ -783,12 +783,12 @@ CompositeCollider2D:
   m_CompositePaths:
     m_Paths:
     - - {x: 8.99997, y: -4}
-      - {x: 8.99997, y: -1}
-      - {x: 7, y: -1.0000293}
+      - {x: 8.99997, y: -1.03125}
+      - {x: 7, y: -1.0312793}
       - {x: 7.0000296, y: -4}
     - - {x: -0.000029300001, y: -4}
-      - {x: -0.000029300001, y: -3}
-      - {x: -2, y: -3.0000293}
+      - {x: -0.000029300001, y: -3.03125}
+      - {x: -2, y: -3.0312793}
       - {x: -1.9999708, y: -4}
   m_VertexDistance: 0.0005
   m_OffsetDistance: 0.00005
@@ -856,6 +856,7 @@ GameObject:
   - component: {fileID: 224917286}
   - component: {fileID: 224917287}
   - component: {fileID: 224917285}
+  - component: {fileID: 224917288}
   m_Layer: 9
   m_Name: Player
   m_TagString: Player
@@ -1844,11 +1845,23 @@ MonoBehaviour:
   secondaryCooldown: 1
   isSecondaryToggle: 0
   iceBlastParticles: {fileID: 375358519845117509}
-  blastRadius: 3
-  freezeDuration: 2
+  blastRadius: 5
+  freezeDuration: 6
   waterMask:
     serializedVersion: 2
     m_Bits: 16
+--- !u!114 &224917288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 224917258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba0fdb6e471673d42ab3fc802ef2dc85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &245973370
 GameObject:
   m_ObjectHideFlags: 0
@@ -9286,7 +9299,7 @@ MonoBehaviour:
   BlockingMovementStates: 
   BlockingConditionStates: 
   BlockingWeaponStates: 
-  InitialWeapon: {fileID: 114000010078180980, guid: 45c6c456ce0871d479087649e1baea84,
+  InitialWeapon: {fileID: 4237984674334015922, guid: 9d60ea47bc8ee1b4a80c55c277f5a949,
     type: 3}
   CanPickupWeapons: 0
   WeaponAttachment: {fileID: 0}

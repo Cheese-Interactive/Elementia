@@ -11,7 +11,7 @@ public class SlowProjectile : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D collision) { // triggers when projectile collides with something
 
-        if (collision.gameObject.CompareTag("Enemy")) // if the projectile collides with the enemy
+        if (collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("Enemy")) // if the projectile collides with the enemy
             collision.gameObject.GetComponent<SlowEffect>().Slow(movementMultiplier, slowDuration);
 
     }
