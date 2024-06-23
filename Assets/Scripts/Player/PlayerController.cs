@@ -105,13 +105,14 @@ public class PlayerController : MonoBehaviour {
 
             hotbar.SetWeapon(action.GetWeaponData(), i); // add weapon item to hotbar
 
-            health.OnDeath += secondaryAction.OnDeath;
-            deathSubscriptions.Add(secondaryAction);
+            health.OnDeath += secondaryAction.OnDeath; // subscribe to death event
+            deathSubscriptions.Add(secondaryAction); // add to list for unsubscribing later
 
         }
 
         health.OnDeath += slowEffect.RemoveEffect; // remove slow effect on death
         health.OnDeath += OnDeath; // to flag death bool to deal with death delay
+        health.OnRevive += OnRespawn; // to flag death bool to deal with death delay
 
         barrierAlpha = barrier.color.a;
         barrier.gameObject.SetActive(false); // barrier is not deployed by default
@@ -120,7 +121,8 @@ public class PlayerController : MonoBehaviour {
 
     private void Update() {
 
-        if (isDead) return; // player is dead, no need to update
+        if (isDead)
+            return; // player is dead, no need to update
 
         currWeapon = null;
         SecondaryAction currSecondaryAction = null;
@@ -440,10 +442,11 @@ public class PlayerController : MonoBehaviour {
 
     private void OnDisable() {
 
+        // unsubscribe from all events
         foreach (SecondaryAction action in deathSubscriptions)
             health.OnDeath -= action.OnDeath;
 
-        health.OnDeath -= slowEffect.RemoveEffect;
+        health.OnDeath -= slowEffect.RemoveEffect; // remove slow effect on death
 
     }
 
@@ -636,6 +639,8 @@ public class PlayerController : MonoBehaviour {
         currWeapon.gameObject.SetActive(false);
 
     }
+
+    private void OnRespawn() => isDead = false;
 
     private void OnDeath() => isDead = true;
 

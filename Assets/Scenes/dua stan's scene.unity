@@ -852,11 +852,11 @@ GameObject:
   - component: {fileID: 224917260}
   - component: {fileID: 224917259}
   - component: {fileID: 224917283}
-  - component: {fileID: 224917284}
   - component: {fileID: 224917286}
   - component: {fileID: 224917287}
-  - component: {fileID: 224917285}
+  - component: {fileID: 224917284}
   - component: {fileID: 224917288}
+  - component: {fileID: 224917285}
   m_Layer: 9
   m_Name: Player
   m_TagString: Player
@@ -1791,7 +1791,6 @@ MonoBehaviour:
     weaponData: {fileID: 11400000, guid: 240fb2df713a88941845b673fa543e19, type: 2}
     secondaryAction: {fileID: 224917287}
   barrier: {fileID: 1049930391}
-  tileDetector: {fileID: 251209039}
 --- !u!95 &224917285
 Animator:
   serializedVersion: 5
@@ -8521,15 +8520,16 @@ GameObject:
   - component: {fileID: 1248597436}
   - component: {fileID: 1248597435}
   - component: {fileID: 1248597431}
-  - component: {fileID: 1248597430}
-  - component: {fileID: 1248597429}
-  - component: {fileID: 1248597451}
+  - component: {fileID: 1248597453}
   - component: {fileID: 1248597446}
   - component: {fileID: 1248597445}
   - component: {fileID: 1248597444}
   - component: {fileID: 1248597450}
   - component: {fileID: 1248597448}
   - component: {fileID: 1248597449}
+  - component: {fileID: 1248597430}
+  - component: {fileID: 1248597452}
+  - component: {fileID: 1248597451}
   - component: {fileID: 1248597428}
   m_Layer: 13
   m_Name: Enemy
@@ -8559,27 +8559,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &1248597429
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1248597427}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df1508296b0904b1ba069c225eb6482a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  RespawnOnPlayerRespawn: 0
-  RepositionToInitOnPlayerRespawn: 0
-  DisableOnKill: 1
-  AutoRespawnDuration: 8
-  AutoRespawnAmount: -1
-  AutoRespawnRemainingAmount: 3
-  IgnoreCheckpointsAlwaysRespawn: 1
-  AssociatedCheckpoints: []
-  RespawnFeedback: {fileID: 0}
 --- !u!114 &1248597430
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8883,7 +8862,7 @@ MonoBehaviour:
   DeathFeedbacks: {fileID: 0}
   DestroyOnDeath: 1
   DelayBeforeDestruction: 0
-  CollisionsOffOnDeath: 1
+  CollisionsOffOnDeath: 0
   GravityOffOnDeath: 0
   PointsWhenDestroyed: 0
   RespawnAtInitialLocation: 1
@@ -9353,6 +9332,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba0fdb6e471673d42ab3fc802ef2dc85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1248597452
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1248597427}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9453d5883e28cae44ba85d67eea24f7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1248597453
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1248597427}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df1508296b0904b1ba069c225eb6482a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RespawnOnPlayerRespawn: 0
+  RepositionToInitOnPlayerRespawn: 0
+  DisableOnKill: 1
+  AutoRespawnDuration: 3
+  AutoRespawnAmount: -1
+  AutoRespawnRemainingAmount: 3
+  IgnoreCheckpointsAlwaysRespawn: 1
+  AssociatedCheckpoints: []
+  RespawnFeedback: {fileID: 0}
 --- !u!1 &1255057641
 GameObject:
   m_ObjectHideFlags: 0
@@ -13585,8 +13597,9 @@ GameObject:
   - component: {fileID: 1987744148}
   - component: {fileID: 1987744132}
   - component: {fileID: 1987744157}
-  - component: {fileID: 1987744159}
   - component: {fileID: 1987744160}
+  - component: {fileID: 1987744159}
+  - component: {fileID: 1987744163}
   - component: {fileID: 1987744162}
   - component: {fileID: 1987744161}
   m_Layer: 13
@@ -14276,6 +14289,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ba0fdb6e471673d42ab3fc802ef2dc85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1987744163
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1987744131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9453d5883e28cae44ba85d67eea24f7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &2018196824
