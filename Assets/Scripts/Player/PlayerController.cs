@@ -33,11 +33,10 @@ public class PlayerController : MonoBehaviour {
     private CharacterLadder charLadder;
     private CharacterButtonActivation charButton;
     private CharacterHandleWeapon charWeapon;
-    private WeaponAim weaponAim;
     private Weapon currWeapon;
 
     [Header("Hotbar")]
-    [SerializeField] private Hotbar hotbar;
+    private Hotbar hotbar;
 
     [Header("Weapons/Secondary Actions")]
     [SerializeField] private WeaponActionPair[] weaponActionPairs;
@@ -88,6 +87,11 @@ public class PlayerController : MonoBehaviour {
         charLadder = GetComponent<CharacterLadder>();
         charButton = GetComponent<CharacterButtonActivation>();
         charWeapon = GetComponent<CharacterHandleWeapon>();
+
+        hotbar = FindObjectOfType<Hotbar>();
+
+        Weapon weapon = weaponActionPairs[0].GetWeapon(); // get first weapon
+        charWeapon.ChangeWeapon(weapon, weapon.WeaponID); // change weapon to first weapon by default
 
         deathSubscriptions = new List<SecondaryAction>();
 
@@ -603,10 +607,6 @@ public class PlayerController : MonoBehaviour {
         charButton.AbilityPermitted = true;
         charWeapon.AbilityPermitted = true;
 
-        //weapon.enabled = true;
-        //weaponAim.enabled = true;
-        //weaponRest.enabled = true;
-
     }
 
     private void DisableAllScripts() {
@@ -625,16 +625,6 @@ public class PlayerController : MonoBehaviour {
         charLadder.AbilityPermitted = false;
         charButton.AbilityPermitted = false;
         charWeapon.AbilityPermitted = false;
-
-        //weaponAim = weapon.GetComponent<WeaponAim>();
-        //weaponRest = weaponAim.GetComponent<WeaponRest>();
-
-        //weapon.enabled = false;
-        //weaponAim.enabled = false;
-        //weaponRest.enabled = false;
-
-        //weaponRest.transform.localPosition = weaponRest.GetRestLocalPos();
-        //weaponRest.transform.rotation = Quaternion.Euler(weaponRest.GetRestRotation());
 
         currWeapon.gameObject.SetActive(false);
 

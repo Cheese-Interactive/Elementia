@@ -7,23 +7,52 @@ public class SlowEffect : MonoBehaviour {
 
     [Header("References")]
     private CharacterHorizontalMovement charMovement;
+    private CharacterJump charJump;
 
     [Header("Slow")]
-    private float initialMultiplier;
+    private float initialSpeed;
+    private float initialJump;
+    private float lastMultiplier;
     private Coroutine slowResetCoroutine;
 
     private void Start() {
 
         charMovement = GetComponent<CharacterHorizontalMovement>();
+        charJump = GetComponent<CharacterJump>();
 
     }
 
     public void Slow(float multiplier, float duration) {
 
-        if (slowResetCoroutine != null) StopCoroutine(slowResetCoroutine);
-        else initialMultiplier = charMovement.MovementSpeedMultiplier; // only set if coroutine wasn't already running (to prevent resetting to slow speed)
+        if (slowResetCoroutine != null) {
 
-        charMovement.MovementSpeedMultiplier = multiplier;
+            StopCoroutine(slowResetCoroutine);
+
+            if (multiplier < lastMultiplier) { // only set if new speed is slower than current speed
+
+                initialSpeed = charMovement.MovementSpeed;
+                charMovement.MovementSpeed *= multiplier;
+
+                if (charJump) { // only set if character can jump
+
+                    initialJump = charJump.JumpHeight;
+                    charJump.JumpHeight *= multiplier;
+
+                }
+            }
+        } else {
+
+            initialSpeed = charMovement.MovementSpeed;
+            charMovement.MovementSpeed *= multiplier; // only set if coroutine wasn't already running (to prevent resetting to slow speed)
+
+            if (charJump) { // only set if character can jump
+
+                initialJump = charJump.JumpHeight;
+                charJump.JumpHeight *= multiplier; // only set if coroutine wasn't already running (to prevent resetting to slow jump)
+
+            }
+        }
+
         slowResetCoroutine = StartCoroutine(ResetSlow(duration));
 
     }
@@ -39,7 +68,10 @@ public class SlowEffect : MonoBehaviour {
 
         if (slowResetCoroutine != null) StopCoroutine(slowResetCoroutine);
 
-        charMovement.MovementSpeedMultiplier = initialMultiplier;
+        charMovement.MovementSpeed = initialSpeed;
+
+        if (charJump)
+            charJump.JumpHeight = initialJump;
 
     }
 }

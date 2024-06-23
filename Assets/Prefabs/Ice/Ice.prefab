@@ -88,14 +88,14 @@ MonoBehaviour:
   BurstLength: 3
   BurstTimeBetweenShots: 0.1
   MagazineBased: 0
-  MagazineSize: 20
-  AutoReload: 1
+  MagazineSize: 30
+  AutoReload: 0
   ReloadTime: 2
   AmmoConsumedPerShot: 1
   AutoDestroyWhenEmpty: 0
   AutoDestroyWhenEmptyDelay: 1
   CurrentAmmoLoaded: 0
-  WeaponAttachmentOffset: {x: 0.15625, y: -0.1875, z: 0}
+  WeaponAttachmentOffset: {x: 0, y: -0.1, z: 0}
   FlipWeaponOnCharacterFlip: 1
   FlipValue: {x: -1, y: 1, z: 1}
   LeftHandHandle: {fileID: 0}
@@ -104,7 +104,7 @@ MonoBehaviour:
   PermanentMovementMultiplier: 0
   ModifyMovementWhileAttacking: 0
   MovementMultiplier: 0
-  AlwaysResetMultiplierToInitial: 1
+  AlwaysResetMultiplierToInitial: 0
   PreventHorizontalGroundMovementWhileInUse: 0
   PreventHorizontalAirMovementWhileInUse: 0
   SetForceWhileInUse: 0
@@ -139,7 +139,7 @@ MonoBehaviour:
   WeaponOnKillFeedback: {fileID: 0}
   ApplyRecoilOnUse: 0
   RecoilOnUseProperties:
-    RecoilForceGrounded: 15
+    RecoilForceGrounded: 10
     RecoilForceAirborne: 10
     RecoilAngleModifier: 0
     DirectionMultiplier: {x: 1, y: 1}
@@ -183,13 +183,13 @@ MonoBehaviour:
     Delay: 0
     RecoilFeedback: {fileID: 0}
   ProjectileSpawnTransform: {fileID: 0}
-  ProjectileSpawnOffset: {x: 0.34375, y: 0, z: 0}
+  ProjectileSpawnOffset: {x: 0.7, y: 0, z: 0}
   ProjectilesPerShot: 1
   Spread: {x: 0, y: 0, z: 0}
   RotateWeaponOnSpread: 0
-  RandomSpread: 0
+  RandomSpread: 1
   ObjectPooler: {fileID: 0}
-  SpawnPosition: {x: 0.34375, y: 0, z: 0}
+  SpawnPosition: {x: 0.7, y: 0, z: 0}
 --- !u!114 &-3073912655475901205
 MonoBehaviour:
   m_ObjectHideFlags: 0

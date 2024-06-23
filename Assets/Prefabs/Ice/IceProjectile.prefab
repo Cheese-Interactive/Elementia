@@ -396,7 +396,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4e14f81bb9a181429eb933e5568ab99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementMultiplier: 0.2
+  movementMultiplier: 0.5
   slowDuration: 5
 --- !u!1 &8257993252936020629
 GameObject:

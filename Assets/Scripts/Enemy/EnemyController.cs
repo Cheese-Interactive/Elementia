@@ -21,6 +21,13 @@ public class EnemyController : MonoBehaviour {
 
     }
 
+    private void OnTriggerEnter2D(Collider2D collision) {
+
+        if (collision.CompareTag("Water"))
+            health.Kill();
+
+    }
+
     private void OnDisable() {
 
         health.OnDeath -= slowEffect.RemoveEffect; // remove slow effect on death

@@ -160,7 +160,7 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
-    Standalone: com.MoreMountains.CorgiEngine
+    Standalone: com.DefaultCompany.Elementia
   buildNumber:
     Standalone: 0
     VisionOS: 0
@@ -861,7 +861,7 @@ PlayerSettings:
   cloudProjectId: 0aebd95c-a601-40a5-b99f-d2402e7388c9
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: 
+  projectName: Elementia
   organizationId: cladcobra
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
