@@ -12,7 +12,6 @@ public class SlowEffect : MonoBehaviour {
     [Header("Slow")]
     private float initialSpeed;
     private float initialJump;
-    private float lastMultiplier;
     private Coroutine slowResetCoroutine;
 
     [Header("Overlay")]
@@ -22,6 +21,11 @@ public class SlowEffect : MonoBehaviour {
 
         charMovement = GetComponent<CharacterHorizontalMovement>();
         charJump = GetComponent<CharacterJump>();
+
+        initialSpeed = charMovement.MovementSpeed;
+
+        if (charJump) // only set if character can jump
+            initialJump = charJump.JumpHeight;
 
         overlay.gameObject.SetActive(false); // deactivate slow overlay by default
 
@@ -33,31 +37,23 @@ public class SlowEffect : MonoBehaviour {
 
             StopCoroutine(slowResetCoroutine);
 
-            if (multiplier < lastMultiplier) { // only set if new speed is slower than current speed
+            if (initialSpeed * multiplier < charMovement.MovementSpeed) { // only set if new speed is slower than current speed
 
-                initialSpeed = charMovement.MovementSpeed;
-                charMovement.MovementSpeed *= multiplier;
+                charMovement.MovementSpeed *= multiplier; // set new speed
                 overlay.gameObject.SetActive(true); // activate slow overlay
 
-                if (charJump) { // only set if character can jump
+                if (charJump) // only set if character can jump
+                    charJump.JumpHeight *= multiplier; // set new jump height
 
-                    initialJump = charJump.JumpHeight;
-                    charJump.JumpHeight *= multiplier;
-
-                }
             }
         } else {
 
-            initialSpeed = charMovement.MovementSpeed;
-            charMovement.MovementSpeed *= multiplier; // only set if coroutine wasn't already running (to prevent resetting to slow speed)
+            charMovement.MovementSpeed *= multiplier; // set new speed
             overlay.gameObject.SetActive(true); // activate slow overlay
 
-            if (charJump) { // only set if character can jump
+            if (charJump) // only set if character can jump
+                charJump.JumpHeight *= multiplier; // set new jump height
 
-                initialJump = charJump.JumpHeight;
-                charJump.JumpHeight *= multiplier; // only set if coroutine wasn't already running (to prevent resetting to slow jump)
-
-            }
         }
 
         slowResetCoroutine = StartCoroutine(ResetSlow(duration));
