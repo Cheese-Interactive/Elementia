@@ -15,10 +15,15 @@ public class SlowEffect : MonoBehaviour {
     private float lastMultiplier;
     private Coroutine slowResetCoroutine;
 
+    [Header("Overlay")]
+    [SerializeField] private GameObject overlay;
+
     private void Start() {
 
         charMovement = GetComponent<CharacterHorizontalMovement>();
         charJump = GetComponent<CharacterJump>();
+
+        overlay.gameObject.SetActive(false); // deactivate slow overlay by default
 
     }
 
@@ -32,6 +37,7 @@ public class SlowEffect : MonoBehaviour {
 
                 initialSpeed = charMovement.MovementSpeed;
                 charMovement.MovementSpeed *= multiplier;
+                overlay.gameObject.SetActive(true); // activate slow overlay
 
                 if (charJump) { // only set if character can jump
 
@@ -44,6 +50,7 @@ public class SlowEffect : MonoBehaviour {
 
             initialSpeed = charMovement.MovementSpeed;
             charMovement.MovementSpeed *= multiplier; // only set if coroutine wasn't already running (to prevent resetting to slow speed)
+            overlay.gameObject.SetActive(true); // activate slow overlay
 
             if (charJump) { // only set if character can jump
 
@@ -72,6 +79,8 @@ public class SlowEffect : MonoBehaviour {
 
         if (charJump)
             charJump.JumpHeight = initialJump;
+
+        overlay.gameObject.SetActive(false); // deactivate slow overlay
 
     }
 }
