@@ -10,15 +10,15 @@ GameObject:
   m_Component:
   - component: {fileID: 400002}
   - component: {fileID: 212000010073301924}
-  - component: {fileID: 61000013902612140}
+  - component: {fileID: 1819634148766671322}
   - component: {fileID: 50000011384318294}
   - component: {fileID: 114000013697282846}
   - component: {fileID: 114000012788668036}
   - component: {fileID: 114000010281602892}
-  - component: {fileID: -5137451317147787246}
+  - component: {fileID: -1293585048276062791}
   - component: {fileID: -6513195632682728618}
   m_Layer: 12
-  m_Name: IceProjectile
+  m_Name: FireProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 1177953632, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -34,7 +34,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4852727705357477191}
@@ -81,18 +81,18 @@ SpriteRenderer:
   m_SortingLayerID: -1628607475
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 925b066e8d8336444ab76c56c395918e, type: 3}
-  m_Color: {r: 0.38959596, g: 0.76284057, b: 0.8018868, a: 1}
+  m_Sprite: {fileID: 21300000, guid: f5fdedeb6b018c64a9903706f286e698, type: 3}
+  m_Color: {r: 0.6792453, g: 0.322427, b: 0.17621931, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.16, y: 0.16}
+  m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &61000013902612140
+--- !u!61 &1819634148766671322
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -129,13 +129,13 @@ BoxCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 0.16, y: 0.16}
-    newSize: {x: 0.16, y: 0.16}
+    newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.16, y: 0.06}
+  m_Size: {x: 0.12, y: 0.08}
   m_EdgeRadius: 0
 --- !u!50 &50000011384318294
 Rigidbody2D:
@@ -186,7 +186,7 @@ MonoBehaviour:
   LifeTime: 5
   FaceDirection: 1
   FaceMovementDirection: 0
-  Speed: 150
+  Speed: 200
   Acceleration: 0
   Direction: {x: -1, y: 0, z: 0}
   DirectionCanBeChangedBySpawner: 1
@@ -222,7 +222,7 @@ MonoBehaviour:
   DamageCausedKnockbackDirection: 0
   DamageCausedKnockbackForce: {x: 2, y: 2}
   InvincibilityDuration: 0
-  RepeatDamageOverTime: 0
+  RepeatDamageOverTime: 1
   AmountOfRepeats: 3
   DurationBetweenRepeats: 1
   DamageOverTimeInterruptible: 1
@@ -281,7 +281,7 @@ MonoBehaviour:
   OnlyDamageMaster: 1
   KillOnMasterHealthDeath: 0
   TargetDamageResistanceProcessor: {fileID: 0}
---- !u!114 &-5137451317147787246
+--- !u!114 &-1293585048276062791
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -290,12 +290,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 100002}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b4e14f81bb9a181429eb933e5568ab99, type: 3}
+  m_Script: {fileID: 11500000, guid: 0bf9887fda6905f47a289c9d777f68d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementMultiplier: 0.3
-  jumpMultiplier: 0.5
-  slowDuration: 5
 --- !u!96 &-6513195632682728618
 TrailRenderer:
   serializedVersion: 3
@@ -360,8 +357,8 @@ TrailRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 0.3882353, g: 0.7647059, b: 0.8, a: 1}
-      key1: {r: 0, g: 0.3363881, b: 0.3679245, a: 1}
+      key0: {r: 0.6784314, g: 0.32156864, b: 0.1764706, a: 1}
+      key1: {r: 0.4509804, g: 0.16470589, b: 0.043137256, a: 1}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -615,7 +612,7 @@ MonoBehaviour:
         MutualizePools: 0
         ParentTransform: {fileID: 0}
         CachedRecycle: 0
-        ParticlesPrefab: {fileID: 19800000, guid: 4c910bfa3a5800543a9cf7173a230853,
+        ParticlesPrefab: {fileID: 19800000, guid: 673eec49738a63a4f8e3fdc8b52316d8,
           type: 3}
         RandomParticlePrefabs: []
         ForceSetActiveOnPlay: 0

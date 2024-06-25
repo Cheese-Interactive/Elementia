@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FreezeOverlay : MonoBehaviour {
+public class Overlay : MonoBehaviour {
 
     [Header("References")]
     [SerializeField] private SpriteRenderer spriteRenderer;

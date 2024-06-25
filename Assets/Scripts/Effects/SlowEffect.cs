@@ -15,7 +15,7 @@ public class SlowEffect : MonoBehaviour {
     private Coroutine slowResetCoroutine;
 
     [Header("Overlay")]
-    [SerializeField] private GameObject overlay;
+    [SerializeField] private Overlay overlay;
 
     private void Start() {
 
@@ -44,9 +44,9 @@ public class SlowEffect : MonoBehaviour {
 
             }
 
-            if (initialJump * jumpMultiplier < charJump.JumpHeight) { // only set if new jump height is lower than current jump height
+            if (charJump) { // only set if character can jump
 
-                if (charJump) { // only set if character can jump
+                if (initialJump * jumpMultiplier < charJump.JumpHeight) { // only set if new jump height is lower than current jump height
 
                     charJump.JumpHeight *= jumpMultiplier; // set new jump height
                     overlay.gameObject.SetActive(true); // activate slow overlay
@@ -64,7 +64,6 @@ public class SlowEffect : MonoBehaviour {
                 overlay.gameObject.SetActive(true); // activate slow overlay
 
             }
-
         }
 
         slowResetCoroutine = StartCoroutine(ResetSlow(duration));

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 19800000}
   - component: {fileID: 19900000}
   m_Layer: 0
-  m_Name: MagicMissileImpact
+  m_Name: FireImpact
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -223,8 +223,8 @@ ParticleSystem:
     startColor:
       serializedVersion: 2
       minMaxState: 2
-      minColor: {r: 0.28627452, g: 0, b: 0.41568628, a: 1}
-      maxColor: {r: 0.6431373, g: 0.2509804, b: 1, a: 1}
+      minColor: {r: 0.4528302, g: 0.16278592, b: 0.044855822, a: 1}
+      maxColor: {r: 0.6784314, g: 0.32156864, b: 0.1764706, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}

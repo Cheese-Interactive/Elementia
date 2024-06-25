@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 114000012788668036}
   - component: {fileID: 114000010281602892}
   - component: {fileID: -6513195632682728618}
-  m_Layer: 16
+  m_Layer: 12
   m_Name: MagicMissileProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 1177953632, guid: 0000000000000000d000000000000000, type: 0}
@@ -127,7 +127,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.21333334, y: 0.21333334}
+    oldSize: {x: 0.16, y: 0.16}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -185,7 +185,7 @@ MonoBehaviour:
   LifeTime: 5
   FaceDirection: 1
   FaceMovementDirection: 0
-  Speed: 200
+  Speed: 250
   Acceleration: 0
   Direction: {x: -1, y: 0, z: 0}
   DirectionCanBeChangedBySpawner: 1
@@ -394,7 +394,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4852727705357477191}
   - component: {fileID: 4464506776866919987}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: DeathFeedbacks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
