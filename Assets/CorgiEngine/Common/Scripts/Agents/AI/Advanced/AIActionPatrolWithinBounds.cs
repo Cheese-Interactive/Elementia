@@ -39,6 +39,7 @@ namespace MoreMountains.CorgiEngine
 		/// </summary>
 		public override void Initialization()
 		{
+			if(!ShouldInitialize) return;
 			base.Initialization();
 			_init = true;
 			_initialPosition = this.transform.position;

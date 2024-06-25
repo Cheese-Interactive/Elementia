@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Scripting.APIUpdating;
 
 namespace MoreMountains.Feedbacks
 {
@@ -9,6 +10,7 @@ namespace MoreMountains.Feedbacks
 	/// </summary>
 	[AddComponentMenu("")]
 	[FeedbackHelp("This feedback allows you to control one or more target MMF Players")]
+	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
 	[FeedbackPath("Feedbacks/MMF Player Control")]
 	public class MMF_PlayerControl : MMF_Feedback
 	{
@@ -21,6 +23,43 @@ namespace MoreMountains.Feedbacks
 		#endif
 		
 		public override bool HasChannel => false;
+
+		public override float FeedbackDuration
+		{
+			get
+			{
+				if ((Mode == Modes.PlayFeedbacks) && (TargetPlayers.Count > 0))
+				{
+					float totalDuration = 0f;
+					foreach (MMF_Player player in TargetPlayers)
+					{
+						if (player != null)
+						{
+							totalDuration += player.TotalDuration;	
+						}
+					}
+
+					return totalDuration;
+				}
+
+				return 0f;
+			}
+		}
+
+		public override bool IsPlaying
+		{
+			get
+			{
+				foreach (MMF_Player player in TargetPlayers)
+				{
+					if (player.IsPlaying)
+					{
+						return true;
+					}
+				}
+				return false;
+			}
+		}
 
 		public enum Modes
 		{

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using MoreMountains.Tools;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.Scripting.APIUpdating;
 
 namespace MoreMountains.Feedbacks
 {
@@ -11,6 +12,7 @@ namespace MoreMountains.Feedbacks
 	/// </summary>
 	[AddComponentMenu("")]
 	[FeedbackHelp("This feedback lets you flicker the color of a specified renderer (sprite, mesh, etc) for a certain duration, at the specified octave, and with the specified color. Useful when a character gets hit, for example (but so much more!).")]
+	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
 	[FeedbackPath("Renderer/Flicker")]
 	public class MMF_Flicker : MMF_Feedback
 	{
@@ -160,6 +162,7 @@ namespace MoreMountains.Feedbacks
 			}
 			for (int i = 0; i < MaterialIndexes.Length; i++)
 			{
+				if (_coroutines[i] != null) { Owner.StopCoroutine(_coroutines[i]); }
 				_coroutines[i] = Owner.StartCoroutine(Flicker(BoundRenderer, i, _initialFlickerColors[i], FlickerColor, FlickerPeriod, FeedbackDuration));
 			}
 		}

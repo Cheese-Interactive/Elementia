@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using MoreMountains.Tools;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Scripting.APIUpdating;
 
 namespace MoreMountains.Feedbacks
 {
@@ -11,6 +12,7 @@ namespace MoreMountains.Feedbacks
 	/// </summary>
 	[AddComponentMenu("")]
 	[FeedbackHelp("This feedback will let you change the alpha of a target Image over time.")]
+	[MovedFrom(false, null, "MoreMountains.Feedbacks.MMTools")]
 	[FeedbackPath("UI/Image Alpha")]
 	public class MMF_ImageAlpha : MMF_Feedback
 	{
@@ -105,6 +107,7 @@ namespace MoreMountains.Feedbacks
 						return;
 					}
 
+					if (_coroutine != null) { Owner.StopCoroutine(_coroutine); }
 					_coroutine = Owner.StartCoroutine(ImageSequence());
 					break;
 				case Modes.ToDestination:
@@ -113,6 +116,7 @@ namespace MoreMountains.Feedbacks
 						return;
 					}
 
+					if (_coroutine != null) { Owner.StopCoroutine(_coroutine); }
 					_coroutine = Owner.StartCoroutine(ImageSequence());
 					break;
 			}
@@ -181,7 +185,10 @@ namespace MoreMountains.Feedbacks
 			{
 				Turn(false);    
 			}
-			Owner.StopCoroutine(_coroutine);
+            if (_coroutine != null)
+            {
+                Owner.StopCoroutine(_coroutine);        
+            }			
 			_coroutine = null;
 		}
 

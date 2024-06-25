@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using MoreMountains.Tools;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Scripting.APIUpdating;
 
 namespace MoreMountains.Feedbacks
 {
@@ -15,6 +16,7 @@ namespace MoreMountains.Feedbacks
 	[FeedbackHelp("This feedback will move the current 'head' of an MMFeedbacks sequence back to another feedback above in the list. " +
 	              "What feedback the head lands on depends on your settings : you can decide to have it loop at last pause, " +
 	              "or at the last LoopStart feedback in the list (or both). Furthermore, you can decide to have it loop multiple times and cause a pause when met.")]
+	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
 	[FeedbackPath("Loop/Looper")]
 	public class MMF_Looper : MMF_Pause
 	{
@@ -81,6 +83,7 @@ namespace MoreMountains.Feedbacks
 		{
 			if (Active)
 			{
+				ProcessNewPauseDuration();
 				InInfiniteLoop = InfiniteLoop;
 				NumberOfLoopsLeft--;
 				Owner.StartCoroutine(PlayPause());

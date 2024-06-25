@@ -13,7 +13,7 @@ namespace MoreMountains.CorgiEngine
 	/// Adds weapon state display to the Weapons inspector
 	/// </summary>
 
-	public class WeaponEditor : MMMonoBehaviourDrawer
+	public class WeaponEditor : MMMonoBehaviourUITKEditor 
 	{
 		public override void OnInspectorGUI()
 		{

@@ -127,7 +127,7 @@ namespace MoreMountains.CorgiEngine
 			_characterHorizontalMovement = _character?.FindAbility<CharacterHorizontalMovement>();
 			_characterGravity = _character?.FindAbility<CharacterGravity> ();
 			_spriteRenderer = this.gameObject.GetComponentInParent<SpriteRenderer>();
-			_health = this.gameObject.GetComponentInParent<Health> ();
+			_health = _character.CharacterHealth;
 			_handleWeaponList = _character?.FindAbilities<CharacterHandleWeapon>();
 			BindAnimator();
 			if (_character != null)

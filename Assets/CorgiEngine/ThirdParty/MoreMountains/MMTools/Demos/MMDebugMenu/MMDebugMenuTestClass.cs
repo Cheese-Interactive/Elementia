@@ -8,6 +8,7 @@ namespace MoreMountains.Tools
 	/// <summary>
 	/// A simple test class used in the MMDebugMenu demo scene to shake a few values and output them in the debug on screen console
 	/// </summary>
+	[AddComponentMenu("")]
 	public class MMDebugMenuTestClass : MonoBehaviour
 	{
 		/// a label to display

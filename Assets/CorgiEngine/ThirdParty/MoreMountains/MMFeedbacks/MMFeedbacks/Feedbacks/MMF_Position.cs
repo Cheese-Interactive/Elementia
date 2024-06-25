@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using MoreMountains.Tools;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.Scripting.APIUpdating;
 
 namespace MoreMountains.Feedbacks
 {
@@ -11,6 +12,7 @@ namespace MoreMountains.Feedbacks
 	/// </summary>
 	[AddComponentMenu("")]
 	[FeedbackHelp("This feedback will animate the target object's position over time, for the specified duration, from the chosen initial position to the chosen destination. These can either be relative Vector3 offsets from the Feedback's position, or Transforms. If you specify transforms, the Vector3 values will be ignored.")]
+	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
 	[FeedbackPath("Transform/Position")]
 	public class MMF_Position : MMF_Feedback
 	{
@@ -235,6 +237,7 @@ namespace MoreMountains.Feedbacks
 						{
 							_destinationPosition = GetPosition(DestinationPositionTransform);
 						}
+						if (_coroutine != null) { Owner.StopCoroutine(_coroutine); }
 						_coroutine = Owner.StartCoroutine(MoveFromTo(AnimatePositionTarget, _initialPosition, _destinationPosition, FeedbackDuration, AnimatePositionTween));
 						break;
 					case Modes.AtoB:
@@ -242,6 +245,7 @@ namespace MoreMountains.Feedbacks
 						{
 							return;
 						}
+						if (_coroutine != null) { Owner.StopCoroutine(_coroutine); }
 						_coroutine = Owner.StartCoroutine(MoveFromTo(AnimatePositionTarget, _workInitialPosition, _workDestinationPosition, FeedbackDuration, AnimatePositionTween));
 						break;
 					case Modes.AlongCurve:
@@ -254,6 +258,7 @@ namespace MoreMountains.Feedbacks
 						_remapCurveZero = RandomizeRemap ? Random.Range(RemapCurveZero, RemapCurveZeroAlt) : RemapCurveZero;
 						_remapCurveOne = RandomizeRemap ? Random.Range(RemapCurveOne, RemapCurveOneAlt) : RemapCurveOne;
 						
+						if (_coroutine != null) { Owner.StopCoroutine(_coroutine); }
 						_coroutine = Owner.StartCoroutine(MoveAlongCurve(AnimatePositionTarget, _workInitialPosition, FeedbackDuration, intensityMultiplier));
 						break;
 				}                    

@@ -1,8 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
 using MoreMountains.Tools;
+#if UNITY_EDITOR
+using UnityEditor;
+using UnityEngine.UIElements;
+using UnityEditor.UIElements;
+#endif
 
 namespace MoreMountains.CorgiEngine
 {
@@ -12,7 +16,7 @@ namespace MoreMountains.CorgiEngine
 	[CanEditMultipleObjects]
 	[CustomEditor(typeof(Teleporter), true)]
 	[InitializeOnLoad]
-	public class TeleporterEditor : MMMonoBehaviourDrawer
+	public class TeleporterEditor : MMMonoBehaviourUITKEditor 
 	{
 		[DrawGizmo(GizmoType.InSelectionHierarchy | GizmoType.NotInSelectionHierarchy)]
 		static void DrawHandles(Teleporter teleporter, GizmoType gizmoType)

@@ -18,6 +18,7 @@ namespace MoreMountains.CorgiEngine
 		/// </summary>
 		public override void Initialization()
 		{
+			if(!ShouldInitialize) return;
 			base.Initialization();
 			_alreadyRan = false;
 		}

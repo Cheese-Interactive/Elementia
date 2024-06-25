@@ -1,11 +1,7 @@
 ﻿using UnityEngine;
-using System.Collections;
 using MoreMountains.Tools;
 using System.Collections.Generic;
-using UnityEngine.UI;
 using System;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 
 namespace MoreMountains.InventoryEngine
 {
@@ -667,9 +663,9 @@ namespace MoreMountains.InventoryEngine
 					_loadedInventoryItem = Resources.Load<InventoryItem>(_resourceItemPath + serializedInventory.ContentType[i]);
 					if (_loadedInventoryItem == null)
 					{
-						Debug.LogError("InventoryEngine : Couldn't find any inventory item to load at "+_resourceItemPath
+						Debug.LogError("InventoryEngine : Couldn't find any inventory item to load at Resources/"+_resourceItemPath
 							+" named "+serializedInventory.ContentType[i] + ". Make sure all your items definitions names (the name of the InventoryItem scriptable " +
-							"objects) are exactly the same as their ItemID string in their inspector. " +
+							"objects) are exactly the same as their ItemID string in their inspector. Make sure they are in a  Resources/"+_resourceItemPath+" folder. " +
 							"Once that's done, also make sure you reset all saved inventories as the mismatched names and IDs may have " +
 							"corrupted them.");
 					}
@@ -720,11 +716,11 @@ namespace MoreMountains.InventoryEngine
 			if (item.Use(PlayerID))
 			{
 				// remove 1 from quantity
-				MMInventoryEvent.Trigger(MMInventoryEventType.ItemUsed, slot, this.name, item.Copy(), 0, index, PlayerID);
 				if (item.Consumable)
 				{
 					RemoveItem(index, item.ConsumeQuantity);    
 				}
+				MMInventoryEvent.Trigger(MMInventoryEventType.ItemUsed, slot, this.name, item.Copy(), 0, index, PlayerID);
 			}
 			return true;
 		}
@@ -803,6 +799,7 @@ namespace MoreMountains.InventoryEngine
 							// we store the item in the equipment inventory
 							oldItem = item.TargetEquipmentInventory(PlayerID).Content[0].Copy();
 							oldItem.UnEquip(PlayerID);
+							MMInventoryEvent.Trigger(MMInventoryEventType.ItemUnEquipped, slot, this.name, oldItem, oldItem.Quantity, index, PlayerID);
 							item.TargetEquipmentInventory(PlayerID).EmptyInventory();
 						}
 					}

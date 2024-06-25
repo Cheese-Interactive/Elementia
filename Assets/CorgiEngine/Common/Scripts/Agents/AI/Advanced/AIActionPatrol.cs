@@ -70,6 +70,7 @@ namespace MoreMountains.CorgiEngine
 		/// </summary>
 		public override void Initialization()
 		{
+			if(!ShouldInitialize) return;
 			// we get the CorgiController2D component
 			_controller = GetComponentInParent<CorgiController>();
 			_character = GetComponentInParent<Character>();

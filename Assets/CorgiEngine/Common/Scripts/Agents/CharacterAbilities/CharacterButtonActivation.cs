@@ -117,6 +117,7 @@ namespace MoreMountains.CorgiEngine
 				ButtonActivatedZone.TriggerButtonAction(_character.gameObject);
 				PlayAbilityStartFeedbacks();
 
+				_lastActivatedAt = Time.time;
 				_activating = true;
 			}
 		}

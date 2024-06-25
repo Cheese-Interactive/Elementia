@@ -284,9 +284,17 @@ namespace MoreMountains.Feedbacks
 		/// <summary>
 		/// On awake we initialize our spawner
 		/// </summary>
-		protected virtual void Start()
+		protected virtual void Awake()
 		{
 			Initialization();
+		}
+
+		/// <summary>
+		/// On Start we grab our main camera if needed
+		/// </summary>
+		protected virtual void Start()
+		{
+			GrabMainCamera();
 		}
 
 		/// <summary>
@@ -295,7 +303,6 @@ namespace MoreMountains.Feedbacks
 		protected virtual void Initialization()
 		{
 			InstantiateObjectPool();
-			GrabMainCamera();
 		}
 
 		/// <summary>

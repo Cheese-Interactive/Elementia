@@ -1,5 +1,6 @@
 ﻿using MoreMountains.Tools;
 using UnityEngine;
+using UnityEngine.Scripting.APIUpdating;
 
 namespace MoreMountains.Feedbacks
 {
@@ -8,6 +9,7 @@ namespace MoreMountains.Feedbacks
 	/// </summary>
 	[AddComponentMenu("")]
 	[FeedbackHelp("This feedback lets you control the position of a RectTransform's pivot over time")]
+	[MovedFrom(false, null, "MoreMountains.Feedbacks.MMTools")]
 	[FeedbackPath("UI/RectTransform Pivot")]
 	public class MMF_RectTransformPivot : MMF_FeedbackBase
 	{

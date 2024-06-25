@@ -86,7 +86,7 @@ namespace MoreMountains.CorgiEngine
 				if ((Bottom != BoundsBehavior.Nothing) && (_controller.ColliderBottomPosition.y < _bounds.min.y))
 				{
 					_constrainedPosition.x = transform.position.x;
-					_constrainedPosition.y = _bounds.min.y + _controller.ColliderSize.y / 2 + _controller.ColliderOffset.y;
+					_constrainedPosition.y = _bounds.min.y + _controller.ColliderSize.y / 2 - _controller.ColliderOffset.y;
 					if (ResetForcesOnConstrain) { _controller.SetVerticalForce(0f); }
 					ApplyBoundsBehavior(Bottom, _constrainedPosition);
 				}					

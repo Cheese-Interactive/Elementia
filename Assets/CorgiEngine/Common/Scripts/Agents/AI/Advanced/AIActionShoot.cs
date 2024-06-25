@@ -38,6 +38,7 @@ namespace MoreMountains.CorgiEngine
 		/// </summary>
 		public override void Initialization()
 		{
+			if(!ShouldInitialize) return;
 			_character = GetComponentInParent<Character>();
 			if (TargetHandleWeapon == null)
 			{

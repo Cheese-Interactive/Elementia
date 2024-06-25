@@ -384,8 +384,6 @@ namespace MoreMountains.Feedbacks
                 
 				EditorGUILayout.Space(10);
 				EditorGUILayout.LabelField(_timingText, EditorStyles.boldLabel);
-				EditorGUILayout.PropertyField(_mmfeedbacksForceTimescaleMode);
-				EditorGUILayout.PropertyField(_mmfeedbacksForcedTimescaleMode);
 				EditorGUILayout.PropertyField(_mmfeedbacksDurationMultiplier);
 				EditorGUILayout.PropertyField(_mmfeedbacksRandomizeDuration);
 				EditorGUILayout.PropertyField(_mmfeedbacksRandomDurationMultiplier);
@@ -394,6 +392,8 @@ namespace MoreMountains.Feedbacks
 				EditorGUILayout.PropertyField(_mmfeedbacksInitialDelay);
 				EditorGUILayout.PropertyField(_mmfeedbacksChanceToPlay);
 				EditorGUILayout.PropertyField(_mmfeedbacksPlayerTimescaleMode);
+				EditorGUILayout.PropertyField(_mmfeedbacksForceTimescaleMode);
+				EditorGUILayout.PropertyField(_mmfeedbacksForcedTimescaleMode);
 
 				EditorGUILayout.Space(10);
 				EditorGUILayout.LabelField(_rangeText, EditorStyles.boldLabel);
@@ -426,6 +426,15 @@ namespace MoreMountains.Feedbacks
 				EditorGUILayout.Space(10);
 				EditorGUILayout.LabelField(_eventsText, EditorStyles.boldLabel);
 				EditorGUILayout.PropertyField(_mmfeedbacksEvents);
+			
+				if (!Application.isPlaying && TargetMmfPlayer.HasAutomaticShakerSetup)
+				{
+					EditorGUILayout.Space(10);
+					if (GUILayout.Button("Automatic Shaker Setup"))
+					{
+						TargetMmfPlayer.AutomaticShakerSetup();
+					}
+				}
 			}
 		}
         
@@ -1071,33 +1080,12 @@ namespace MoreMountains.Feedbacks
 		{
 			switch (playModeState)
 			{
-				case PlayModeStateChange.ExitingPlayMode:
-					StoreRuntimeChanges();
-					break;
-        
 				case PlayModeStateChange.EnteredEditMode:
-					ApplyRuntimeChanges();
+					ForceRepaint();
 					break;
 			}
 		}
-
-		protected virtual void StoreRuntimeChanges()
-		{
-			foreach (MMF_Player player in FindObjectsOfType<MMF_Player>().Where(p => p.KeepPlayModeChanges))
-			{
-				MMF_PlayerCopy.StoreRuntimeChanges(player);
-			}
-		}
-
-		protected virtual void ApplyRuntimeChanges()
-		{
-			foreach (MMF_Player player in FindObjectsOfType<MMF_Player>().Where(MMF_PlayerCopy.RuntimeChanges.ContainsKey))
-			{
-				MMF_PlayerCopy.ApplyRuntimeChanges(player);
-			}
-			ForceRepaint();
-		}
-
+		
 		public virtual void ForceRepaint()
 		{
 			MMF_FeedbackInspectors.Clear();

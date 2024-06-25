@@ -183,7 +183,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   LifeTime: 5
+  trailRenderer: {fileID: 0}
   FaceDirection: 1
+  FaceMovementDirection: 0
   Speed: 200
   Acceleration: 0
   Direction: {x: -1, y: 0, z: 0}
@@ -503,6 +505,12 @@ MonoBehaviour:
     OnSkipToTheEnd:
       m_PersistentCalls:
         m_Calls: []
+    OnEnable:
+      m_PersistentCalls:
+        m_Calls: []
+    OnDisable:
+      m_PersistentCalls:
+        m_Calls: []
   DebugActive: 0
   FeedbacksList:
   - rid: 0
@@ -514,7 +522,7 @@ MonoBehaviour:
     version: 2
     RefIds:
     - rid: 0
-      type: {class: MMF_ParticlesInstantiation, ns: MoreMountains.Feedbacks, asm: MoreMountains.Feedbacks}
+      type: {class: MMF_ParticlesInstantiation, ns: MoreMountains.Feedbacks, asm: MoreMountains.Tools}
       data:
         Active: 1
         UniqueID: 435572823
@@ -534,6 +542,10 @@ MonoBehaviour:
           NumberOfRepeats: 0
           RepeatForever: 0
           DelayBetweenRepeats: 1
+          PlayCount: 0
+          LimitPlayCount: 0
+          MaxPlayCount: 3
+          SetPlayCountToZeroOnReset: 0
           MMFeedbacksDirectionCondition: 0
           PlayDirection: 0
           ConstantIntensity: 0
@@ -579,6 +591,8 @@ MonoBehaviour:
           m_PostInfinity: 2
           m_RotationOrder: 4
         RemapRangeFalloff: {x: 0, y: 1}
+        AutomaticShakerSetupButton:
+          ButtonText: 
         Owner: {fileID: 4464506776866919987}
         DebugActive: 0
         Mode: 1

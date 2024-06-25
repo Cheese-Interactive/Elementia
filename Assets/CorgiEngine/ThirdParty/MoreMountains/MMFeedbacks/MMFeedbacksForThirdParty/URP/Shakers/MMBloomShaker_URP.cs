@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using MoreMountains.Feedbacks;
 using MoreMountains.Tools;
 using UnityEngine.Rendering;

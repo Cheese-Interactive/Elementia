@@ -1,7 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
-using MoreMountains.Tools;
-using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
@@ -26,7 +23,19 @@ namespace MoreMountains.InventoryEngine
 		public RectTransform IconRectTransform;
 		public Image IconImage;
 		public Text QuantityText;
-		
+
+		public InventoryItem CurrentItem
+		{
+			get
+			{
+				if (ParentInventoryDisplay != null)
+				{
+					return ParentInventoryDisplay.TargetInventory.Content[Index];
+				}
+
+				return null;
+			}
+		}
 		
 		protected const float _disabledAlpha = 0.5f;
 		protected const float _enabledAlpha = 1.0f;

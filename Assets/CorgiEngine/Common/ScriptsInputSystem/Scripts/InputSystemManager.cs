@@ -82,7 +82,7 @@ namespace MoreMountains.CorgiEngine
                 {
                     imButton.TriggerButtonDown();
                 }
-                if (button.wasReleasedThisFrame)
+                if ( button.wasReleasedThisFrame || (imButton.State.CurrentState == MMInput.ButtonStates.ButtonPressed && !button.isPressed) )
                 {
                     imButton.TriggerButtonUp();
                 }

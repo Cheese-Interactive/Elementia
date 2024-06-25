@@ -206,6 +206,10 @@ namespace MoreMountains.CorgiEngine
 
 		public virtual bool InWalljumpCoyoteTime()
 		{
+			if (_characterWallClinging == null)
+			{
+				return false;
+			}
 			if (_characterWallClinging.HasTouchedGround)
 			{
 				return false;

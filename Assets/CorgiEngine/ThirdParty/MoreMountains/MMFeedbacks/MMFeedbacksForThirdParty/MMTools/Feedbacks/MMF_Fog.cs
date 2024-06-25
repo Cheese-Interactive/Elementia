@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using MoreMountains.Tools;
+using UnityEngine.Scripting.APIUpdating;
 
 namespace MoreMountains.Feedbacks
 {
@@ -10,6 +11,7 @@ namespace MoreMountains.Feedbacks
 	/// </summary>
 	[AddComponentMenu("")]
 	[FeedbackHelp("This feedback will let you animate the density, color, end and start distance of your scene's fog")]
+	[MovedFrom(false, null, "MoreMountains.Feedbacks.MMTools")]
 	[FeedbackPath("Renderer/Fog")]
 	public class MMF_Fog : MMF_Feedback
 	{
@@ -21,6 +23,7 @@ namespace MoreMountains.Feedbacks
 		public override string RequiredTargetText { get { return Mode.ToString();  } }
 		#endif
 		public override bool HasRandomness => true;
+		public override bool HasCustomInspectors => true; 
 
 		/// the possible modes for this feedback
 		public enum Modes { OverTime, Instant }
@@ -156,6 +159,7 @@ namespace MoreMountains.Feedbacks
 					{
 						return;
 					}
+					if (_coroutine != null) { Owner.StopCoroutine(_coroutine); }
 					_coroutine = Owner.StartCoroutine(FogSequence(intensityMultiplier));
 					break;
 			}

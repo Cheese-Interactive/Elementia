@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 using MoreMountains.Tools;
 
@@ -240,10 +239,6 @@ namespace MoreMountains.InventoryEngine
 		public virtual void FindTargetInventory(string targetInventoryName, string playerID = "Player1")
 		{
 			_targetInventory = null;
-			if (targetInventoryName == null)
-			{
-				return;
-			}
 			_targetInventory = Inventory.FindInventory(targetInventoryName, playerID);
 		}
 	}

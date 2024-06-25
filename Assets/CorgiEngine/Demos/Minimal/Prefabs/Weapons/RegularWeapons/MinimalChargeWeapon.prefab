@@ -210,7 +210,8 @@ MonoBehaviour:
     ChargeCompleteFeedbacks: {fileID: 0}
   ReleaseMode: 0
   TimescaleMode: 0
-  AllowInitialShot: 1
+  AllowInitialShotOnPress: 1
+  AllowInitialShotOnRelease: 0
   CurrentChargeIndex: 0
   Charging: 0
 --- !u!1 &286725641787154797
@@ -10133,6 +10134,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   InitializationMode: 2
+  AutoInitialization: 1
   SafeMode: 3
   Direction: 0
   AutoChangeDirectionOnEnd: 0
@@ -10217,7 +10219,7 @@ MonoBehaviour:
   - id: 7
   KeepPlayModeChanges: 0
   PerformanceMode: 0
-  ForceStopFeedbacksOnDisable: 1
+  StopFeedbacksOnDisable: 0
   PlayCount: 0
   references:
     version: 1
@@ -10290,11 +10292,14 @@ MonoBehaviour:
         Owner: {fileID: 3640802873430378275}
         DebugActive: 0
         Mode: 0
+        EmitCount: 100
         BoundParticleSystem: {fileID: 1750871160138172478}
         RandomParticleSystems: []
         MoveToPosition: 0
         ActivateOnPlay: 0
         StopSystemOnInit: 1
+        StopSystemOnReset: 1
+        StopSystemOnStopFeedback: 1
         DeclaredDuration: 0
         ForceSimulationSpeed: 0
         ForcedSimulationSpeed: {x: 0.1, y: 1}
@@ -10367,11 +10372,14 @@ MonoBehaviour:
         Owner: {fileID: 3640802873430378275}
         DebugActive: 0
         Mode: 0
+        EmitCount: 100
         BoundParticleSystem: {fileID: 9007246933882716211}
         RandomParticleSystems: []
         MoveToPosition: 0
         ActivateOnPlay: 0
         StopSystemOnInit: 1
+        StopSystemOnReset: 1
+        StopSystemOnStopFeedback: 1
         DeclaredDuration: 0
         ForceSimulationSpeed: 0
         ForcedSimulationSpeed: {x: 0.1, y: 1}
@@ -10451,6 +10459,7 @@ MonoBehaviour:
           ButtonText: Debug Stop Sound
         PlayMethod: 1
         PoolSize: 10
+        UseLegacyEventsMode: 0
         StopSoundOnFeedbackStop: 1
         MinVolume: 1
         MaxVolume: 1
@@ -11109,6 +11118,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Feedbacks: []
   InitializationMode: 2
+  AutoInitialization: 1
   SafeMode: 3
   Direction: 0
   AutoChangeDirectionOnEnd: 0
@@ -11187,7 +11197,7 @@ MonoBehaviour:
   - id: 1
   KeepPlayModeChanges: 0
   PerformanceMode: 0
-  ForceStopFeedbacksOnDisable: 1
+  StopFeedbacksOnDisable: 0
   PlayCount: 0
   references:
     version: 1
@@ -11260,11 +11270,14 @@ MonoBehaviour:
         Owner: {fileID: 8207414409761664599}
         DebugActive: 0
         Mode: 0
+        EmitCount: 100
         BoundParticleSystem: {fileID: 8525750716920855029}
         RandomParticleSystems: []
         MoveToPosition: 0
         ActivateOnPlay: 0
         StopSystemOnInit: 1
+        StopSystemOnReset: 1
+        StopSystemOnStopFeedback: 1
         DeclaredDuration: 0
         ForceSimulationSpeed: 0
         ForcedSimulationSpeed: {x: 0.1, y: 1}
@@ -11347,7 +11360,6 @@ MonoBehaviour:
         MaxVolume: 1
         MinPitch: 1.2
         MaxPitch: 1.2
-        PlaybackTime: {x: 0, y: 0}
         MmSoundManagerTrack: 0
         ID: 0
         AudioGroup: {fileID: 0}
@@ -11398,6 +11410,8 @@ MonoBehaviour:
         BypassReverbZones: 0
         Priority: 128
         ReverbZoneMix: 1
+        PlaybackTime: {x: 0, y: 0}
+        PlaybackDuration: {x: 0, y: 0}
         DopplerLevel: 1
         Spread: 0
         RolloffMode: 0
@@ -11494,6 +11508,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   InitializationMode: 2
+  AutoInitialization: 1
   SafeMode: 3
   Direction: 0
   AutoChangeDirectionOnEnd: 0
@@ -11578,7 +11593,7 @@ MonoBehaviour:
   - id: 7
   KeepPlayModeChanges: 0
   PerformanceMode: 0
-  ForceStopFeedbacksOnDisable: 1
+  StopFeedbacksOnDisable: 0
   PlayCount: 0
   references:
     version: 1
@@ -11651,11 +11666,14 @@ MonoBehaviour:
         Owner: {fileID: 2734607427803007479}
         DebugActive: 0
         Mode: 0
+        EmitCount: 100
         BoundParticleSystem: {fileID: 3789967468271263984}
         RandomParticleSystems: []
         MoveToPosition: 0
         ActivateOnPlay: 0
         StopSystemOnInit: 1
+        StopSystemOnReset: 1
+        StopSystemOnStopFeedback: 1
         DeclaredDuration: 0
         ForceSimulationSpeed: 0
         ForcedSimulationSpeed: {x: 0.1, y: 1}
@@ -11728,11 +11746,14 @@ MonoBehaviour:
         Owner: {fileID: 2734607427803007479}
         DebugActive: 0
         Mode: 0
+        EmitCount: 100
         BoundParticleSystem: {fileID: 9007246933882716211}
         RandomParticleSystems: []
         MoveToPosition: 0
         ActivateOnPlay: 0
         StopSystemOnInit: 1
+        StopSystemOnReset: 1
+        StopSystemOnStopFeedback: 1
         DeclaredDuration: 0
         ForceSimulationSpeed: 0
         ForcedSimulationSpeed: {x: 0.1, y: 1}
@@ -11812,6 +11833,7 @@ MonoBehaviour:
           ButtonText: Debug Stop Sound
         PlayMethod: 1
         PoolSize: 10
+        UseLegacyEventsMode: 0
         StopSoundOnFeedbackStop: 1
         MinVolume: 1
         MaxVolume: 1
@@ -12523,7 +12545,7 @@ MonoBehaviour:
   AutoDestroyWhenEmptyDelay: 1
   CurrentAmmoLoaded: 0
   WeaponAttachmentOffset: {x: 0, y: 0, z: 0}
-  FlipWeaponOnCharacterFlip: 0
+  FlipWeaponOnCharacterFlip: 1
   FlipValue: {x: -1, y: 1, z: 1}
   LeftHandHandle: {fileID: 0}
   RightHandHandle: {fileID: 0}
@@ -12700,6 +12722,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Feedbacks: []
   InitializationMode: 2
+  AutoInitialization: 1
   SafeMode: 3
   Direction: 0
   AutoChangeDirectionOnEnd: 0
@@ -12776,7 +12799,7 @@ MonoBehaviour:
   FeedbacksList: []
   KeepPlayModeChanges: 0
   PerformanceMode: 0
-  ForceStopFeedbacksOnDisable: 1
+  StopFeedbacksOnDisable: 0
   PlayCount: 0
   references:
     version: 1
@@ -17719,7 +17742,7 @@ MonoBehaviour:
   AutoDestroyWhenEmptyDelay: 1
   CurrentAmmoLoaded: 0
   WeaponAttachmentOffset: {x: 0, y: 0, z: 0}
-  FlipWeaponOnCharacterFlip: 0
+  FlipWeaponOnCharacterFlip: 1
   FlipValue: {x: -1, y: 1, z: 1}
   LeftHandHandle: {fileID: 0}
   RightHandHandle: {fileID: 0}
@@ -27503,6 +27526,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Feedbacks: []
   InitializationMode: 2
+  AutoInitialization: 1
   SafeMode: 3
   Direction: 0
   AutoChangeDirectionOnEnd: 0
@@ -27580,7 +27604,7 @@ MonoBehaviour:
   - id: 0
   KeepPlayModeChanges: 0
   PerformanceMode: 0
-  ForceStopFeedbacksOnDisable: 1
+  StopFeedbacksOnDisable: 0
   PlayCount: 0
   references:
     version: 1
@@ -27653,11 +27677,14 @@ MonoBehaviour:
         Owner: {fileID: 5287952133868880224}
         DebugActive: 0
         Mode: 0
+        EmitCount: 100
         BoundParticleSystem: {fileID: 3078826466282313927}
         RandomParticleSystems: []
         MoveToPosition: 0
         ActivateOnPlay: 0
         StopSystemOnInit: 1
+        StopSystemOnReset: 1
+        StopSystemOnStopFeedback: 1
         DeclaredDuration: 0
         ForceSimulationSpeed: 0
         ForcedSimulationSpeed: {x: 0.1, y: 1}
@@ -27707,6 +27734,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Feedbacks: []
   InitializationMode: 2
+  AutoInitialization: 1
   SafeMode: 3
   Direction: 0
   AutoChangeDirectionOnEnd: 0
@@ -27785,7 +27813,7 @@ MonoBehaviour:
   - id: 1
   KeepPlayModeChanges: 0
   PerformanceMode: 0
-  ForceStopFeedbacksOnDisable: 1
+  StopFeedbacksOnDisable: 0
   PlayCount: 0
   references:
     version: 1
@@ -27858,11 +27886,14 @@ MonoBehaviour:
         Owner: {fileID: 7534122941747306997}
         DebugActive: 0
         Mode: 0
+        EmitCount: 100
         BoundParticleSystem: {fileID: 2020982372467017496}
         RandomParticleSystems: []
         MoveToPosition: 0
         ActivateOnPlay: 0
         StopSystemOnInit: 1
+        StopSystemOnReset: 1
+        StopSystemOnStopFeedback: 1
         DeclaredDuration: 0
         ForceSimulationSpeed: 0
         ForcedSimulationSpeed: {x: 0.1, y: 1}
@@ -27945,7 +27976,6 @@ MonoBehaviour:
         MaxVolume: 1
         MinPitch: 1.5
         MaxPitch: 1.5
-        PlaybackTime: {x: 0, y: 0}
         MmSoundManagerTrack: 0
         ID: 0
         AudioGroup: {fileID: 0}
@@ -27996,6 +28026,8 @@ MonoBehaviour:
         BypassReverbZones: 0
         Priority: 128
         ReverbZoneMix: 1
+        PlaybackTime: {x: 0, y: 0}
+        PlaybackDuration: {x: 0, y: 0}
         DopplerLevel: 1
         Spread: 0
         RolloffMode: 0
@@ -28084,6 +28116,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Feedbacks: []
   InitializationMode: 2
+  AutoInitialization: 1
   SafeMode: 3
   Direction: 0
   AutoChangeDirectionOnEnd: 0
@@ -28160,7 +28193,7 @@ MonoBehaviour:
   FeedbacksList: []
   KeepPlayModeChanges: 0
   PerformanceMode: 0
-  ForceStopFeedbacksOnDisable: 1
+  StopFeedbacksOnDisable: 0
   PlayCount: 0
   references:
     version: 1
@@ -28209,6 +28242,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Feedbacks: []
   InitializationMode: 2
+  AutoInitialization: 1
   SafeMode: 3
   Direction: 0
   AutoChangeDirectionOnEnd: 0
@@ -28285,7 +28319,7 @@ MonoBehaviour:
   FeedbacksList: []
   KeepPlayModeChanges: 0
   PerformanceMode: 0
-  ForceStopFeedbacksOnDisable: 1
+  StopFeedbacksOnDisable: 0
   PlayCount: 0
   references:
     version: 1
@@ -28334,6 +28368,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Feedbacks: []
   InitializationMode: 2
+  AutoInitialization: 1
   SafeMode: 3
   Direction: 0
   AutoChangeDirectionOnEnd: 0
@@ -28410,7 +28445,7 @@ MonoBehaviour:
   FeedbacksList: []
   KeepPlayModeChanges: 0
   PerformanceMode: 0
-  ForceStopFeedbacksOnDisable: 1
+  StopFeedbacksOnDisable: 0
   PlayCount: 0
   references:
     version: 1
@@ -28467,6 +28502,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   InitializationMode: 2
+  AutoInitialization: 1
   SafeMode: 3
   Direction: 0
   AutoChangeDirectionOnEnd: 0
@@ -28551,7 +28587,7 @@ MonoBehaviour:
   - id: 7
   KeepPlayModeChanges: 0
   PerformanceMode: 0
-  ForceStopFeedbacksOnDisable: 1
+  StopFeedbacksOnDisable: 0
   PlayCount: 0
   references:
     version: 1
@@ -28624,11 +28660,14 @@ MonoBehaviour:
         Owner: {fileID: 2766471215107805029}
         DebugActive: 0
         Mode: 0
+        EmitCount: 100
         BoundParticleSystem: {fileID: 5293931053760427204}
         RandomParticleSystems: []
         MoveToPosition: 0
         ActivateOnPlay: 0
         StopSystemOnInit: 1
+        StopSystemOnReset: 1
+        StopSystemOnStopFeedback: 1
         DeclaredDuration: 0
         ForceSimulationSpeed: 0
         ForcedSimulationSpeed: {x: 0.1, y: 1}
@@ -28701,11 +28740,14 @@ MonoBehaviour:
         Owner: {fileID: 2766471215107805029}
         DebugActive: 0
         Mode: 0
+        EmitCount: 100
         BoundParticleSystem: {fileID: 9007246933882716211}
         RandomParticleSystems: []
         MoveToPosition: 0
         ActivateOnPlay: 0
         StopSystemOnInit: 1
+        StopSystemOnReset: 1
+        StopSystemOnStopFeedback: 1
         DeclaredDuration: 0
         ForceSimulationSpeed: 0
         ForcedSimulationSpeed: {x: 0.1, y: 1}
@@ -28785,6 +28827,7 @@ MonoBehaviour:
           ButtonText: Debug Stop Sound
         PlayMethod: 1
         PoolSize: 10
+        UseLegacyEventsMode: 0
         StopSoundOnFeedbackStop: 1
         MinVolume: 1
         MaxVolume: 1
@@ -34276,6 +34319,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Feedbacks: []
   InitializationMode: 2
+  AutoInitialization: 1
   SafeMode: 3
   Direction: 0
   AutoChangeDirectionOnEnd: 0
@@ -34352,7 +34396,7 @@ MonoBehaviour:
   FeedbacksList: []
   KeepPlayModeChanges: 0
   PerformanceMode: 0
-  ForceStopFeedbacksOnDisable: 1
+  StopFeedbacksOnDisable: 0
   PlayCount: 0
   references:
     version: 1
@@ -39235,6 +39279,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Feedbacks: []
   InitializationMode: 2
+  AutoInitialization: 1
   SafeMode: 3
   Direction: 0
   AutoChangeDirectionOnEnd: 0
@@ -39311,7 +39356,7 @@ MonoBehaviour:
   FeedbacksList: []
   KeepPlayModeChanges: 0
   PerformanceMode: 0
-  ForceStopFeedbacksOnDisable: 1
+  StopFeedbacksOnDisable: 0
   PlayCount: 0
   references:
     version: 1

@@ -25,6 +25,7 @@ namespace MoreMountains.CorgiEngine
 		protected CharacterJump _characterJump;
 		protected CharacterWalljump _characterWallJump;
 		protected CharacterSwim _characterSwim;
+		protected CharacterLedgeHang _characterLedgeHang;
         
 		// animation parameters
 		protected const string _glidingAnimationParameterName = "Gliding";
@@ -39,6 +40,7 @@ namespace MoreMountains.CorgiEngine
 			_characterJump = _character?.FindAbility<CharacterJump>();
 			_characterWallJump = _character?.FindAbility<CharacterWalljump>();
 			_characterSwim = _character?.FindAbility<CharacterSwim>();
+			_characterLedgeHang = _character?.FindAbility<CharacterLedgeHang>();
 		}
 
 		/// <summary>
@@ -72,6 +74,14 @@ namespace MoreMountains.CorgiEngine
 			    || (_condition.CurrentState != CharacterStates.CharacterConditions.Normal)) // or if we're not in normal conditions
 			{
 				return;
+			}
+
+			if (_characterLedgeHang != null)
+			{
+				if (_characterLedgeHang.Hanging)
+				{
+					_characterLedgeHang.DetachFromLedge();
+				}
 			}
 
 			if (_characterSwim != null)

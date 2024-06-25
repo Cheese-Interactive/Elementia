@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using MoreMountains.Feedbacks;
 using MoreMountains.Tools;
+using UnityEngine.Scripting.APIUpdating;
 
 namespace MoreMountains.FeedbacksForThirdParty
 {
@@ -13,6 +14,7 @@ namespace MoreMountains.FeedbacksForThirdParty
 	#if MM_POSTPROCESSING
 	[FeedbackPath("PostProcess/Global PP Volume Auto Blend")]
 	#endif
+	[MovedFrom(false, null, "MoreMountains.Feedbacks.PostProcessing")]
 	public class MMF_GlobalPPVolumeAutoBlend : MMF_Feedback
 	{
 		/// sets the inspector color for this feedback
@@ -188,7 +190,7 @@ namespace MoreMountains.FeedbacksForThirdParty
 				return;
 			}
 
-			#if MM_POSTPROCESSING
+			#if UNITY_EDITOR && MM_POSTPROCESSING
 			TargetAutoBlend.RestoreInitialValues();
 			#endif
 		}

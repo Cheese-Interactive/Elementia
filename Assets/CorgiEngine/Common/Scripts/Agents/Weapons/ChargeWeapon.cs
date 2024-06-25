@@ -283,11 +283,11 @@ namespace MoreMountains.CorgiEngine
 					}
 					ForceWeaponAttack(CurrentChargeIndex);	
 				}
-			}
 
-			if (!Weapons[CurrentChargeIndex].ChargeComplete)
-			{
-				InterruptStepCharge(CurrentChargeIndex);
+				if (!Weapons[CurrentChargeIndex].ChargeComplete)
+				{
+					InterruptStepCharge(CurrentChargeIndex);
+				}
 			}
 
 			ResetCharge();

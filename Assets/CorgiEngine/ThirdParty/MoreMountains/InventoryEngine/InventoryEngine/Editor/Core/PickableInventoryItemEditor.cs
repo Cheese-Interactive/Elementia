@@ -54,6 +54,10 @@ namespace MoreMountains.InventoryEngine
 		public override void OnInspectorGUI()
 		{
 			DrawDefaultInspector();
+            
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField("Inventory Item Details", EditorStyles.boldLabel);
+            
 			if (ItemTarget.Item!=null)
 			{
 				System.Type type = ItemTarget.Item.GetType();

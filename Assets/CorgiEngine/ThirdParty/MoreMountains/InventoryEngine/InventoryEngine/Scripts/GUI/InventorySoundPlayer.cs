@@ -1,11 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
 using MoreMountains.Tools;
-using System.Collections.Generic;
-using UnityEngine.UI;
-using System;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 
 namespace MoreMountains.InventoryEngine
 {	

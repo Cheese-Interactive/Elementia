@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
+using UnityEngine.Scripting.APIUpdating;
 
 namespace MoreMountains.Feedbacks
 {
@@ -11,6 +12,7 @@ namespace MoreMountains.Feedbacks
 	/// </summary>
 	[AddComponentMenu("")]
 	[FeedbackHelp("This feedback will let you change the color of a target Image over time. You can also use it to command one or many MMImageShakers.")]
+	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
 	[FeedbackPath("UI/Image")]
 	public class MMF_Image : MMF_Feedback
 	{
@@ -122,6 +124,7 @@ namespace MoreMountains.Feedbacks
 					{
 						return;
 					}
+					if (_coroutine != null) { Owner.StopCoroutine(_coroutine); }
 					_coroutine = Owner.StartCoroutine(ImageSequence());
 					break;
 			}
@@ -184,7 +187,12 @@ namespace MoreMountains.Feedbacks
 			{
 				Turn(false);    
 			}
-			Owner.StopCoroutine(_coroutine);
+
+			if (_coroutine != null)
+			{
+				Owner.StopCoroutine(_coroutine);	
+			}
+			
 			_coroutine = null;
 		}
 

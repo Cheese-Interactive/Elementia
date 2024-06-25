@@ -124,6 +124,8 @@ namespace MoreMountains.Feedbacks
 		/// </summary>
 		protected override void OnEnable()
 		{
+			Events.TriggerOnEnable(this);
+			
 			if (OnlyPlayIfWithinRange)
 			{
 				MMSetFeedbackRangeCenterEvent.Register(OnMMSetFeedbackRangeCenterEvent);	
@@ -515,7 +517,16 @@ namespace MoreMountains.Feedbacks
 		protected override IEnumerator HandleInitialDelayCo(Vector3 position, float feedbacksIntensity, bool forceRevert = false)
 		{
 			IsPlaying = true;
-			yield return MMFeedbacksCoroutine.WaitForUnscaled(ComputedInitialDelay);
+
+			if (PlayerTimescaleMode == TimescaleModes.Scaled)
+			{
+				yield return MMFeedbacksCoroutine.WaitFor(ComputedInitialDelay);
+			}
+			else
+			{
+				yield return MMFeedbacksCoroutine.WaitForUnscaled(ComputedInitialDelay);	
+			}
+			
 			PreparePlay(position, feedbacksIntensity, forceRevert);
 		}
         
@@ -1026,6 +1037,48 @@ namespace MoreMountains.Feedbacks
 			
 			FeedbacksList = tempList;
 		}
+
+		/// <summary>
+		/// Returns true if one or more of the feedbacks on this MMF Player have an option for automatic shaker setup, false otherwise
+		/// </summary>
+		public virtual bool HasAutomaticShakerSetup
+		{
+			get
+			{
+				if (FeedbacksList == null)
+				{
+					return false;
+				}
+				
+				int count = FeedbacksList.Count;
+				for (int i = 0; i < count; i++)
+				{
+					if (FeedbacksList[i] != null)
+					{
+						if (FeedbacksList[i].HasAutomaticShakerSetup)
+						{
+							return true;
+						}
+					}
+				}
+				return false;
+			}
+		}
+
+		/// <summary>
+		/// Calls the AutomaticShakerSetup method on all feedbacks that have it
+		/// </summary>
+		public virtual void AutomaticShakerSetup()
+		{
+			int count = FeedbacksList.Count;
+			for (int i = 0; i < count; i++)
+			{
+				if (FeedbacksList[i] != null)
+				{
+					FeedbacksList[i].AutomaticShakerSetup();    
+				}
+			}
+		}
         
 		#endregion MODIFICATION
 
@@ -1040,9 +1093,10 @@ namespace MoreMountains.Feedbacks
 			int count = FeedbacksList.Count;
 			for (int i = 0; i < count; i++)
 			{
-				if ((FeedbacksList[i].IsPlaying 
+				if ((FeedbacksList[i].IsPlaying
 				     && !FeedbacksList[i].Timing.ExcludeFromHoldingPauses)
-				    || FeedbacksList[i].Timing.RepeatForever)
+				    || FeedbacksList[i].Timing.RepeatForever
+				    || ((FeedbacksList[i].Timing.NumberOfRepeats > 0) && (FeedbacksList[i].PlaysLeft > 0)))
 				{
 					return true;
 				}

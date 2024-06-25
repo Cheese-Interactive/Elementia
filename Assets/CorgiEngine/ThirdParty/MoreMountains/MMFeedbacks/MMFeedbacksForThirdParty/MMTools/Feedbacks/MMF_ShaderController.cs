@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using MoreMountains.Tools;
+using UnityEngine.Scripting.APIUpdating;
 
 namespace MoreMountains.Feedbacks
 {
@@ -10,6 +11,7 @@ namespace MoreMountains.Feedbacks
 	/// </summary>
 	[AddComponentMenu("")]
 	[FeedbackHelp("This feedback lets you trigger a one time play on a target ShaderController.")]
+	[MovedFrom(false, null, "MoreMountains.Feedbacks.MMTools")]
 	[FeedbackPath("Renderer/ShaderController")]
 	public class MMF_ShaderController : MMF_Feedback
 	{

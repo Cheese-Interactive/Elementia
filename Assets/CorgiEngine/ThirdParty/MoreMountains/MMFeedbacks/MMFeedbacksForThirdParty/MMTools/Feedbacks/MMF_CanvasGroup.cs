@@ -1,5 +1,6 @@
 ﻿using MoreMountains.Tools;
 using UnityEngine;
+using UnityEngine.Scripting.APIUpdating;
 
 namespace MoreMountains.Feedbacks
 {
@@ -8,6 +9,7 @@ namespace MoreMountains.Feedbacks
 	/// </summary>
 	[AddComponentMenu("")]
 	[FeedbackHelp("This feedback lets you control the opacity of a canvas group over time.")]
+	[MovedFrom(false, null, "MoreMountains.Feedbacks.MMTools")]
 	[FeedbackPath("UI/CanvasGroup")]
 	public class MMF_CanvasGroup : MMF_FeedbackBase
 	{

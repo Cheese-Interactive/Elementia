@@ -7,12 +7,20 @@ namespace MoreMountains.InventoryEngine
 	[Serializable]
 	public class InventoryItemDisplayProperties
 	{
+		[Header("Buttons")]
 		public bool DisplayEquipUseButton = true;
 		public bool DisplayMoveButton = true;
 		public bool DisplayDropButton = true;
 		public bool DisplayEquipButton = true;
 		public bool DisplayUseButton = true;
 		public bool DisplayUnequipButton = true;
+		
+		[Header("Shortcuts")]
+		public bool AllowEquipUseShortcut = true;
+		public bool AllowMoveShortcut = true;
+		public bool AllowDropShortcut = true;
+		public bool AllowEquipShortcut = true;
+		public bool AllowUseShortcut = true;
 	}
 	
 	[Serializable]
@@ -218,32 +226,38 @@ namespace MoreMountains.InventoryEngine
 		/// <summary>
 		/// Spawns the associated prefab
 		/// </summary>
-		public virtual void SpawnPrefab(string playerID)
+		public virtual GameObject SpawnPrefab(string playerID)
 		{
 			if (TargetInventory(playerID) != null)
 			{
 				// if there's a prefab set for the item at this slot, we instantiate it at the specified offset
-				if (Prefab!=null && TargetInventory(playerID).TargetTransform!=null)
+				if (Prefab != null && TargetInventory(playerID).TargetTransform != null)
 				{
 					GameObject droppedObject=(GameObject)Instantiate(Prefab);
-					if (droppedObject.GetComponent<ItemPicker>() != null)
+					ItemPicker droppedObjectItemPicker = droppedObject.GetComponent<ItemPicker>(); 
+					
+					if (droppedObjectItemPicker != null)
 					{
 						if (ForcePrefabDropQuantity)
 						{
-							droppedObject.GetComponent<ItemPicker>().Quantity = PrefabDropQuantity;
-							droppedObject.GetComponent<ItemPicker>().RemainingQuantity = PrefabDropQuantity;	
+							droppedObjectItemPicker.Quantity = PrefabDropQuantity;
+							droppedObjectItemPicker.RemainingQuantity = PrefabDropQuantity;	
 						}
 						else
 						{
-							droppedObject.GetComponent<ItemPicker>().Quantity = Quantity;
-							droppedObject.GetComponent<ItemPicker>().RemainingQuantity = Quantity;	
+							droppedObjectItemPicker.Quantity = Quantity;
+							droppedObjectItemPicker.RemainingQuantity = Quantity;	
 						}
 					}
 
 					MMSpawnAround.ApplySpawnAroundProperties(droppedObject, DropProperties,
 						TargetInventory(playerID).TargetTransform.position);
+
+					return droppedObject;
 				}
 			}
+
+			return null;
 		}
 
 		/// <summary>

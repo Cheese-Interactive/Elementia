@@ -133,6 +133,11 @@ namespace MoreMountains.CorgiEngine
 			{
 				_movement.ChangeState(CharacterStates.MovementStates.Crawling);
 			}
+			
+			if (!InputDriven && Mathf.Abs(_controller.Speed.x) > 0)
+			{
+				_movement.ChangeState(CharacterStates.MovementStates.Crawling);
+			}
 
 			// we resize our collider to match the new shape of our character (it's usually smaller when crouched)
 			if (ResizeColliderWhenCrouched)
@@ -175,17 +180,28 @@ namespace MoreMountains.CorgiEngine
 		/// </summary>
 		protected virtual void DetermineState()
 		{
-			float threshold = (_inputManager != null) ? _inputManager.Threshold.x : 0f;
+			float threshold = (_inputManager != null) ? _inputManager.Threshold.x : 0.1f;
 			
 			if ((_movement.CurrentState == CharacterStates.MovementStates.Crouching) || (_movement.CurrentState == CharacterStates.MovementStates.Crawling))
 			{
-				if ( (Mathf.Abs(_horizontalInput) > threshold) && (CrawlAuthorized) )
+				if (InputDriven && (Mathf.Abs(_horizontalInput) > threshold) && (CrawlAuthorized) )
 				{
 					_movement.ChangeState(CharacterStates.MovementStates.Crawling);
 				}
 				else
 				{
 					_movement.ChangeState(CharacterStates.MovementStates.Crouching);
+				}
+				if (!InputDriven)
+				{
+					if (Mathf.Abs(_controller.Speed.x) > threshold)
+					{
+						_movement.ChangeState(CharacterStates.MovementStates.Crawling);	
+					}
+					else
+					{
+						_movement.ChangeState(CharacterStates.MovementStates.Crouching);
+					}
 				}
 			}
 		}
@@ -195,6 +211,11 @@ namespace MoreMountains.CorgiEngine
 		/// </summary>
 		protected virtual void CheckExitCrouch()
 		{
+			if (!InputDriven)
+			{
+				return;
+			}
+			
 			if (_inputManager == null)
 			{
 				if ((_movement.CurrentState == CharacterStates.MovementStates.Crouching)

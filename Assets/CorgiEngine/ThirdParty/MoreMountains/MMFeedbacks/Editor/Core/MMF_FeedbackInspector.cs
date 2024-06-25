@@ -171,6 +171,11 @@ namespace MoreMountains.Feedbacks
 				skip = true;
 			}
 
+			if (groupName == MMF_Feedback._automaticSetupGroupName && !_feedback.HasAutomaticShakerSetup)
+			{
+				skip = true;
+			}
+
 			return skip;
 		}
 

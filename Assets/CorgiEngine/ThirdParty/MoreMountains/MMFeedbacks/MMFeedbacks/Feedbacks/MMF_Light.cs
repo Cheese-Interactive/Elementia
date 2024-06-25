@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using MoreMountains.Tools;
 using UnityEngine;
+using UnityEngine.Scripting.APIUpdating;
 
 namespace MoreMountains.Feedbacks
 {
@@ -11,7 +12,8 @@ namespace MoreMountains.Feedbacks
 	/// </summary>
 	[AddComponentMenu("")]
 	[FeedbackHelp("This feedback lets you control the color and intensity of a Light in your scene for a certain duration (or instantly).")]
-	[FeedbackPath("Light")]
+	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
+	[FeedbackPath("Lights/Light")]
 	public class MMF_Light : MMF_Feedback
 	{
 		/// a static bool used to disable all feedbacks of this type at once
@@ -249,6 +251,7 @@ namespace MoreMountains.Feedbacks
 					{
 						return;
 					}
+					if (_coroutine != null) { Owner.StopCoroutine(_coroutine); }
 					_coroutine = Owner.StartCoroutine(LightSequence(intensityMultiplier));
 					break;
 				case Modes.ShakerEvent:

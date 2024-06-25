@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+using UnityEngine;using UnityEngine.Scripting.APIUpdating;
+
 namespace MoreMountains.Feedbacks
 {
 	/// <summary>
@@ -8,6 +9,7 @@ namespace MoreMountains.Feedbacks
 	/// </summary>
 	[AddComponentMenu("")]
 	[FeedbackHelp("This feedback will 'hold', or wait, until all previous feedbacks have been executed, and will then pause the execution of your MMFeedbacks sequence, for the specified duration.")]
+	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
 	[FeedbackPath("Pause/Holding Pause")]
 	public class MMF_HoldingPause : MMF_Pause
 	{
@@ -29,6 +31,7 @@ namespace MoreMountains.Feedbacks
 		{
 			if (Active)
 			{
+				ProcessNewPauseDuration();
 				Owner.StartCoroutine(PlayPause());
 			}
 		}

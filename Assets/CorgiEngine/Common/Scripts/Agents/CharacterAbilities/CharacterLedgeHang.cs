@@ -26,6 +26,9 @@ namespace MoreMountains.CorgiEngine
 		[Tooltip("the minimum time the Character must have been LedgeHanging before it can LedgeClimb. 0.2s (or more) will prevent any glitches and unwanted input conflicts")]
 		public float MinimumHangingTime = 0.2f;
 
+		public bool Hanging => _hanging;
+
+		protected bool _hanging = false;
 		protected Ledge _ledge = null;
 		protected CharacterJump _characterJump;
 		protected WaitForSeconds _climbingAnimationDelay;
@@ -114,6 +117,7 @@ namespace MoreMountains.CorgiEngine
 			// we start hanging from the ledge
 			_ledgeHangingStartedTimestamp = Time.time;
 			_ledge = ledge;
+			_hanging = true;
 			_controller.CollisionsOff();
 			PlayAbilityStartFeedbacks();
 			_movement.ChangeState(CharacterStates.MovementStates.LedgeHanging);
@@ -172,12 +176,13 @@ namespace MoreMountains.CorgiEngine
 		/// <summary>
 		/// Detaches the Character from the ledge, losing any reference to it, and restoring permissions
 		/// </summary>
-		protected virtual void DetachFromLedge()
+		public virtual void DetachFromLedge()
 		{
 			_ledge = null;
 			_character.CanFlip = true;
 			_characterHorizontalMovement.AbilityPermitted = true;
 			_controller.CollisionsOn();
+			_hanging = false;
 			if (_startFeedbackIsPlaying)
 			{
 				StopStartFeedbacks();

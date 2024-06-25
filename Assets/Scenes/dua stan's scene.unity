@@ -38,7 +38,6 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1853,7 +1852,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waterTilesParent: {fileID: 1058326816}
-  iceTilesParent: {fileID: 0}
+  iceTilesParent: {fileID: 245973371}
   waterTilemap: {fileID: 38393259}
   iceTilemap: {fileID: 245973373}
   waterTileTop: {fileID: 11400000, guid: 7ea1dd16e33ee924183e3e8ba2cb9828, type: 2}
@@ -2642,6 +2641,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   FollowTargetMode: 2
+  FollowRotation: 0
+  FollowScale: 1
   NestDrawnHealthBar: 0
   Billboard: 0
   InstantiatedOnDeath: {fileID: 0}
@@ -7171,6 +7172,7 @@ GameObject:
   - component: {fileID: 1470143788}
   - component: {fileID: 1470143790}
   - component: {fileID: 1470143789}
+  - component: {fileID: 1470143791}
   m_Layer: 13
   m_Name: FreezeOverlay
   m_TagString: Untagged
@@ -7297,6 +7299,19 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 1
   m_SpriteSortPoint: 0
+--- !u!114 &1470143791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1470143787}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5685c97a034e0454fadf442833c7f159, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 1987744155}
 --- !u!1 &1471157807
 GameObject:
   m_ObjectHideFlags: 0
@@ -7549,6 +7564,7 @@ GameObject:
   - component: {fileID: 1945490002}
   - component: {fileID: 1945490003}
   - component: {fileID: 1945490004}
+  - component: {fileID: 1945490005}
   m_Layer: 13
   m_Name: FreezeOverlay
   m_TagString: Untagged
@@ -7675,6 +7691,19 @@ SpriteMask:
   m_BackSortingOrder: 0
   m_IsCustomRangeActive: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1945490005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1945490001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5685c97a034e0454fadf442833c7f159, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 1248597442}
 --- !u!1 &1980703292
 GameObject:
   m_ObjectHideFlags: 0
@@ -8397,6 +8426,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   FollowTargetMode: 2
+  FollowRotation: 0
+  FollowScale: 1
   NestDrawnHealthBar: 0
   Billboard: 0
   InstantiatedOnDeath: {fileID: 0}
