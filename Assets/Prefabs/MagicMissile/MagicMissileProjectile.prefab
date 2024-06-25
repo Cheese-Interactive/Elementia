@@ -183,7 +183,6 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   LifeTime: 5
-  trailRenderer: {fileID: 0}
   FaceDirection: 1
   FaceMovementDirection: 0
   Speed: 200

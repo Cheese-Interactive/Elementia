@@ -12,7 +12,7 @@ namespace MoreMountains.CorgiEngine
 	{
 
 		[Header("References")]
-		[SerializeField] private TrailRenderer trailRenderer;
+		private TrailRenderer trailRenderer;
 
 		[Header("Movement")] 
 

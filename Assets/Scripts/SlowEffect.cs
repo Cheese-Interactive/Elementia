@@ -31,28 +31,39 @@ public class SlowEffect : MonoBehaviour {
 
     }
 
-    public void Slow(float multiplier, float duration) {
+    public void Slow(float movementMultiplier, float jumpMultiplier, float duration) {
 
         if (slowResetCoroutine != null) {
 
             StopCoroutine(slowResetCoroutine);
 
-            if (initialSpeed * multiplier < charMovement.MovementSpeed) { // only set if new speed is slower than current speed
+            if (initialSpeed * movementMultiplier < charMovement.MovementSpeed) { // only set if new speed is slower than current speed
 
-                charMovement.MovementSpeed *= multiplier; // set new speed
+                charMovement.MovementSpeed *= movementMultiplier; // set new speed
                 overlay.gameObject.SetActive(true); // activate slow overlay
 
-                if (charJump) // only set if character can jump
-                    charJump.JumpHeight *= multiplier; // set new jump height
+            }
 
+            if (initialJump * jumpMultiplier < charJump.JumpHeight) { // only set if new jump height is lower than current jump height
+
+                if (charJump) { // only set if character can jump
+
+                    charJump.JumpHeight *= jumpMultiplier; // set new jump height
+                    overlay.gameObject.SetActive(true); // activate slow overlay
+
+                }
             }
         } else {
 
-            charMovement.MovementSpeed *= multiplier; // set new speed
+            charMovement.MovementSpeed *= movementMultiplier; // set new speed
             overlay.gameObject.SetActive(true); // activate slow overlay
 
-            if (charJump) // only set if character can jump
-                charJump.JumpHeight *= multiplier; // set new jump height
+            if (charJump) { // only set if character can jump
+
+                charJump.JumpHeight *= jumpMultiplier; // set new jump height
+                overlay.gameObject.SetActive(true); // activate slow overlay
+
+            }
 
         }
 
