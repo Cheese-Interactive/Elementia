@@ -13,6 +13,7 @@ using UnityEngine.Tilemaps;
 public class PlayerController : MonoBehaviour {
 
     [Header("References")]
+    private SpriteRenderer spriteRenderer;
     private SlowEffect slowEffect;
     private Animator anim;
 
@@ -43,11 +44,18 @@ public class PlayerController : MonoBehaviour {
 
     [Header("Barrier")]
     [SerializeField] private SpriteRenderer barrier;
+    private BarrierAction barrierAction;
     private float barrierAlpha;
     private Coroutine barrierCoroutine;
     private Tweener barrierTweener;
-    private bool barrierDeployed;
-    private bool retracted; // for barrier max duration
+    private bool isBarrierRetractedPreMax; // for barrier max duration
+
+    [Header("Flamethrower")]
+    [SerializeField] private Transform flamethrower;
+    private FlamethrowerAction flamethrowerAction;
+    private Quaternion initialRot;
+    private bool isFlamethrowerFlipped;
+    private bool isFlamethrowerRetractedPreMax; // for flamethrower max duration
 
     [Header("Death")]
     private bool isDead; // to deal with death delay
@@ -69,6 +77,7 @@ public class PlayerController : MonoBehaviour {
 
     private void Start() {
 
+        spriteRenderer = GetComponent<SpriteRenderer>();
         slowEffect = GetComponent<SlowEffect>();
         anim = GetComponent<Animator>();
 
@@ -88,10 +97,13 @@ public class PlayerController : MonoBehaviour {
         charButton = GetComponent<CharacterButtonActivation>();
         charWeapon = GetComponent<CharacterHandleWeapon>();
 
+        barrierAction = GetComponent<BarrierAction>();
+        flamethrowerAction = GetComponent<FlamethrowerAction>();
+
         hotbar = FindObjectOfType<Hotbar>();
 
-        Weapon weapon = weaponActionPairs[0].GetWeapon(); // get first weapon
-        charWeapon.ChangeWeapon(weapon, weapon.WeaponID); // change weapon to first weapon by default
+        currWeapon = weaponActionPairs[0].GetWeapon(); // get first weapon
+        charWeapon.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon to first weapon by default
 
         deathSubscriptions = new List<SecondaryAction>();
 
@@ -121,13 +133,15 @@ public class PlayerController : MonoBehaviour {
         barrierAlpha = barrier.color.a;
         barrier.gameObject.SetActive(false); // barrier is not deployed by default
 
+        flamethrower.gameObject.SetActive(false); // hide flamethrower particles
+        initialRot = flamethrower.transform.rotation;
+
     }
 
     private void Update() {
 
-        if (isDead)
-            return; // player is dead, no need to update
-
+        /* SECONDARY ACTIONS */
+        // IMPORTANT: do this before isDead check to prevent toggle issues on death
         currWeapon = null;
         SecondaryAction currSecondaryAction = null;
 
@@ -138,8 +152,43 @@ public class PlayerController : MonoBehaviour {
 
         }
 
+        if (currWeapon) { // make sure slot has a weapon/secondary action in it
+
+            if ((((currSecondaryAction.IsAuto() && Input.GetMouseButton(1)) // secondary action is auto
+                    || (!currSecondaryAction.IsAuto() && Input.GetMouseButtonDown(1))) // secondary action is not auto
+                    || (currSecondaryAction.IsToggle() && (Input.GetMouseButtonDown(1) || Input.GetMouseButtonUp(1)))) // secondary action is toggle
+                    && IsMechanicEnabled(MechanicType.SecondaryAction)) { // checks if mechanic is enabled
+
+                // secondary action
+                // GetComponent<Element>().SecondaryAction(); <- use if updating element variable is inconvenient
+                currSecondaryAction.OnTrigger();
+
+            }
+        }
+
+        // handle flipping with flamethrower (gets flipped on sprite renderer)
+        if (flamethrowerAction.IsFlamethrowerEquipped()) {
+
+            if (spriteRenderer.flipX && !isFlamethrowerFlipped) { // then flip flamethrower
+
+                flamethrower.transform.localPosition = new Vector3(-flamethrower.transform.localPosition.x, flamethrower.transform.localPosition.y, flamethrower.transform.localPosition.z); // flip x axis local position
+                flamethrower.transform.rotation *= Quaternion.Euler(0f, 180f, 0f); // flip overlay by adding 180f on the Y axis
+                isFlamethrowerFlipped = true;
+
+            } else if (!spriteRenderer.flipX && isFlamethrowerFlipped) { // then unflip flamethrower
+
+                flamethrower.transform.localPosition = new Vector3(-flamethrower.transform.localPosition.x, flamethrower.transform.localPosition.y, flamethrower.transform.localPosition.z); // flip x axis position
+                flamethrower.transform.rotation = initialRot; // reset overlay rotation to initial rotation
+                isFlamethrowerFlipped = false;
+
+            }
+        }
+
+        if (isDead)
+            return; // player is dead, no need to update
+
         /* SCROLL WHEEL WEAPON SWITCHING */
-        if (Input.mouseScrollDelta.y > 0f && !barrierDeployed) { // make sure barrier is not deployed before switching
+        if (Input.mouseScrollDelta.y > 0f && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped()) { // make sure barrier is not deployed & flamethrower isn't equipped before switching
 
             if (currWeapon)
                 currSecondaryAction.enabled = false; // disable current secondary action
@@ -154,6 +203,7 @@ public class PlayerController : MonoBehaviour {
                 if (currWeapon) {
 
                     currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
+                    currSecondaryAction.SetInitialToggled(Input.GetMouseButton(1)); // set initial toggled status to if mouse is already down
                     currSecondaryAction.enabled = true; // enable new action
 
                 }
@@ -162,7 +212,7 @@ public class PlayerController : MonoBehaviour {
                 charWeapon.ChangeWeapon(null, null); // remove weapon
 
             }
-        } else if (Input.mouseScrollDelta.y < 0f && !barrierDeployed) { // make sure barrier is not deployed before switching
+        } else if (Input.mouseScrollDelta.y < 0f && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped()) { // make sure barrier is not deployed before switching
 
             if (currWeapon)
                 currSecondaryAction.enabled = false; // disable current secondary action
@@ -177,6 +227,7 @@ public class PlayerController : MonoBehaviour {
                 if (currWeapon) {
 
                     currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
+                    currSecondaryAction.SetInitialToggled(Input.GetMouseButton(1)); // set initial toggled status to if mouse is already down
                     currSecondaryAction.enabled = true; // enable new action
 
                 }
@@ -188,7 +239,7 @@ public class PlayerController : MonoBehaviour {
         }
 
         /* KEY WEAPON SWITCHING */
-        if (Input.GetKeyDown(KeyCode.Alpha1) && !barrierDeployed) {
+        if (Input.GetKeyDown(KeyCode.Alpha1) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped()) {
 
             if (currWeapon)
                 currSecondaryAction.enabled = false; // disable current secondary action
@@ -203,6 +254,7 @@ public class PlayerController : MonoBehaviour {
                 if (currWeapon) {
 
                     currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
+                    currSecondaryAction.SetInitialToggled(Input.GetMouseButton(1)); // set initial toggled status to if mouse is already down
                     currSecondaryAction.enabled = true; // enable new action
 
                 }
@@ -211,7 +263,7 @@ public class PlayerController : MonoBehaviour {
                 charWeapon.ChangeWeapon(null, null); // remove weapon
 
             }
-        } else if (Input.GetKeyDown(KeyCode.Alpha2) && !barrierDeployed) {
+        } else if (Input.GetKeyDown(KeyCode.Alpha2) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped()) {
 
             if (currWeapon)
                 currSecondaryAction.enabled = false; // disable current secondary action
@@ -226,6 +278,7 @@ public class PlayerController : MonoBehaviour {
                 if (currWeapon) {
 
                     currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
+                    currSecondaryAction.SetInitialToggled(Input.GetMouseButton(1)); // set initial toggled status to if mouse is already down
                     currSecondaryAction.enabled = true; // enable new action
 
                 }
@@ -234,7 +287,7 @@ public class PlayerController : MonoBehaviour {
                 charWeapon.ChangeWeapon(null, null); // remove weapon
 
             }
-        } else if (Input.GetKeyDown(KeyCode.Alpha3) && !barrierDeployed) {
+        } else if (Input.GetKeyDown(KeyCode.Alpha3) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped()) {
 
             if (currWeapon)
                 currSecondaryAction.enabled = false; // disable current secondary action
@@ -249,6 +302,7 @@ public class PlayerController : MonoBehaviour {
                 if (currWeapon) {
 
                     currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
+                    currSecondaryAction.SetInitialToggled(Input.GetMouseButton(1)); // set initial toggled status to if mouse is already down
                     currSecondaryAction.enabled = true; // enable new action
 
                 }
@@ -257,7 +311,7 @@ public class PlayerController : MonoBehaviour {
                 charWeapon.ChangeWeapon(null, null); // remove weapon
 
             }
-        } else if (Input.GetKeyDown(KeyCode.Alpha4) && !barrierDeployed) {
+        } else if (Input.GetKeyDown(KeyCode.Alpha4) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped()) {
 
             if (currWeapon)
                 currSecondaryAction.enabled = false; // disable current secondary action
@@ -272,6 +326,7 @@ public class PlayerController : MonoBehaviour {
                 if (currWeapon) {
 
                     currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
+                    currSecondaryAction.SetInitialToggled(Input.GetMouseButton(1)); // set initial toggled status to if mouse is already down
                     currSecondaryAction.enabled = true; // enable new action
 
                 }
@@ -280,7 +335,7 @@ public class PlayerController : MonoBehaviour {
                 charWeapon.ChangeWeapon(null, null); // remove weapon
 
             }
-        } else if (Input.GetKeyDown(KeyCode.Alpha5) && !barrierDeployed) {
+        } else if (Input.GetKeyDown(KeyCode.Alpha5) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped()) {
 
             if (currWeapon)
                 currSecondaryAction.enabled = false; // disable current secondary action
@@ -295,6 +350,7 @@ public class PlayerController : MonoBehaviour {
                 if (currWeapon) {
 
                     currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
+                    currSecondaryAction.SetInitialToggled(Input.GetMouseButton(1)); // set initial toggled status to if mouse is already down
                     currSecondaryAction.enabled = true; // enable new action
 
                 }
@@ -303,7 +359,7 @@ public class PlayerController : MonoBehaviour {
                 charWeapon.ChangeWeapon(null, null); // remove weapon
 
             }
-        } else if (Input.GetKeyDown(KeyCode.Alpha6) && !barrierDeployed) {
+        } else if (Input.GetKeyDown(KeyCode.Alpha6) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped()) {
 
             if (currWeapon)
                 currSecondaryAction.enabled = false; // disable current secondary action
@@ -318,6 +374,7 @@ public class PlayerController : MonoBehaviour {
                 if (currWeapon) {
 
                     currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
+                    currSecondaryAction.SetInitialToggled(Input.GetMouseButton(1)); // set initial toggled status to if mouse is already down
                     currSecondaryAction.enabled = true; // enable new action
 
                 }
@@ -326,7 +383,7 @@ public class PlayerController : MonoBehaviour {
                 charWeapon.ChangeWeapon(null, null); // remove weapon
 
             }
-        } else if (Input.GetKeyDown(KeyCode.Alpha7) && !barrierDeployed) {
+        } else if (Input.GetKeyDown(KeyCode.Alpha7) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped()) {
 
             if (currWeapon)
                 currSecondaryAction.enabled = false; // disable current secondary action
@@ -341,6 +398,7 @@ public class PlayerController : MonoBehaviour {
                 if (currWeapon) {
 
                     currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
+                    currSecondaryAction.SetInitialToggled(Input.GetMouseButton(1)); // set initial toggled status to if mouse is already down
                     currSecondaryAction.enabled = true; // enable new action
 
                 }
@@ -349,7 +407,7 @@ public class PlayerController : MonoBehaviour {
                 charWeapon.ChangeWeapon(null, null); // remove weapon
 
             }
-        } else if (Input.GetKeyDown(KeyCode.Alpha8) && !barrierDeployed) {
+        } else if (Input.GetKeyDown(KeyCode.Alpha8) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped()) {
 
             if (currWeapon)
                 currSecondaryAction.enabled = false; // disable current secondary action
@@ -364,6 +422,7 @@ public class PlayerController : MonoBehaviour {
                 if (currWeapon) {
 
                     currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
+                    currSecondaryAction.SetInitialToggled(Input.GetMouseButton(1)); // set initial toggled status to if mouse is already down
                     currSecondaryAction.enabled = true; // enable new action
 
                 }
@@ -372,7 +431,7 @@ public class PlayerController : MonoBehaviour {
                 charWeapon.ChangeWeapon(null, null); // remove weapon
 
             }
-        } else if (Input.GetKeyDown(KeyCode.Alpha9) && !barrierDeployed) {
+        } else if (Input.GetKeyDown(KeyCode.Alpha9) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped()) {
 
             if (currWeapon)
                 currSecondaryAction.enabled = false; // disable current secondary action
@@ -387,6 +446,7 @@ public class PlayerController : MonoBehaviour {
                 if (currWeapon) {
 
                     currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
+                    currSecondaryAction.SetInitialToggled(Input.GetMouseButton(1)); // set initial toggled status to if mouse is already down
                     currSecondaryAction.enabled = true; // enable new action
 
                 }
@@ -395,7 +455,7 @@ public class PlayerController : MonoBehaviour {
                 charWeapon.ChangeWeapon(null, null); // remove weapon
 
             }
-        } else if (Input.GetKeyDown(KeyCode.Alpha0) && !barrierDeployed) {
+        } else if (Input.GetKeyDown(KeyCode.Alpha0) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped()) {
 
             if (currWeapon)
                 currSecondaryAction.enabled = false; // disable current secondary action
@@ -410,6 +470,7 @@ public class PlayerController : MonoBehaviour {
                 if (currWeapon) {
 
                     currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
+                    currSecondaryAction.SetInitialToggled(Input.GetMouseButton(1)); // set initial toggled status to if mouse is already down
                     currSecondaryAction.enabled = true; // enable new action
 
                 }
@@ -419,27 +480,11 @@ public class PlayerController : MonoBehaviour {
 
             }
         }
-
-        /* SECONDARY ACTIONS */
-        // IMPORTANT: do this after weapon switching to make sure the right secondary action is used
-        if (currWeapon) { // make sure slot has a weapon/secondary action in it
-
-            if ((((currSecondaryAction.IsAuto() && Input.GetMouseButton(1)) // secondary action is auto
-                    || (!currSecondaryAction.IsAuto() && Input.GetMouseButtonDown(1))) // secondary action is not auto
-                    || (currSecondaryAction.IsToggle() && (Input.GetMouseButtonDown(1) || Input.GetMouseButtonUp(1)))) // secondary action is toggle
-                    && IsMechanicEnabled(MechanicType.SecondaryAction)) { // checks if mechanic is enabled
-
-                // secondary action
-                // GetComponent<Element>().SecondaryAction(); <- use if updating element variable is inconvenient
-                currSecondaryAction.OnTrigger();
-
-            }
-        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {
 
-        if (collision.CompareTag("Water") && !barrierDeployed) // barrier can save player from water
+        if (collision.CompareTag("Water") && !barrierAction.IsBarrierDeployed()) // barrier can save player from water
             health.Kill();
 
     }
@@ -456,9 +501,7 @@ public class PlayerController : MonoBehaviour {
 
     #region BARRIER
 
-    public void DeployBarrier(float duration) {
-
-        if (barrierDeployed) return; // barrier is already deployed
+    public void DeployBarrier(float maxDuration) {
 
         if (barrierCoroutine != null) StopCoroutine(barrierCoroutine); // stop barrier coroutine if it's running
 
@@ -467,36 +510,16 @@ public class PlayerController : MonoBehaviour {
         barrierCoroutine = StartCoroutine(HandleDeployBarrier());
 
         DisableAllScripts(); // disable all scripts while barrier is deployed
-        retracted = false; // barrier is not retracted yet (for max duration)
-        StartCoroutine(HandleBarrierDuration(duration));
-        barrierDeployed = true;
+        charWeapon.CurrentWeapon.gameObject.SetActive(false); // hide weapon (use charWeapon.CurrentWeapon instead of currWeapon because it has the actual instance of the weapon object)
 
-    }
-
-    public void RetractBarrier() {
-
-        if (!barrierDeployed) return; // barrier is not deployed (no need to retract)
-
-        if (barrierCoroutine != null) StopCoroutine(barrierCoroutine); // stop barrier coroutine if it's running
-
-        if (barrierTweener != null && barrierTweener.IsActive()) barrierTweener.Kill(); // kill barrier tweener if it's active
-
-        currWeapon.gameObject.SetActive(true);
-        retracted = true; // barrier is retracted (for max duration)
-        barrierCoroutine = StartCoroutine(HandleRetractBarrier());
-
-        /* the following is done without a fade animation */
-        //barrier.color = new Color(barrier.color.r, barrier.color.g, barrier.color.b, barrierAlpha); // set barrier alpha to full
-        //anim.SetBool("isBarrierDeployed", false);
-        //barrier.gameObject.SetActive(false); // hide barrier
-        //isBarrierDeployed = false;
-        //EnableAllMechanics(); // enable all mechanics after barrier is retracted
+        isBarrierRetractedPreMax = false; // barrier is not retracted yet (for max duration)
+        StartCoroutine(HandleBarrierDuration(maxDuration)); // handle barrier max duration
 
     }
 
     private IEnumerator HandleDeployBarrier() {
 
-        DisableAllMechanics(); // disable all mechanics while barrier is being deployed
+        DisableAllMechanics(); // disable all mechanics while barrier is being deployed (except secondary action)
         EnableMechanic(MechanicType.SecondaryAction); // enable only secondary action while barrier is deployed
 
         barrier.color = new Color(barrier.color.r, barrier.color.g, barrier.color.b, 0f); // set barrier alpha to none
@@ -505,6 +528,26 @@ public class PlayerController : MonoBehaviour {
         yield return null; // wait for animation to start
 
         barrierTweener = barrier.DOFade(barrierAlpha, anim.GetCurrentAnimatorStateInfo(0).length).SetEase(Ease.InBounce).OnComplete(() => barrierCoroutine = null); // fade barrier in based on animation length
+
+    }
+
+    public void RetractBarrier() {
+
+        if (barrierCoroutine != null) StopCoroutine(barrierCoroutine); // stop barrier coroutine if it's running
+
+        if (barrierTweener != null && barrierTweener.IsActive()) barrierTweener.Kill(); // kill barrier tweener if it's active
+
+        charWeapon.CurrentWeapon.gameObject.SetActive(true); // show weapon (use charWeapon.CurrentWeapon instead of currWeapon because it has the actual instance of the weapon object)
+
+        isBarrierRetractedPreMax = true; // barrier is retracted (for max duration)
+        barrierCoroutine = StartCoroutine(HandleRetractBarrier());
+
+        /* the following is done without a fade animation */
+        //barrier.color = new Color(barrier.color.r, barrier.color.g, barrier.color.b, barrierAlpha); // set barrier alpha to full
+        //anim.SetBool("isBarrierDeployed", false);
+        //barrier.gameObject.SetActive(false); // hide barrier
+        //isBarrierDeployed = false;
+        //EnableAllMechanics(); // enable all mechanics after barrier is retracted
 
     }
 
@@ -519,21 +562,20 @@ public class PlayerController : MonoBehaviour {
             barrier.gameObject.SetActive(false); // hide barrier
             EnableAllScripts(); // enable all scripts after barrier is retracted
             EnableAllMechanics(); // enable all mechanics after barrier is retracted
-            barrierDeployed = false;
             barrierCoroutine = null;
 
         }); // fade barrier in based on animation length
     }
 
-    private IEnumerator HandleBarrierDuration(float duration) {
+    private IEnumerator HandleBarrierDuration(float maxDuration) {
 
         float timer = 0f;
 
-        while (timer < duration) {
+        while (timer < maxDuration) {
 
-            if (retracted) { // barrier is retracted before max duration
+            if (isBarrierRetractedPreMax) { // barrier is retracted before max duration
 
-                retracted = false; // reset retracted status
+                isBarrierRetractedPreMax = false; // reset retracted status
                 yield break;
 
             }
@@ -544,6 +586,58 @@ public class PlayerController : MonoBehaviour {
         }
 
         RetractBarrier();
+
+    }
+
+    #endregion
+
+    #region FLAMETHROWER
+
+    public void EquipFlamethrower(float maxDuration) {
+
+        charWeapon.CurrentWeapon.gameObject.SetActive(false); // hide weapon (use charWeapon.CurrentWeapon instead of currWeapon because it has the actual instance of the weapon object)
+        isFlamethrowerRetractedPreMax = false; // flamethrower is not unequipped yet (for max duration)
+
+        DisableAllMechanics(); // disable all mechanics while flamethrower is being equipped (except secondary action)
+        EnableMechanic(MechanicType.SecondaryAction); // enable only secondary action while flamethrower is equipped
+
+        flamethrower.gameObject.SetActive(true); // show flamethrower particles
+        StartCoroutine(HandleFlamethrowerDuration(maxDuration)); // handle flamethrower max duration
+
+    }
+
+    public void UnequipFlamethrower() {
+
+        charWeapon.CurrentWeapon.gameObject.SetActive(true); // show weapon (use charWeapon.CurrentWeapon instead of currWeapon because it has the actual instance of the weapon object)
+        currWeapon.gameObject.SetActive(true); // show weapon
+
+        isFlamethrowerRetractedPreMax = true; // flamethrower is unequipped (for max duration)
+
+        EnableAllMechanics(); // enable all mechanics after flamethrower is unequipped
+
+        flamethrower.gameObject.SetActive(false); // hide flamethrower particles
+
+    }
+
+    private IEnumerator HandleFlamethrowerDuration(float maxDuration) {
+
+        float timer = 0f;
+
+        while (timer < maxDuration) {
+
+            if (isFlamethrowerRetractedPreMax) { // flamethrower is retracted before max duration
+
+                isFlamethrowerRetractedPreMax = false; // reset retracted status
+                yield break;
+
+            }
+
+            timer += Time.deltaTime;
+            yield return null;
+
+        }
+
+        UnequipFlamethrower();
 
     }
 
@@ -626,13 +720,20 @@ public class PlayerController : MonoBehaviour {
         charButton.AbilityPermitted = false;
         charWeapon.AbilityPermitted = false;
 
-        currWeapon.gameObject.SetActive(false);
-
     }
 
     private void OnRespawn() => isDead = false;
 
-    private void OnDeath() => isDead = true;
+    private void OnDeath() {
+
+        isDead = true;
+
+        if (barrierCoroutine != null) StopCoroutine(barrierCoroutine); // stop barrier coroutine if it's running
+        if (barrierTweener != null && barrierTweener.IsActive()) barrierTweener.Kill(); // kill barrier tweener if it's active
+
+        flamethrower.gameObject.SetActive(false); // hide flamethrower particles
+
+    }
 
     #endregion
 }

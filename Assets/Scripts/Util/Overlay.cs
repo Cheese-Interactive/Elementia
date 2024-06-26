@@ -21,4 +21,9 @@ public class Overlay : MonoBehaviour {
             transform.rotation = Quaternion.identity; // reset overlay rotation
 
     }
+
+    public void ShowOverlay() => gameObject.SetActive(true);
+
+    public void HideOverlay() => gameObject.SetActive(false);
+
 }

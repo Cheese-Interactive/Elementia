@@ -15,7 +15,7 @@ public class SlowEffect : MonoBehaviour {
     private Coroutine slowResetCoroutine;
 
     [Header("Overlay")]
-    [SerializeField] private Overlay overlay;
+    [SerializeField] private Overlay freezeOverlay;
 
     private void Start() {
 
@@ -27,7 +27,7 @@ public class SlowEffect : MonoBehaviour {
         if (charJump) // only set if character can jump
             initialJump = charJump.JumpHeight;
 
-        overlay.gameObject.SetActive(false); // deactivate slow overlay by default
+        freezeOverlay.HideOverlay(); // hide slow overlay by default
 
     }
 
@@ -40,7 +40,7 @@ public class SlowEffect : MonoBehaviour {
             if (initialSpeed * movementMultiplier < charMovement.MovementSpeed) { // only set if new speed is slower than current speed
 
                 charMovement.MovementSpeed *= movementMultiplier; // set new speed
-                overlay.gameObject.SetActive(true); // activate slow overlay
+                freezeOverlay.ShowOverlay(); // show slow overlay
 
             }
 
@@ -49,19 +49,19 @@ public class SlowEffect : MonoBehaviour {
                 if (initialJump * jumpMultiplier < charJump.JumpHeight) { // only set if new jump height is lower than current jump height
 
                     charJump.JumpHeight *= jumpMultiplier; // set new jump height
-                    overlay.gameObject.SetActive(true); // activate slow overlay
+                    freezeOverlay.ShowOverlay(); // show slow overlay
 
                 }
             }
         } else {
 
             charMovement.MovementSpeed *= movementMultiplier; // set new speed
-            overlay.gameObject.SetActive(true); // activate slow overlay
+            freezeOverlay.ShowOverlay(); // show slow overlay
 
             if (charJump) { // only set if character can jump
 
                 charJump.JumpHeight *= jumpMultiplier; // set new jump height
-                overlay.gameObject.SetActive(true); // activate slow overlay
+                freezeOverlay.ShowOverlay(); // show slow overlay
 
             }
         }
@@ -86,7 +86,7 @@ public class SlowEffect : MonoBehaviour {
         if (charJump)
             charJump.JumpHeight = initialJump;
 
-        overlay.gameObject.SetActive(false); // deactivate slow overlay
+        freezeOverlay.HideOverlay(); // hide slow overlay
 
     }
 }

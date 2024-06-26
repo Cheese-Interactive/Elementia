@@ -29,11 +29,14 @@ public abstract class SecondaryAction : MonoBehaviour {
 
     protected void ReadyAction() => isReady = true;
 
-    public void OnDeath() {
+    public virtual void OnDeath() {
 
         // cancel all secondary action cooldowns if player dies
         CancelInvoke("ReadyAction");
         isReady = true;
 
     }
+
+    public virtual void SetInitialToggled(bool isToggled) { } // only for toggle actions | to deal with if mouse button is already down before equip
+
 }

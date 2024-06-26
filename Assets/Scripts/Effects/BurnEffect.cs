@@ -7,17 +7,17 @@ public class BurnEffect : MonoBehaviour {
     // IMPORTANT: actual burn effect is implemented with Corgi Engine's DamageOnTouch script
 
     [Header("Overlay")]
-    [SerializeField] private Overlay overlay;
+    [SerializeField] private Overlay burnOverlay;
 
     private void Start() {
 
-        overlay.gameObject.SetActive(false); // deactivate burn overlay by default
+        burnOverlay.HideOverlay(); // hide burn overlay by default
 
     }
 
     public void Burn(float duration) {
 
-        overlay.gameObject.SetActive(true); // activate burn overlay
+        burnOverlay.ShowOverlay(); // show burn overlay
 
         StartCoroutine(BurnReset(duration));
 
@@ -26,7 +26,7 @@ public class BurnEffect : MonoBehaviour {
     private IEnumerator BurnReset(float duration) {
 
         yield return new WaitForSeconds(duration);
-        overlay.gameObject.SetActive(false); // deactivate burn overlay
+        burnOverlay.HideOverlay(); // show burn overlay
 
     }
 }

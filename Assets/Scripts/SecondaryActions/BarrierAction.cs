@@ -26,4 +26,24 @@ public class BarrierAction : SecondaryAction {
         Invoke("ReadyAction", secondaryCooldown);
 
     }
+
+    public override void OnDeath() {
+
+        base.OnDeath();
+
+        // if barrier is deployed, retract it
+        if (isBarrierDeployed)
+            player.RetractBarrier();
+
+    }
+
+    public override void SetInitialToggled(bool isToggled) {
+
+        base.SetInitialToggled(isToggled);
+        isBarrierDeployed = isToggled;
+
+    }
+
+    public bool IsBarrierDeployed() => isBarrierDeployed;
+
 }

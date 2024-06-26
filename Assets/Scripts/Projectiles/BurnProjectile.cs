@@ -8,11 +8,7 @@ public class BurnProjectile : MonoBehaviour {
     [Header("References")]
     private DamageOnTouch damageOnTouch;
 
-    private void Start() {
-
-        damageOnTouch = GetComponent<DamageOnTouch>();
-
-    }
+    private void Start() => damageOnTouch = GetComponent<DamageOnTouch>();
 
     private void OnTriggerEnter2D(Collider2D collision) { // triggers when projectile collides with something | IMPORTANT: triggers after the object is disabled on death
 
