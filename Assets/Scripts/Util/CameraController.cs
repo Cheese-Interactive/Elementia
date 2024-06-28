@@ -1,3 +1,4 @@
+using MoreMountains.CorgiEngine;
 using System.Collections;
 using UnityEngine;
 
@@ -8,6 +9,7 @@ public class CameraController : MonoBehaviour {
     //when player enters different zones the camera shifts to the state associated with that zone
     //meaning it changes position and fov (or really anything else)
     //this helps keep the open feel of the map while also splitting it into distinct sections
+
 
     new private Camera camera;
     private float zPos;
@@ -21,6 +23,8 @@ public class CameraController : MonoBehaviour {
         camera = GetComponent<Camera>();
         zPos = transform.position.z;
         SetCam(startZone);
+        if (!FindObjectOfType<CharacterHorizontalMovement>()!.GetComponent<CameraZoneHelper>())
+            print("ERROR: Player needs a CameraZoneHelper!!!!!!");
     }
 
     void Update() {
@@ -41,6 +45,8 @@ public class CameraController : MonoBehaviour {
         float t = 0; //smoothing formula
         float startSize = camera.orthographicSize;
         Vector3 startPos = transform.position;
+        float dist = Vector2.Distance(transform.position, pos);
+
         while (elapsed < shiftTime) {
             t = elapsed / shiftTime;
             t = Mathf.Sin(t * Mathf.PI * 0.5f);

@@ -15,6 +15,6 @@ public class CameraZone : MonoBehaviour {
     private void OnDrawGizmosSelected() {
         //Camera preview
         Gizmos.color = Color.white;
-        Gizmos.DrawWireCube(camPos, new Vector3(camSize * 4f, camSize * 2f));
+        Gizmos.DrawWireCube(camPos, new Vector3(camSize * (2f * 16 / 9), camSize * 2f));
     }
 }
