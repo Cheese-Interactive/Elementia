@@ -733,7 +733,7 @@ MonoBehaviour:
   ReadInput: 1
   InstantAcceleration: 0
   InputThreshold: 0.1
-  AirControl: 1
+  AirControl: 0.842
   AllowFlipInTheAir: 1
   ActiveAfterDeath: 0
   TouchTheGroundFeedback: {fileID: 0}
@@ -753,7 +753,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AbilityStartFeedbacks: {fileID: 0}
   AbilityStopFeedbacks: {fileID: 0}
-  AbilityPermitted: 1
+  AbilityPermitted: 0
   BlockingMovementStates: 
   BlockingConditionStates: 
   BlockingWeaponStates: 
@@ -781,7 +781,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AbilityStartFeedbacks: {fileID: 0}
   AbilityStopFeedbacks: {fileID: 0}
-  AbilityPermitted: 1
+  AbilityPermitted: 0
   BlockingMovementStates: 
   BlockingConditionStates: 
   BlockingWeaponStates: 
@@ -821,7 +821,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AbilityStartFeedbacks: {fileID: 0}
   AbilityStopFeedbacks: {fileID: 0}
-  AbilityPermitted: 1
+  AbilityPermitted: 0
   BlockingMovementStates: 
   BlockingConditionStates: 
   BlockingWeaponStates: 
@@ -841,7 +841,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AbilityStartFeedbacks: {fileID: 0}
   AbilityStopFeedbacks: {fileID: 0}
-  AbilityPermitted: 1
+  AbilityPermitted: 0
   BlockingMovementStates: 
   BlockingConditionStates: 
   BlockingWeaponStates: 
@@ -865,12 +865,12 @@ MonoBehaviour:
   BlockingMovementStates: 
   BlockingConditionStates: 
   BlockingWeaponStates: 
-  NumberOfJumps: 2
-  JumpHeight: 2
+  NumberOfJumps: 1
+  JumpHeight: 1.1
   JumpRestrictions: 2
   ResetCameraOffsetOnJump: 0
   CanJumpDownOneWayPlatforms: 1
-  FixedAerialJumpCount: 0
+  FixedAerialJumpCount: 1
   JumpIsProportionalToThePressTime: 0
   JumpMinimumAirTime: 0.1
   JumpReleaseForceFactor: 2
@@ -936,7 +936,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AbilityStartFeedbacks: {fileID: 0}
   AbilityStopFeedbacks: {fileID: 0}
-  AbilityPermitted: 1
+  AbilityPermitted: 0
   BlockingMovementStates: 
   BlockingConditionStates: 
   BlockingWeaponStates: 
@@ -959,7 +959,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AbilityStartFeedbacks: {fileID: 0}
   AbilityStopFeedbacks: {fileID: 0}
-  AbilityPermitted: 1
+  AbilityPermitted: 0
   BlockingMovementStates: 
   BlockingConditionStates: 
   BlockingWeaponStates: 
