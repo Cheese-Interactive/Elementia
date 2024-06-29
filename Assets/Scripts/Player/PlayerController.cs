@@ -10,30 +10,14 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class PlayerController : MonoBehaviour {
+public class PlayerController : EntityController {
 
     [Header("References")]
     private SpriteRenderer spriteRenderer;
-    private SlowEffect slowEffect;
     private Animator anim;
 
     [Header("Mechanics")]
     private Dictionary<MechanicType, bool> mechanicStatuses;
-    private CorgiController corgiController;
-    private Health health;
-    private CharacterHorizontalMovement charMovement;
-    private CharacterCrouch charCrouch;
-    private CharacterDash charDash;
-    private CharacterDive charDive;
-    private CharacterDangling charDangling;
-    private CharacterJump charJump;
-    private CharacterLookUp charLookUp;
-    private CharacterGrip charGrip;
-    private CharacterWallClinging charWallCling;
-    private CharacterWalljump charWallJump;
-    private CharacterLadder charLadder;
-    private CharacterButtonActivation charButton;
-    private CharacterHandleWeapon charWeapon;
     private Weapon currWeapon;
 
     [Header("Hotbar")]
@@ -75,27 +59,13 @@ public class PlayerController : MonoBehaviour {
 
     }
 
-    private void Start() {
+    private new void Start() {
+
+        base.Start();
 
         spriteRenderer = GetComponent<SpriteRenderer>();
         slowEffect = GetComponent<SlowEffect>();
         anim = GetComponent<Animator>();
-
-        corgiController = GetComponent<CorgiController>();
-        health = GetComponent<Health>();
-        charMovement = GetComponent<CharacterHorizontalMovement>();
-        charCrouch = GetComponent<CharacterCrouch>();
-        charDash = GetComponent<CharacterDash>();
-        charDive = GetComponent<CharacterDive>();
-        charDangling = GetComponent<CharacterDangling>();
-        charJump = GetComponent<CharacterJump>();
-        charLookUp = GetComponent<CharacterLookUp>();
-        charGrip = GetComponent<CharacterGrip>();
-        charWallCling = GetComponent<CharacterWallClinging>();
-        charWallJump = GetComponent<CharacterWalljump>();
-        charLadder = GetComponent<CharacterLadder>();
-        charButton = GetComponent<CharacterButtonActivation>();
-        charWeapon = GetComponent<CharacterHandleWeapon>();
 
         barrierAction = GetComponent<BarrierAction>();
         flamethrowerAction = GetComponent<FlamethrowerAction>();
@@ -125,10 +95,6 @@ public class PlayerController : MonoBehaviour {
             deathSubscriptions.Add(secondaryAction); // add to list for unsubscribing later
 
         }
-
-        health.OnDeath += slowEffect.RemoveEffect; // remove slow effect on death
-        health.OnDeath += OnDeath; // to flag death bool to deal with death delay
-        health.OnRevive += OnRespawn; // to flag death bool to deal with death delay
 
         barrierAlpha = barrier.color.a;
         barrier.gameObject.SetActive(false); // barrier is not deployed by default
@@ -482,20 +448,20 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision) {
+    protected new void OnTriggerEnter2D(Collider2D collision) {
 
         if (collision.CompareTag("Water") && !barrierAction.IsBarrierDeployed()) // barrier can save player from water
             health.Kill();
 
     }
 
-    private void OnDisable() {
+    protected new void OnDisable() {
+
+        base.OnDisable();
 
         // unsubscribe from all events
         foreach (SecondaryAction action in deathSubscriptions)
             health.OnDeath -= action.OnDeath;
-
-        health.OnDeath -= slowEffect.RemoveEffect; // remove slow effect on death
 
     }
 
@@ -509,7 +475,7 @@ public class PlayerController : MonoBehaviour {
 
         barrierCoroutine = StartCoroutine(HandleDeployBarrier());
 
-        DisableAllScripts(); // disable all scripts while barrier is deployed
+        DisableCoreMechanics(); // disable all scripts while barrier is deployed
         charWeapon.CurrentWeapon.gameObject.SetActive(false); // hide weapon (use charWeapon.CurrentWeapon instead of currWeapon because it has the actual instance of the weapon object)
 
         isBarrierRetractedPreMax = false; // barrier is not retracted yet (for max duration)
@@ -560,7 +526,7 @@ public class PlayerController : MonoBehaviour {
         barrierTweener = barrier.DOFade(0f, anim.GetCurrentAnimatorStateInfo(0).length).SetEase(Ease.OutBounce).OnComplete(() => {
 
             barrier.gameObject.SetActive(false); // hide barrier
-            EnableAllScripts(); // enable all scripts after barrier is retracted
+            EnableCoreMechanics(); // enable all scripts after barrier is retracted
             EnableAllMechanics(); // enable all mechanics after barrier is retracted
             barrierCoroutine = null;
 
@@ -684,47 +650,16 @@ public class PlayerController : MonoBehaviour {
 
     public bool IsGrounded() => corgiController.State.IsGrounded;
 
-    private void EnableAllScripts() {
+    protected override void OnRespawn() {
 
-        corgiController.enabled = true;
-        charMovement.AbilityPermitted = true;
-        charCrouch.AbilityPermitted = true;
-        charDash.AbilityPermitted = true;
-        charDive.AbilityPermitted = true;
-        charDangling.AbilityPermitted = true;
-        charJump.AbilityPermitted = true;
-        charLookUp.AbilityPermitted = true;
-        charGrip.AbilityPermitted = true;
-        charWallCling.AbilityPermitted = true;
-        charWallJump.AbilityPermitted = true;
-        charLadder.AbilityPermitted = true;
-        charButton.AbilityPermitted = true;
-        charWeapon.AbilityPermitted = true;
+        base.OnRespawn();
+        isDead = false;
 
     }
 
-    private void DisableAllScripts() {
+    protected override void OnDeath() {
 
-        corgiController.enabled = false;
-        charMovement.AbilityPermitted = false;
-        charCrouch.AbilityPermitted = false;
-        charDash.AbilityPermitted = false;
-        charDive.AbilityPermitted = false;
-        charDangling.AbilityPermitted = false;
-        charJump.AbilityPermitted = false;
-        charLookUp.AbilityPermitted = false;
-        charGrip.AbilityPermitted = false;
-        charWallCling.AbilityPermitted = false;
-        charWallJump.AbilityPermitted = false;
-        charLadder.AbilityPermitted = false;
-        charButton.AbilityPermitted = false;
-        charWeapon.AbilityPermitted = false;
-
-    }
-
-    private void OnRespawn() => isDead = false;
-
-    private void OnDeath() {
+        base.OnDeath();
 
         isDead = true;
 

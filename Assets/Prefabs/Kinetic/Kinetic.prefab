@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4237984674334015922}
   - component: {fileID: -3073912655475901205}
   m_Layer: 0
-  m_Name: Ice
+  m_Name: Kinetic
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -205,7 +205,7 @@ MonoBehaviour:
   MutualizeWaitingPools: 1
   NestWaitingPool: 1
   NestUnderThis: 0
-  GameObjectToPool: {fileID: 100002, guid: e38dd38f6313bbb47a11c0fd83fd271b, type: 3}
+  GameObjectToPool: {fileID: 100002, guid: 6aecc75908a2bbe418ea09461b130cb6, type: 3}
   PoolSize: 20
   PoolCanExpand: 1
 --- !u!1 &5294270777027740188
