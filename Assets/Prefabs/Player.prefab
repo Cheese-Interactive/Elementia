@@ -160,7 +160,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51c2d688bdef3c1429112ce47e4ef200, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  force: 5
+  objectFlamethrowerForce: 0
 --- !u!1 &2067468884184695098
 GameObject:
   m_ObjectHideFlags: 0
@@ -322,9 +322,9 @@ GameObject:
   m_Component:
   - component: {fileID: 6028263854266632344}
   - component: {fileID: 898556298284909675}
-  - component: {fileID: 6870399177041132509}
   - component: {fileID: 4799442617126734469}
   - component: {fileID: 2489162015849116405}
+  - component: {fileID: 6870399177041132509}
   - component: {fileID: 6145230641924286331}
   - component: {fileID: 4247068797751214176}
   - component: {fileID: 5094258444006064962}
@@ -333,14 +333,15 @@ GameObject:
   - component: {fileID: 3737841378194443840}
   - component: {fileID: 8354201413464159754}
   - component: {fileID: 10088441257559901}
-  - component: {fileID: 1329390229436454737}
   - component: {fileID: 6298585181428920326}
   - component: {fileID: 7161239672520688488}
   - component: {fileID: 5764598075329143441}
   - component: {fileID: 1478656505548864672}
+  - component: {fileID: 6885750652469125261}
   - component: {fileID: 2721479856997411025}
   - component: {fileID: 8881875236129953771}
   - component: {fileID: -8039291345281199097}
+  - component: {fileID: -5756287154290932317}
   - component: {fileID: 230583099580174233}
   - component: {fileID: 9206677560049693005}
   - component: {fileID: 4640116482856619915}
@@ -424,41 +425,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &6870399177041132509
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4900122409563817483}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b470d1b161b2454590386135b7fd64f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CharacterType: 0
-  PlayerID: Player1
-  InitialFacingDirection: 1
-  DirectionOnSpawn: 0
-  CharacterAnimator: {fileID: 4640116482856619915}
-  UseDefaultMecanim: 1
-  PerformAnimatorSanityChecks: 1
-  DisableAnimatorLogs: 0
-  CharacterModel: {fileID: 0}
-  CameraTarget: {fileID: 0}
-  CameraTargetSpeed: 5
-  AdditionalAbilityNodes: []
-  FlipModelOnDirectionChange: 1
-  ModelFlipValue: {x: -1, y: 1, z: 1}
-  RotateModelOnDirectionChange: 0
-  ModelRotationValue: {x: 0, y: 180, z: 0}
-  ModelRotationSpeed: 0
-  CharacterHealth: {fileID: 0}
-  SendStateChangeEvents: 1
-  SendStateUpdateEvents: 1
-  AirborneDistance: 0.5
-  AirborneMinimumTime: 0.1
-  CharacterBrain: {fileID: 0}
 --- !u!50 &4799442617126734469
 Rigidbody2D:
   serializedVersion: 4
@@ -531,6 +497,41 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.625, y: 0.9375}
   m_EdgeRadius: 0
+--- !u!114 &6870399177041132509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4900122409563817483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b470d1b161b2454590386135b7fd64f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CharacterType: 0
+  PlayerID: Player1
+  InitialFacingDirection: 1
+  DirectionOnSpawn: 0
+  CharacterAnimator: {fileID: 4640116482856619915}
+  UseDefaultMecanim: 1
+  PerformAnimatorSanityChecks: 1
+  DisableAnimatorLogs: 0
+  CharacterModel: {fileID: 0}
+  CameraTarget: {fileID: 0}
+  CameraTargetSpeed: 5
+  AdditionalAbilityNodes: []
+  FlipModelOnDirectionChange: 1
+  ModelFlipValue: {x: -1, y: 1, z: 1}
+  RotateModelOnDirectionChange: 0
+  ModelRotationValue: {x: 0, y: 180, z: 0}
+  ModelRotationSpeed: 0
+  CharacterHealth: {fileID: 0}
+  SendStateChangeEvents: 1
+  SendStateUpdateEvents: 1
+  AirborneDistance: 0.5
+  AirborneMinimumTime: 0.1
+  CharacterBrain: {fileID: 0}
 --- !u!114 &6145230641924286331
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -832,34 +833,6 @@ MonoBehaviour:
   MinimumTimeAfterLadderJump: 0.5
   NoInputClimb: 0
   NoInputClimbAirOnly: 0
---- !u!114 &1329390229436454737
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4900122409563817483}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f59e06702d6be45948936bd909420d61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  AbilityStartFeedbacks: {fileID: 0}
-  AbilityStopFeedbacks: {fileID: 0}
-  AbilityPermitted: 1
-  BlockingMovementStates: 
-  BlockingConditionStates: 
-  BlockingWeaponStates: 
-  MuteSfxTrackSounds: 1
-  MuteUITrackSounds: 0
-  MuteMusicTrackSounds: 0
-  MuteMasterTrackSounds: 0
-  OnPause:
-    m_PersistentCalls:
-      m_Calls: []
-  OnUnpause:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &6298585181428920326
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1117,25 +1090,53 @@ MonoBehaviour:
   - weapon: {fileID: 4237984674334015922, guid: 1146d9a50fe8cfb4491f14c86a6845dc,
       type: 3}
     weaponData: {fileID: 11400000, guid: 3224215c3a45c564ca37fef85f48c954, type: 2}
+    primaryAction: {fileID: 0}
     secondaryAction: {fileID: 2721479856997411025}
   - weapon: {fileID: 4237984674334015922, guid: 9d60ea47bc8ee1b4a80c55c277f5a949,
       type: 3}
     weaponData: {fileID: 11400000, guid: 240fb2df713a88941845b673fa543e19, type: 2}
+    primaryAction: {fileID: 0}
     secondaryAction: {fileID: 8881875236129953771}
   - weapon: {fileID: 4237984674334015922, guid: 9a3122220c3edc64683ed774da57bdca,
       type: 3}
     weaponData: {fileID: 11400000, guid: 0b8316274d5b89d44ab51986d17cc3ba, type: 2}
+    primaryAction: {fileID: 0}
     secondaryAction: {fileID: -8039291345281199097}
   - weapon: {fileID: 4237984674334015922, guid: b8a570382a6f4554f90091a497fef835,
       type: 3}
     weaponData: {fileID: 11400000, guid: 6f8080ba3b2a54c459fdce6bcff4b454, type: 2}
-    secondaryAction: {fileID: -8039291345281199097}
+    primaryAction: {fileID: 0}
+    secondaryAction: {fileID: -5756287154290932317}
   - weapon: {fileID: 4237984674334015922, guid: 4b35fc7ef435692488cc8c2bc368ca14,
       type: 3}
     weaponData: {fileID: 11400000, guid: ca3ec5979ed33474e8d59fd613d982a1, type: 2}
+    primaryAction: {fileID: 0}
+    secondaryAction: {fileID: -8039291345281199097}
+  - weapon: {fileID: 4237984674334015922, guid: e8331e579bf579e468249f527de34970,
+      type: 3}
+    weaponData: {fileID: 11400000, guid: 6fb9c3a94d1f1cd4582e6ca735c37e39, type: 2}
+    primaryAction: {fileID: 6885750652469125261}
     secondaryAction: {fileID: -8039291345281199097}
   barrier: {fileID: 8107409526917543720}
   flamethrower: {fileID: 8203172182253892236}
+--- !u!114 &6885750652469125261
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4900122409563817483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf5b14915a6f1af4eb892dda359fd67f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPrimaryAuto: 0
+  primaryCooldown: 5
+  canUseInAir: 0
+  rockPrefabs:
+  - {fileID: 7290656901816913271, guid: 7916ca674dd68f3408d21d44235fe7cd, type: 3}
+  throwSpeed: 15
 --- !u!114 &2721479856997411025
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1149,8 +1150,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isSecondaryAuto: 0
-  secondaryCooldown: 0
-  isSecondaryToggle: 1
+  secondaryCooldown: 2
+  canUseInAir: 0
   maxBarrierDuration: 5
 --- !u!114 &8881875236129953771
 MonoBehaviour:
@@ -1166,7 +1167,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isSecondaryAuto: 0
   secondaryCooldown: 1
-  isSecondaryToggle: 0
+  canUseInAir: 1
   iceBlastParticles: {fileID: 2345786623437224621}
   blastRadius: 5
   freezeDuration: 6
@@ -1186,9 +1187,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isSecondaryAuto: 0
-  secondaryCooldown: 0
-  isSecondaryToggle: 1
-  maxFlamethrowerDuration: 5
+  secondaryCooldown: 1
+  canUseInAir: 1
+  flamethrower: {fileID: 8717936393037922922}
+  objectFlamethrowerForce: 3
+  maxFlamethrowerDuration: 3
+--- !u!114 &-5756287154290932317
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4900122409563817483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ea7823934e094f4397020acda90b16f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isSecondaryAuto: 0
+  secondaryCooldown: 1.5
+  canUseInAir: 1
+  playerWindForce: 25
 --- !u!114 &230583099580174233
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class IceBlastAction : SecondaryAction {
+public class IceSecondaryAction : SecondaryAction {
 
     [Header("References")]
     private TilemapManager tilemapManager;
@@ -33,9 +33,11 @@ public class IceBlastAction : SecondaryAction {
 
     }
 
-    public override void OnTrigger() {
+    public override void OnTriggerRegular() {
 
-        if (!isReady) return;
+        if (!isReady) return; // make sure player is ready
+
+        if (!canUseInAir && !playerController.IsGrounded()) return; // make sure player is grounded if required
 
         iceBlastParticles.gameObject.SetActive(false); // set to false to make sure particle activates on awake
         iceBlastParticles.gameObject.SetActive(true); // show ice blast particles (disables itself after duration) | to modify duration check particle settings
@@ -67,4 +69,7 @@ public class IceBlastAction : SecondaryAction {
         Gizmos.DrawSphere(transform.position, blastRadius);
 
     }
+
+    public override bool IsRegularAction() => true;
+
 }

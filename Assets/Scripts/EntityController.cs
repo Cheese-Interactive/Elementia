@@ -25,7 +25,7 @@ public class EntityController : MonoBehaviour {
     protected SlowEffect slowEffect;
     protected CharacterHandleWeapon charWeapon;
 
-    protected void Start() {
+    protected void Awake() {
 
         corgiController = GetComponent<CorgiController>();
         health = GetComponent<Health>();
@@ -66,7 +66,7 @@ public class EntityController : MonoBehaviour {
 
     #region UTILITIES
 
-    public void EnableCoreMechanics() {
+    public void EnableCoreScripts() {
 
         if (corgiController)
             corgiController.enabled = true;
@@ -115,7 +115,7 @@ public class EntityController : MonoBehaviour {
 
     }
 
-    public void DisableCoreMechanics() {
+    public void DisableCoreScripts() {
 
         if (corgiController)
             corgiController.enabled = false;

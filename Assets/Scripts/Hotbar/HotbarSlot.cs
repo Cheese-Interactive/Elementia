@@ -17,7 +17,7 @@ public class HotbarSlot : MonoBehaviour {
 
     }
 
-    public void SetWeapon(WeaponData weaponData) => itemIcon.sprite = weaponData.GetIcon();
+    public void SetWeapon(SpellData weaponData) => itemIcon.sprite = weaponData.GetSpellIcon();
 
     public void SetSelected(bool isSelected) {
 

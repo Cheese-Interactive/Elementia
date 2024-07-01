@@ -17,33 +17,43 @@ public class PlayerController : EntityController {
     private Weapon currWeapon;
 
     [Header("Hotbar")]
-    private Hotbar hotbar;
+    private ItemSelector hotbar;
 
-    [Header("Weapons/Secondary Actions")]
+    [Header("Weapons/Primary/Secondary Actions")]
     [SerializeField] private WeaponActionPair[] weaponActionPairs;
 
     [Header("Barrier")]
     [SerializeField] private SpriteRenderer barrier;
-    private BarrierAction barrierAction;
+    private MagicMissileSecondaryAction barrierAction;
     private float barrierAlpha;
     private Coroutine barrierCoroutine;
+    private Coroutine barrierDurationCoroutine;
     private Tweener barrierTweener;
     private bool isBarrierRetractedPreMax; // for barrier max duration
 
     [Header("Flamethrower")]
     [SerializeField] private Transform flamethrower;
-    private FlamethrowerAction flamethrowerAction;
+    private FireSecondaryAction flamethrowerAction;
     private Quaternion initialRot;
+    private Coroutine flamethrowerDurationCoroutine;
     private bool isFlamethrowerFlipped;
     private bool isFlamethrowerRetractedPreMax; // for flamethrower max duration
+
+    [Header("Rock")]
+    private Rock currRock;
+    private Coroutine rockCoroutine;
+    private bool isRockSummoning;
+    private bool isRockThrowReady;
 
     [Header("Death")]
     private bool isDead; // to deal with death delay
 
     [Header("Health")]
-    private List<SecondaryAction> deathSubscriptions; // for unsubscribing later
+    private List<WeaponActionPair> deathSubscriptions; // for unsubscribing later
 
-    private void Awake() {
+    private new void Awake() {
+
+        base.Awake();
 
         // set up mechanic statuses early so scripts can change them earlier too
         mechanicStatuses = new Dictionary<MechanicType, bool>();
@@ -53,48 +63,65 @@ public class PlayerController : EntityController {
         foreach (MechanicType mechanicType in mechanics)
             mechanicStatuses.Add(mechanicType, true); // set all mechanics to true by default
 
-    }
-
-    private new void Start() {
-
-        base.Start();
-
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        slowEffect = GetComponent<SlowEffect>();
-        anim = GetComponent<Animator>();
-
-        barrierAction = GetComponent<BarrierAction>();
-        flamethrowerAction = GetComponent<FlamethrowerAction>();
-
-        hotbar = FindObjectOfType<Hotbar>();
-
-        currWeapon = weaponActionPairs[0].GetWeapon(); // get first weapon
-        charWeapon.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon to first weapon by default
-
-        deathSubscriptions = new List<SecondaryAction>();
+        hotbar = FindObjectOfType<ItemSelector>();
+        deathSubscriptions = new List<WeaponActionPair>();
 
         // pick the first secondary action as the default, subscribe to death event, initialize hotbar
         for (int i = 0; i < weaponActionPairs.Length; i++) {
 
             WeaponActionPair action = weaponActionPairs[i];
+            PrimaryAction primaryAction = action.GetPrimaryAction();
             SecondaryAction secondaryAction = action.GetSecondaryAction();
 
-            // enable current secondary action, disable the rest
-            if (action == weaponActionPairs[0])
-                secondaryAction.enabled = true;
-            else
-                secondaryAction.enabled = false;
+            // enable current primary & secondary action (if they exist), disable the rest
+            if (action == weaponActionPairs[0]) {
 
-            hotbar.SetWeapon(action.GetWeaponData(), i); // add weapon item to hotbar
+                if (primaryAction)
+                    primaryAction.enabled = true;
 
-            health.OnDeath += secondaryAction.OnDeath; // subscribe to death event
-            deathSubscriptions.Add(secondaryAction); // add to list for unsubscribing later
+                if (secondaryAction)
+                    secondaryAction.enabled = true;
+
+            } else {
+
+                if (primaryAction)
+                    primaryAction.enabled = false;
+
+                if (secondaryAction)
+                    secondaryAction.enabled = false;
+
+            }
+
+            hotbar.SetSpell(action.GetWeaponData(), i); // add weapon item to hotbar
+
+            if (primaryAction)
+                health.OnDeath += primaryAction.OnDeath; // subscribe to death event
+
+            if (secondaryAction)
+                health.OnDeath += secondaryAction.OnDeath; // subscribe to death event
+
+            deathSubscriptions.Add(action); // add to list for unsubscribing later
 
         }
+    }
 
+    private void Start() {
+
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        slowEffect = GetComponent<SlowEffect>();
+        anim = GetComponent<Animator>();
+
+        barrierAction = GetComponent<MagicMissileSecondaryAction>();
+        flamethrowerAction = GetComponent<FireSecondaryAction>();
+
+        currWeapon = weaponActionPairs[0].GetWeapon(); // get first weapon
+        charWeapon.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon to first weapon by default
+
+        /* BARRIER */
         barrierAlpha = barrier.color.a;
         barrier.gameObject.SetActive(false); // barrier is not deployed by default
 
+        /* FLAMETHROWER */
         flamethrower.gameObject.SetActive(false); // hide flamethrower particles
         initialRot = flamethrower.transform.rotation;
 
@@ -102,28 +129,58 @@ public class PlayerController : EntityController {
 
     private void Update() {
 
-        /* SECONDARY ACTIONS */
+        /* ACTIONS */
         // IMPORTANT: do this before isDead check to prevent toggle issues on death
         currWeapon = null;
+        PrimaryAction currPrimaryAction = null;
         SecondaryAction currSecondaryAction = null;
 
         if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
             currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
+            currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction();
             currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction();
 
         }
 
-        if (currWeapon) { // make sure slot has a weapon/secondary action in it
+        /* PRIMARY ACTIONS */
+        if (currPrimaryAction) { // make sure slot has a primary action in it
 
-            if ((((currSecondaryAction.IsAuto() && Input.GetMouseButton(1)) // secondary action is auto
-                    || (!currSecondaryAction.IsAuto() && Input.GetMouseButtonDown(1))) // secondary action is not auto
-                    || (currSecondaryAction.IsToggle() && (Input.GetMouseButtonDown(1) || Input.GetMouseButtonUp(1)))) // secondary action is toggle
-                    && IsMechanicEnabled(MechanicType.SecondaryAction)) { // checks if mechanic is enabled
+            if (currPrimaryAction.IsRegularAction()) { // primary action is regular action
 
-                // secondary action
-                // GetComponent<Element>().SecondaryAction(); <- use if updating element variable is inconvenient
-                currSecondaryAction.OnTrigger();
+                if ((currPrimaryAction.IsAutoAction() && Input.GetMouseButton(0)) || // primary action is auto
+                    (!currPrimaryAction.IsAutoAction() && Input.GetMouseButtonDown(0))) { // primary action is not auto
+
+                    currPrimaryAction.OnTriggerRegular(); // trigger regular primary action
+
+                }
+            } else { // primary action is hold action
+
+                if (Input.GetMouseButtonDown(0)) // start hold
+                    currPrimaryAction.OnTriggerHold(true);
+                else if (Input.GetMouseButtonUp(0)) // stop hold
+                    currPrimaryAction.OnTriggerHold(false);
+
+            }
+        }
+
+        /* SECONDARY ACTIONS */
+        if (currWeapon && currSecondaryAction) { // make sure slot has a weapon/secondary action in it
+
+            if (currSecondaryAction.IsRegularAction()) { // secondary action is regular action
+
+                if ((currSecondaryAction.IsAutoAction() && Input.GetMouseButton(1)) || // secondary action is auto
+                    (!currSecondaryAction.IsAutoAction() && Input.GetMouseButtonDown(1))) { // secondary action is not auto
+
+                    currSecondaryAction.OnTriggerRegular(); // trigger regular secondary action
+
+                }
+            } else { // secondary action is hold action
+
+                if (Input.GetMouseButtonDown(1)) // start hold
+                    currSecondaryAction.OnTriggerHold(true);
+                else if (Input.GetMouseButtonUp(1)) // stop hold
+                    currSecondaryAction.OnTriggerHold(false);
 
             }
         }
@@ -137,8 +194,7 @@ public class PlayerController : EntityController {
                 flamethrower.transform.rotation *= Quaternion.Euler(0f, 180f, 0f); // flip overlay by adding 180f on the Y axis
                 isFlamethrowerFlipped = true;
 
-            }
-            else if (!spriteRenderer.flipX && isFlamethrowerFlipped) { // then unflip flamethrower
+            } else if (!spriteRenderer.flipX && isFlamethrowerFlipped) { // then unflip flamethrower
 
                 flamethrower.transform.localPosition = new Vector3(-flamethrower.transform.localPosition.x, flamethrower.transform.localPosition.y, flamethrower.transform.localPosition.z); // flip x axis position
                 flamethrower.transform.rotation = initialRot; // reset overlay rotation to initial rotation
@@ -151,53 +207,90 @@ public class PlayerController : EntityController {
             return; // player is dead, no need to update
 
         /* SCROLL WHEEL WEAPON SWITCHING */
-        if (Input.mouseScrollDelta.y > 0f && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped()) { // make sure barrier is not deployed & flamethrower isn't equipped before switching
-
-            if (currWeapon)
-                currSecondaryAction.enabled = false; // disable current secondary action
+        if (Input.mouseScrollDelta.y > 0f && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) { // make sure barrier is not deployed & flamethrower isn't equipped before switching
 
             hotbar.CycleSlot(-1); // cycle hotbar slot backwards
+
+            // set new weapon and actions
+            if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+
+                currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
+                currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction();
+                currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction();
+
+            }
+
+            if (currPrimaryAction) // make sure primary action exists
+                currPrimaryAction.enabled = false; // disable current primary action
+
+            if (currWeapon && currSecondaryAction) // make sure weapon and secondary action exist
+                currSecondaryAction.enabled = false; // disable current secondary action
 
             if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
                 currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
                 charWeapon.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
-                if (currWeapon) {
+                if (currPrimaryAction) { // make sure primary action exists
+
+                    currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction(); // update primary action
+
+                    if (currPrimaryAction) // check if new primary action exists
+                        currPrimaryAction.enabled = true; // enable new action
+
+                }
+
+                if (currWeapon && currSecondaryAction) { // make sure weapon and secondary action exist
 
                     currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
-                    currSecondaryAction.SetInitialToggled(Input.GetMouseButton(1)); // set initial toggled status to if mouse is already down
                     currSecondaryAction.enabled = true; // enable new action
 
                 }
-            }
-            else {
+            } else {
 
                 charWeapon.ChangeWeapon(null, null); // remove weapon
 
             }
-        }
-        else if (Input.mouseScrollDelta.y < 0f && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped()) { // make sure barrier is not deployed before switching
-
-            if (currWeapon)
-                currSecondaryAction.enabled = false; // disable current secondary action
+        } else if (Input.mouseScrollDelta.y < 0f && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) { // make sure barrier is not deployed before switching
 
             hotbar.CycleSlot(1); // cycle hotbar slot forwards
+
+            // set new weapon and actions
+            if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+
+                currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
+                currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction();
+                currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction();
+
+            }
+
+            if (currPrimaryAction) // make sure primary action exists
+                currPrimaryAction.enabled = false; // disable current primary action
+
+            if (currWeapon && currSecondaryAction) // make sure weapon and secondary action exist
+                currSecondaryAction.enabled = false; // disable current secondary action
 
             if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
                 currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
                 charWeapon.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
-                if (currWeapon) {
+                if (currPrimaryAction) { // make sure primary action exists
+
+                    currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction(); // update primary action
+
+                    if (currPrimaryAction) // check if new primary action exists
+                        currPrimaryAction.enabled = true; // enable new action
+
+                }
+
+                if (currWeapon && currSecondaryAction) { // make sure weapon and secondary action exist
 
                     currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
-                    currSecondaryAction.SetInitialToggled(Input.GetMouseButton(1)); // set initial toggled status to if mouse is already down
                     currSecondaryAction.enabled = true; // enable new action
 
                 }
-            }
-            else {
+            } else {
 
                 charWeapon.ChangeWeapon(null, null); // remove weapon
 
@@ -205,261 +298,442 @@ public class PlayerController : EntityController {
         }
 
         /* KEY WEAPON SWITCHING */
-        if (Input.GetKeyDown(KeyCode.Alpha1) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped()) {
-
-            if (currWeapon)
-                currSecondaryAction.enabled = false; // disable current secondary action
+        if (Input.GetKeyDown(KeyCode.Alpha1) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
 
             hotbar.SelectSlot(0);
 
+            // set new weapon and actions
+            if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+
+                currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
+                currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction();
+                currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction();
+
+            }
+
+            if (currPrimaryAction) // make sure primary action exists
+                currPrimaryAction.enabled = false; // disable current primary action
+
+            if (currWeapon && currSecondaryAction) // make sure weapon and secondary action exist
+                currSecondaryAction.enabled = false; // disable current secondary action
+
             if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
                 currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
                 charWeapon.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
-                if (currWeapon) {
+                if (currPrimaryAction) { // make sure primary action exists
+
+                    currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction(); // update primary action
+
+                    if (currPrimaryAction) // check if new primary action exists
+                        currPrimaryAction.enabled = true; // enable new action
+
+                }
+
+                if (currWeapon && currSecondaryAction) { // make sure weapon and secondary action exist
 
                     currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
-                    currSecondaryAction.SetInitialToggled(Input.GetMouseButton(1)); // set initial toggled status to if mouse is already down
                     currSecondaryAction.enabled = true; // enable new action
 
                 }
-            }
-            else {
+            } else {
 
                 charWeapon.ChangeWeapon(null, null); // remove weapon
 
             }
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha2) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped()) {
-
-            if (currWeapon)
-                currSecondaryAction.enabled = false; // disable current secondary action
+        } else if (Input.GetKeyDown(KeyCode.Alpha2) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
 
             hotbar.SelectSlot(1);
 
+            // set new weapon and actions
+            if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+
+                currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
+                currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction();
+                currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction();
+
+            }
+
+            if (currPrimaryAction) // make sure primary action exists
+                currPrimaryAction.enabled = false; // disable current primary action
+
+            if (currWeapon && currSecondaryAction) // make sure weapon and secondary action exist
+                currSecondaryAction.enabled = false; // disable current secondary action
+
             if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
                 currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
                 charWeapon.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
-                if (currWeapon) {
+                if (currPrimaryAction) { // make sure primary action exists
+
+                    currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction(); // update primary action
+
+                    if (currPrimaryAction) // check if new primary action exists
+                        currPrimaryAction.enabled = true; // enable new action
+
+                }
+
+                if (currWeapon && currSecondaryAction) { // make sure weapon and secondary action exist
 
                     currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
-                    currSecondaryAction.SetInitialToggled(Input.GetMouseButton(1)); // set initial toggled status to if mouse is already down
                     currSecondaryAction.enabled = true; // enable new action
 
                 }
-            }
-            else {
+            } else {
 
                 charWeapon.ChangeWeapon(null, null); // remove weapon
 
             }
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha3) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped()) {
-
-            if (currWeapon)
-                currSecondaryAction.enabled = false; // disable current secondary action
+        } else if (Input.GetKeyDown(KeyCode.Alpha3) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
 
             hotbar.SelectSlot(2);
 
+            // set new weapon and actions
+            if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+
+                currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
+                currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction();
+                currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction();
+
+            }
+
+            if (currPrimaryAction) // make sure primary action exists
+                currPrimaryAction.enabled = false; // disable current primary action
+
+            if (currWeapon && currSecondaryAction) // make sure weapon and secondary action exist
+                currSecondaryAction.enabled = false; // disable current secondary action
+
             if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
                 currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
                 charWeapon.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
-                if (currWeapon) {
+                if (currPrimaryAction) { // make sure primary action exists
+
+                    currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction(); // update primary action
+
+                    if (currPrimaryAction) // check if new primary action exists
+                        currPrimaryAction.enabled = true; // enable new action
+
+                }
+
+                if (currWeapon && currSecondaryAction) { // make sure weapon and secondary action exist
 
                     currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
-                    currSecondaryAction.SetInitialToggled(Input.GetMouseButton(1)); // set initial toggled status to if mouse is already down
                     currSecondaryAction.enabled = true; // enable new action
 
                 }
-            }
-            else {
+            } else {
 
                 charWeapon.ChangeWeapon(null, null); // remove weapon
 
             }
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha4) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped()) {
-
-            if (currWeapon)
-                currSecondaryAction.enabled = false; // disable current secondary action
+        } else if (Input.GetKeyDown(KeyCode.Alpha4) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
 
             hotbar.SelectSlot(3);
 
+            // set new weapon and actions
+            if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+
+                currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
+                currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction();
+                currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction();
+
+            }
+
+            if (currPrimaryAction) // make sure primary action exists
+                currPrimaryAction.enabled = false; // disable current primary action
+
+            if (currWeapon && currSecondaryAction) // make sure weapon and secondary action exist
+                currSecondaryAction.enabled = false; // disable current secondary action
+
             if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
                 currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
                 charWeapon.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
-                if (currWeapon) {
+                if (currPrimaryAction) { // make sure primary action exists
+
+                    currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction(); // update primary action
+
+                    if (currPrimaryAction) // check if new primary action exists
+                        currPrimaryAction.enabled = true; // enable new action
+
+                }
+
+                if (currWeapon && currSecondaryAction) { // make sure weapon and secondary action exist
 
                     currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
-                    currSecondaryAction.SetInitialToggled(Input.GetMouseButton(1)); // set initial toggled status to if mouse is already down
                     currSecondaryAction.enabled = true; // enable new action
 
                 }
-            }
-            else {
+            } else {
 
                 charWeapon.ChangeWeapon(null, null); // remove weapon
 
             }
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha5) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped()) {
-
-            if (currWeapon)
-                currSecondaryAction.enabled = false; // disable current secondary action
+        } else if (Input.GetKeyDown(KeyCode.Alpha5) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
 
             hotbar.SelectSlot(4);
 
+            // set new weapon and actions
+            if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+
+                currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
+                currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction();
+                currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction();
+
+            }
+
+            if (currPrimaryAction) // make sure primary action exists
+                currPrimaryAction.enabled = false; // disable current primary action
+
+            if (currWeapon && currSecondaryAction) // make sure weapon and secondary action exist
+                currSecondaryAction.enabled = false; // disable current secondary action
+
             if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
                 currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
                 charWeapon.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
-                if (currWeapon) {
+                if (currPrimaryAction) { // make sure primary action exists
+
+                    currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction(); // update primary action
+
+                    if (currPrimaryAction) // check if new primary action exists
+                        currPrimaryAction.enabled = true; // enable new action
+
+                }
+
+                if (currWeapon && currSecondaryAction) { // make sure weapon and secondary action exist
 
                     currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
-                    currSecondaryAction.SetInitialToggled(Input.GetMouseButton(1)); // set initial toggled status to if mouse is already down
                     currSecondaryAction.enabled = true; // enable new action
 
                 }
-            }
-            else {
+            } else {
 
                 charWeapon.ChangeWeapon(null, null); // remove weapon
 
             }
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha6) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped()) {
-
-            if (currWeapon)
-                currSecondaryAction.enabled = false; // disable current secondary action
+        } else if (Input.GetKeyDown(KeyCode.Alpha6) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
 
             hotbar.SelectSlot(5);
 
+            // set new weapon and actions
+            if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+
+                currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
+                currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction();
+                currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction();
+
+            }
+
+            if (currPrimaryAction) // make sure primary action exists
+                currPrimaryAction.enabled = false; // disable current primary action
+
+            if (currWeapon && currSecondaryAction) // make sure weapon and secondary action exist
+                currSecondaryAction.enabled = false; // disable current secondary action
+
             if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
                 currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
                 charWeapon.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
-                if (currWeapon) {
+                if (currPrimaryAction) { // make sure primary action exists
+
+                    currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction(); // update primary action
+
+                    if (currPrimaryAction) // check if new primary action exists
+                        currPrimaryAction.enabled = true; // enable new action
+
+                }
+
+                if (currWeapon && currSecondaryAction) { // make sure weapon and secondary action exist
 
                     currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
-                    currSecondaryAction.SetInitialToggled(Input.GetMouseButton(1)); // set initial toggled status to if mouse is already down
                     currSecondaryAction.enabled = true; // enable new action
 
                 }
-            }
-            else {
+            } else {
 
                 charWeapon.ChangeWeapon(null, null); // remove weapon
 
             }
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha7) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped()) {
-
-            if (currWeapon)
-                currSecondaryAction.enabled = false; // disable current secondary action
+        } else if (Input.GetKeyDown(KeyCode.Alpha7) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
 
             hotbar.SelectSlot(6);
 
+            // set new weapon and actions
+            if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+
+                currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
+                currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction();
+                currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction();
+
+            }
+
+            if (currPrimaryAction) // make sure primary action exists
+                currPrimaryAction.enabled = false; // disable current primary action
+
+            if (currWeapon && currSecondaryAction) // make sure weapon and secondary action exist
+                currSecondaryAction.enabled = false; // disable current secondary action
+
             if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
                 currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
                 charWeapon.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
-                if (currWeapon) {
+                if (currPrimaryAction) { // make sure primary action exists
+
+                    currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction(); // update primary action
+
+                    if (currPrimaryAction) // check if new primary action exists
+                        currPrimaryAction.enabled = true; // enable new action
+
+                }
+
+                if (currWeapon && currSecondaryAction) { // make sure weapon and secondary action exist
 
                     currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
-                    currSecondaryAction.SetInitialToggled(Input.GetMouseButton(1)); // set initial toggled status to if mouse is already down
                     currSecondaryAction.enabled = true; // enable new action
 
                 }
-            }
-            else {
+            } else {
 
                 charWeapon.ChangeWeapon(null, null); // remove weapon
 
             }
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha8) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped()) {
-
-            if (currWeapon)
-                currSecondaryAction.enabled = false; // disable current secondary action
+        } else if (Input.GetKeyDown(KeyCode.Alpha8) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
 
             hotbar.SelectSlot(7);
 
+            // set new weapon and actions
+            if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+
+                currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
+                currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction();
+                currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction();
+
+            }
+
+            if (currPrimaryAction) // make sure primary action exists
+                currPrimaryAction.enabled = false; // disable current primary action
+
+            if (currWeapon && currSecondaryAction) // make sure weapon and secondary action exist
+                currSecondaryAction.enabled = false; // disable current secondary action
+
             if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
                 currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
                 charWeapon.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
-                if (currWeapon) {
+                if (currPrimaryAction) { // make sure primary action exists
+
+                    currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction(); // update primary action
+
+                    if (currPrimaryAction) // check if new primary action exists
+                        currPrimaryAction.enabled = true; // enable new action
+
+                }
+
+                if (currWeapon && currSecondaryAction) { // make sure weapon and secondary action exist
 
                     currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
-                    currSecondaryAction.SetInitialToggled(Input.GetMouseButton(1)); // set initial toggled status to if mouse is already down
                     currSecondaryAction.enabled = true; // enable new action
 
                 }
-            }
-            else {
+            } else {
 
                 charWeapon.ChangeWeapon(null, null); // remove weapon
 
             }
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha9) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped()) {
-
-            if (currWeapon)
-                currSecondaryAction.enabled = false; // disable current secondary action
+        } else if (Input.GetKeyDown(KeyCode.Alpha9) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
 
             hotbar.SelectSlot(8);
 
+            // set new weapon and actions
+            if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+
+                currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
+                currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction();
+                currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction();
+
+            }
+
+            if (currPrimaryAction) // make sure primary action exists
+                currPrimaryAction.enabled = false; // disable current primary action
+
+            if (currWeapon && currSecondaryAction) // make sure weapon and secondary action exist
+                currSecondaryAction.enabled = false; // disable current secondary action
+
             if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
                 currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
                 charWeapon.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
-                if (currWeapon) {
+                if (currPrimaryAction) { // make sure primary action exists
+
+                    currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction(); // update primary action
+
+                    if (currPrimaryAction) // check if new primary action exists
+                        currPrimaryAction.enabled = true; // enable new action
+
+                }
+
+                if (currWeapon && currSecondaryAction) { // make sure weapon and secondary action exist
 
                     currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
-                    currSecondaryAction.SetInitialToggled(Input.GetMouseButton(1)); // set initial toggled status to if mouse is already down
                     currSecondaryAction.enabled = true; // enable new action
 
                 }
-            }
-            else {
+            } else {
 
                 charWeapon.ChangeWeapon(null, null); // remove weapon
 
             }
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha0) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped()) {
-
-            if (currWeapon)
-                currSecondaryAction.enabled = false; // disable current secondary action
+        } else if (Input.GetKeyDown(KeyCode.Alpha0) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
 
             hotbar.SelectSlot(9);
+
+            // set new weapon and actions
+            if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+
+                currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
+                currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction();
+                currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction();
+
+            }
+
+            if (currPrimaryAction) // make sure primary action exists
+                currPrimaryAction.enabled = false; // disable current primary action
+
+            if (currWeapon && currSecondaryAction) // make sure weapon and secondary action exist
+                currSecondaryAction.enabled = false; // disable current secondary action
 
             if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
                 currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
                 charWeapon.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
-                if (currWeapon) {
+                if (currPrimaryAction) { // make sure primary action exists
+
+                    currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction(); // update primary action
+
+                    if (currPrimaryAction) // check if new primary action exists
+                        currPrimaryAction.enabled = true; // enable new action
+
+                }
+
+                if (currWeapon && currSecondaryAction) { // make sure weapon and secondary action exist
 
                     currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
-                    currSecondaryAction.SetInitialToggled(Input.GetMouseButton(1)); // set initial toggled status to if mouse is already down
                     currSecondaryAction.enabled = true; // enable new action
 
                 }
-            }
-            else {
+            } else {
 
                 charWeapon.ChangeWeapon(null, null); // remove weapon
 
@@ -479,9 +753,15 @@ public class PlayerController : EntityController {
         base.OnDisable();
 
         // unsubscribe from all events
-        foreach (SecondaryAction action in deathSubscriptions)
-            health.OnDeath -= action.OnDeath;
+        foreach (WeaponActionPair action in deathSubscriptions) {
 
+            if (action.GetPrimaryAction())
+                health.OnDeath -= action.GetPrimaryAction().OnDeath;
+
+            if (action.GetSecondaryAction())
+                health.OnDeath -= action.GetSecondaryAction().OnDeath;
+
+        }
     }
 
     #region BARRIER
@@ -494,11 +774,11 @@ public class PlayerController : EntityController {
 
         barrierCoroutine = StartCoroutine(HandleDeployBarrier());
 
-        DisableCoreMechanics(); // disable all scripts while barrier is deployed
+        DisableCoreScripts(); // disable all scripts while barrier is deployed
         charWeapon.CurrentWeapon.gameObject.SetActive(false); // hide weapon (use charWeapon.CurrentWeapon instead of currWeapon because it has the actual instance of the weapon object)
 
         isBarrierRetractedPreMax = false; // barrier is not retracted yet (for max duration)
-        StartCoroutine(HandleBarrierDuration(maxDuration)); // handle barrier max duration
+        barrierDurationCoroutine = StartCoroutine(HandleBarrierDuration(maxDuration)); // handle barrier max duration
 
     }
 
@@ -521,6 +801,8 @@ public class PlayerController : EntityController {
         if (barrierCoroutine != null) StopCoroutine(barrierCoroutine); // stop barrier coroutine if it's running
 
         if (barrierTweener != null && barrierTweener.IsActive()) barrierTweener.Kill(); // kill barrier tweener if it's active
+
+        if (barrierDurationCoroutine != null) StopCoroutine(barrierDurationCoroutine); // stop barrier duration coroutine if it's running
 
         charWeapon.CurrentWeapon.gameObject.SetActive(true); // show weapon (use charWeapon.CurrentWeapon instead of currWeapon because it has the actual instance of the weapon object)
 
@@ -545,7 +827,7 @@ public class PlayerController : EntityController {
         barrierTweener = barrier.DOFade(0f, anim.GetCurrentAnimatorStateInfo(0).length).SetEase(Ease.OutBounce).OnComplete(() => {
 
             barrier.gameObject.SetActive(false); // hide barrier
-            EnableCoreMechanics(); // enable all scripts after barrier is retracted
+            EnableCoreScripts(); // enable all scripts after barrier is retracted
             EnableAllMechanics(); // enable all mechanics after barrier is retracted
             barrierCoroutine = null;
 
@@ -571,6 +853,7 @@ public class PlayerController : EntityController {
         }
 
         RetractBarrier();
+        barrierDurationCoroutine = null;
 
     }
 
@@ -587,11 +870,13 @@ public class PlayerController : EntityController {
         EnableMechanic(MechanicType.SecondaryAction); // enable only secondary action while flamethrower is equipped
 
         flamethrower.gameObject.SetActive(true); // show flamethrower particles
-        StartCoroutine(HandleFlamethrowerDuration(maxDuration)); // handle flamethrower max duration
+        flamethrowerDurationCoroutine = StartCoroutine(HandleFlamethrowerDuration(maxDuration)); // handle flamethrower max duration
 
     }
 
     public void UnequipFlamethrower() {
+
+        if (flamethrowerDurationCoroutine != null) StopCoroutine(flamethrowerDurationCoroutine); // stop flamethrower duration coroutine if it's running
 
         charWeapon.CurrentWeapon.gameObject.SetActive(true); // show weapon (use charWeapon.CurrentWeapon instead of currWeapon because it has the actual instance of the weapon object)
         currWeapon.gameObject.SetActive(true); // show weapon
@@ -623,6 +908,67 @@ public class PlayerController : EntityController {
         }
 
         UnequipFlamethrower();
+        flamethrowerDurationCoroutine = null;
+
+    }
+
+    #endregion
+
+    #region ROCK
+
+    // returns true if rock is successfully summoned, false if rock is already summoned
+    public bool SummonRock(EarthPrimaryAction action, Rock rockPrefab) {
+
+        if (currRock) return false; // rock is already summoned
+
+        if (rockCoroutine != null) StopCoroutine(rockCoroutine); // stop rock coroutine if it's running
+        rockCoroutine = StartCoroutine(HandleSummonRock(action, rockPrefab));
+
+        DisableCoreScripts(); // disable all scripts while rock is being summoned
+
+        return true;
+
+    }
+
+    private IEnumerator HandleSummonRock(EarthPrimaryAction action, Rock rockPrefab) {
+
+        isRockSummoning = true;
+        DisableAllMechanics(); // disable all mechanics while rock is being summoned (except primary action)
+        EnableMechanic(MechanicType.PrimaryAction); // enable only primary action while rock is summoned
+
+        currRock = Instantiate(rockPrefab, transform.position, Quaternion.identity); // instantiate rock (will play summon animation automatically)
+        currRock.SetRigidbodyKinematic(true); // set rock to kinematic so it doesn't fall during animation
+        anim.SetBool("isRockSummoned", true); // play rock summon animation
+
+        yield return null; // wait for animation to start
+        yield return new WaitForSeconds(anim.GetCurrentAnimatorClipInfo(0).Length); // wait for animation to end (so rock can be dropped during animation because this coroutine won't be null)
+
+        isRockSummoning = false;
+        isRockThrowReady = true; // rock is ready to be thrown
+        action.ActivateWeapon(); // activate weapon after rock is summoned
+        rockCoroutine = null;
+
+    }
+
+    public void DropRock() {
+
+        if (!currRock || !isRockSummoning) return; // no rock to drop or rock has been fully summoned already -> can't drop it
+
+        if (rockCoroutine != null) StopCoroutine(rockCoroutine); // stop rock coroutine if it's running
+        rockCoroutine = StartCoroutine(HandleDropRock());
+
+    }
+
+    private IEnumerator HandleDropRock() {
+
+        currRock.Drop(); // drop rock
+        anim.SetBool("isRockSummoned", false);
+        yield return null; // wait for animation to start
+
+        EnableCoreScripts(); // enable all scripts after rock is dropped/thrown
+        EnableAllMechanics(); // enable all mechanics after rock is dropped/thrown
+
+        rockCoroutine = null;
 
     }
 
@@ -668,6 +1014,8 @@ public class PlayerController : EntityController {
     #region UTILITIES
 
     public bool IsGrounded() => corgiController.State.IsGrounded;
+
+    public Animator GetAnimator() => anim;
 
     protected override void OnRespawn() {
 

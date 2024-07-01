@@ -157,7 +157,7 @@ MonoBehaviour:
   IgnoreDownWhenGrounded: 0
   Reticle: {fileID: 1000010525066036, guid: fdff91f9c641e4bc4ae800f161c07e1f, type: 3}
   DisplayReticle: 1
-  ReticleDistance: 4
+  ReticleDistance: 0
   ReticleZPosition: 0
   ReticleAtMousePosition: 1
   RotateReticle: 1

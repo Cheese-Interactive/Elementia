@@ -10,6 +10,7 @@ public class KineticProjectile : BaseProjectile {
     private DamageOnTouch damageOnTouch;
 
     [Header("Settings")]
+    [SerializeField] private Vector2 entityKineticForce;
     [SerializeField] private float totalPullMultiplier;
     [SerializeField] private float verticalPullMultiplier;
 
@@ -18,12 +19,14 @@ public class KineticProjectile : BaseProjectile {
         projectile = GetComponent<Projectile>();
         damageOnTouch = GetComponent<DamageOnTouch>();
 
+        damageOnTouch.DamageCausedKnockbackForce = entityKineticForce;
+
     }
 
     private void OnTriggerEnter2D(Collider2D collision) { // triggers when projectile collides with something | IMPORTANT: triggers after the object is disabled on death
 
         if (collision.gameObject.activeInHierarchy) // make sure hit object is active
-            collision.gameObject.GetComponent<Pullable>()?.Pull(projectile.GetOwner().transform, totalPullMultiplier, verticalPullMultiplier);
+            collision.gameObject.GetComponent<Pullable>()?.Pull(projectile.GetOwner().transform, totalPullMultiplier, verticalPullMultiplier); // pull object towards player
 
     }
 }

@@ -5,25 +5,25 @@ using UnityEngine;
 public abstract class SecondaryAction : MonoBehaviour {
 
     [Header("References")]
-    protected PlayerController player;
+    protected PlayerController playerController;
 
     [Header("Settings")]
-    [SerializeField][Tooltip("Provide cooldown as well")] private bool isSecondaryAuto;
-    [SerializeField][Tooltip("For auto attacks ONLY")] protected float secondaryCooldown;
-    [SerializeField][Tooltip("No cooldown")] protected bool isSecondaryToggle;
+    [SerializeField] private bool isSecondaryAuto;
+    [SerializeField] protected float secondaryCooldown;
+    [SerializeField] protected bool canUseInAir;
 
     [Header("Actions")]
     protected bool isReady;
 
-    protected void Awake() => player = GetComponent<PlayerController>();
+    protected void Awake() => playerController = GetComponent<PlayerController>();
 
     protected void Start() => isReady = true;
 
-    public abstract void OnTrigger();
+    public virtual void OnTriggerRegular() { }
 
-    public bool IsAuto() => isSecondaryAuto;
+    public virtual void OnTriggerHold(bool startHold) { }
 
-    public bool IsToggle() => isSecondaryToggle;
+    public bool IsAutoAction() => isSecondaryAuto;
 
     public float GetCooldown() => secondaryCooldown;
 
@@ -37,6 +37,6 @@ public abstract class SecondaryAction : MonoBehaviour {
 
     }
 
-    public virtual void SetInitialToggled(bool isToggled) { } // only for toggle actions | to deal with if mouse button is already down before equip
+    public abstract bool IsRegularAction(); // regular or hold action
 
 }

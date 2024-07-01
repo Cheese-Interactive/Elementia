@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c7768079091df64d97263e34cfd6bcf, type: 3}
   m_Name: Fire
   m_EditorClassIdentifier: 
-  icon: {fileID: 21300000, guid: 2b066b1e153805f4aa7e2e585d2470cf, type: 3}
+  spellIcon: {fileID: 21300000, guid: 2b066b1e153805f4aa7e2e585d2470cf, type: 3}
+  hotbarSelectedIcon: {fileID: 21300000, guid: c7a21c992305ee8408621f3f6b65b6ba, type: 3}

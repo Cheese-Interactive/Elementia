@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c7768079091df64d97263e34cfd6bcf, type: 3}
   m_Name: MagicMissile
   m_EditorClassIdentifier: 
-  icon: {fileID: 21300000, guid: 1a17bf0991c46894389dc840c3893213, type: 3}
+  spellIcon: {fileID: 21300000, guid: 1a17bf0991c46894389dc840c3893213, type: 3}
+  hotbarSelectedIcon: {fileID: 21300000, guid: 2ca348d3a6c0cd64ea7409a131c00b0e, type: 3}

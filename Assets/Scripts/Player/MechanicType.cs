@@ -4,6 +4,6 @@ using UnityEngine;
 
 public enum MechanicType {
 
-    SecondaryAction
+    PrimaryAction, SecondaryAction
 
 }
