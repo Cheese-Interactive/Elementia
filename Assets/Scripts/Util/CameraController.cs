@@ -3,13 +3,6 @@ using System.Collections;
 using UnityEngine;
 
 public class CameraController : MonoBehaviour {
-    //explanation:
-    //camera is mostly stationary
-    //collider triggers define different "zones" 
-    //when player enters different zones the camera shifts to the state associated with that zone
-    //meaning it changes position and fov (or really anything else)
-    //this helps keep the open feel of the map while also splitting it into distinct sections
-
 
     new private Camera camera;
     private float zPos;
@@ -18,6 +11,7 @@ public class CameraController : MonoBehaviour {
     [SerializeField] private CameraZone startZone;
     [Header("Customization")]
     [SerializeField] private float shiftTime;
+    [SerializeField] private bool isPosStatic;
 
     void Start() {
         camera = GetComponent<Camera>();
@@ -31,7 +25,8 @@ public class CameraController : MonoBehaviour {
     }
 
     public void SetCam(Vector3 pos, float size) {
-        transform.position = new Vector3(pos.x, pos.y, zPos);
+        if (!isPosStatic)
+            transform.position = new Vector3(pos.x, pos.y, zPos);
         camera.orthographicSize = size;
     }
 
@@ -51,7 +46,8 @@ public class CameraController : MonoBehaviour {
             t = elapsed / shiftTime;
             t = Mathf.Sin(t * Mathf.PI * 0.5f);
             camera.orthographicSize = Mathf.Lerp(startSize, size, t);
-            transform.position = Vector3.Lerp(startPos, pos, t);
+            if (!isPosStatic)
+                transform.position = Vector3.Lerp(startPos, pos, t);
             elapsed += Time.deltaTime;
             yield return null;
         }

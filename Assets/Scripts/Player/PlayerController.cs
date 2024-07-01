@@ -1,14 +1,10 @@
 using DG.Tweening;
 using MoreMountains.CorgiEngine;
-using MoreMountains.InventoryEngine;
-using MoreMountains.Tools;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
 public class PlayerController : EntityController {
 
@@ -141,7 +137,8 @@ public class PlayerController : EntityController {
                 flamethrower.transform.rotation *= Quaternion.Euler(0f, 180f, 0f); // flip overlay by adding 180f on the Y axis
                 isFlamethrowerFlipped = true;
 
-            } else if (!spriteRenderer.flipX && isFlamethrowerFlipped) { // then unflip flamethrower
+            }
+            else if (!spriteRenderer.flipX && isFlamethrowerFlipped) { // then unflip flamethrower
 
                 flamethrower.transform.localPosition = new Vector3(-flamethrower.transform.localPosition.x, flamethrower.transform.localPosition.y, flamethrower.transform.localPosition.z); // flip x axis position
                 flamethrower.transform.rotation = initialRot; // reset overlay rotation to initial rotation
@@ -173,12 +170,14 @@ public class PlayerController : EntityController {
                     currSecondaryAction.enabled = true; // enable new action
 
                 }
-            } else {
+            }
+            else {
 
                 charWeapon.ChangeWeapon(null, null); // remove weapon
 
             }
-        } else if (Input.mouseScrollDelta.y < 0f && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped()) { // make sure barrier is not deployed before switching
+        }
+        else if (Input.mouseScrollDelta.y < 0f && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped()) { // make sure barrier is not deployed before switching
 
             if (currWeapon)
                 currSecondaryAction.enabled = false; // disable current secondary action
@@ -197,7 +196,8 @@ public class PlayerController : EntityController {
                     currSecondaryAction.enabled = true; // enable new action
 
                 }
-            } else {
+            }
+            else {
 
                 charWeapon.ChangeWeapon(null, null); // remove weapon
 
@@ -224,12 +224,14 @@ public class PlayerController : EntityController {
                     currSecondaryAction.enabled = true; // enable new action
 
                 }
-            } else {
+            }
+            else {
 
                 charWeapon.ChangeWeapon(null, null); // remove weapon
 
             }
-        } else if (Input.GetKeyDown(KeyCode.Alpha2) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped()) {
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped()) {
 
             if (currWeapon)
                 currSecondaryAction.enabled = false; // disable current secondary action
@@ -248,12 +250,14 @@ public class PlayerController : EntityController {
                     currSecondaryAction.enabled = true; // enable new action
 
                 }
-            } else {
+            }
+            else {
 
                 charWeapon.ChangeWeapon(null, null); // remove weapon
 
             }
-        } else if (Input.GetKeyDown(KeyCode.Alpha3) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped()) {
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped()) {
 
             if (currWeapon)
                 currSecondaryAction.enabled = false; // disable current secondary action
@@ -272,12 +276,14 @@ public class PlayerController : EntityController {
                     currSecondaryAction.enabled = true; // enable new action
 
                 }
-            } else {
+            }
+            else {
 
                 charWeapon.ChangeWeapon(null, null); // remove weapon
 
             }
-        } else if (Input.GetKeyDown(KeyCode.Alpha4) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped()) {
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha4) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped()) {
 
             if (currWeapon)
                 currSecondaryAction.enabled = false; // disable current secondary action
@@ -296,12 +302,14 @@ public class PlayerController : EntityController {
                     currSecondaryAction.enabled = true; // enable new action
 
                 }
-            } else {
+            }
+            else {
 
                 charWeapon.ChangeWeapon(null, null); // remove weapon
 
             }
-        } else if (Input.GetKeyDown(KeyCode.Alpha5) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped()) {
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha5) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped()) {
 
             if (currWeapon)
                 currSecondaryAction.enabled = false; // disable current secondary action
@@ -320,12 +328,14 @@ public class PlayerController : EntityController {
                     currSecondaryAction.enabled = true; // enable new action
 
                 }
-            } else {
+            }
+            else {
 
                 charWeapon.ChangeWeapon(null, null); // remove weapon
 
             }
-        } else if (Input.GetKeyDown(KeyCode.Alpha6) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped()) {
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha6) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped()) {
 
             if (currWeapon)
                 currSecondaryAction.enabled = false; // disable current secondary action
@@ -344,12 +354,14 @@ public class PlayerController : EntityController {
                     currSecondaryAction.enabled = true; // enable new action
 
                 }
-            } else {
+            }
+            else {
 
                 charWeapon.ChangeWeapon(null, null); // remove weapon
 
             }
-        } else if (Input.GetKeyDown(KeyCode.Alpha7) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped()) {
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha7) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped()) {
 
             if (currWeapon)
                 currSecondaryAction.enabled = false; // disable current secondary action
@@ -368,12 +380,14 @@ public class PlayerController : EntityController {
                     currSecondaryAction.enabled = true; // enable new action
 
                 }
-            } else {
+            }
+            else {
 
                 charWeapon.ChangeWeapon(null, null); // remove weapon
 
             }
-        } else if (Input.GetKeyDown(KeyCode.Alpha8) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped()) {
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha8) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped()) {
 
             if (currWeapon)
                 currSecondaryAction.enabled = false; // disable current secondary action
@@ -392,12 +406,14 @@ public class PlayerController : EntityController {
                     currSecondaryAction.enabled = true; // enable new action
 
                 }
-            } else {
+            }
+            else {
 
                 charWeapon.ChangeWeapon(null, null); // remove weapon
 
             }
-        } else if (Input.GetKeyDown(KeyCode.Alpha9) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped()) {
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha9) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped()) {
 
             if (currWeapon)
                 currSecondaryAction.enabled = false; // disable current secondary action
@@ -416,12 +432,14 @@ public class PlayerController : EntityController {
                     currSecondaryAction.enabled = true; // enable new action
 
                 }
-            } else {
+            }
+            else {
 
                 charWeapon.ChangeWeapon(null, null); // remove weapon
 
             }
-        } else if (Input.GetKeyDown(KeyCode.Alpha0) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped()) {
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha0) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped()) {
 
             if (currWeapon)
                 currSecondaryAction.enabled = false; // disable current secondary action
@@ -440,7 +458,8 @@ public class PlayerController : EntityController {
                     currSecondaryAction.enabled = true; // enable new action
 
                 }
-            } else {
+            }
+            else {
 
                 charWeapon.ChangeWeapon(null, null); // remove weapon
 
