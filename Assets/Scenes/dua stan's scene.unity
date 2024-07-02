@@ -7678,7 +7678,6 @@ GameObject:
   - component: {fileID: 1932897177}
   - component: {fileID: 1932897176}
   - component: {fileID: 1932897175}
-  - component: {fileID: 1932897174}
   m_Layer: 8
   m_Name: PushableBlock
   m_TagString: Untagged
@@ -7686,18 +7685,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1932897174
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1932897173}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e14f6c804f8e3e418fd2d4a1299f0c5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1932897175
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9668,7 +9655,6 @@ GameObject:
   - component: {fileID: 275764450190201342}
   - component: {fileID: 275764450191324048}
   - component: {fileID: 275764450191324050}
-  - component: {fileID: 275764450191324049}
   m_Layer: 8
   m_Name: PushableBlock
   m_TagString: Untagged
@@ -9763,18 +9749,6 @@ Rigidbody2D:
   m_SleepingMode: 0
   m_CollisionDetection: 1
   m_Constraints: 0
---- !u!114 &275764450191324049
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 275764450187313056}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e14f6c804f8e3e418fd2d4a1299f0c5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &275764450191324050
 MonoBehaviour:
   m_ObjectHideFlags: 0

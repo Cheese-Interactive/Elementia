@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 114000013697282846}
   - component: {fileID: 114000012788668036}
   - component: {fileID: 114000010281602892}
+  - component: {fileID: -7026214223972298618}
   - component: {fileID: -6513195632682728618}
   m_Layer: 12
   m_Name: MagicMissileProjectile
@@ -219,7 +220,7 @@ MonoBehaviour:
   TypedDamages: []
   DamageCausedKnockbackType: 1
   DamageCausedKnockbackDirection: 0
-  DamageCausedKnockbackForce: {x: 2, y: 2}
+  DamageCausedKnockbackForce: {x: 0, y: 0}
   InvincibilityDuration: 0
   RepeatDamageOverTime: 0
   AmountOfRepeats: 3
@@ -280,6 +281,19 @@ MonoBehaviour:
   OnlyDamageMaster: 1
   KillOnMasterHealthDeath: 0
   TargetDamageResistanceProcessor: {fileID: 0}
+--- !u!114 &-7026214223972298618
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8de529aa55fb28242bfbd8ad6454db08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectImpactForce: {x: 3, y: 2}
 --- !u!96 &-6513195632682728618
 TrailRenderer:
   serializedVersion: 3

@@ -196,7 +196,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   entityWindForce: {x: 15, y: 2}
-  objectWindForce: 25
+  objectWindForce: {x: 15, y: 20}
 --- !u!96 &-6513195632682728618
 TrailRenderer:
   serializedVersion: 3

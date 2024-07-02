@@ -24,7 +24,7 @@ public class WindSecondaryAction : SecondaryAction {
 
         if (!canUseInAir && !playerController.IsGrounded()) return; // make sure player is grounded if required
 
-        corgiController.SetForce(((Vector2) Camera.main.ScreenToWorldPoint(Input.mousePosition) - (Vector2) transform.position).normalized * playerWindForce);
+        corgiController.AddForce(((Vector2) Camera.main.ScreenToWorldPoint(Input.mousePosition) - (Vector2) transform.position).normalized * playerWindForce);
 
         // begin cooldown
         isReady = false;

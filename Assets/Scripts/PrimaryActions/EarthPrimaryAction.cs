@@ -23,6 +23,8 @@ public class EarthPrimaryAction : PrimaryAction {
 
     }
 
+    private void OnDisable() => charWeaponHandler.AbilityPermitted = true; // disables when weapon is switched, re-enable weapon handler
+
     public override void OnTriggerRegular() {
 
         if (!isReady) return; // make sure player is ready

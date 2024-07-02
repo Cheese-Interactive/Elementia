@@ -236,9 +236,9 @@ MonoBehaviour:
   WeaponOnHitDamageableFeedback: {fileID: 0}
   WeaponOnHitNonDamageableFeedback: {fileID: 0}
   WeaponOnKillFeedback: {fileID: 0}
-  ApplyRecoilOnUse: 1
+  ApplyRecoilOnUse: 0
   RecoilOnUseProperties:
-    RecoilForceGrounded: 15
+    RecoilForceGrounded: 10
     RecoilForceAirborne: 10
     RecoilAngleModifier: 0
     DirectionMultiplier: {x: 1, y: 1}
@@ -286,7 +286,7 @@ MonoBehaviour:
   ProjectilesPerShot: 1
   Spread: {x: 0, y: 0, z: 0}
   RotateWeaponOnSpread: 0
-  RandomSpread: 0
+  RandomSpread: 1
   ObjectPooler: {fileID: 0}
   SpawnPosition: {x: 0.35, y: 0.12, z: 0}
 --- !u!114 &-3073912655475901205

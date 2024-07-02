@@ -293,9 +293,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b8d82a4bf4d4344ab1f9bbdf35ca079, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  entityKineticForce: {x: -15, y: 5}
-  totalPullMultiplier: 2
-  verticalPullMultiplier: 3
+  entityKineticForce: {x: 15, y: 5}
+  objectKineticForce: {x: 5, y: 10}
 --- !u!96 &-6513195632682728618
 TrailRenderer:
   serializedVersion: 3
