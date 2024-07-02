@@ -10,7 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3c7768079091df64d97263e34cfd6bcf, type: 3}
-  m_Name: Wind
+  m_Name: Ice
   m_EditorClassIdentifier: 
-  spellIcon: {fileID: 21300000, guid: 8034f644bd34aad41844c806ed682132, type: 3}
-  hotbarSelectedIcon: {fileID: 21300000, guid: 0e39a005a86ff98479a0e9919c0bf19c, type: 3}
+  primarySpellIcon: {fileID: 21300000, guid: 2046d3e6e9709d34895aa1581c8a3332, type: 3}
+  secondarySpellIcon: {fileID: 21300000, guid: 3a03e44d6e7e0094e8dd2f25954d1310, type: 3}
+  spellColor: {r: 0.3882353, g: 0.7647059, b: 0.8, a: 1}

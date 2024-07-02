@@ -311,7 +311,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5685c97a034e0454fadf442833c7f159, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spriteRenderer: {fileID: 898556298284909675}
+  spriteRenderer: {fileID: 0}
 --- !u!1 &4900122409563817483
 GameObject:
   m_ObjectHideFlags: 0
@@ -321,9 +321,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6028263854266632344}
-  - component: {fileID: 898556298284909675}
-  - component: {fileID: 4799442617126734469}
+  - component: {fileID: 6623342494606771417}
   - component: {fileID: 2489162015849116405}
+  - component: {fileID: 4077020468999200023}
   - component: {fileID: 6870399177041132509}
   - component: {fileID: 6145230641924286331}
   - component: {fileID: 4247068797751214176}
@@ -373,7 +373,7 @@ Transform:
   - {fileID: 8203172182253892236}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &898556298284909675
+--- !u!212 &6623342494606771417
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -425,33 +425,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!50 &4799442617126734469
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4900122409563817483}
-  m_BodyType: 1
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 1
-  m_SleepingMode: 0
-  m_CollisionDetection: 1
-  m_Constraints: 0
 --- !u!61 &2489162015849116405
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -497,6 +470,33 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.625, y: 0.9375}
   m_EdgeRadius: 0
+--- !u!50 &4077020468999200023
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4900122409563817483}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 1
+  m_SleepingMode: 0
+  m_CollisionDetection: 1
+  m_Constraints: 0
 --- !u!114 &6870399177041132509
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1089,32 +1089,32 @@ MonoBehaviour:
   weaponActionPairs:
   - weapon: {fileID: 4237984674334015922, guid: 1146d9a50fe8cfb4491f14c86a6845dc,
       type: 3}
-    weaponData: {fileID: 11400000, guid: 3224215c3a45c564ca37fef85f48c954, type: 2}
+    spellData: {fileID: 11400000, guid: 3224215c3a45c564ca37fef85f48c954, type: 2}
     primaryAction: {fileID: 0}
     secondaryAction: {fileID: 2721479856997411025}
   - weapon: {fileID: 4237984674334015922, guid: 9d60ea47bc8ee1b4a80c55c277f5a949,
       type: 3}
-    weaponData: {fileID: 11400000, guid: 240fb2df713a88941845b673fa543e19, type: 2}
+    spellData: {fileID: 11400000, guid: 240fb2df713a88941845b673fa543e19, type: 2}
     primaryAction: {fileID: 0}
     secondaryAction: {fileID: 8881875236129953771}
   - weapon: {fileID: 4237984674334015922, guid: 9a3122220c3edc64683ed774da57bdca,
       type: 3}
-    weaponData: {fileID: 11400000, guid: 0b8316274d5b89d44ab51986d17cc3ba, type: 2}
+    spellData: {fileID: 11400000, guid: 0b8316274d5b89d44ab51986d17cc3ba, type: 2}
     primaryAction: {fileID: 0}
     secondaryAction: {fileID: -8039291345281199097}
   - weapon: {fileID: 4237984674334015922, guid: b8a570382a6f4554f90091a497fef835,
       type: 3}
-    weaponData: {fileID: 11400000, guid: 6f8080ba3b2a54c459fdce6bcff4b454, type: 2}
+    spellData: {fileID: 11400000, guid: 6f8080ba3b2a54c459fdce6bcff4b454, type: 2}
     primaryAction: {fileID: 0}
     secondaryAction: {fileID: -5756287154290932317}
   - weapon: {fileID: 4237984674334015922, guid: 4b35fc7ef435692488cc8c2bc368ca14,
       type: 3}
-    weaponData: {fileID: 11400000, guid: ca3ec5979ed33474e8d59fd613d982a1, type: 2}
+    spellData: {fileID: 11400000, guid: ca3ec5979ed33474e8d59fd613d982a1, type: 2}
     primaryAction: {fileID: 0}
     secondaryAction: {fileID: -8039291345281199097}
   - weapon: {fileID: 4237984674334015922, guid: e8331e579bf579e468249f527de34970,
       type: 3}
-    weaponData: {fileID: 11400000, guid: 6fb9c3a94d1f1cd4582e6ca735c37e39, type: 2}
+    spellData: {fileID: 11400000, guid: 6fb9c3a94d1f1cd4582e6ca735c37e39, type: 2}
     primaryAction: {fileID: 6885750652469125261}
     secondaryAction: {fileID: -8039291345281199097}
   barrier: {fileID: 8107409526917543720}
@@ -11187,7 +11187,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5685c97a034e0454fadf442833c7f159, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spriteRenderer: {fileID: 898556298284909675}
+  spriteRenderer: {fileID: 0}
 --- !u!1 &8430081091570191344
 GameObject:
   m_ObjectHideFlags: 0

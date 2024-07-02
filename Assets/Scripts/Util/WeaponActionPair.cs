@@ -10,13 +10,13 @@ public class WeaponActionPair {
 
     [Header("Data")]
     [SerializeField] private Weapon weapon;
-    [SerializeField] private SpellData weaponData;
+    [SerializeField] private SpellData spellData;
     [SerializeField] private PrimaryAction primaryAction;
     [SerializeField] private SecondaryAction secondaryAction;
 
     public Weapon GetWeapon() => weapon;
 
-    public SpellData GetWeaponData() => weaponData;
+    public SpellData GetSpellData() => spellData;
 
     public PrimaryAction GetPrimaryAction() => primaryAction;
 

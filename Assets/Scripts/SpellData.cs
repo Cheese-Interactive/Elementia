@@ -6,11 +6,14 @@ using UnityEngine;
 public class SpellData : ScriptableObject {
 
     [Header("Data")]
-    [SerializeField] private Sprite spellIcon;
-    [SerializeField] private Sprite hotbarSelectedIcon;
+    [SerializeField] private Sprite primarySpellIcon;
+    [SerializeField] private Sprite secondarySpellIcon;
+    [SerializeField] private Color spellColor;
 
-    public Sprite GetSpellIcon() => spellIcon;
+    public Sprite GetPrimarySpellIcon() => primarySpellIcon;
 
-    public Sprite GetHotbarSelectedIcon() => hotbarSelectedIcon;
+    public Sprite GetSecondarySpellIcon() => secondarySpellIcon;
+
+    public Color GetSpellColor() => spellColor;
 
 }

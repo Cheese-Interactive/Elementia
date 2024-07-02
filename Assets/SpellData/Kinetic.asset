@@ -10,7 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3c7768079091df64d97263e34cfd6bcf, type: 3}
-  m_Name: MagicMissile
+  m_Name: Kinetic
   m_EditorClassIdentifier: 
-  spellIcon: {fileID: 21300000, guid: 1a17bf0991c46894389dc840c3893213, type: 3}
-  hotbarSelectedIcon: {fileID: 21300000, guid: 2ca348d3a6c0cd64ea7409a131c00b0e, type: 3}
+  primarySpellIcon: {fileID: 21300000, guid: 0fe62121de742a242b18430bc36f8218, type: 3}
+  secondarySpellIcon: {fileID: 21300000, guid: 1e226aab47ac9e843bd126b82d9de06f, type: 3}
+  spellColor: {r: 0.47843137, g: 0.99215686, b: 0.59607846, a: 1}

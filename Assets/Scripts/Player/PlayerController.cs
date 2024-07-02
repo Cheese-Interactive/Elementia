@@ -17,7 +17,7 @@ public class PlayerController : EntityController {
     private Weapon currWeapon;
 
     [Header("Hotbar")]
-    private ItemSelector hotbar;
+    private ItemSelector itemSelector;
 
     [Header("Weapons/Primary/Secondary Actions")]
     [SerializeField] private WeaponActionPair[] weaponActionPairs;
@@ -65,7 +65,7 @@ public class PlayerController : EntityController {
         foreach (MechanicType mechanicType in mechanics)
             mechanicStatuses.Add(mechanicType, true); // set all mechanics to true by default
 
-        hotbar = FindObjectOfType<ItemSelector>();
+        itemSelector = FindObjectOfType<ItemSelector>();
         deathSubscriptions = new List<WeaponActionPair>();
 
         // pick the first secondary action as the default, subscribe to death event, initialize hotbar
@@ -94,7 +94,7 @@ public class PlayerController : EntityController {
 
             }
 
-            hotbar.SetSpell(action.GetWeaponData(), i); // add weapon item to hotbar
+            itemSelector.SetSpellData(action.GetSpellData(), i); // add weapon item to hotbar
 
             if (primaryAction)
                 health.OnDeath += primaryAction.OnDeath; // subscribe to death event
@@ -137,11 +137,11 @@ public class PlayerController : EntityController {
         PrimaryAction currPrimaryAction = null;
         SecondaryAction currSecondaryAction = null;
 
-        if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+        if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
-            currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
-            currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction();
-            currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction();
+            currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon();
+            currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
+            currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
 
         }
 
@@ -211,14 +211,14 @@ public class PlayerController : EntityController {
         /* SCROLL WHEEL WEAPON SWITCHING */
         if (Input.mouseScrollDelta.y > 0f && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) { // make sure barrier is not deployed & flamethrower isn't equipped before switching
 
-            hotbar.CycleSlot(-1); // cycle hotbar slot backwards
+            itemSelector.CycleSlot(-1); // cycle hotbar slot backwards
 
             // set new weapon and actions
-            if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+            if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
-                currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
-                currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction();
-                currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction();
+                currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon();
+                currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
+                currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
 
             }
 
@@ -228,14 +228,14 @@ public class PlayerController : EntityController {
             if (currWeapon && currSecondaryAction) // make sure weapon and secondary action exist
                 currSecondaryAction.enabled = false; // disable current secondary action
 
-            if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+            if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
-                currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
+                currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon();
                 charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
                 if (currPrimaryAction) { // make sure primary action exists
 
-                    currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction(); // update primary action
+                    currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction(); // update primary action
 
                     if (currPrimaryAction) // check if new primary action exists
                         currPrimaryAction.enabled = true; // enable new action
@@ -244,7 +244,7 @@ public class PlayerController : EntityController {
 
                 if (currWeapon && currSecondaryAction) { // make sure weapon and secondary action exist
 
-                    currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
+                    currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
                     currSecondaryAction.enabled = true; // enable new action
 
                 }
@@ -255,14 +255,14 @@ public class PlayerController : EntityController {
             }
         } else if (Input.mouseScrollDelta.y < 0f && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) { // make sure barrier is not deployed before switching
 
-            hotbar.CycleSlot(1); // cycle hotbar slot forwards
+            itemSelector.CycleSlot(1); // cycle hotbar slot forwards
 
             // set new weapon and actions
-            if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+            if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
-                currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
-                currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction();
-                currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction();
+                currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon();
+                currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
+                currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
 
             }
 
@@ -272,14 +272,14 @@ public class PlayerController : EntityController {
             if (currWeapon && currSecondaryAction) // make sure weapon and secondary action exist
                 currSecondaryAction.enabled = false; // disable current secondary action
 
-            if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+            if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
-                currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
+                currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon();
                 charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
                 if (currPrimaryAction) { // make sure primary action exists
 
-                    currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction(); // update primary action
+                    currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction(); // update primary action
 
                     if (currPrimaryAction) // check if new primary action exists
                         currPrimaryAction.enabled = true; // enable new action
@@ -288,7 +288,7 @@ public class PlayerController : EntityController {
 
                 if (currWeapon && currSecondaryAction) { // make sure weapon and secondary action exist
 
-                    currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
+                    currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
                     currSecondaryAction.enabled = true; // enable new action
 
                 }
@@ -302,14 +302,14 @@ public class PlayerController : EntityController {
         /* KEY WEAPON SWITCHING */
         if (Input.GetKeyDown(KeyCode.Alpha1) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
 
-            hotbar.SelectSlot(0);
+            itemSelector.SelectSlot(0);
 
             // set new weapon and actions
-            if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+            if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
-                currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
-                currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction();
-                currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction();
+                currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon();
+                currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
+                currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
 
             }
 
@@ -319,14 +319,14 @@ public class PlayerController : EntityController {
             if (currWeapon && currSecondaryAction) // make sure weapon and secondary action exist
                 currSecondaryAction.enabled = false; // disable current secondary action
 
-            if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+            if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
-                currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
+                currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon();
                 charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
                 if (currPrimaryAction) { // make sure primary action exists
 
-                    currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction(); // update primary action
+                    currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction(); // update primary action
 
                     if (currPrimaryAction) // check if new primary action exists
                         currPrimaryAction.enabled = true; // enable new action
@@ -335,7 +335,7 @@ public class PlayerController : EntityController {
 
                 if (currWeapon && currSecondaryAction) { // make sure weapon and secondary action exist
 
-                    currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
+                    currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
                     currSecondaryAction.enabled = true; // enable new action
 
                 }
@@ -346,14 +346,14 @@ public class PlayerController : EntityController {
             }
         } else if (Input.GetKeyDown(KeyCode.Alpha2) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
 
-            hotbar.SelectSlot(1);
+            itemSelector.SelectSlot(1);
 
             // set new weapon and actions
-            if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+            if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
-                currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
-                currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction();
-                currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction();
+                currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon();
+                currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
+                currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
 
             }
 
@@ -363,14 +363,14 @@ public class PlayerController : EntityController {
             if (currWeapon && currSecondaryAction) // make sure weapon and secondary action exist
                 currSecondaryAction.enabled = false; // disable current secondary action
 
-            if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+            if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
-                currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
+                currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon();
                 charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
                 if (currPrimaryAction) { // make sure primary action exists
 
-                    currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction(); // update primary action
+                    currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction(); // update primary action
 
                     if (currPrimaryAction) // check if new primary action exists
                         currPrimaryAction.enabled = true; // enable new action
@@ -379,7 +379,7 @@ public class PlayerController : EntityController {
 
                 if (currWeapon && currSecondaryAction) { // make sure weapon and secondary action exist
 
-                    currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
+                    currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
                     currSecondaryAction.enabled = true; // enable new action
 
                 }
@@ -390,14 +390,14 @@ public class PlayerController : EntityController {
             }
         } else if (Input.GetKeyDown(KeyCode.Alpha3) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
 
-            hotbar.SelectSlot(2);
+            itemSelector.SelectSlot(2);
 
             // set new weapon and actions
-            if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+            if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
-                currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
-                currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction();
-                currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction();
+                currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon();
+                currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
+                currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
 
             }
 
@@ -407,14 +407,14 @@ public class PlayerController : EntityController {
             if (currWeapon && currSecondaryAction) // make sure weapon and secondary action exist
                 currSecondaryAction.enabled = false; // disable current secondary action
 
-            if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+            if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
-                currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
+                currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon();
                 charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
                 if (currPrimaryAction) { // make sure primary action exists
 
-                    currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction(); // update primary action
+                    currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction(); // update primary action
 
                     if (currPrimaryAction) // check if new primary action exists
                         currPrimaryAction.enabled = true; // enable new action
@@ -423,7 +423,7 @@ public class PlayerController : EntityController {
 
                 if (currWeapon && currSecondaryAction) { // make sure weapon and secondary action exist
 
-                    currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
+                    currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
                     currSecondaryAction.enabled = true; // enable new action
 
                 }
@@ -434,14 +434,14 @@ public class PlayerController : EntityController {
             }
         } else if (Input.GetKeyDown(KeyCode.Alpha4) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
 
-            hotbar.SelectSlot(3);
+            itemSelector.SelectSlot(3);
 
             // set new weapon and actions
-            if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+            if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
-                currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
-                currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction();
-                currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction();
+                currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon();
+                currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
+                currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
 
             }
 
@@ -451,14 +451,14 @@ public class PlayerController : EntityController {
             if (currWeapon && currSecondaryAction) // make sure weapon and secondary action exist
                 currSecondaryAction.enabled = false; // disable current secondary action
 
-            if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+            if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
-                currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
+                currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon();
                 charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
                 if (currPrimaryAction) { // make sure primary action exists
 
-                    currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction(); // update primary action
+                    currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction(); // update primary action
 
                     if (currPrimaryAction) // check if new primary action exists
                         currPrimaryAction.enabled = true; // enable new action
@@ -467,7 +467,7 @@ public class PlayerController : EntityController {
 
                 if (currWeapon && currSecondaryAction) { // make sure weapon and secondary action exist
 
-                    currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
+                    currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
                     currSecondaryAction.enabled = true; // enable new action
 
                 }
@@ -478,14 +478,14 @@ public class PlayerController : EntityController {
             }
         } else if (Input.GetKeyDown(KeyCode.Alpha5) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
 
-            hotbar.SelectSlot(4);
+            itemSelector.SelectSlot(4);
 
             // set new weapon and actions
-            if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+            if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
-                currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
-                currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction();
-                currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction();
+                currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon();
+                currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
+                currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
 
             }
 
@@ -495,14 +495,14 @@ public class PlayerController : EntityController {
             if (currWeapon && currSecondaryAction) // make sure weapon and secondary action exist
                 currSecondaryAction.enabled = false; // disable current secondary action
 
-            if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+            if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
-                currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
+                currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon();
                 charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
                 if (currPrimaryAction) { // make sure primary action exists
 
-                    currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction(); // update primary action
+                    currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction(); // update primary action
 
                     if (currPrimaryAction) // check if new primary action exists
                         currPrimaryAction.enabled = true; // enable new action
@@ -511,7 +511,7 @@ public class PlayerController : EntityController {
 
                 if (currWeapon && currSecondaryAction) { // make sure weapon and secondary action exist
 
-                    currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
+                    currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
                     currSecondaryAction.enabled = true; // enable new action
 
                 }
@@ -522,14 +522,14 @@ public class PlayerController : EntityController {
             }
         } else if (Input.GetKeyDown(KeyCode.Alpha6) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
 
-            hotbar.SelectSlot(5);
+            itemSelector.SelectSlot(5);
 
             // set new weapon and actions
-            if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+            if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
-                currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
-                currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction();
-                currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction();
+                currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon();
+                currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
+                currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
 
             }
 
@@ -539,14 +539,14 @@ public class PlayerController : EntityController {
             if (currWeapon && currSecondaryAction) // make sure weapon and secondary action exist
                 currSecondaryAction.enabled = false; // disable current secondary action
 
-            if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+            if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
-                currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
+                currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon();
                 charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
                 if (currPrimaryAction) { // make sure primary action exists
 
-                    currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction(); // update primary action
+                    currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction(); // update primary action
 
                     if (currPrimaryAction) // check if new primary action exists
                         currPrimaryAction.enabled = true; // enable new action
@@ -555,7 +555,7 @@ public class PlayerController : EntityController {
 
                 if (currWeapon && currSecondaryAction) { // make sure weapon and secondary action exist
 
-                    currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
+                    currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
                     currSecondaryAction.enabled = true; // enable new action
 
                 }
@@ -566,14 +566,14 @@ public class PlayerController : EntityController {
             }
         } else if (Input.GetKeyDown(KeyCode.Alpha7) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
 
-            hotbar.SelectSlot(6);
+            itemSelector.SelectSlot(6);
 
             // set new weapon and actions
-            if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+            if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
-                currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
-                currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction();
-                currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction();
+                currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon();
+                currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
+                currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
 
             }
 
@@ -583,14 +583,14 @@ public class PlayerController : EntityController {
             if (currWeapon && currSecondaryAction) // make sure weapon and secondary action exist
                 currSecondaryAction.enabled = false; // disable current secondary action
 
-            if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+            if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
-                currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
+                currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon();
                 charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
                 if (currPrimaryAction) { // make sure primary action exists
 
-                    currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction(); // update primary action
+                    currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction(); // update primary action
 
                     if (currPrimaryAction) // check if new primary action exists
                         currPrimaryAction.enabled = true; // enable new action
@@ -599,7 +599,7 @@ public class PlayerController : EntityController {
 
                 if (currWeapon && currSecondaryAction) { // make sure weapon and secondary action exist
 
-                    currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
+                    currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
                     currSecondaryAction.enabled = true; // enable new action
 
                 }
@@ -610,14 +610,14 @@ public class PlayerController : EntityController {
             }
         } else if (Input.GetKeyDown(KeyCode.Alpha8) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
 
-            hotbar.SelectSlot(7);
+            itemSelector.SelectSlot(7);
 
             // set new weapon and actions
-            if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+            if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
-                currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
-                currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction();
-                currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction();
+                currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon();
+                currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
+                currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
 
             }
 
@@ -627,14 +627,14 @@ public class PlayerController : EntityController {
             if (currWeapon && currSecondaryAction) // make sure weapon and secondary action exist
                 currSecondaryAction.enabled = false; // disable current secondary action
 
-            if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+            if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
-                currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
+                currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon();
                 charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
                 if (currPrimaryAction) { // make sure primary action exists
 
-                    currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction(); // update primary action
+                    currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction(); // update primary action
 
                     if (currPrimaryAction) // check if new primary action exists
                         currPrimaryAction.enabled = true; // enable new action
@@ -643,7 +643,7 @@ public class PlayerController : EntityController {
 
                 if (currWeapon && currSecondaryAction) { // make sure weapon and secondary action exist
 
-                    currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
+                    currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
                     currSecondaryAction.enabled = true; // enable new action
 
                 }
@@ -654,14 +654,14 @@ public class PlayerController : EntityController {
             }
         } else if (Input.GetKeyDown(KeyCode.Alpha9) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
 
-            hotbar.SelectSlot(8);
+            itemSelector.SelectSlot(8);
 
             // set new weapon and actions
-            if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+            if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
-                currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
-                currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction();
-                currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction();
+                currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon();
+                currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
+                currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
 
             }
 
@@ -671,14 +671,14 @@ public class PlayerController : EntityController {
             if (currWeapon && currSecondaryAction) // make sure weapon and secondary action exist
                 currSecondaryAction.enabled = false; // disable current secondary action
 
-            if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+            if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
-                currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
+                currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon();
                 charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
                 if (currPrimaryAction) { // make sure primary action exists
 
-                    currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction(); // update primary action
+                    currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction(); // update primary action
 
                     if (currPrimaryAction) // check if new primary action exists
                         currPrimaryAction.enabled = true; // enable new action
@@ -687,7 +687,7 @@ public class PlayerController : EntityController {
 
                 if (currWeapon && currSecondaryAction) { // make sure weapon and secondary action exist
 
-                    currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
+                    currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
                     currSecondaryAction.enabled = true; // enable new action
 
                 }
@@ -698,14 +698,14 @@ public class PlayerController : EntityController {
             }
         } else if (Input.GetKeyDown(KeyCode.Alpha0) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
 
-            hotbar.SelectSlot(9);
+            itemSelector.SelectSlot(9);
 
             // set new weapon and actions
-            if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+            if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
-                currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
-                currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction();
-                currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction();
+                currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon();
+                currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
+                currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
 
             }
 
@@ -715,14 +715,14 @@ public class PlayerController : EntityController {
             if (currWeapon && currSecondaryAction) // make sure weapon and secondary action exist
                 currSecondaryAction.enabled = false; // disable current secondary action
 
-            if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+            if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
-                currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
+                currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon();
                 charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
                 if (currPrimaryAction) { // make sure primary action exists
 
-                    currPrimaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetPrimaryAction(); // update primary action
+                    currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction(); // update primary action
 
                     if (currPrimaryAction) // check if new primary action exists
                         currPrimaryAction.enabled = true; // enable new action
@@ -731,7 +731,7 @@ public class PlayerController : EntityController {
 
                 if (currWeapon && currSecondaryAction) { // make sure weapon and secondary action exist
 
-                    currSecondaryAction = weaponActionPairs[hotbar.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
+                    currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
                     currSecondaryAction.enabled = true; // enable new action
 
                 }
@@ -745,7 +745,7 @@ public class PlayerController : EntityController {
 
     protected new void OnTriggerEnter2D(Collider2D collision) {
 
-        if (collision.CompareTag("Water") && !barrierAction.IsBarrierDeployed()) // barrier can save player from water
+        if (collision.CompareTag("Water") && !barrierAction.IsBarrierDeployed())  // barrier can save player from water
             health.Kill();
 
     }
