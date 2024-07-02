@@ -23,7 +23,7 @@ public class EntityController : MonoBehaviour {
     protected CharacterButtonActivation charButton;
     protected DamageOnTouch damageOnTouch;
     protected SlowEffect slowEffect;
-    protected CharacterHandleWeapon charWeapon;
+    protected CharacterHandleWeapon charWeaponHandler;
 
     protected void Awake() {
 
@@ -44,7 +44,7 @@ public class EntityController : MonoBehaviour {
         charButton = GetComponent<CharacterButtonActivation>();
         damageOnTouch = GetComponent<DamageOnTouch>();
         slowEffect = GetComponent<SlowEffect>();
-        charWeapon = GetComponent<CharacterHandleWeapon>();
+        charWeaponHandler = GetComponent<CharacterHandleWeapon>();
 
         health.OnDeath += slowEffect.RemoveEffect; // remove slow effect on death
         health.OnDeath += OnDeath;
@@ -110,8 +110,7 @@ public class EntityController : MonoBehaviour {
         if (charButton)
             charButton.AbilityPermitted = true;
 
-        if (charWeapon)
-            charWeapon.AbilityPermitted = true;
+        SetWeaponHandlerEnabled(true);
 
     }
 
@@ -159,8 +158,14 @@ public class EntityController : MonoBehaviour {
         if (charButton)
             charButton.AbilityPermitted = false;
 
-        if (charWeapon)
-            charWeapon.AbilityPermitted = false;
+        SetWeaponHandlerEnabled(false);
+
+    }
+
+    public void SetWeaponHandlerEnabled(bool enabled) {
+
+        if (charWeaponHandler)
+            charWeaponHandler.AbilityPermitted = enabled;
 
     }
 

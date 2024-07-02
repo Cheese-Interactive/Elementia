@@ -26,10 +26,10 @@ public class PlayerController : EntityController {
     [SerializeField] private SpriteRenderer barrier;
     private MagicMissileSecondaryAction barrierAction;
     private float barrierAlpha;
+    private bool isBarrierRetractedPreMax; // for barrier max duration
+    private Tweener barrierTweener;
     private Coroutine barrierCoroutine;
     private Coroutine barrierDurationCoroutine;
-    private Tweener barrierTweener;
-    private bool isBarrierRetractedPreMax; // for barrier max duration
 
     [Header("Flamethrower")]
     [SerializeField] private Transform flamethrower;
@@ -40,10 +40,12 @@ public class PlayerController : EntityController {
     private bool isFlamethrowerRetractedPreMax; // for flamethrower max duration
 
     [Header("Rock")]
-    private Rock currRock;
-    private Coroutine rockCoroutine;
+    private GameObject currRock;
     private bool isRockSummoning;
     private bool isRockThrowReady;
+    private bool isRockThrownPreMax; // for rock throw max duration
+    private Coroutine rockCoroutine;
+    private Coroutine rockThrowDurationCoroutine;
 
     [Header("Death")]
     private bool isDead; // to deal with death delay
@@ -115,7 +117,7 @@ public class PlayerController : EntityController {
         flamethrowerAction = GetComponent<FireSecondaryAction>();
 
         currWeapon = weaponActionPairs[0].GetWeapon(); // get first weapon
-        charWeapon.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon to first weapon by default
+        charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon to first weapon by default
 
         /* BARRIER */
         barrierAlpha = barrier.color.a;
@@ -229,7 +231,7 @@ public class PlayerController : EntityController {
             if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
                 currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
-                charWeapon.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
+                charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
                 if (currPrimaryAction) { // make sure primary action exists
 
@@ -248,7 +250,7 @@ public class PlayerController : EntityController {
                 }
             } else {
 
-                charWeapon.ChangeWeapon(null, null); // remove weapon
+                charWeaponHandler.ChangeWeapon(null, null); // remove weapon
 
             }
         } else if (Input.mouseScrollDelta.y < 0f && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) { // make sure barrier is not deployed before switching
@@ -273,7 +275,7 @@ public class PlayerController : EntityController {
             if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
                 currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
-                charWeapon.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
+                charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
                 if (currPrimaryAction) { // make sure primary action exists
 
@@ -292,7 +294,7 @@ public class PlayerController : EntityController {
                 }
             } else {
 
-                charWeapon.ChangeWeapon(null, null); // remove weapon
+                charWeaponHandler.ChangeWeapon(null, null); // remove weapon
 
             }
         }
@@ -320,7 +322,7 @@ public class PlayerController : EntityController {
             if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
                 currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
-                charWeapon.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
+                charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
                 if (currPrimaryAction) { // make sure primary action exists
 
@@ -339,7 +341,7 @@ public class PlayerController : EntityController {
                 }
             } else {
 
-                charWeapon.ChangeWeapon(null, null); // remove weapon
+                charWeaponHandler.ChangeWeapon(null, null); // remove weapon
 
             }
         } else if (Input.GetKeyDown(KeyCode.Alpha2) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
@@ -364,7 +366,7 @@ public class PlayerController : EntityController {
             if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
                 currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
-                charWeapon.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
+                charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
                 if (currPrimaryAction) { // make sure primary action exists
 
@@ -383,7 +385,7 @@ public class PlayerController : EntityController {
                 }
             } else {
 
-                charWeapon.ChangeWeapon(null, null); // remove weapon
+                charWeaponHandler.ChangeWeapon(null, null); // remove weapon
 
             }
         } else if (Input.GetKeyDown(KeyCode.Alpha3) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
@@ -408,7 +410,7 @@ public class PlayerController : EntityController {
             if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
                 currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
-                charWeapon.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
+                charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
                 if (currPrimaryAction) { // make sure primary action exists
 
@@ -427,7 +429,7 @@ public class PlayerController : EntityController {
                 }
             } else {
 
-                charWeapon.ChangeWeapon(null, null); // remove weapon
+                charWeaponHandler.ChangeWeapon(null, null); // remove weapon
 
             }
         } else if (Input.GetKeyDown(KeyCode.Alpha4) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
@@ -452,7 +454,7 @@ public class PlayerController : EntityController {
             if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
                 currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
-                charWeapon.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
+                charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
                 if (currPrimaryAction) { // make sure primary action exists
 
@@ -471,7 +473,7 @@ public class PlayerController : EntityController {
                 }
             } else {
 
-                charWeapon.ChangeWeapon(null, null); // remove weapon
+                charWeaponHandler.ChangeWeapon(null, null); // remove weapon
 
             }
         } else if (Input.GetKeyDown(KeyCode.Alpha5) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
@@ -496,7 +498,7 @@ public class PlayerController : EntityController {
             if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
                 currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
-                charWeapon.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
+                charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
                 if (currPrimaryAction) { // make sure primary action exists
 
@@ -515,7 +517,7 @@ public class PlayerController : EntityController {
                 }
             } else {
 
-                charWeapon.ChangeWeapon(null, null); // remove weapon
+                charWeaponHandler.ChangeWeapon(null, null); // remove weapon
 
             }
         } else if (Input.GetKeyDown(KeyCode.Alpha6) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
@@ -540,7 +542,7 @@ public class PlayerController : EntityController {
             if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
                 currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
-                charWeapon.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
+                charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
                 if (currPrimaryAction) { // make sure primary action exists
 
@@ -559,7 +561,7 @@ public class PlayerController : EntityController {
                 }
             } else {
 
-                charWeapon.ChangeWeapon(null, null); // remove weapon
+                charWeaponHandler.ChangeWeapon(null, null); // remove weapon
 
             }
         } else if (Input.GetKeyDown(KeyCode.Alpha7) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
@@ -584,7 +586,7 @@ public class PlayerController : EntityController {
             if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
                 currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
-                charWeapon.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
+                charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
                 if (currPrimaryAction) { // make sure primary action exists
 
@@ -603,7 +605,7 @@ public class PlayerController : EntityController {
                 }
             } else {
 
-                charWeapon.ChangeWeapon(null, null); // remove weapon
+                charWeaponHandler.ChangeWeapon(null, null); // remove weapon
 
             }
         } else if (Input.GetKeyDown(KeyCode.Alpha8) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
@@ -628,7 +630,7 @@ public class PlayerController : EntityController {
             if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
                 currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
-                charWeapon.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
+                charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
                 if (currPrimaryAction) { // make sure primary action exists
 
@@ -647,7 +649,7 @@ public class PlayerController : EntityController {
                 }
             } else {
 
-                charWeapon.ChangeWeapon(null, null); // remove weapon
+                charWeaponHandler.ChangeWeapon(null, null); // remove weapon
 
             }
         } else if (Input.GetKeyDown(KeyCode.Alpha9) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
@@ -672,7 +674,7 @@ public class PlayerController : EntityController {
             if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
                 currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
-                charWeapon.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
+                charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
                 if (currPrimaryAction) { // make sure primary action exists
 
@@ -691,7 +693,7 @@ public class PlayerController : EntityController {
                 }
             } else {
 
-                charWeapon.ChangeWeapon(null, null); // remove weapon
+                charWeaponHandler.ChangeWeapon(null, null); // remove weapon
 
             }
         } else if (Input.GetKeyDown(KeyCode.Alpha0) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
@@ -716,7 +718,7 @@ public class PlayerController : EntityController {
             if (hotbar.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
 
                 currWeapon = weaponActionPairs[hotbar.GetCurrWeapon()].GetWeapon();
-                charWeapon.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
+                charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
                 if (currPrimaryAction) { // make sure primary action exists
 
@@ -735,7 +737,7 @@ public class PlayerController : EntityController {
                 }
             } else {
 
-                charWeapon.ChangeWeapon(null, null); // remove weapon
+                charWeaponHandler.ChangeWeapon(null, null); // remove weapon
 
             }
         }
@@ -774,8 +776,7 @@ public class PlayerController : EntityController {
 
         barrierCoroutine = StartCoroutine(HandleDeployBarrier());
 
-        DisableCoreScripts(); // disable all scripts while barrier is deployed
-        charWeapon.CurrentWeapon.gameObject.SetActive(false); // hide weapon (use charWeapon.CurrentWeapon instead of currWeapon because it has the actual instance of the weapon object)
+        charWeaponHandler.CurrentWeapon.gameObject.SetActive(false); // hide weapon (use charWeapon.CurrentWeapon instead of currWeapon because it has the actual instance of the weapon object)
 
         isBarrierRetractedPreMax = false; // barrier is not retracted yet (for max duration)
         barrierDurationCoroutine = StartCoroutine(HandleBarrierDuration(maxDuration)); // handle barrier max duration
@@ -786,6 +787,7 @@ public class PlayerController : EntityController {
 
         DisableAllMechanics(); // disable all mechanics while barrier is being deployed (except secondary action)
         EnableMechanic(MechanicType.SecondaryAction); // enable only secondary action while barrier is deployed
+        DisableCoreScripts(); // disable all scripts while barrier is deployed (including weapon handler)
 
         barrier.color = new Color(barrier.color.r, barrier.color.g, barrier.color.b, 0f); // set barrier alpha to none
         barrier.gameObject.SetActive(true); // show barrier
@@ -804,7 +806,7 @@ public class PlayerController : EntityController {
 
         if (barrierDurationCoroutine != null) StopCoroutine(barrierDurationCoroutine); // stop barrier duration coroutine if it's running
 
-        charWeapon.CurrentWeapon.gameObject.SetActive(true); // show weapon (use charWeapon.CurrentWeapon instead of currWeapon because it has the actual instance of the weapon object)
+        charWeaponHandler.CurrentWeapon.gameObject.SetActive(true); // show weapon (use charWeapon.CurrentWeapon instead of currWeapon because it has the actual instance of the weapon object)
 
         isBarrierRetractedPreMax = true; // barrier is retracted (for max duration)
         barrierCoroutine = StartCoroutine(HandleRetractBarrier());
@@ -827,7 +829,7 @@ public class PlayerController : EntityController {
         barrierTweener = barrier.DOFade(0f, anim.GetCurrentAnimatorStateInfo(0).length).SetEase(Ease.OutBounce).OnComplete(() => {
 
             barrier.gameObject.SetActive(false); // hide barrier
-            EnableCoreScripts(); // enable all scripts after barrier is retracted
+            EnableCoreScripts(); // enable all scripts after barrier is retracted (including weapon handler)
             EnableAllMechanics(); // enable all mechanics after barrier is retracted
             barrierCoroutine = null;
 
@@ -843,6 +845,7 @@ public class PlayerController : EntityController {
             if (isBarrierRetractedPreMax) { // barrier is retracted before max duration
 
                 isBarrierRetractedPreMax = false; // reset retracted status
+                barrierDurationCoroutine = null;
                 yield break;
 
             }
@@ -863,7 +866,7 @@ public class PlayerController : EntityController {
 
     public void EquipFlamethrower(float maxDuration) {
 
-        charWeapon.CurrentWeapon.gameObject.SetActive(false); // hide weapon (use charWeapon.CurrentWeapon instead of currWeapon because it has the actual instance of the weapon object)
+        charWeaponHandler.CurrentWeapon.gameObject.SetActive(false); // hide weapon (use charWeapon.CurrentWeapon instead of currWeapon because it has the actual instance of the weapon object)
         isFlamethrowerRetractedPreMax = false; // flamethrower is not unequipped yet (for max duration)
 
         DisableAllMechanics(); // disable all mechanics while flamethrower is being equipped (except secondary action)
@@ -878,7 +881,7 @@ public class PlayerController : EntityController {
 
         if (flamethrowerDurationCoroutine != null) StopCoroutine(flamethrowerDurationCoroutine); // stop flamethrower duration coroutine if it's running
 
-        charWeapon.CurrentWeapon.gameObject.SetActive(true); // show weapon (use charWeapon.CurrentWeapon instead of currWeapon because it has the actual instance of the weapon object)
+        charWeaponHandler.CurrentWeapon.gameObject.SetActive(true); // show weapon (use charWeapon.CurrentWeapon instead of currWeapon because it has the actual instance of the weapon object)
         currWeapon.gameObject.SetActive(true); // show weapon
 
         isFlamethrowerRetractedPreMax = true; // flamethrower is unequipped (for max duration)
@@ -917,27 +920,26 @@ public class PlayerController : EntityController {
     #region ROCK
 
     // returns true if rock is successfully summoned, false if rock is already summoned
-    public bool SummonRock(EarthPrimaryAction action, Rock rockPrefab) {
+    public bool SummonRock(EarthPrimaryAction action, GameObject rockPrefab, float maxThrowDuration) {
 
         if (currRock) return false; // rock is already summoned
 
         if (rockCoroutine != null) StopCoroutine(rockCoroutine); // stop rock coroutine if it's running
-        rockCoroutine = StartCoroutine(HandleSummonRock(action, rockPrefab));
 
-        DisableCoreScripts(); // disable all scripts while rock is being summoned
+        rockCoroutine = StartCoroutine(HandleSummonRock(action, rockPrefab, maxThrowDuration));
 
         return true;
 
     }
 
-    private IEnumerator HandleSummonRock(EarthPrimaryAction action, Rock rockPrefab) {
+    private IEnumerator HandleSummonRock(EarthPrimaryAction action, GameObject rockPrefab, float maxThrowDuration) {
 
         isRockSummoning = true;
         DisableAllMechanics(); // disable all mechanics while rock is being summoned (except primary action)
         EnableMechanic(MechanicType.PrimaryAction); // enable only primary action while rock is summoned
+        DisableCoreScripts(); // disable all scripts while rock is being summoned (including weapon handler)
 
         currRock = Instantiate(rockPrefab, transform.position, Quaternion.identity); // instantiate rock (will play summon animation automatically)
-        currRock.SetRigidbodyKinematic(true); // set rock to kinematic so it doesn't fall during animation
         anim.SetBool("isRockSummoned", true); // play rock summon animation
 
         yield return null; // wait for animation to start
@@ -945,7 +947,12 @@ public class PlayerController : EntityController {
 
         isRockSummoning = false;
         isRockThrowReady = true; // rock is ready to be thrown
+        SetWeaponHandlerEnabled(true); // enable weapon handler when rock is fully summoned
         action.ActivateWeapon(); // activate weapon after rock is summoned
+
+        isRockThrownPreMax = false; // rock has not been thrown yet (for max duration)
+        rockThrowDurationCoroutine = StartCoroutine(HandleRockThrowDuration(maxThrowDuration)); // handle rock throw max duration
+
         rockCoroutine = null;
 
     }
@@ -955,20 +962,84 @@ public class PlayerController : EntityController {
         if (!currRock || !isRockSummoning) return; // no rock to drop or rock has been fully summoned already -> can't drop it
 
         if (rockCoroutine != null) StopCoroutine(rockCoroutine); // stop rock coroutine if it's running
-        rockCoroutine = StartCoroutine(HandleDropRock());
+
+        DestroyRock(true);
 
     }
 
-    private IEnumerator HandleDropRock() {
+    public void OnRockThrow() {
 
-        currRock.Drop(); // drop rock
-        anim.SetBool("isRockSummoned", false);
-        yield return null; // wait for animation to start
+        if (!currRock || isRockSummoning) return; // no rock to destroy or rock is still being summoned -> can't throw it
 
-        EnableCoreScripts(); // enable all scripts after rock is dropped/thrown
+        if (rockCoroutine != null) StopCoroutine(rockCoroutine); // stop rock coroutine if it's running
+
+        if (rockThrowDurationCoroutine != null) StopCoroutine(rockThrowDurationCoroutine); // stop rock throw duration coroutine if it's running
+
+        isRockThrownPreMax = true; // rock has been thrown (for max duration)
+        rockCoroutine = StartCoroutine(HandleRockThrow()); // handle rock throw
+
+    }
+
+    private IEnumerator HandleRockThrow() {
+
+        DestroyRock(false); // don't activate mechanics because it is dealt with differently in this case
+
+        // must wait for two frames to allow shot to be fired
+        yield return null;
+        yield return null;
+
+        charWeaponHandler.ShootStop(); // stop shooting weapon (to deal with infinite shooting bug | do this before disabling the core scripts)
+        EnableCoreScripts(); // enable all scripts after rock is dropped/thrown (except weapon handler | don't want player to use weapon unless rock is fully summoned)
+        SetWeaponHandlerEnabled(false); // disable weapon handler when rock is thrown
         EnableAllMechanics(); // enable all mechanics after rock is dropped/thrown
 
         rockCoroutine = null;
+
+    }
+
+    private void DestroyRock(bool activateMechanics) {
+
+        // destroy rock
+        Destroy(currRock.gameObject);
+        currRock = null;
+
+        corgiController.SetForce(Vector2.zero); // stop player movement
+        anim.SetBool("isRockSummoned", false);
+
+        // reset bools
+        isRockSummoning = false;
+        isRockThrowReady = false;
+
+        if (activateMechanics) {
+
+            EnableCoreScripts(); // enable all scripts after rock is dropped/thrown (except weapon handler | don't want player to use weapon unless rock is fully summoned)
+            SetWeaponHandlerEnabled(false); // disable weapon handler when rock is dropped
+            EnableAllMechanics(); // enable all mechanics after rock is dropped/thrown
+
+        }
+    }
+
+    private IEnumerator HandleRockThrowDuration(float maxThrowDuration) {
+
+        float timer = 0f;
+
+        while (timer < maxThrowDuration) {
+
+            if (isRockThrownPreMax) { // barrier is retracted before max duration
+
+                isRockThrownPreMax = false; // reset retracted status
+                rockThrowDurationCoroutine = null;
+                yield break;
+
+            }
+
+            timer += Time.deltaTime;
+            yield return null;
+
+        }
+
+        DestroyRock(true);
+        rockThrowDurationCoroutine = null;
 
     }
 
@@ -984,11 +1055,7 @@ public class PlayerController : EntityController {
 
     }
 
-    public void EnableMechanic(MechanicType mechanicType) {
-
-        mechanicStatuses[mechanicType] = true;
-
-    }
+    public void EnableMechanic(MechanicType mechanicType) => mechanicStatuses[mechanicType] = true;
 
     public void DisableAllMechanics() {
 
@@ -1001,11 +1068,7 @@ public class PlayerController : EntityController {
 
     }
 
-    public void DisableMechanic(MechanicType mechanicType) {
-
-        mechanicStatuses[mechanicType] = false;
-
-    }
+    public void DisableMechanic(MechanicType mechanicType) => mechanicStatuses[mechanicType] = false;
 
     public bool IsMechanicEnabled(MechanicType mechanicType) => mechanicStatuses[mechanicType];
 

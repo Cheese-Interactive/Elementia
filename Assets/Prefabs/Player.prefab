@@ -1132,11 +1132,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isPrimaryAuto: 0
-  primaryCooldown: 5
-  canUseInAir: 0
+  primaryCooldown: 2
+  canUseInAir: 1
   rockPrefabs:
-  - {fileID: 7290656901816913271, guid: 7916ca674dd68f3408d21d44235fe7cd, type: 3}
-  throwSpeed: 15
+  - {fileID: 6850876090901903962, guid: 53bbf0c6ac057d64186b93228b23b5e1, type: 3}
+  - {fileID: 8784099456446224592, guid: 4416a01f1ed60604c9fe840b3e7de7a0, type: 3}
+  maxThrowDuration: 5
 --- !u!114 &2721479856997411025
 MonoBehaviour:
   m_ObjectHideFlags: 0
