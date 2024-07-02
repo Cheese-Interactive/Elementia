@@ -1,4 +1,5 @@
 using MoreMountains.CorgiEngine;
+using MoreMountains.Tools;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,7 +12,7 @@ public class EarthPrimaryAction : PrimaryAction {
 
     [Header("Summon")]
     [SerializeField] private float maxThrowDuration;
-    private bool isRockSummoned;
+    private Rock currRock; // if null, rock hasn't been summoned yet
     private bool isRockThrowReady;
 
     private new void Start() {
@@ -33,8 +34,11 @@ public class EarthPrimaryAction : PrimaryAction {
 
         if (isRockThrowReady) { // weapon handles rock throw
 
+            MMSimpleObjectPooler pool = charWeaponHandler.CurrentWeapon.GetComponent<MMSimpleObjectPooler>();
+            pool.GameObjectToPool = currRock.GetProjectile().gameObject; // set new rock projectile
+            pool.FillObjectPool(); // fill weapon pool
+
             playerController.OnRockThrow();
-            isRockSummoned = false;
             isRockThrowReady = false;
 
             // begin cooldown (placed here to start cooldown if rock is thrown)
@@ -45,14 +49,13 @@ public class EarthPrimaryAction : PrimaryAction {
 
         }
 
-        if (!isRockSummoned) {
+        if (!currRock) {
 
-            isRockSummoned = playerController.SummonRock(this, rockPrefabs[Random.Range(0, rockPrefabs.Length)], maxThrowDuration);
+            currRock = playerController.SummonRock(this, rockPrefabs[Random.Range(0, rockPrefabs.Length)], maxThrowDuration);
 
         } else {
 
             playerController.DropRock();
-            isRockSummoned = false;
 
             // begin cooldown (placed here to start cooldown if rock is dropped)
             isReady = false;

@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 114000010281602892}
   - component: {fileID: -6513195632682728618}
   m_Layer: 12
-  m_Name: EarthProjectile
+  m_Name: Rock1Projectile
   m_TagString: Untagged
   m_Icon: {fileID: 1177953632, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -33,7 +33,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4852727705357477191}
@@ -80,13 +80,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -2135585597343286014, guid: 5aa8b770bc43046bc8d993d0d5b7f4a5,
-    type: 3}
-  m_Color: {r: 0.31764707, g: 0.19215687, b: 0.050980393, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 2413a6607d3cb40429c616c13f8230be, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.8828125, y: 1}
+  m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -124,18 +123,18 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: -0.03125}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.8828125, y: 1}
-    newSize: {x: 0.8828125, y: 1}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.16, y: 0.06}
+  m_Size: {x: 0.625, y: 0.6875}
   m_EdgeRadius: 0
 --- !u!50 &50000011384318294
 Rigidbody2D:
@@ -186,7 +185,7 @@ MonoBehaviour:
   LifeTime: 1
   FaceDirection: 1
   FaceMovementDirection: 0
-  Speed: 300
+  Speed: 400
   Acceleration: 100
   Direction: {x: -1, y: 0, z: 0}
   DirectionCanBeChangedBySpawner: 1
@@ -215,8 +214,8 @@ MonoBehaviour:
     m_Bits: 270592
   ApplyDamageOnTriggerEnter: 1
   ApplyDamageOnTriggerStay: 1
-  MinDamageCaused: 25
-  MaxDamageCaused: 25
+  MinDamageCaused: 35
+  MaxDamageCaused: 35
   TypedDamages: []
   DamageCausedKnockbackType: 1
   DamageCausedKnockbackDirection: 0
@@ -345,8 +344,8 @@ TrailRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 0.31764707, g: 0.19215687, b: 0.050980393, a: 1}
-      key1: {r: 0.1792453, g: 0.11041191, b: 0.032974374, a: 1}
+      key0: {r: 0.6901961, g: 0.73333335, b: 0.7647059, a: 1}
+      key1: {r: 0.3301887, g: 0.3301887, b: 0.3301887, a: 1}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
