@@ -22,6 +22,7 @@ public class PlayerController : EntityController {
 
     [Header("Weapons/Primary/Secondary Actions")]
     [SerializeField] private WeaponActionPair[] weaponActionPairs;
+    private Coroutine switchCoroutine;
 
     [Header("Barrier")]
     [SerializeField] private SpriteRenderer barrier;
@@ -216,6 +217,9 @@ public class PlayerController : EntityController {
 
             itemSelector.CycleSlot(-1); // cycle hotbar slot backwards
 
+            if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
+            switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start spell cooldown
+
             if (currPrimaryAction) // make sure primary action exists
                 currPrimaryAction.enabled = false; // disable current primary action
 
@@ -259,6 +263,9 @@ public class PlayerController : EntityController {
         } else if (Input.mouseScrollDelta.y < 0f && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) { // make sure barrier is not deployed before switching
 
             itemSelector.CycleSlot(1); // cycle hotbar slot forwards
+
+            if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
+            switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start spell cooldown
 
             if (currPrimaryAction) // make sure primary action exists
                 currPrimaryAction.enabled = false; // disable current primary action
@@ -307,6 +314,9 @@ public class PlayerController : EntityController {
 
             itemSelector.SelectSlot(0);
 
+            if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
+            switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start spell cooldown
+
             if (currPrimaryAction) // make sure primary action exists
                 currPrimaryAction.enabled = false; // disable current primary action
 
@@ -350,6 +360,9 @@ public class PlayerController : EntityController {
         } else if (Input.GetKeyDown(KeyCode.Alpha2) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
 
             itemSelector.SelectSlot(1);
+
+            if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
+            switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start spell cooldown
 
             if (currPrimaryAction) // make sure primary action exists
                 currPrimaryAction.enabled = false; // disable current primary action
@@ -395,6 +408,9 @@ public class PlayerController : EntityController {
 
             itemSelector.SelectSlot(2);
 
+            if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
+            switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start spell cooldown
+
             if (currPrimaryAction) // make sure primary action exists
                 currPrimaryAction.enabled = false; // disable current primary action
 
@@ -438,6 +454,9 @@ public class PlayerController : EntityController {
         } else if (Input.GetKeyDown(KeyCode.Alpha4) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
 
             itemSelector.SelectSlot(3);
+
+            if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
+            switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start spell cooldown
 
             if (currPrimaryAction) // make sure primary action exists
                 currPrimaryAction.enabled = false; // disable current primary action
@@ -483,6 +502,9 @@ public class PlayerController : EntityController {
 
             itemSelector.SelectSlot(4);
 
+            if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
+            switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start spell cooldown
+
             if (currPrimaryAction) // make sure primary action exists
                 currPrimaryAction.enabled = false; // disable current primary action
 
@@ -526,6 +548,9 @@ public class PlayerController : EntityController {
         } else if (Input.GetKeyDown(KeyCode.Alpha6) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
 
             itemSelector.SelectSlot(5);
+
+            if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
+            switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start spell cooldown
 
             if (currPrimaryAction) // make sure primary action exists
                 currPrimaryAction.enabled = false; // disable current primary action
@@ -571,6 +596,9 @@ public class PlayerController : EntityController {
 
             itemSelector.SelectSlot(6);
 
+            if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
+            switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start spell cooldown
+
             if (currPrimaryAction) // make sure primary action exists
                 currPrimaryAction.enabled = false; // disable current primary action
 
@@ -614,6 +642,9 @@ public class PlayerController : EntityController {
         } else if (Input.GetKeyDown(KeyCode.Alpha8) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
 
             itemSelector.SelectSlot(7);
+
+            if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
+            switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start spell cooldown
 
             if (currPrimaryAction) // make sure primary action exists
                 currPrimaryAction.enabled = false; // disable current primary action
@@ -659,6 +690,9 @@ public class PlayerController : EntityController {
 
             itemSelector.SelectSlot(8);
 
+            if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
+            switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start spell cooldown
+
             if (currPrimaryAction) // make sure primary action exists
                 currPrimaryAction.enabled = false; // disable current primary action
 
@@ -702,6 +736,9 @@ public class PlayerController : EntityController {
         } else if (Input.GetKeyDown(KeyCode.Alpha0) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
 
             itemSelector.SelectSlot(9);
+
+            if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
+            switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start spell cooldown
 
             if (currPrimaryAction) // make sure primary action exists
                 currPrimaryAction.enabled = false; // disable current primary action
@@ -1081,9 +1118,13 @@ public class PlayerController : EntityController {
 
     #region UTILITIES
 
-    public bool IsGrounded() => corgiController.State.IsGrounded;
+    private IEnumerator HandleSwitchCooldown() {
 
-    public Animator GetAnimator() => anim;
+        charWeaponHandler.AbilityPermitted = false; // disable ability use
+        yield return new WaitForSeconds(weaponActionPairs[itemSelector.GetCurrWeapon()].GetSwitchCooldown()); // wait for switch cooldown
+        charWeaponHandler.AbilityPermitted = true; // enable ability use
+
+    }
 
     protected override void OnRespawn() {
 
@@ -1104,6 +1145,10 @@ public class PlayerController : EntityController {
         flamethrower.gameObject.SetActive(false); // hide flamethrower particles
 
     }
+
+    public bool IsGrounded() => corgiController.State.IsGrounded;
+
+    public Animator GetAnimator() => anim;
 
     #endregion
 

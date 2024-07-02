@@ -217,7 +217,7 @@ MonoBehaviour:
   MinDamageCaused: 35
   MaxDamageCaused: 35
   TypedDamages: []
-  DamageCausedKnockbackType: 1
+  DamageCausedKnockbackType: 2
   DamageCausedKnockbackDirection: 0
   DamageCausedKnockbackForce: {x: 2, y: 2}
   InvincibilityDuration: 0

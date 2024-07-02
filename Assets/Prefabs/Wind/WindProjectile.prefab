@@ -163,7 +163,7 @@ MonoBehaviour:
   MinDamageCaused: 0
   MaxDamageCaused: 0
   TypedDamages: []
-  DamageCausedKnockbackType: 1
+  DamageCausedKnockbackType: 2
   DamageCausedKnockbackDirection: 0
   DamageCausedKnockbackForce: {x: 0, y: 0}
   InvincibilityDuration: 0

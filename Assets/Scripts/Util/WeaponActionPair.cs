@@ -13,6 +13,7 @@ public class WeaponActionPair {
     [SerializeField] private SpellData spellData;
     [SerializeField] private PrimaryAction primaryAction;
     [SerializeField] private SecondaryAction secondaryAction;
+    [SerializeField] private float switchCooldown;
 
     public Weapon GetWeapon() => weapon;
 
@@ -21,5 +22,7 @@ public class WeaponActionPair {
     public PrimaryAction GetPrimaryAction() => primaryAction;
 
     public SecondaryAction GetSecondaryAction() => secondaryAction;
+
+    public float GetSwitchCooldown() => switchCooldown;
 
 }
