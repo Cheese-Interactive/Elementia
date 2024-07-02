@@ -6,7 +6,7 @@ using UnityEngine;
 public class EarthPrimaryAction : PrimaryAction {
 
     [Header("References")]
-    [SerializeField] private GameObject[] rockPrefabs;
+    [SerializeField] private Rock[] rockPrefabs;
     private CharacterHandleWeapon charWeaponHandler;
 
     [Header("Summon")]

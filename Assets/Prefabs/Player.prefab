@@ -1153,8 +1153,8 @@ MonoBehaviour:
   primaryCooldown: 2
   canUseInAir: 1
   rockPrefabs:
-  - {fileID: 6850876090901903962, guid: 53bbf0c6ac057d64186b93228b23b5e1, type: 3}
-  - {fileID: 8784099456446224592, guid: 4416a01f1ed60604c9fe840b3e7de7a0, type: 3}
+  - {fileID: -2339275746217844875, guid: 53bbf0c6ac057d64186b93228b23b5e1, type: 3}
+  - {fileID: -8400966328272869936, guid: 4416a01f1ed60604c9fe840b3e7de7a0, type: 3}
   maxThrowDuration: 5
 --- !u!114 &2721479856997411025
 MonoBehaviour:

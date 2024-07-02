@@ -40,7 +40,7 @@ public class PlayerController : EntityController {
     private bool isFlamethrowerRetractedPreMax; // for flamethrower max duration
 
     [Header("Rock")]
-    private GameObject currRock;
+    private Rock currRock;
     private bool isRockSummoning;
     private bool isRockThrowReady;
     private bool isRockThrownPreMax; // for rock throw max duration
@@ -920,7 +920,7 @@ public class PlayerController : EntityController {
     #region ROCK
 
     // returns true if rock is successfully summoned, false if rock is already summoned
-    public bool SummonRock(EarthPrimaryAction action, GameObject rockPrefab, float maxThrowDuration) {
+    public bool SummonRock(EarthPrimaryAction action, Rock rockPrefab, float maxThrowDuration) {
 
         if (currRock) return false; // rock is already summoned
 
@@ -932,7 +932,7 @@ public class PlayerController : EntityController {
 
     }
 
-    private IEnumerator HandleSummonRock(EarthPrimaryAction action, GameObject rockPrefab, float maxThrowDuration) {
+    private IEnumerator HandleSummonRock(EarthPrimaryAction action, Rock rockPrefab, float maxThrowDuration) {
 
         isRockSummoning = true;
         DisableAllMechanics(); // disable all mechanics while rock is being summoned (except primary action)
