@@ -31,7 +31,7 @@ public class KineticProjectile : BaseProjectile {
             // handle entity force
             entityForce.x *= entityKineticForce.x; // increase horizontal push force
             entityForce.y *= entityKineticForce.y; // increase vertical push force
-            collision.gameObject.GetComponent<CorgiController>()?.AddForce(entityForce); // push entity away from shooter
+            collision.gameObject.GetComponent<CorgiController>()?.SetForce(entityForce); // push entity away from shooter
 
             // handle object force
             objectForce.x *= objectKineticForce.x; // increase horizontal pull force

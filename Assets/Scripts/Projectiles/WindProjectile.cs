@@ -37,7 +37,7 @@ public class WindProjectile : BaseProjectile {
             // handle entity force
             entityForce.x *= entityWindForce.x; // increase horizontal push force
             entityForce.y *= entityWindForce.y; // increase vertical push force
-            collision.gameObject.GetComponent<CorgiController>()?.AddForce(entityForce); // push entity away from projectile
+            collision.gameObject.GetComponent<CorgiController>()?.SetForce(entityForce); // push entity away from projectile
 
             // handle object force
             objectForce.x *= objectWindForce.x; // increase horizontal pull force
