@@ -11,9 +11,12 @@ public class EarthPrimaryAction : PrimaryAction {
     private CharacterHandleWeapon charWeaponHandler;
 
     [Header("Summon")]
-    [SerializeField] private float maxThrowDuration;
     private Rock currRock; // if null, rock hasn't been summoned yet
     private bool isRockThrowReady;
+
+    [Header("Duration")]
+    [SerializeField] private float maxThrowDuration;
+    private Coroutine throwDurationCoroutine;
 
     private new void Start() {
 
@@ -32,39 +35,72 @@ public class EarthPrimaryAction : PrimaryAction {
 
         if (!canUseInAir && !playerController.IsGrounded()) return; // make sure player is grounded if required
 
-        if (isRockThrowReady) { // weapon handles rock throw
+        if (isRockThrowReady) { // rock is fully summoned & rock is thrown (handled by weapon)
 
             MMSimpleObjectPooler pool = charWeaponHandler.CurrentWeapon.GetComponent<MMSimpleObjectPooler>();
             pool.GameObjectToPool = currRock.GetProjectile().gameObject; // set new rock projectile
             pool.FillObjectPool(); // fill weapon pool
 
-            playerController.OnRockThrow();
-            isRockThrowReady = false;
-
-            // begin cooldown (placed here to start cooldown if rock is thrown)
-            isReady = false;
-            Invoke("ReadyAction", primaryCooldown);
-
+            ThrowRock();
             return;
 
         }
 
-        if (!currRock) {
+        if (!currRock) // mouse button pressed
+            SummonRock();
+        else // mouse button released & rock hasn't been fully summoned yet
+            DestroyRock();
 
-            currRock = playerController.SummonRock(this, rockPrefabs[Random.Range(0, rockPrefabs.Length)], maxThrowDuration);
-
-        } else {
-
-            playerController.DropRock();
-
-            // begin cooldown (placed here to start cooldown if rock is dropped)
-            isReady = false;
-            Invoke("ReadyAction", primaryCooldown);
-
-        }
     }
 
-    public void ActivateWeapon() => isRockThrowReady = true;
+    private void SummonRock() => currRock = playerController.OnSummonRock(this, rockPrefabs[Random.Range(0, rockPrefabs.Length)], maxThrowDuration);
+
+
+    private void ThrowRock() {
+
+        playerController.OnRockThrow();
+        isRockThrowReady = false;
+
+        // begin cooldown
+        isReady = false;
+        Invoke("ReadyAction", primaryCooldown);
+
+    }
+
+    private void DestroyRock() {
+
+        if (throwDurationCoroutine != null) StopCoroutine(throwDurationCoroutine); // stop max duration coroutine as rock is being destroyed
+
+        playerController.OnDestroyRock(true); // activate mechanics after rock is destroyed
+
+        // begin cooldown
+        isReady = false;
+        Invoke("ReadyAction", primaryCooldown);
+
+    }
+
+    private IEnumerator HandleMaxThrowDuration() {
+
+        float timer = 0f;
+
+        while (timer < maxThrowDuration) {
+
+            timer += Time.deltaTime;
+            yield return null;
+
+        }
+
+        DestroyRock(); // destroy rock after max throw duration
+        throwDurationCoroutine = null;
+
+    }
+
+    public void OnThrowReady() {
+
+        isRockThrowReady = true;
+        throwDurationCoroutine = StartCoroutine(HandleMaxThrowDuration()); // start max throw duration coroutine
+
+    }
 
     public override bool IsRegularAction() => true;
 

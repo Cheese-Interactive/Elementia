@@ -1,3 +1,4 @@
+using MoreMountains.CorgiEngine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,18 +6,23 @@ using UnityEngine;
 public class FireSecondaryAction : SecondaryAction {
 
     [Header("References")]
-    [SerializeField] private Flamethrower flamethrower;
+    [SerializeField] private Weapon flamethrower;
+    private CharacterHandleWeapon charWeaponHandler;
+    private Weapon prevWeapon;
+    private bool prevAlwaysShoot;
 
-    [Header("Action")]
-    [SerializeField] private float objectFlamethrowerForce;
-    [SerializeField] private float maxFlamethrowerDuration;
+    [Header("Toggle")]
     private bool isFlamethrowerEquipped;
+
+    [Header("Duration")]
+    [SerializeField] private float maxDuration;
+    private Coroutine durationCoroutine;
 
     private new void Start() {
 
         base.Start();
 
-        flamethrower.SetFlamethrowerForce(objectFlamethrowerForce); // set flamethrower force
+        charWeaponHandler = GetComponent<CharacterHandleWeapon>();
 
     }
 
@@ -26,36 +32,63 @@ public class FireSecondaryAction : SecondaryAction {
 
         if (!canUseInAir && !playerController.IsGrounded()) { // make sure player is grounded if required
 
-            if (isFlamethrowerEquipped) { // if flamethrower is equipped, unequip it
-
-                playerController.UnequipFlamethrower();
-                isFlamethrowerEquipped = false;
-
-                // begin cooldown
-                isReady = false;
-                Invoke("ReadyAction", secondaryCooldown);
-
-            }
+            if (isFlamethrowerEquipped) // if flamethrower is equipped, unequip it
+                UnequipFlamethrower();
 
             return;
 
         }
 
-        isFlamethrowerEquipped = startHold;
+        if (startHold) // mouse button pressed
+            EquipFlamethrower();
+        else // mouse button released
+            UnequipFlamethrower();
 
-        if (isFlamethrowerEquipped) {
+    }
 
-            playerController.EquipFlamethrower(maxFlamethrowerDuration);
+    private void EquipFlamethrower() {
 
-        } else {
+        prevWeapon = playerController.GetCurrentWeapon(); // store current weapon to revert back to it later (don't use character weapon handler's current weapon because it gets destroyed when flamethrower is equipped)
 
-            playerController.UnequipFlamethrower();
+        charWeaponHandler.ChangeWeapon(flamethrower, flamethrower.WeaponID); // equip flamethrower
 
-            // begin cooldown (placed here on toggle actions)
-            isReady = false;
-            Invoke("ReadyAction", secondaryCooldown);
+        prevAlwaysShoot = charWeaponHandler.ForceAlwaysShoot; // store previous always shoot value
+        charWeaponHandler.ForceAlwaysShoot = true; // force flamethrower to always shoot
+
+        isFlamethrowerEquipped = true;
+
+        durationCoroutine = StartCoroutine(HandleMaxDuration()); // start max duration coroutine
+
+    }
+
+    private void UnequipFlamethrower() {
+
+        if (durationCoroutine != null) StopCoroutine(durationCoroutine); // stop max duration coroutine as flamethrower is being unequipped
+
+        charWeaponHandler.ForceAlwaysShoot = prevAlwaysShoot; // reset always shoot
+        charWeaponHandler.ChangeWeapon(prevWeapon, prevWeapon.WeaponID); // revert back to previous weapon
+        isFlamethrowerEquipped = false;
+
+        // begin cooldown
+        isReady = false;
+        Invoke("ReadyAction", secondaryCooldown);
+
+    }
+
+    private IEnumerator HandleMaxDuration() {
+
+        float timer = 0f;
+
+        while (timer < maxDuration) {
+
+            timer += Time.deltaTime;
+            yield return null;
 
         }
+
+        UnequipFlamethrower(); // unequip flamethrower after max duration
+        durationCoroutine = null;
+
     }
 
     public override void OnDeath() {
@@ -65,7 +98,7 @@ public class FireSecondaryAction : SecondaryAction {
         // if flamethrower is equipped, unequip it
         if (isFlamethrowerEquipped) {
 
-            playerController.UnequipFlamethrower();
+            charWeaponHandler.ChangeWeapon(prevWeapon, prevWeapon.WeaponID);
             isFlamethrowerEquipped = false;
 
         }

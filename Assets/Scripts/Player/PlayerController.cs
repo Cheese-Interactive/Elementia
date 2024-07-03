@@ -24,30 +24,14 @@ public class PlayerController : EntityController {
     [SerializeField] private WeaponActionPair[] weaponActionPairs;
     private Coroutine switchCoroutine;
 
-    [Header("Barrier")]
-    [SerializeField] private SpriteRenderer barrier;
-    private MagicMissileSecondaryAction barrierAction;
-    private float barrierAlpha;
-    private bool isBarrierRetractedPreMax; // for barrier max duration
-    private Tweener barrierTweener;
-    private Coroutine barrierCoroutine;
-    private Coroutine barrierDurationCoroutine;
-
     [Header("Flamethrower")]
-    [SerializeField] private Transform flamethrower;
-    private FireSecondaryAction flamethrowerAction;
-    private Quaternion initialRot;
-    private Coroutine flamethrowerDurationCoroutine;
-    private bool isFlamethrowerFlipped;
-    private bool isFlamethrowerRetractedPreMax; // for flamethrower max duration
+    private FireSecondaryAction fireSecondaryAction;
 
     [Header("Rock")]
     private Rock currRock;
     private bool isRockSummoning;
     private bool isRockThrowReady;
-    private bool isRockThrownPreMax; // for rock throw max duration
     private Coroutine rockCoroutine;
-    private Coroutine rockThrowDurationCoroutine;
 
     [Header("Death")]
     private bool isDead; // to deal with death delay
@@ -115,25 +99,20 @@ public class PlayerController : EntityController {
         slowEffect = GetComponent<SlowEffect>();
         anim = GetComponent<Animator>();
 
-        barrierAction = GetComponent<MagicMissileSecondaryAction>();
-        flamethrowerAction = GetComponent<FireSecondaryAction>();
+        fireSecondaryAction = GetComponent<FireSecondaryAction>();
 
         currWeapon = weaponActionPairs[0].GetWeapon(); // get first weapon
         charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon to first weapon by default
-
-        /* BARRIER */
-        barrierAlpha = barrier.color.a;
-        barrier.gameObject.SetActive(false); // barrier is not deployed by default
-
-        /* FLAMETHROWER */
-        flamethrower.gameObject.SetActive(false); // hide flamethrower particles
-        initialRot = flamethrower.transform.rotation;
 
     }
 
     private void Update() {
 
+        if (isDead)
+            return; // player is dead, no need to update
+
         #region ACTIONS
+
         // IMPORTANT: do this before isDead check to prevent toggle issues on death
         currWeapon = null;
         PrimaryAction currPrimaryAction = null;
@@ -189,36 +168,14 @@ public class PlayerController : EntityController {
             }
         }
 
-        // handle flipping with flamethrower (gets flipped on sprite renderer)
-        if (flamethrowerAction.IsFlamethrowerEquipped()) {
-
-            if (spriteRenderer.flipX && !isFlamethrowerFlipped) { // then flip flamethrower
-
-                flamethrower.transform.localPosition = new Vector3(-flamethrower.transform.localPosition.x, flamethrower.transform.localPosition.y, flamethrower.transform.localPosition.z); // flip x axis local position
-                flamethrower.transform.rotation *= Quaternion.Euler(0f, 180f, 0f); // flip overlay by adding 180f on the Y axis
-                isFlamethrowerFlipped = true;
-
-            } else if (!spriteRenderer.flipX && isFlamethrowerFlipped) { // then unflip flamethrower
-
-                flamethrower.transform.localPosition = new Vector3(-flamethrower.transform.localPosition.x, flamethrower.transform.localPosition.y, flamethrower.transform.localPosition.z); // flip x axis position
-                flamethrower.transform.rotation = initialRot; // reset overlay rotation to initial rotation
-                isFlamethrowerFlipped = false;
-
-            }
-        }
         #endregion
 
-        if (isDead)
-            return; // player is dead, no need to update
-
         #region WEAPON SWITCHING
+
         /* SCROLL WHEEL WEAPON SWITCHING */
-        if (Input.mouseScrollDelta.y > 0f && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) { // make sure barrier is not deployed & flamethrower isn't equipped before switching
+        if (Input.mouseScrollDelta.y > 0f && !fireSecondaryAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) { // make sure barrier is not deployed & flamethrower isn't equipped before switching
 
             itemSelector.CycleSlot(-1); // cycle hotbar slot backwards
-
-            if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
-            switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start spell cooldown
 
             if (currPrimaryAction) // make sure primary action exists
                 currPrimaryAction.enabled = false; // disable current primary action
@@ -233,11 +190,10 @@ public class PlayerController : EntityController {
                 currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
                 currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
 
-            }
+                // placed here to make sure spell exists before starting cooldown
+                if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
+                switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start spell cooldown
 
-            if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
-
-                currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon();
                 charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
                 if (currPrimaryAction) { // make sure primary action exists
@@ -252,7 +208,9 @@ public class PlayerController : EntityController {
                 if (currSecondaryAction) { // make sure secondary action exists
 
                     currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
-                    currSecondaryAction.enabled = true; // enable new action
+
+                    if (currSecondaryAction) // check if new secondary action exists
+                        currSecondaryAction.enabled = true; // enable new action
 
                 }
             } else {
@@ -260,12 +218,9 @@ public class PlayerController : EntityController {
                 charWeaponHandler.ChangeWeapon(null, null); // remove weapon
 
             }
-        } else if (Input.mouseScrollDelta.y < 0f && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) { // make sure barrier is not deployed before switching
+        } else if (Input.mouseScrollDelta.y < 0f && !fireSecondaryAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) { // make sure barrier is not deployed before switching
 
             itemSelector.CycleSlot(1); // cycle hotbar slot forwards
-
-            if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
-            switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start spell cooldown
 
             if (currPrimaryAction) // make sure primary action exists
                 currPrimaryAction.enabled = false; // disable current primary action
@@ -280,11 +235,10 @@ public class PlayerController : EntityController {
                 currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
                 currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
 
-            }
+                // placed here to make sure spell exists before starting cooldown
+                if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
+                switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start spell cooldown
 
-            if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
-
-                currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon();
                 charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
                 if (currPrimaryAction) { // make sure primary action exists
@@ -299,7 +253,9 @@ public class PlayerController : EntityController {
                 if (currSecondaryAction) { // make sure secondary action exists
 
                     currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
-                    currSecondaryAction.enabled = true; // enable new action
+
+                    if (currSecondaryAction) // check if new secondary action exists
+                        currSecondaryAction.enabled = true; // enable new action
 
                 }
             } else {
@@ -310,13 +266,10 @@ public class PlayerController : EntityController {
         }
 
         /* KEY WEAPON SWITCHING */
-        if (Input.GetKeyDown(KeyCode.Alpha1) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
+        if (Input.GetKeyDown(KeyCode.Alpha1) && !fireSecondaryAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
 
             itemSelector.SelectSlot(0);
 
-            if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
-            switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start spell cooldown
-
             if (currPrimaryAction) // make sure primary action exists
                 currPrimaryAction.enabled = false; // disable current primary action
 
@@ -330,11 +283,10 @@ public class PlayerController : EntityController {
                 currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
                 currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
 
-            }
+                // placed here to make sure spell exists before starting cooldown
+                if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
+                switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start spell cooldown
 
-            if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
-
-                currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon();
                 charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
                 if (currPrimaryAction) { // make sure primary action exists
@@ -349,7 +301,9 @@ public class PlayerController : EntityController {
                 if (currSecondaryAction) { // make sure secondary action exists
 
                     currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
-                    currSecondaryAction.enabled = true; // enable new action
+
+                    if (currSecondaryAction) // check if new secondary action exists
+                        currSecondaryAction.enabled = true; // enable new action
 
                 }
             } else {
@@ -357,13 +311,10 @@ public class PlayerController : EntityController {
                 charWeaponHandler.ChangeWeapon(null, null); // remove weapon
 
             }
-        } else if (Input.GetKeyDown(KeyCode.Alpha2) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
+        } else if (Input.GetKeyDown(KeyCode.Alpha2) && !fireSecondaryAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
 
             itemSelector.SelectSlot(1);
 
-            if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
-            switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start spell cooldown
-
             if (currPrimaryAction) // make sure primary action exists
                 currPrimaryAction.enabled = false; // disable current primary action
 
@@ -377,11 +328,10 @@ public class PlayerController : EntityController {
                 currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
                 currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
 
-            }
+                // placed here to make sure spell exists before starting cooldown
+                if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
+                switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start spell cooldown
 
-            if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
-
-                currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon();
                 charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
                 if (currPrimaryAction) { // make sure primary action exists
@@ -396,7 +346,9 @@ public class PlayerController : EntityController {
                 if (currSecondaryAction) { // make sure secondary action exists
 
                     currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
-                    currSecondaryAction.enabled = true; // enable new action
+
+                    if (currSecondaryAction) // check if new secondary action exists
+                        currSecondaryAction.enabled = true; // enable new action
 
                 }
             } else {
@@ -404,13 +356,10 @@ public class PlayerController : EntityController {
                 charWeaponHandler.ChangeWeapon(null, null); // remove weapon
 
             }
-        } else if (Input.GetKeyDown(KeyCode.Alpha3) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
+        } else if (Input.GetKeyDown(KeyCode.Alpha3) && !fireSecondaryAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
 
             itemSelector.SelectSlot(2);
 
-            if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
-            switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start spell cooldown
-
             if (currPrimaryAction) // make sure primary action exists
                 currPrimaryAction.enabled = false; // disable current primary action
 
@@ -424,11 +373,10 @@ public class PlayerController : EntityController {
                 currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
                 currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
 
-            }
+                // placed here to make sure spell exists before starting cooldown
+                if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
+                switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start spell cooldown
 
-            if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
-
-                currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon();
                 charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
                 if (currPrimaryAction) { // make sure primary action exists
@@ -443,7 +391,9 @@ public class PlayerController : EntityController {
                 if (currSecondaryAction) { // make sure secondary action exists
 
                     currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
-                    currSecondaryAction.enabled = true; // enable new action
+
+                    if (currSecondaryAction) // check if new secondary action exists
+                        currSecondaryAction.enabled = true; // enable new action
 
                 }
             } else {
@@ -451,13 +401,10 @@ public class PlayerController : EntityController {
                 charWeaponHandler.ChangeWeapon(null, null); // remove weapon
 
             }
-        } else if (Input.GetKeyDown(KeyCode.Alpha4) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
+        } else if (Input.GetKeyDown(KeyCode.Alpha4) && !fireSecondaryAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
 
             itemSelector.SelectSlot(3);
 
-            if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
-            switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start spell cooldown
-
             if (currPrimaryAction) // make sure primary action exists
                 currPrimaryAction.enabled = false; // disable current primary action
 
@@ -471,11 +418,10 @@ public class PlayerController : EntityController {
                 currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
                 currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
 
-            }
+                // placed here to make sure spell exists before starting cooldown
+                if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
+                switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start spell cooldown
 
-            if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
-
-                currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon();
                 charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
                 if (currPrimaryAction) { // make sure primary action exists
@@ -490,7 +436,9 @@ public class PlayerController : EntityController {
                 if (currSecondaryAction) { // make sure secondary action exists
 
                     currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
-                    currSecondaryAction.enabled = true; // enable new action
+
+                    if (currSecondaryAction) // check if new secondary action exists
+                        currSecondaryAction.enabled = true; // enable new action
 
                 }
             } else {
@@ -498,13 +446,10 @@ public class PlayerController : EntityController {
                 charWeaponHandler.ChangeWeapon(null, null); // remove weapon
 
             }
-        } else if (Input.GetKeyDown(KeyCode.Alpha5) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
+        } else if (Input.GetKeyDown(KeyCode.Alpha5) && !fireSecondaryAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
 
             itemSelector.SelectSlot(4);
 
-            if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
-            switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start spell cooldown
-
             if (currPrimaryAction) // make sure primary action exists
                 currPrimaryAction.enabled = false; // disable current primary action
 
@@ -518,11 +463,10 @@ public class PlayerController : EntityController {
                 currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
                 currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
 
-            }
+                // placed here to make sure spell exists before starting cooldown
+                if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
+                switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start spell cooldown
 
-            if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
-
-                currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon();
                 charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
                 if (currPrimaryAction) { // make sure primary action exists
@@ -537,7 +481,9 @@ public class PlayerController : EntityController {
                 if (currSecondaryAction) { // make sure secondary action exists
 
                     currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
-                    currSecondaryAction.enabled = true; // enable new action
+
+                    if (currSecondaryAction) // check if new secondary action exists
+                        currSecondaryAction.enabled = true; // enable new action
 
                 }
             } else {
@@ -545,13 +491,10 @@ public class PlayerController : EntityController {
                 charWeaponHandler.ChangeWeapon(null, null); // remove weapon
 
             }
-        } else if (Input.GetKeyDown(KeyCode.Alpha6) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
+        } else if (Input.GetKeyDown(KeyCode.Alpha6) && !fireSecondaryAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
 
             itemSelector.SelectSlot(5);
 
-            if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
-            switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start spell cooldown
-
             if (currPrimaryAction) // make sure primary action exists
                 currPrimaryAction.enabled = false; // disable current primary action
 
@@ -565,11 +508,10 @@ public class PlayerController : EntityController {
                 currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
                 currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
 
-            }
+                // placed here to make sure spell exists before starting cooldown
+                if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
+                switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start spell cooldown
 
-            if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
-
-                currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon();
                 charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
                 if (currPrimaryAction) { // make sure primary action exists
@@ -584,7 +526,9 @@ public class PlayerController : EntityController {
                 if (currSecondaryAction) { // make sure secondary action exists
 
                     currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
-                    currSecondaryAction.enabled = true; // enable new action
+
+                    if (currSecondaryAction) // check if new secondary action exists
+                        currSecondaryAction.enabled = true; // enable new action
 
                 }
             } else {
@@ -592,13 +536,10 @@ public class PlayerController : EntityController {
                 charWeaponHandler.ChangeWeapon(null, null); // remove weapon
 
             }
-        } else if (Input.GetKeyDown(KeyCode.Alpha7) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
+        } else if (Input.GetKeyDown(KeyCode.Alpha7) && !fireSecondaryAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
 
             itemSelector.SelectSlot(6);
 
-            if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
-            switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start spell cooldown
-
             if (currPrimaryAction) // make sure primary action exists
                 currPrimaryAction.enabled = false; // disable current primary action
 
@@ -612,11 +553,10 @@ public class PlayerController : EntityController {
                 currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
                 currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
 
-            }
+                // placed here to make sure spell exists before starting cooldown
+                if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
+                switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start spell cooldown
 
-            if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
-
-                currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon();
                 charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
                 if (currPrimaryAction) { // make sure primary action exists
@@ -631,7 +571,9 @@ public class PlayerController : EntityController {
                 if (currSecondaryAction) { // make sure secondary action exists
 
                     currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
-                    currSecondaryAction.enabled = true; // enable new action
+
+                    if (currSecondaryAction) // check if new secondary action exists
+                        currSecondaryAction.enabled = true; // enable new action
 
                 }
             } else {
@@ -639,13 +581,10 @@ public class PlayerController : EntityController {
                 charWeaponHandler.ChangeWeapon(null, null); // remove weapon
 
             }
-        } else if (Input.GetKeyDown(KeyCode.Alpha8) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
+        } else if (Input.GetKeyDown(KeyCode.Alpha8) && !fireSecondaryAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
 
             itemSelector.SelectSlot(7);
 
-            if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
-            switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start spell cooldown
-
             if (currPrimaryAction) // make sure primary action exists
                 currPrimaryAction.enabled = false; // disable current primary action
 
@@ -659,11 +598,10 @@ public class PlayerController : EntityController {
                 currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
                 currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
 
-            }
+                // placed here to make sure spell exists before starting cooldown
+                if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
+                switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start spell cooldown
 
-            if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
-
-                currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon();
                 charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
                 if (currPrimaryAction) { // make sure primary action exists
@@ -678,7 +616,9 @@ public class PlayerController : EntityController {
                 if (currSecondaryAction) { // make sure secondary action exists
 
                     currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
-                    currSecondaryAction.enabled = true; // enable new action
+
+                    if (currSecondaryAction) // check if new secondary action exists
+                        currSecondaryAction.enabled = true; // enable new action
 
                 }
             } else {
@@ -686,13 +626,10 @@ public class PlayerController : EntityController {
                 charWeaponHandler.ChangeWeapon(null, null); // remove weapon
 
             }
-        } else if (Input.GetKeyDown(KeyCode.Alpha9) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
+        } else if (Input.GetKeyDown(KeyCode.Alpha9) && !fireSecondaryAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
 
             itemSelector.SelectSlot(8);
 
-            if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
-            switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start spell cooldown
-
             if (currPrimaryAction) // make sure primary action exists
                 currPrimaryAction.enabled = false; // disable current primary action
 
@@ -706,11 +643,10 @@ public class PlayerController : EntityController {
                 currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
                 currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
 
-            }
+                // placed here to make sure spell exists before starting cooldown
+                if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
+                switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start spell cooldown
 
-            if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
-
-                currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon();
                 charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
                 if (currPrimaryAction) { // make sure primary action exists
@@ -725,7 +661,9 @@ public class PlayerController : EntityController {
                 if (currSecondaryAction) { // make sure secondary action exists
 
                     currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
-                    currSecondaryAction.enabled = true; // enable new action
+
+                    if (currSecondaryAction) // check if new secondary action exists
+                        currSecondaryAction.enabled = true; // enable new action
 
                 }
             } else {
@@ -733,12 +671,9 @@ public class PlayerController : EntityController {
                 charWeaponHandler.ChangeWeapon(null, null); // remove weapon
 
             }
-        } else if (Input.GetKeyDown(KeyCode.Alpha0) && !barrierAction.IsBarrierDeployed() && !flamethrowerAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
+        } else if (Input.GetKeyDown(KeyCode.Alpha0) && !fireSecondaryAction.IsFlamethrowerEquipped() && !isRockSummoning && !isRockThrowReady) {
 
             itemSelector.SelectSlot(9);
-
-            if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
-            switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start spell cooldown
 
             if (currPrimaryAction) // make sure primary action exists
                 currPrimaryAction.enabled = false; // disable current primary action
@@ -753,11 +688,10 @@ public class PlayerController : EntityController {
                 currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
                 currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
 
-            }
+                // placed here to make sure spell exists before starting cooldown
+                if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
+                switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start spell cooldown
 
-            if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
-
-                currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon();
                 charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
                 if (currPrimaryAction) { // make sure primary action exists
@@ -772,7 +706,9 @@ public class PlayerController : EntityController {
                 if (currSecondaryAction) { // make sure secondary action exists
 
                     currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
-                    currSecondaryAction.enabled = true; // enable new action
+
+                    if (currSecondaryAction) // check if new secondary action exists
+                        currSecondaryAction.enabled = true; // enable new action
 
                 }
             } else {
@@ -781,13 +717,14 @@ public class PlayerController : EntityController {
 
             }
         }
+
         #endregion
 
     }
 
     private new void OnTriggerEnter2D(Collider2D collision) {
 
-        if (collision.CompareTag("Water") && !barrierAction.IsBarrierDeployed())  // barrier can save player from water
+        if (collision.CompareTag("Water"))  // barrier can save player from water
             health.Kill();
 
     }
@@ -808,175 +745,19 @@ public class PlayerController : EntityController {
         }
     }
 
-    #region BARRIER
-
-    public void DeployBarrier(float maxDuration) {
-
-        if (barrierCoroutine != null) StopCoroutine(barrierCoroutine); // stop barrier coroutine if it's running
-
-        if (barrierTweener != null && barrierTweener.IsActive()) barrierTweener.Kill(); // kill barrier tweener if it's active
-
-        barrierCoroutine = StartCoroutine(HandleDeployBarrier());
-
-        charWeaponHandler.CurrentWeapon.gameObject.SetActive(false); // hide weapon (use charWeapon.CurrentWeapon instead of currWeapon because it has the actual instance of the weapon object)
-
-        isBarrierRetractedPreMax = false; // barrier is not retracted yet (for max duration)
-        barrierDurationCoroutine = StartCoroutine(HandleBarrierDuration(maxDuration)); // handle barrier max duration
-
-    }
-
-    private IEnumerator HandleDeployBarrier() {
-
-        DisableAllMechanics(); // disable all mechanics while barrier is being deployed (except secondary action)
-        EnableMechanic(MechanicType.SecondaryAction); // enable only secondary action while barrier is deployed
-        DisableCoreScripts(); // disable all scripts while barrier is deployed (including weapon handler)
-
-        barrier.color = new Color(barrier.color.r, barrier.color.g, barrier.color.b, 0f); // set barrier alpha to none
-        barrier.gameObject.SetActive(true); // show barrier
-        anim.SetBool("isBarrierDeployed", true); // play barrier deploy animation
-        yield return null; // wait for animation to start
-
-        barrierTweener = barrier.DOFade(barrierAlpha, anim.GetCurrentAnimatorStateInfo(0).length).SetEase(Ease.InBounce).OnComplete(() => barrierCoroutine = null); // fade barrier in based on animation length
-
-    }
-
-    public void RetractBarrier() {
-
-        if (barrierCoroutine != null) StopCoroutine(barrierCoroutine); // stop barrier coroutine if it's running
-
-        if (barrierTweener != null && barrierTweener.IsActive()) barrierTweener.Kill(); // kill barrier tweener if it's active
-
-        if (barrierDurationCoroutine != null) StopCoroutine(barrierDurationCoroutine); // stop barrier duration coroutine if it's running
-
-        charWeaponHandler.CurrentWeapon.gameObject.SetActive(true); // show weapon (use charWeapon.CurrentWeapon instead of currWeapon because it has the actual instance of the weapon object)
-
-        isBarrierRetractedPreMax = true; // barrier is retracted (for max duration)
-        barrierCoroutine = StartCoroutine(HandleRetractBarrier());
-
-        /* the following is done without a fade animation */
-        //barrier.color = new Color(barrier.color.r, barrier.color.g, barrier.color.b, barrierAlpha); // set barrier alpha to full
-        //anim.SetBool("isBarrierDeployed", false);
-        //barrier.gameObject.SetActive(false); // hide barrier
-        //isBarrierDeployed = false;
-        //EnableAllMechanics(); // enable all mechanics after barrier is retracted
-
-    }
-
-    private IEnumerator HandleRetractBarrier() {
-
-        barrier.color = new Color(barrier.color.r, barrier.color.g, barrier.color.b, barrierAlpha); // set barrier alpha to full
-        anim.SetBool("isBarrierDeployed", false);
-        yield return null; // wait for animation to start
-
-        barrierTweener = barrier.DOFade(0f, anim.GetCurrentAnimatorStateInfo(0).length).SetEase(Ease.OutBounce).OnComplete(() => {
-
-            barrier.gameObject.SetActive(false); // hide barrier
-            EnableCoreScripts(); // enable all scripts after barrier is retracted (including weapon handler)
-            EnableAllMechanics(); // enable all mechanics after barrier is retracted
-            barrierCoroutine = null;
-
-        }); // fade barrier in based on animation length
-    }
-
-    private IEnumerator HandleBarrierDuration(float maxDuration) {
-
-        float timer = 0f;
-
-        while (timer < maxDuration) {
-
-            if (isBarrierRetractedPreMax) { // barrier is retracted before max duration
-
-                isBarrierRetractedPreMax = false; // reset retracted status
-                barrierDurationCoroutine = null;
-                yield break;
-
-            }
-
-            timer += Time.deltaTime;
-            yield return null;
-
-        }
-
-        RetractBarrier();
-        barrierDurationCoroutine = null;
-
-    }
-
-    #endregion
-
-    #region FLAMETHROWER
-
-    public void EquipFlamethrower(float maxDuration) {
-
-        charWeaponHandler.CurrentWeapon.gameObject.SetActive(false); // hide weapon (use charWeapon.CurrentWeapon instead of currWeapon because it has the actual instance of the weapon object)
-        isFlamethrowerRetractedPreMax = false; // flamethrower is not unequipped yet (for max duration)
-
-        DisableAllMechanics(); // disable all mechanics while flamethrower is being equipped (except secondary action)
-        EnableMechanic(MechanicType.SecondaryAction); // enable only secondary action while flamethrower is equipped
-
-        flamethrower.gameObject.SetActive(true); // show flamethrower particles
-        flamethrowerDurationCoroutine = StartCoroutine(HandleFlamethrowerDuration(maxDuration)); // handle flamethrower max duration
-
-    }
-
-    public void UnequipFlamethrower() {
-
-        if (flamethrowerDurationCoroutine != null) StopCoroutine(flamethrowerDurationCoroutine); // stop flamethrower duration coroutine if it's running
-
-        charWeaponHandler.CurrentWeapon.gameObject.SetActive(true); // show weapon (use charWeapon.CurrentWeapon instead of currWeapon because it has the actual instance of the weapon object)
-        currWeapon.gameObject.SetActive(true); // show weapon
-
-        isFlamethrowerRetractedPreMax = true; // flamethrower is unequipped (for max duration)
-
-        EnableAllMechanics(); // enable all mechanics after flamethrower is unequipped
-
-        flamethrower.gameObject.SetActive(false); // hide flamethrower particles
-
-    }
-
-    private IEnumerator HandleFlamethrowerDuration(float maxDuration) {
-
-        float timer = 0f;
-
-        while (timer < maxDuration) {
-
-            if (isFlamethrowerRetractedPreMax) { // flamethrower is retracted before max duration
-
-                isFlamethrowerRetractedPreMax = false; // reset retracted status
-                yield break;
-
-            }
-
-            timer += Time.deltaTime;
-            yield return null;
-
-        }
-
-        UnequipFlamethrower();
-        flamethrowerDurationCoroutine = null;
-
-    }
-
-    #endregion
-
     #region ROCK
 
-    // returns true if rock is successfully summoned, false if rock is already summoned
-    public Rock SummonRock(EarthPrimaryAction action, Rock rockPrefab, float maxThrowDuration) {
-
-        if (currRock) return null; // rock is already summoned
-
-        if (rockCoroutine != null) StopCoroutine(rockCoroutine); // stop rock coroutine if it's running
+    public Rock OnSummonRock(EarthPrimaryAction action, Rock rockPrefab, float maxThrowDuration) {
 
         rockCoroutine = StartCoroutine(HandleSummonRock(action, rockPrefab, maxThrowDuration));
-
         return currRock;
 
     }
 
     private IEnumerator HandleSummonRock(EarthPrimaryAction action, Rock rockPrefab, float maxThrowDuration) {
 
-        isRockSummoning = true;
+        isRockSummoning = true; // rock is being summoned
+
         DisableAllMechanics(); // disable all mechanics while rock is being summoned (except primary action)
         EnableMechanic(MechanicType.PrimaryAction); // enable only primary action while rock is summoned
         DisableCoreScripts(); // disable all scripts while rock is being summoned (including weapon handler)
@@ -987,44 +768,20 @@ public class PlayerController : EntityController {
         yield return null; // wait for animation to start
         yield return new WaitForSeconds(anim.GetCurrentAnimatorClipInfo(0).Length); // wait for animation to end (so rock can be dropped during animation because this coroutine won't be null)
 
-        isRockSummoning = false;
+        isRockSummoning = false; // rock has been fully summoned
         isRockThrowReady = true; // rock is ready to be thrown
         SetWeaponHandlerEnabled(true); // enable weapon handler when rock is fully summoned
-        action.ActivateWeapon(); // activate weapon after rock is summoned
-
-        isRockThrownPreMax = false; // rock has not been thrown yet (for max duration)
-        rockThrowDurationCoroutine = StartCoroutine(HandleRockThrowDuration(maxThrowDuration)); // handle rock throw max duration
+        action.OnThrowReady(); // trigger throw ready event
 
         rockCoroutine = null;
 
     }
 
-    public void DropRock() {
-
-        if (!currRock || !isRockSummoning) return; // no rock to drop or rock has been fully summoned already -> can't drop it
-
-        if (rockCoroutine != null) StopCoroutine(rockCoroutine); // stop rock coroutine if it's running
-
-        DestroyRock(true);
-
-    }
-
-    public void OnRockThrow() {
-
-        if (!currRock || isRockSummoning) return; // no rock to destroy or rock is still being summoned -> can't throw it
-
-        if (rockCoroutine != null) StopCoroutine(rockCoroutine); // stop rock coroutine if it's running
-
-        if (rockThrowDurationCoroutine != null) StopCoroutine(rockThrowDurationCoroutine); // stop rock throw duration coroutine if it's running
-
-        isRockThrownPreMax = true; // rock has been thrown (for max duration)
-        rockCoroutine = StartCoroutine(HandleRockThrow()); // handle rock throw
-
-    }
+    public void OnRockThrow() => rockCoroutine = StartCoroutine(HandleRockThrow()); // handle rock throw
 
     private IEnumerator HandleRockThrow() {
 
-        DestroyRock(false); // don't activate mechanics because it is dealt with differently in this case
+        OnDestroyRock(false); // don't activate mechanics because it is dealt with differently in this case
 
         // must wait for two frames to allow shot to be fired
         yield return null;
@@ -1039,13 +796,11 @@ public class PlayerController : EntityController {
 
     }
 
-    private void DestroyRock(bool activateMechanics) {
+    public void OnDestroyRock(bool activateMechanics) {
 
-        // destroy rock
-        Destroy(currRock.gameObject);
-        currRock = null;
+        Destroy(currRock.gameObject); // destroy rock
 
-        corgiController.SetForce(Vector2.zero); // stop player movement
+        corgiController.SetForce(Vector2.zero); // reset player movement
         anim.SetBool("isRockSummoned", false);
 
         // reset bools
@@ -1059,30 +814,6 @@ public class PlayerController : EntityController {
             EnableAllMechanics(); // enable all mechanics after rock is dropped/thrown
 
         }
-    }
-
-    private IEnumerator HandleRockThrowDuration(float maxThrowDuration) {
-
-        float timer = 0f;
-
-        while (timer < maxThrowDuration) {
-
-            if (isRockThrownPreMax) { // barrier is retracted before max duration
-
-                isRockThrownPreMax = false; // reset retracted status
-                rockThrowDurationCoroutine = null;
-                yield break;
-
-            }
-
-            timer += Time.deltaTime;
-            yield return null;
-
-        }
-
-        DestroyRock(true);
-        rockThrowDurationCoroutine = null;
-
     }
 
     #endregion
@@ -1118,6 +849,8 @@ public class PlayerController : EntityController {
 
     #region UTILITIES
 
+    public Weapon GetCurrentWeapon() => weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon();
+
     private IEnumerator HandleSwitchCooldown() {
 
         charWeaponHandler.AbilityPermitted = false; // disable ability use
@@ -1138,11 +871,6 @@ public class PlayerController : EntityController {
         base.OnDeath();
 
         isDead = true;
-
-        if (barrierCoroutine != null) StopCoroutine(barrierCoroutine); // stop barrier coroutine if it's running
-        if (barrierTweener != null && barrierTweener.IsActive()) barrierTweener.Kill(); // kill barrier tweener if it's active
-
-        flamethrower.gameObject.SetActive(false); // hide flamethrower particles
 
     }
 

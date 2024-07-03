@@ -215,14 +215,14 @@ MonoBehaviour:
     m_Bits: 270592
   ApplyDamageOnTriggerEnter: 1
   ApplyDamageOnTriggerStay: 1
-  MinDamageCaused: 10
-  MaxDamageCaused: 10
+  MinDamageCaused: 5
+  MaxDamageCaused: 5
   TypedDamages: []
   DamageCausedKnockbackType: 2
   DamageCausedKnockbackDirection: 0
   DamageCausedKnockbackForce: {x: 2, y: 2}
   InvincibilityDuration: 0
-  RepeatDamageOverTime: 1
+  RepeatDamageOverTime: 0
   AmountOfRepeats: 3
   DurationBetweenRepeats: 1
   DamageOverTimeInterruptible: 1
@@ -293,6 +293,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bf9887fda6905f47a289c9d777f68d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  burnTicks: 3
+  burnDuration: 3
 --- !u!96 &-6513195632682728618
 TrailRenderer:
   serializedVersion: 3

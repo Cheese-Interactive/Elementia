@@ -741,24 +741,24 @@ CompositeCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_GeometryType: 1
+  m_GeometryType: 0
   m_GenerationType: 0
   m_EdgeRadius: 0
   m_ColliderPaths:
   - m_Collider: {fileID: 38393260}
     m_ColliderPaths:
     - - X: 90000000
-        Y: -10312500
+        Y: -10625000
       - X: 70000000
-        Y: -10312500
+        Y: -10625000
       - X: 70000000
         Y: -40000000
       - X: 90000000
         Y: -40000000
     - - X: 0
-        Y: -30312500
+        Y: -30625000
       - X: -20000000
-        Y: -30312500
+        Y: -30625000
       - X: -20000000
         Y: -40000000
       - X: 0
@@ -766,12 +766,12 @@ CompositeCollider2D:
   m_CompositePaths:
     m_Paths:
     - - {x: 8.99997, y: -4}
-      - {x: 8.99997, y: -1.03125}
-      - {x: 7, y: -1.0312793}
+      - {x: 8.99997, y: -1.0625}
+      - {x: 7, y: -1.0625293}
       - {x: 7.0000296, y: -4}
     - - {x: -0.000029300001, y: -4}
-      - {x: -0.000029300001, y: -3.03125}
-      - {x: -2, y: -3.0312793}
+      - {x: -0.000029300001, y: -3.0625}
+      - {x: -2, y: -3.0625293}
       - {x: -1.9999708, y: -4}
   m_VertexDistance: 0.0005
   m_OffsetDistance: 0.00005
@@ -1156,7 +1156,7 @@ CompositeCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_GeometryType: 1
+  m_GeometryType: 0
   m_GenerationType: 0
   m_EdgeRadius: 0
   m_ColliderPaths:

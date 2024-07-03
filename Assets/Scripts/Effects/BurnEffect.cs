@@ -1,3 +1,4 @@
+using MoreMountains.CorgiEngine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,20 +6,15 @@ using UnityEngine;
 public class BurnEffect : MonoBehaviour {
 
     // IMPORTANT: actual burn effect is implemented with Corgi Engine's DamageOnTouch script
-
     [Header("Overlay")]
     [SerializeField] private Overlay burnOverlay;
 
-    private void Start() {
+    private void Start() => burnOverlay.HideOverlay(); // hide burn overlay by default
 
-        burnOverlay.HideOverlay(); // hide burn overlay by default
-
-    }
 
     public void Burn(float duration) {
 
         burnOverlay.ShowOverlay(); // show burn overlay
-
         StartCoroutine(BurnReset(duration));
 
     }
