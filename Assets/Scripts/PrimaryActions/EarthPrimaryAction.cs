@@ -84,6 +84,7 @@ public class EarthPrimaryAction : PrimaryAction {
 
         }
 
+        print("force threow");
         DestroyRock(true); // destroy rock after max throw duration (activate mechanics)
         throwDurationCoroutine = null;
 

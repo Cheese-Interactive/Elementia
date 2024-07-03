@@ -24,6 +24,7 @@ public class PlayerController : EntityController {
     [Header("Earth")]
     private EarthPrimaryAction earthPrimaryAction;
     private Rock currRock;
+    private Coroutine rockSummonCoroutine;
 
     [Header("Flamethrower")]
     private FireSecondaryAction fireSecondaryAction;
@@ -745,7 +746,7 @@ public class PlayerController : EntityController {
 
     public Rock OnSummonRock(EarthPrimaryAction action, Rock rockPrefab, float maxThrowDuration) {
 
-        StartCoroutine(HandleSummonRock(action, rockPrefab, maxThrowDuration));
+        rockSummonCoroutine = StartCoroutine(HandleSummonRock(action, rockPrefab, maxThrowDuration));
         return currRock;
 
     }
@@ -765,6 +766,8 @@ public class PlayerController : EntityController {
         SetWeaponHandlerEnabled(true); // enable weapon handler when rock is fully summoned
         action.OnThrowReady(); // trigger throw ready event
 
+        rockSummonCoroutine = null;
+
     }
 
     public void OnRockThrow() => StartCoroutine(HandleRockThrow()); // handle rock throw
@@ -783,6 +786,8 @@ public class PlayerController : EntityController {
     }
 
     public void OnDestroyRock(bool activateMechanics) {
+
+        if (rockSummonCoroutine != null) StopCoroutine(rockSummonCoroutine); // stop rock summon coroutine if it's running
 
         Destroy(currRock.gameObject); // destroy rock
 
