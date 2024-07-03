@@ -1051,7 +1051,8 @@ MonoBehaviour:
   canUseInAir: 1
   flamethrower: {fileID: 4813264542210501733, guid: a3d8fb112d7064a45811dfdc7799823e,
     type: 3}
-  flamethrowerParticles: {fileID: 0}
+  objectFlamethrowerForce: {x: 2, y: 4}
+  entityFlamethrowerForce: {x: 5, y: 2}
   maxDuration: 5
 --- !u!114 &-5756287154290932317
 MonoBehaviour:

@@ -12,6 +12,7 @@ public class EarthPrimaryAction : PrimaryAction {
 
     [Header("Summon")]
     private Rock currRock; // if null, rock hasn't been summoned yet
+    private bool isSummoningRock;
     private bool isRockThrowReady;
 
     [Header("Duration")]
@@ -53,8 +54,12 @@ public class EarthPrimaryAction : PrimaryAction {
 
     }
 
-    private void SummonRock() => currRock = playerController.OnSummonRock(this, rockPrefabs[Random.Range(0, rockPrefabs.Length)], maxThrowDuration);
+    private void SummonRock() {
 
+        isSummoningRock = true; // rock is being summoned
+        currRock = playerController.OnSummonRock(this, rockPrefabs[Random.Range(0, rockPrefabs.Length)], maxThrowDuration);
+
+    }
 
     private void ThrowRock() {
 
@@ -97,11 +102,16 @@ public class EarthPrimaryAction : PrimaryAction {
 
     public void OnThrowReady() {
 
-        isRockThrowReady = true;
+        isSummoningRock = false; // rock is fully summoned
+        isRockThrowReady = true; // rock is ready to be thrown
         throwDurationCoroutine = StartCoroutine(HandleMaxThrowDuration()); // start max throw duration coroutine
 
     }
 
     public override bool IsRegularAction() => true;
+
+    public bool IsSummoningRock() => isSummoningRock;
+
+    public bool IsRockThrowReady() => isRockThrowReady;
 
 }

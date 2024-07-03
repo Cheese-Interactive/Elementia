@@ -17,7 +17,7 @@ public class MagicMissileProjectile : BaseProjectile {
 
         if (collision.gameObject.activeInHierarchy) { // make sure hit object is active
 
-            /* FORCE DEPENDS ON PROJECTILE DIRECTION/POSITION */
+            /* FORCE DEPENDS ON PROJECTILE VELOCITY DIRECTION */
             Vector2 force = ((Vector2) transform.position - lastPos).normalized;
             force.x *= objectImpactForce.x; // increase horizontal pull force
             force.y *= objectImpactForce.y; // increase vertical pull force

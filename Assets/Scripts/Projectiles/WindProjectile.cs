@@ -16,14 +16,7 @@ public class WindProjectile : BaseProjectile {
     [SerializeField] private Vector2 entityWindForce;
     [SerializeField] private Vector2 objectWindForce;
 
-    void Start() {
-
-        damageOnTouch = GetComponent<DamageOnTouch>();
-
-        damageOnTouch.DamageCausedKnockbackForce = entityWindForce;
-        lastPos = transform.position;
-
-    }
+    void Start() => lastPos = transform.position;
 
     void Update() => lastPos = transform.position;
 
@@ -31,11 +24,19 @@ public class WindProjectile : BaseProjectile {
 
         if (collision.gameObject.activeInHierarchy) { // make sure hit object is active
 
-            /* FORCE DEPENDS ON PROJECTILE DIRECTION/POSITION */
-            Vector2 force = ((Vector2) transform.position - lastPos).normalized;
-            force.x *= objectWindForce.x; // increase horizontal pull force
-            force.y *= objectWindForce.y; // increase vertical pull force
-            collision.gameObject.GetComponent<Rigidbody2D>()?.AddForce(force, ForceMode2D.Impulse); // push object away
+            /* FORCE DEPENDS ON PROJECTILE VELOCITY DIRECTION */
+            Vector2 entityForce = ((Vector2) transform.position - lastPos).normalized;
+            Vector2 objectForce = entityForce;
+
+            // handle entity force
+            entityForce.x *= entityWindForce.x; // increase horizontal push force
+            entityForce.y *= entityWindForce.y; // increase vertical push force
+            collision.gameObject.GetComponent<CorgiController>()?.AddForce(entityForce); // push entity away from projectile
+
+            // handle object force
+            objectForce.x *= objectWindForce.x; // increase horizontal pull force
+            objectForce.y *= objectWindForce.y; // increase vertical pull force
+            collision.gameObject.GetComponent<Rigidbody2D>()?.AddForce(objectForce, ForceMode2D.Impulse); // push object away from projectile
 
         }
     }

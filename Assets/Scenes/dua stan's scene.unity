@@ -7697,7 +7697,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81b0aad1de69d854d8aa796e404c5724, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PushSpeed: 3
+  PushSpeed: 0
   GroundedRaycastLength: 1
   GroundedRaycastOffset: 0.1
   GroundedLayerMask:
@@ -9761,7 +9761,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81b0aad1de69d854d8aa796e404c5724, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PushSpeed: 3
+  PushSpeed: 0
   GroundedRaycastLength: 1
   GroundedRaycastOffset: 0.1
   GroundedLayerMask:

@@ -195,7 +195,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a468ef2987c01474dbcf42b9046e0375, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  entityWindForce: {x: 15, y: 2}
+  entityWindForce: {x: 25, y: 30}
   objectWindForce: {x: 15, y: 20}
 --- !u!96 &-6513195632682728618
 TrailRenderer:
