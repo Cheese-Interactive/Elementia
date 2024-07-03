@@ -293,8 +293,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bf9887fda6905f47a289c9d777f68d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  burnDamage: 5
   burnTicks: 3
-  burnDuration: 3
+  burnDuration: 1
 --- !u!96 &-6513195632682728618
 TrailRenderer:
   serializedVersion: 3

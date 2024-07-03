@@ -14,6 +14,9 @@ public class FireSecondaryAction : SecondaryAction {
     [Header("Settings")]
     [SerializeField] private Vector2 objectFlamethrowerForce;
     [SerializeField] private Vector2 entityFlamethrowerForce;
+    [SerializeField] private float burnDamage;
+    [SerializeField] private int burnTicks;
+    [SerializeField] private float burnDuration;
 
     [Header("Toggle")]
     private bool isFlamethrowerEquipped;
@@ -55,7 +58,7 @@ public class FireSecondaryAction : SecondaryAction {
         prevWeapon = playerController.GetCurrentWeapon(); // store current weapon to revert back to it later (don't use character weapon handler's current weapon because it gets destroyed when flamethrower is equipped)
 
         charWeaponHandler.ChangeWeapon(flamethrower, flamethrower.WeaponID); // equip flamethrower
-        charWeaponHandler.CurrentWeapon.GetComponent<Flamethrower>().Initialize(entityFlamethrowerForce, objectFlamethrowerForce); // initialize flamethrower
+        charWeaponHandler.CurrentWeapon.GetComponent<Flamethrower>().Initialize(entityFlamethrowerForce, objectFlamethrowerForce, burnDamage, burnTicks, burnDuration); // initialize flamethrower
 
         prevAlwaysShoot = charWeaponHandler.ForceAlwaysShoot; // store previous always shoot value
         charWeaponHandler.ForceAlwaysShoot = true; // force flamethrower to always shoot

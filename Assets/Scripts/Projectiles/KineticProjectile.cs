@@ -7,16 +7,22 @@ public class KineticProjectile : BaseProjectile {
 
     [Header("References")]
     private Projectile projectile;
+    private DamageOnTouch damageOnTouch;
 
     [Header("Settings")]
     [SerializeField] private Vector2 entityKineticForce;
     [SerializeField] private Vector2 objectKineticForce;
 
-    private void Start() => projectile = GetComponent<Projectile>();
+    private void Start() {
+
+        projectile = GetComponent<Projectile>();
+        damageOnTouch = GetComponent<DamageOnTouch>();
+
+    }
 
     private void OnTriggerEnter2D(Collider2D collision) { // triggers when projectile collides with something | IMPORTANT: triggers after the object is disabled on death
 
-        if (collision.gameObject.activeInHierarchy) { // make sure hit object is active
+        if (collision.gameObject.activeInHierarchy && (damageOnTouch.TargetLayerMask & (1 << collision.gameObject.layer)) != 0) { // make sure hit object is active & is in target layer
 
             /* FORCE DIRECTION DEPENDS ON SHOOTER POSITION */
             Vector2 entityForce = (projectile.GetOwner().transform.position - collision.transform.position).normalized; // get force direction (vector faces shooter)

@@ -196,8 +196,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 270592
   HitscanMaxDistance: 3
-  MinDamageCaused: 5
-  MaxDamageCaused: 5
+  MinDamageCaused: 0
+  MaxDamageCaused: 0
   TypedDamages: []
   DamageCausedInvincibilityDuration: 0.2
   DamageableImpactParticles: {fileID: 0}

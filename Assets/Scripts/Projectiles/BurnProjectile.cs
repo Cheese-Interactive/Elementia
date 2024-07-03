@@ -10,23 +10,27 @@ public class BurnProjectile : BaseProjectile {
     private DamageOnTouch damageOnTouch;
 
     [Header("Settings")]
+    [SerializeField] private float burnDamage;
     [SerializeField] private int burnTicks;
     [SerializeField] private float burnDuration;
 
-    private void Start() {
+    [Header("Direction")]
+    private Vector2 lastPos;
+
+    void Start() {
 
         damageOnTouch = GetComponent<DamageOnTouch>();
 
-        damageOnTouch.RepeatDamageOverTime = true; // enable repeat damage over time (for damage tick)
-        damageOnTouch.AmountOfRepeats = burnTicks + 1; // set burn damage to ticks + 1 (1 extra tick for initial damage)
-        damageOnTouch.DurationBetweenRepeats = burnDuration / burnTicks; // set duration between ticks to burn duration divided by ticks
+        lastPos = transform.position;
 
     }
 
+    void Update() => lastPos = transform.position;
+
     private void OnTriggerEnter2D(Collider2D collision) { // triggers when projectile collides with something | IMPORTANT: triggers after the object is disabled on death
 
-        if (collision.gameObject.activeInHierarchy) // make sure hit object is active
-            collision.gameObject.GetComponent<BurnEffect>()?.Burn(burnDuration);
+        if (collision.gameObject.activeInHierarchy && (damageOnTouch.TargetLayerMask & (1 << collision.gameObject.layer)) != 0) // make sure hit object is active & is in target layer
+            collision.gameObject.GetComponent<BurnEffect>()?.Burn(gameObject, burnDamage, burnTicks, burnDuration, damageOnTouch.DamageTakenInvincibilityDuration, (Vector2) transform.position - lastPos, false); // apply burn effect to object
 
     }
 }

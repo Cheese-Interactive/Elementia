@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 901505831517131580}
   - component: {fileID: 8231221148931468357}
   - component: {fileID: 3706479291433903718}
-  m_Layer: 13
+  m_Layer: 9
   m_Name: FreezeOverlay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1053,6 +1053,9 @@ MonoBehaviour:
     type: 3}
   objectFlamethrowerForce: {x: 2, y: 4}
   entityFlamethrowerForce: {x: 5, y: 2}
+  burnDamage: 5
+  burnTicks: 6
+  burnDuration: 2
   maxDuration: 5
 --- !u!114 &-5756287154290932317
 MonoBehaviour:
@@ -1141,7 +1144,7 @@ GameObject:
   - component: {fileID: 8107409526917543720}
   - component: {fileID: 2679066528501517291}
   - component: {fileID: 5936133160643898427}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: Barrier
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -1323,7 +1326,7 @@ GameObject:
   - component: {fileID: 8553785770644780367}
   - component: {fileID: 3699529529728838466}
   - component: {fileID: 4634817492476706939}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: BarrierParticles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6158,7 +6161,7 @@ GameObject:
   - component: {fileID: 860092744807077413}
   - component: {fileID: 8957936408487965001}
   - component: {fileID: 4224931691841699186}
-  m_Layer: 13
+  m_Layer: 9
   m_Name: BurnOverlay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6308,7 +6311,7 @@ GameObject:
   - component: {fileID: 5452681496835425656}
   - component: {fileID: 1516626704141152873}
   - component: {fileID: 2345786623437224621}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: IceBlast
   m_TagString: Untagged
   m_Icon: {fileID: 0}

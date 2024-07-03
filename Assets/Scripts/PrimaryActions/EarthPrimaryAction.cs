@@ -50,7 +50,7 @@ public class EarthPrimaryAction : PrimaryAction {
         if (!currRock) // mouse button pressed
             SummonRock();
         else // mouse button released & rock hasn't been fully summoned yet
-            DestroyRock();
+            DestroyRock(true); // destroy rock before it's fully summoned (activate mechanics)
 
     }
 
@@ -63,20 +63,9 @@ public class EarthPrimaryAction : PrimaryAction {
 
     private void ThrowRock() {
 
-        playerController.OnRockThrow();
         isRockThrowReady = false;
-
-        // begin cooldown
-        isReady = false;
-        Invoke("ReadyAction", primaryCooldown);
-
-    }
-
-    private void DestroyRock() {
-
-        if (throwDurationCoroutine != null) StopCoroutine(throwDurationCoroutine); // stop max duration coroutine as rock is being destroyed
-
-        playerController.OnDestroyRock(true); // activate mechanics after rock is destroyed
+        playerController.OnRockThrow();
+        DestroyRock(false); // destroy rock after throw (don't activate mechanics)
 
         // begin cooldown
         isReady = false;
@@ -95,7 +84,7 @@ public class EarthPrimaryAction : PrimaryAction {
 
         }
 
-        DestroyRock(); // destroy rock after max throw duration
+        DestroyRock(true); // destroy rock after max throw duration (activate mechanics)
         throwDurationCoroutine = null;
 
     }
@@ -105,6 +94,18 @@ public class EarthPrimaryAction : PrimaryAction {
         isSummoningRock = false; // rock is fully summoned
         isRockThrowReady = true; // rock is ready to be thrown
         throwDurationCoroutine = StartCoroutine(HandleMaxThrowDuration()); // start max throw duration coroutine
+
+    }
+
+    private void DestroyRock(bool activateMechanics) {
+
+        if (throwDurationCoroutine != null) StopCoroutine(throwDurationCoroutine); // stop max duration coroutine as rock is being destroyed
+
+        playerController.OnDestroyRock(activateMechanics); // activate mechanics after rock is destroyed
+
+        // begin cooldown
+        isReady = false;
+        Invoke("ReadyAction", primaryCooldown);
 
     }
 

@@ -16,13 +16,19 @@ public class WindProjectile : BaseProjectile {
     [SerializeField] private Vector2 entityWindForce;
     [SerializeField] private Vector2 objectWindForce;
 
-    void Start() => lastPos = transform.position;
+    void Start() {
+
+        damageOnTouch = GetComponent<DamageOnTouch>();
+
+        lastPos = transform.position;
+
+    }
 
     void Update() => lastPos = transform.position;
 
     private void OnTriggerEnter2D(Collider2D collision) { // triggers when projectile collides with something | IMPORTANT: triggers after the object is disabled on death
 
-        if (collision.gameObject.activeInHierarchy) { // make sure hit object is active
+        if (collision.gameObject.activeInHierarchy && (damageOnTouch.TargetLayerMask & (1 << collision.gameObject.layer)) != 0) { // make sure hit object is active & is in target layer
 
             /* FORCE DEPENDS ON PROJECTILE VELOCITY DIRECTION */
             Vector2 entityForce = ((Vector2) transform.position - lastPos).normalized;

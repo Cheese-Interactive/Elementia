@@ -771,8 +771,6 @@ public class PlayerController : EntityController {
 
     private IEnumerator HandleRockThrow() {
 
-        OnDestroyRock(false); // don't activate mechanics because it is dealt with differently in this case
-
         // must wait for two frames to allow shot to be fired
         yield return null;
         yield return null;
