@@ -27,8 +27,8 @@ Transform:
   m_GameObject: {fileID: 1084125173359300224}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.365, y: 0.147, z: 0}
-  m_LocalScale: {x: 2.7004669, y: 2.7004669, z: 0}
+  m_LocalPosition: {x: 0.5625, y: 0.125, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6707437497993546744}
@@ -130,8 +130,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 5681016998530101493}
   - {fileID: 8065127029920104577}
+  - {fileID: 5681016998530101493}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &-3601002809632648221
@@ -194,7 +194,7 @@ MonoBehaviour:
   AutoDestroyWhenEmpty: 0
   AutoDestroyWhenEmptyDelay: 1
   CurrentAmmoLoaded: 0
-  WeaponAttachmentOffset: {x: 0.25, y: 0.1875, z: 0}
+  WeaponAttachmentOffset: {x: 0, y: 0, z: 0}
   FlipWeaponOnCharacterFlip: 1
   FlipValue: {x: -1, y: 1, z: 1}
   LeftHandHandle: {fileID: 0}
@@ -282,13 +282,13 @@ MonoBehaviour:
     Delay: 0
     RecoilFeedback: {fileID: 0}
   ProjectileSpawnTransform: {fileID: 0}
-  ProjectileSpawnOffset: {x: 0.35, y: 0.12, z: 0}
+  ProjectileSpawnOffset: {x: 0.6875, y: 0.125, z: 0}
   ProjectilesPerShot: 1
   Spread: {x: 0, y: 0, z: 0}
   RotateWeaponOnSpread: 0
   RandomSpread: 1
   ObjectPooler: {fileID: 0}
-  SpawnPosition: {x: 0.35, y: 0.12, z: 0}
+  SpawnPosition: {x: 0.6875, y: 0.125, z: 0}
 --- !u!114 &-3073912655475901205
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -334,8 +334,8 @@ Transform:
   m_GameObject: {fileID: 5294270777027740188}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.34375, y: 0, z: 0}
-  m_LocalScale: {x: 0.6, y: 0.6, z: 0.6}
+  m_LocalPosition: {x: 0.5625, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6707437497993546744}
