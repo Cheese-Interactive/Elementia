@@ -928,39 +928,39 @@ MonoBehaviour:
   weaponActionPairs:
   - weapon: {fileID: 4237984674334015922, guid: 1146d9a50fe8cfb4491f14c86a6845dc,
       type: 3}
-    spellData: {fileID: 11400000, guid: 3224215c3a45c564ca37fef85f48c954, type: 2}
+    weaponData: {fileID: 11400000, guid: 3224215c3a45c564ca37fef85f48c954, type: 2}
     primaryAction: {fileID: 2592352146518810568}
     secondaryAction: {fileID: 2721479856997411025}
     switchCooldown: 0.15
   - weapon: {fileID: 4237984674334015922, guid: 9d60ea47bc8ee1b4a80c55c277f5a949,
       type: 3}
-    spellData: {fileID: 11400000, guid: 240fb2df713a88941845b673fa543e19, type: 2}
+    weaponData: {fileID: 11400000, guid: 240fb2df713a88941845b673fa543e19, type: 2}
     primaryAction: {fileID: 0}
     secondaryAction: {fileID: 8881875236129953771}
     switchCooldown: 0.15
   - weapon: {fileID: 4237984674334015922, guid: 9a3122220c3edc64683ed774da57bdca,
       type: 3}
-    spellData: {fileID: 11400000, guid: 0b8316274d5b89d44ab51986d17cc3ba, type: 2}
+    weaponData: {fileID: 11400000, guid: 0b8316274d5b89d44ab51986d17cc3ba, type: 2}
     primaryAction: {fileID: 0}
     secondaryAction: {fileID: -8039291345281199097}
     switchCooldown: 0.15
   - weapon: {fileID: 4237984674334015922, guid: b8a570382a6f4554f90091a497fef835,
       type: 3}
-    spellData: {fileID: 11400000, guid: 6f8080ba3b2a54c459fdce6bcff4b454, type: 2}
+    weaponData: {fileID: 11400000, guid: 6f8080ba3b2a54c459fdce6bcff4b454, type: 2}
     primaryAction: {fileID: 0}
     secondaryAction: {fileID: -5756287154290932317}
     switchCooldown: 0.15
   - weapon: {fileID: 4237984674334015922, guid: 4b35fc7ef435692488cc8c2bc368ca14,
       type: 3}
-    spellData: {fileID: 11400000, guid: ca3ec5979ed33474e8d59fd613d982a1, type: 2}
+    weaponData: {fileID: 11400000, guid: ca3ec5979ed33474e8d59fd613d982a1, type: 2}
     primaryAction: {fileID: 0}
-    secondaryAction: {fileID: -8039291345281199097}
+    secondaryAction: {fileID: 0}
     switchCooldown: 0.15
   - weapon: {fileID: 4237984674334015922, guid: e8331e579bf579e468249f527de34970,
       type: 3}
-    spellData: {fileID: 11400000, guid: 6fb9c3a94d1f1cd4582e6ca735c37e39, type: 2}
+    weaponData: {fileID: 11400000, guid: 6fb9c3a94d1f1cd4582e6ca735c37e39, type: 2}
     primaryAction: {fileID: 6885750652469125261}
-    secondaryAction: {fileID: -8039291345281199097}
+    secondaryAction: {fileID: 0}
     switchCooldown: 0.15
 --- !u!114 &2592352146518810568
 MonoBehaviour:

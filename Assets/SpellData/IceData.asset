@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3c7768079091df64d97263e34cfd6bcf, type: 3}
-  m_Name: Kinetic
+  m_Name: IceData
   m_EditorClassIdentifier: 
-  primarySpellIcon: {fileID: 21300000, guid: 0fe62121de742a242b18430bc36f8218, type: 3}
-  secondarySpellIcon: {fileID: 21300000, guid: 1e226aab47ac9e843bd126b82d9de06f, type: 3}
-  spellColor: {r: 0.47843137, g: 0.99215686, b: 0.59607846, a: 1}
+  primaryIcon: {fileID: 21300000, guid: 2046d3e6e9709d34895aa1581c8a3332, type: 3}
+  secondaryIcon: {fileID: 21300000, guid: 3a03e44d6e7e0094e8dd2f25954d1310, type: 3}
+  weaponColor: {r: 0.3882353, g: 0.7647059, b: 0.8, a: 1}

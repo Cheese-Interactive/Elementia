@@ -75,7 +75,7 @@ public class PlayerController : EntityController {
 
             }
 
-            itemSelector.SetSpellData(action.GetSpellData(), i); // add weapon item to hotbar
+            itemSelector.SetWeaponData(action.GetWeaponData(), i); // add weapon item to hotbar
 
             if (primaryAction)
                 health.OnDeath += primaryAction.OnDeath; // subscribe to death event
@@ -186,9 +186,9 @@ public class PlayerController : EntityController {
                 currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
                 currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
 
-                // placed here to make sure spell exists before starting cooldown
+                // placed here to make sure weapon exists before starting cooldown
                 if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
-                switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start spell cooldown
+                switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start weapon cooldown
 
                 charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
@@ -231,9 +231,9 @@ public class PlayerController : EntityController {
                 currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
                 currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
 
-                // placed here to make sure spell exists before starting cooldown
+                // placed here to make sure weapon exists before starting cooldown
                 if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
-                switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start spell cooldown
+                switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start weapon cooldown
 
                 charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
@@ -279,9 +279,9 @@ public class PlayerController : EntityController {
                 currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
                 currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
 
-                // placed here to make sure spell exists before starting cooldown
+                // placed here to make sure weapon exists before starting cooldown
                 if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
-                switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start spell cooldown
+                switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start weapon cooldown
 
                 charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
@@ -324,9 +324,9 @@ public class PlayerController : EntityController {
                 currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
                 currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
 
-                // placed here to make sure spell exists before starting cooldown
+                // placed here to make sure weapon exists before starting cooldown
                 if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
-                switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start spell cooldown
+                switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start weapon cooldown
 
                 charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
@@ -369,9 +369,9 @@ public class PlayerController : EntityController {
                 currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
                 currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
 
-                // placed here to make sure spell exists before starting cooldown
+                // placed here to make sure weapon exists before starting cooldown
                 if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
-                switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start spell cooldown
+                switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start weapon cooldown
 
                 charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
@@ -414,9 +414,9 @@ public class PlayerController : EntityController {
                 currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
                 currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
 
-                // placed here to make sure spell exists before starting cooldown
+                // placed here to make sure weapon exists before starting cooldown
                 if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
-                switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start spell cooldown
+                switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start weapon cooldown
 
                 charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
@@ -459,9 +459,9 @@ public class PlayerController : EntityController {
                 currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
                 currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
 
-                // placed here to make sure spell exists before starting cooldown
+                // placed here to make sure weapon exists before starting cooldown
                 if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
-                switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start spell cooldown
+                switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start weapon cooldown
 
                 charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
@@ -504,9 +504,9 @@ public class PlayerController : EntityController {
                 currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
                 currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
 
-                // placed here to make sure spell exists before starting cooldown
+                // placed here to make sure weapon exists before starting cooldown
                 if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
-                switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start spell cooldown
+                switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start weapon cooldown
 
                 charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
@@ -549,9 +549,9 @@ public class PlayerController : EntityController {
                 currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
                 currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
 
-                // placed here to make sure spell exists before starting cooldown
+                // placed here to make sure weapon exists before starting cooldown
                 if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
-                switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start spell cooldown
+                switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start weapon cooldown
 
                 charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
@@ -594,9 +594,9 @@ public class PlayerController : EntityController {
                 currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
                 currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
 
-                // placed here to make sure spell exists before starting cooldown
+                // placed here to make sure weapon exists before starting cooldown
                 if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
-                switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start spell cooldown
+                switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start weapon cooldown
 
                 charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
@@ -639,9 +639,9 @@ public class PlayerController : EntityController {
                 currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
                 currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
 
-                // placed here to make sure spell exists before starting cooldown
+                // placed here to make sure weapon exists before starting cooldown
                 if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
-                switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start spell cooldown
+                switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start weapon cooldown
 
                 charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
@@ -684,9 +684,9 @@ public class PlayerController : EntityController {
                 currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
                 currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
 
-                // placed here to make sure spell exists before starting cooldown
+                // placed here to make sure weapon exists before starting cooldown
                 if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
-                switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start spell cooldown
+                switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start weapon cooldown
 
                 charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 

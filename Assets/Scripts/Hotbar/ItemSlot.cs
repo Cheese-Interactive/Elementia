@@ -6,8 +6,8 @@ public class ItemSlot : MonoBehaviour {
 
     [Header("References")]
     [SerializeField] private Image fill;
-    [SerializeField] private Sprite blankSpellIcon;
-    private SpellData spellData;
+    [SerializeField] private Sprite blankWeaponIcon;
+    private WeaponData weaponData;
 
     [Header("Settings")]
     [SerializeField] private float selectedScale;
@@ -17,11 +17,11 @@ public class ItemSlot : MonoBehaviour {
 
     private void Start() => initialScale = transform.localScale;
 
-    public void Initialize(SpellData spellData) {
+    public void Initialize(WeaponData weaponData) {
 
-        this.spellData = spellData;
+        this.weaponData = weaponData;
 
-        fill.color = spellData.GetSpellColor();
+        fill.color = weaponData.GetWeaponColor();
 
     }
 
@@ -33,8 +33,8 @@ public class ItemSlot : MonoBehaviour {
 
     }
 
-    public Sprite GetPrimarySpellIcon() => spellData && spellData.GetPrimarySpellIcon() ? spellData.GetPrimarySpellIcon() : blankSpellIcon;
+    public Sprite GetPrimaryIcon() => weaponData && weaponData.GetPrimaryIcon() ? weaponData.GetPrimaryIcon() : blankWeaponIcon;
 
-    public Sprite GetSecondarySpellIcon() => spellData && spellData.GetSecondarySpellIcon() ? spellData.GetSecondarySpellIcon() : blankSpellIcon;
+    public Sprite GetSecondaryIcon() => weaponData && weaponData.GetSecondaryIcon() ? weaponData.GetSecondaryIcon() : blankWeaponIcon;
 
 }

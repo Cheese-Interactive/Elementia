@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3c7768079091df64d97263e34cfd6bcf, type: 3}
-  m_Name: Fire
+  m_Name: EarthData
   m_EditorClassIdentifier: 
-  primarySpellIcon: {fileID: 21300000, guid: 2b066b1e153805f4aa7e2e585d2470cf, type: 3}
-  secondarySpellIcon: {fileID: 21300000, guid: 2a4f1f03d542b4b4bb6bda5bfae841a2, type: 3}
-  spellColor: {r: 0.6784314, g: 0.32156864, b: 0.1764706, a: 1}
+  primaryIcon: {fileID: 21300000, guid: ce0a5f15e747a9448ad1180206ebef64, type: 3}
+  secondaryIcon: {fileID: 0}
+  weaponColor: {r: 0.31764707, g: 0.19215687, b: 0.050980393, a: 1}
