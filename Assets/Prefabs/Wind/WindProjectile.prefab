@@ -128,11 +128,11 @@ MonoBehaviour:
   ExecuteOnDisable:
     m_PersistentCalls:
       m_Calls: []
-  LifeTime: 0.75
+  LifeTime: 1
   FaceDirection: 1
   FaceMovementDirection: 0
-  Speed: 50
-  Acceleration: 300
+  Speed: 0
+  Acceleration: 0
   Direction: {x: -1, y: 0, z: 0}
   DirectionCanBeChangedBySpawner: 1
   FlipValue: {x: -1, y: 1, z: 1}
@@ -163,7 +163,7 @@ MonoBehaviour:
   MinDamageCaused: 0
   MaxDamageCaused: 0
   TypedDamages: []
-  DamageCausedKnockbackType: 2
+  DamageCausedKnockbackType: 1
   DamageCausedKnockbackDirection: 0
   DamageCausedKnockbackForce: {x: 0, y: 0}
   InvincibilityDuration: 0
@@ -195,8 +195,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a468ef2987c01474dbcf42b9046e0375, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  minSpeed: 100
+  maxSpeed: 300
+  totalSpeedTransitionPercentage: 25
+  totalMinSpeedDurationPercentage: 60
   entityWindForce: {x: 25, y: 30}
   objectWindForce: {x: 15, y: 20}
+  windFadeDuration: 1
 --- !u!96 &-6513195632682728618
 TrailRenderer:
   serializedVersion: 3
@@ -218,7 +223,7 @@ TrailRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: e8db3b5851efcad4a8edae372d509cd9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -238,7 +243,7 @@ TrailRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_Time: 0.1
   m_PreviewTimeScale: 1
   m_Parameters:
@@ -261,8 +266,8 @@ TrailRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 0.78431374}
-      key1: {r: 0.3301887, g: 0.3301887, b: 0.3301887, a: 0}
+      key0: {r: 0.6313726, g: 0.6313726, b: 0.6313726, a: 0.5882353}
+      key1: {r: 1, g: 1, b: 1, a: 0}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
