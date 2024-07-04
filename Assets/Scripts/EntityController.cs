@@ -229,6 +229,13 @@ public class EntityController : MonoBehaviour {
 
     }
 
+    public void SetInvulnerable(bool invulnerable) {
+
+        if (health)
+            health.Invulnerable = invulnerable;
+
+    }
+
     public void SetWeaponHandlerEnabled(bool enabled) {
 
         if (charWeaponHandler)

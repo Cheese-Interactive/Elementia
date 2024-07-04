@@ -32,6 +32,7 @@ public class TimeEffect : BaseEffect {
 
         entityController.DisableAllMechanics(); // disable all mechanics
         entityController.DisableCoreScripts(); // disable core scripts
+        entityController.SetInvulnerable(true); // set entity invulnerable
 
         unfreezeTimeCoroutine = StartCoroutine(UnfreezeTime(duration));
 
@@ -52,6 +53,7 @@ public class TimeEffect : BaseEffect {
 
         entityController.EnableCoreScripts(); // enable core scripts
         entityController.EnableAllMechanics(); // enable all mechanics
+        entityController.SetInvulnerable(false); // set entity vulnerable
 
     }
 }
