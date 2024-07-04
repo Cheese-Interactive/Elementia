@@ -8,6 +8,7 @@ public class WindProjectile : BaseProjectile {
 
     [Header("References")]
     private DamageOnTouch damageOnTouch;
+    private TrailRenderer trailRenderer;
 
     [Header("Direction")]
     private Vector2 lastPos;
@@ -19,6 +20,10 @@ public class WindProjectile : BaseProjectile {
     void Start() {
 
         damageOnTouch = GetComponent<DamageOnTouch>();
+        trailRenderer = GetComponent<TrailRenderer>();
+
+        trailRenderer.startWidth = transform.localScale.y; // set trail start width to match projectile width
+        trailRenderer.endWidth = transform.localScale.y; // set trail end width to match projectile width
 
         lastPos = transform.position;
 

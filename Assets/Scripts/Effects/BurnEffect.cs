@@ -3,12 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BurnEffect : MonoBehaviour {
+public class BurnEffect : BaseEffect {
 
     [Header("References")]
     private Health health;
 
-    // IMPORTANT: actual burn effect is implemented with Corgi Engine's DamageOnTouch script
     [Header("Overlay")]
     [SerializeField] private Overlay burnOverlay;
     private Coroutine burnCoroutine;
@@ -48,6 +47,14 @@ public class BurnEffect : MonoBehaviour {
         }
 
         burnOverlay.HideOverlay(); // hide burn overlay after burn effect is over
+
+    }
+
+    public void RemoveEffect() {
+
+        if (burnCoroutine != null) StopCoroutine(burnCoroutine);
+
+        burnOverlay.HideOverlay(); // hide burn overlay
 
     }
 }

@@ -131,8 +131,8 @@ MonoBehaviour:
   LifeTime: 0.75
   FaceDirection: 1
   FaceMovementDirection: 0
-  Speed: 200
-  Acceleration: 0
+  Speed: 50
+  Acceleration: 300
   Direction: {x: -1, y: 0, z: 0}
   DirectionCanBeChangedBySpawner: 1
   FlipValue: {x: -1, y: 1, z: 1}
@@ -261,7 +261,7 @@ TrailRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 0.5882353}
+      key0: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 0.78431374}
       key1: {r: 0.3301887, g: 0.3301887, b: 0.3301887, a: 0}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}

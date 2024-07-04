@@ -7,11 +7,7 @@ using UnityEngine;
 
 public class PlayerController : EntityController {
 
-    [Header("References")]
-    private Animator anim;
-
     [Header("Mechanics")]
-    private Dictionary<MechanicType, bool> mechanicStatuses;
     private Weapon currWeapon;
 
     [Header("Hotbar")]
@@ -40,7 +36,6 @@ public class PlayerController : EntityController {
         base.Awake();
 
         // set up mechanic statuses early so scripts can change them earlier too
-        mechanicStatuses = new Dictionary<MechanicType, bool>();
         Array mechanics = Enum.GetValues(typeof(MechanicType)); // get all mechanic type values
 
         // add all mechanic types to dictionary
@@ -89,10 +84,9 @@ public class PlayerController : EntityController {
         }
     }
 
-    private void Start() {
+    private new void Start() {
 
-        slowEffect = GetComponent<SlowEffect>();
-        anim = GetComponent<Animator>();
+        base.Start();
 
         earthPrimaryAction = GetComponent<EarthPrimaryAction>();
 
@@ -757,7 +751,7 @@ public class PlayerController : EntityController {
         EnableMechanic(MechanicType.PrimaryAction); // enable only primary action while rock is summoned
         DisableCoreScripts(); // disable all scripts while rock is being summoned (including weapon handler)
 
-        currRock = Instantiate(rockPrefab, transform.position, Quaternion.identity); // instantiate rock (will play summon animation automatically)
+        currRock = Instantiate(rockPrefab, transform.position, Quaternion.identity); // instantiate rock (will play summon animation & rotate itself automatically)
         anim.SetBool("isRockSummoned", true); // play rock summon animation
 
         yield return null; // wait for animation to start
@@ -805,35 +799,6 @@ public class PlayerController : EntityController {
 
     #endregion
 
-    #region MECHANICS
-
-    public void EnableAllMechanics() {
-
-        // enable all mechanics
-        foreach (MechanicType mechanicType in mechanicStatuses.Keys.ToList())
-            mechanicStatuses[mechanicType] = true;
-
-    }
-
-    public void EnableMechanic(MechanicType mechanicType) => mechanicStatuses[mechanicType] = true;
-
-    public void DisableAllMechanics() {
-
-        // disable all mechanics
-        foreach (MechanicType mechanicType in mechanicStatuses.Keys.ToList())
-            mechanicStatuses[mechanicType] = false;
-
-        // send to idle animation
-        anim.SetBool("isMoving", false); // stop moving animation
-
-    }
-
-    public void DisableMechanic(MechanicType mechanicType) => mechanicStatuses[mechanicType] = false;
-
-    public bool IsMechanicEnabled(MechanicType mechanicType) => mechanicStatuses[mechanicType];
-
-    #endregion
-
     #region UTILITIES
 
     public Weapon GetCurrentWeapon() => weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon();
@@ -846,6 +811,13 @@ public class PlayerController : EntityController {
 
     }
 
+    protected override void OnDeath() {
+
+        base.OnDeath();
+        isDead = true;
+
+    }
+
     protected override void OnRespawn() {
 
         base.OnRespawn();
@@ -853,13 +825,7 @@ public class PlayerController : EntityController {
 
     }
 
-    protected override void OnDeath() {
-
-        base.OnDeath();
-
-        isDead = true;
-
-    }
+    public Vector2 GetDirectionRight() => character.IsFacingRight ? transform.right : -transform.right;
 
     public bool IsGrounded() => corgiController.State.IsGrounded;
 

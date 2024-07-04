@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class BurnProjectile : BaseProjectile {
 
-    // IMPORTANT: actual burn effect is implemented with Corgi Engine's DamageOnTouch script
     [Header("References")]
     private DamageOnTouch damageOnTouch;
 

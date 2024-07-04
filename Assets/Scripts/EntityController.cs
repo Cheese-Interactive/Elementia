@@ -1,11 +1,14 @@
 using MoreMountains.CorgiEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class EntityController : MonoBehaviour {
 
     [Header("References")]
+    protected Animator anim;
+    protected Character character;
     protected CorgiController corgiController;
     protected Health health;
     protected CharacterHorizontalMovement charMovement;
@@ -23,10 +26,16 @@ public class EntityController : MonoBehaviour {
     protected CharacterButtonActivation charButton;
     protected DamageOnTouch damageOnTouch;
     protected SlowEffect slowEffect;
+    protected BurnEffect burnEffect;
+    protected TimeEffect timeEffect;
     protected CharacterHandleWeapon charWeaponHandler;
+
+    [Header("Mechanics")]
+    protected Dictionary<MechanicType, bool> mechanicStatuses;
 
     protected void Awake() {
 
+        character = GetComponent<Character>();
         corgiController = GetComponent<CorgiController>();
         health = GetComponent<Health>();
         charMovement = GetComponent<CharacterHorizontalMovement>();
@@ -44,13 +53,22 @@ public class EntityController : MonoBehaviour {
         charButton = GetComponent<CharacterButtonActivation>();
         damageOnTouch = GetComponent<DamageOnTouch>();
         slowEffect = GetComponent<SlowEffect>();
+        burnEffect = GetComponent<BurnEffect>();
+        timeEffect = GetComponent<TimeEffect>();
         charWeaponHandler = GetComponent<CharacterHandleWeapon>();
 
+        // set up mechanic statuses early so scripts can change them earlier too
+        mechanicStatuses = new Dictionary<MechanicType, bool>();
+
         health.OnDeath += slowEffect.RemoveEffect; // remove slow effect on death
+        health.OnDeath += burnEffect.RemoveEffect; // remove burn effect on death
+        health.OnDeath += timeEffect.RemoveEffect; // remove time effect on death
         health.OnDeath += OnDeath;
         health.OnRevive += OnRespawn;
 
     }
+
+    protected void Start() => anim = GetComponent<Animator>();
 
     protected void OnTriggerEnter2D(Collider2D collision) {
 
@@ -59,14 +77,60 @@ public class EntityController : MonoBehaviour {
 
     }
 
-    protected void OnDisable() => health.OnDeath -= slowEffect.RemoveEffect; // remove subscription to on death event
+    protected void OnDisable() {
 
-    protected void OnDestroy() => health.OnDeath -= slowEffect.RemoveEffect; // remove subscription to on death event
+        // remove subscription to on death events
+        health.OnDeath -= slowEffect.RemoveEffect;
+        health.OnDeath -= burnEffect.RemoveEffect;
+        health.OnDeath -= timeEffect.RemoveEffect;
 
+    }
+
+    protected void OnDestroy() {
+
+        // remove subscription to on death event
+        health.OnDeath -= slowEffect.RemoveEffect;
+        health.OnDeath -= burnEffect.RemoveEffect;
+        health.OnDeath -= timeEffect.RemoveEffect;
+
+    }
+
+    #region MECHANICS
+
+    public void EnableAllMechanics() {
+
+        // enable all mechanics
+        foreach (MechanicType mechanicType in mechanicStatuses.Keys.ToList())
+            mechanicStatuses[mechanicType] = true;
+
+    }
+
+    public void EnableMechanic(MechanicType mechanicType) => mechanicStatuses[mechanicType] = true;
+
+    public void DisableAllMechanics() {
+
+        // disable all mechanics
+        foreach (MechanicType mechanicType in mechanicStatuses.Keys.ToList())
+            mechanicStatuses[mechanicType] = false;
+
+        // send to idle animation
+        print(false);
+        anim.SetBool("Walking", false); // stop moving animation
+
+    }
+
+    public void DisableMechanic(MechanicType mechanicType) => mechanicStatuses[mechanicType] = false;
+
+    public bool IsMechanicEnabled(MechanicType mechanicType) => mechanicStatuses[mechanicType];
+
+    #endregion
 
     #region UTILITIES
 
     public void EnableCoreScripts() {
+
+        if (character)
+            character.enabled = true;
 
         if (corgiController)
             corgiController.enabled = true;
@@ -115,6 +179,9 @@ public class EntityController : MonoBehaviour {
     }
 
     public void DisableCoreScripts() {
+
+        if (character)
+            character.enabled = false;
 
         if (corgiController)
             corgiController.enabled = false;

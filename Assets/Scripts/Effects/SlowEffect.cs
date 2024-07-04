@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SlowEffect : MonoBehaviour {
+public class SlowEffect : BaseEffect {
 
     [Header("References")]
     private CharacterHorizontalMovement charMovement;
@@ -33,7 +33,7 @@ public class SlowEffect : MonoBehaviour {
 
     public void Slow(float movementMultiplier, float jumpMultiplier, float duration) {
 
-        if (slowResetCoroutine != null) {
+        if (slowResetCoroutine != null) { // coroutine is already running -> restart
 
             StopCoroutine(slowResetCoroutine);
 
@@ -53,7 +53,7 @@ public class SlowEffect : MonoBehaviour {
 
                 }
             }
-        } else {
+        } else { // coroutine is not running -> start
 
             charMovement.MovementSpeed *= movementMultiplier; // set new speed
             freezeOverlay.ShowOverlay(); // show slow overlay
