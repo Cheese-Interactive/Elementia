@@ -215,7 +215,7 @@ MonoBehaviour:
   ApplyDamageOnTriggerEnter: 1
   ApplyDamageOnTriggerStay: 1
   MinDamageCaused: 35
-  MaxDamageCaused: 35
+  MaxDamageCaused: 0
   TypedDamages: []
   DamageCausedKnockbackType: 1
   DamageCausedKnockbackDirection: 0

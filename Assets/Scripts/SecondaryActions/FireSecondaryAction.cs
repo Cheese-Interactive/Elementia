@@ -55,6 +55,8 @@ public class FireSecondaryAction : SecondaryAction {
 
     private void EquipFlamethrower() {
 
+        isFlamethrowerEquipped = true;
+
         prevWeapon = playerController.GetCurrentWeapon(); // store current weapon to revert back to it later (don't use character weapon handler's current weapon because it gets destroyed when flamethrower is equipped)
 
         charWeaponHandler.ChangeWeapon(flamethrower, flamethrower.WeaponID); // equip flamethrower
@@ -62,8 +64,6 @@ public class FireSecondaryAction : SecondaryAction {
 
         prevAlwaysShoot = charWeaponHandler.ForceAlwaysShoot; // store previous always shoot value
         charWeaponHandler.ForceAlwaysShoot = true; // force flamethrower to always shoot
-
-        isFlamethrowerEquipped = true;
 
         durationCoroutine = StartCoroutine(HandleMaxDuration()); // start max duration coroutine
 

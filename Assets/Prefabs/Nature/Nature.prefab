@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4237984674334015922}
   - component: {fileID: -3073912655475901205}
   m_Layer: 0
-  m_Name: Earth
+  m_Name: Nature
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -185,10 +185,10 @@ MonoBehaviour:
     RecoilFeedback: {fileID: 0}
   ProjectileSpawnTransform: {fileID: 0}
   ProjectileSpawnOffset: {x: 0.6875, y: 0.125, z: 0}
-  ProjectilesPerShot: 1
-  Spread: {x: 0, y: 0, z: 0}
+  ProjectilesPerShot: 3
+  Spread: {x: 0, y: 0, z: 6}
   RotateWeaponOnSpread: 0
-  RandomSpread: 1
+  RandomSpread: 0
   ObjectPooler: {fileID: 0}
   SpawnPosition: {x: 0.6875, y: 0.125, z: 0}
 --- !u!114 &-3073912655475901205
@@ -206,7 +206,7 @@ MonoBehaviour:
   MutualizeWaitingPools: 1
   NestWaitingPool: 1
   NestUnderThis: 0
-  GameObjectToPool: {fileID: 0}
+  GameObjectToPool: {fileID: 100002, guid: ad33f2f16d5fc8247a889100b1c3845a, type: 3}
   PoolSize: 20
   PoolCanExpand: 1
 --- !u!1 &4819280329784108086
@@ -226,7 +226,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &842300026645340768
 Transform:
   m_ObjectHideFlags: 0
@@ -324,7 +324,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &8065127029920104577
 Transform:
   m_ObjectHideFlags: 0

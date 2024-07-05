@@ -97,6 +97,7 @@ public class EarthPrimaryAction : PrimaryAction {
 
     }
 
+    // triggers on both cancels and throws
     private void DestroyRock(bool activateMechanics) {
 
         if (throwDurationCoroutine != null) StopCoroutine(throwDurationCoroutine); // stop max duration coroutine as rock is being destroyed

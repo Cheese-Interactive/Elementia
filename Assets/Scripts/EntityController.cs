@@ -114,7 +114,6 @@ public class EntityController : MonoBehaviour {
             mechanicStatuses[mechanicType] = false;
 
         // send to idle animation
-        print(false);
         anim.SetBool("Walking", false); // stop moving animation
 
     }
@@ -128,9 +127,6 @@ public class EntityController : MonoBehaviour {
     #region UTILITIES
 
     public void EnableCoreScripts() {
-
-        if (character)
-            character.enabled = true;
 
         if (corgiController)
             corgiController.enabled = true;
@@ -180,9 +176,6 @@ public class EntityController : MonoBehaviour {
 
     public void DisableCoreScripts() {
 
-        if (character)
-            character.enabled = false;
-
         if (corgiController)
             corgiController.enabled = false;
 
@@ -229,10 +222,10 @@ public class EntityController : MonoBehaviour {
 
     }
 
-    public void SetInvulnerable(bool invulnerable) {
+    public void SetCharacterEnabled(bool enabled) {
 
-        if (health)
-            health.Invulnerable = invulnerable;
+        if (character)
+            character.enabled = enabled;
 
     }
 
@@ -243,9 +236,17 @@ public class EntityController : MonoBehaviour {
 
     }
 
+    public void SetInvulnerable(bool invulnerable) {
+
+        if (health)
+            health.Invulnerable = invulnerable;
+
+    }
+
     protected virtual void OnRespawn() { }
 
     protected virtual void OnDeath() { }
 
     #endregion
+
 }

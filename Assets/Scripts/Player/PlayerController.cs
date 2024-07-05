@@ -752,7 +752,7 @@ public class PlayerController : EntityController {
         DisableCoreScripts(); // disable all scripts while rock is being summoned (including weapon handler)
 
         currRock = Instantiate(rockPrefab, transform.position, Quaternion.identity); // instantiate rock (will play summon animation & rotate itself automatically)
-        anim.SetBool("isRockSummoned", true); // play rock summon animation
+        anim.SetBool("isSummoningRock", true); // play rock summon animation
 
         yield return null; // wait for animation to start
         yield return new WaitForSeconds(anim.GetCurrentAnimatorClipInfo(0).Length); // wait for animation to end (so rock can be dropped during animation because this coroutine won't be null)
@@ -786,7 +786,7 @@ public class PlayerController : EntityController {
         Destroy(currRock.gameObject); // destroy rock
 
         corgiController.SetForce(Vector2.zero); // reset player movement
-        anim.SetBool("isRockSummoned", false);
+        anim.SetBool("isSummoningRock", false);
 
         if (activateMechanics) {
 
