@@ -236,9 +236,9 @@ MonoBehaviour:
   WeaponOnHitDamageableFeedback: {fileID: 0}
   WeaponOnHitNonDamageableFeedback: {fileID: 0}
   WeaponOnKillFeedback: {fileID: 0}
-  ApplyRecoilOnUse: 0
+  ApplyRecoilOnUse: 1
   RecoilOnUseProperties:
-    RecoilForceGrounded: 10
+    RecoilForceGrounded: 15
     RecoilForceAirborne: 10
     RecoilAngleModifier: 0
     DirectionMultiplier: {x: 1, y: 1}

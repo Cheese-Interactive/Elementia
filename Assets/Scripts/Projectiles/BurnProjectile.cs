@@ -5,9 +5,6 @@ using UnityEngine;
 
 public class BurnProjectile : BaseProjectile {
 
-    [Header("References")]
-    private DamageOnTouch damageOnTouch;
-
     [Header("Settings")]
     [SerializeField] private float burnDamage;
     [SerializeField] private int burnTicks;
@@ -16,17 +13,9 @@ public class BurnProjectile : BaseProjectile {
     [Header("Direction")]
     private Vector2 lastPos;
 
-    void Start() {
+    private new void OnTriggerEnter2D(Collider2D collision) { // triggers when projectile collides with something | IMPORTANT: triggers after the object is disabled on death
 
-        damageOnTouch = GetComponent<DamageOnTouch>();
-
-        lastPos = transform.position;
-
-    }
-
-    void Update() => lastPos = transform.position;
-
-    private void OnTriggerEnter2D(Collider2D collision) { // triggers when projectile collides with something | IMPORTANT: triggers after the object is disabled on death
+        base.OnTriggerEnter2D(collision); // call base method
 
         if (collision.gameObject.activeInHierarchy && (damageOnTouch.TargetLayerMask & (1 << collision.gameObject.layer)) != 0) // make sure hit object is active & is in target layer
             collision.gameObject.GetComponent<BurnEffect>()?.Burn(gameObject, burnDamage, burnTicks, burnDuration, damageOnTouch.DamageTakenInvincibilityDuration, (Vector2) transform.position - lastPos, false); // apply burn effect to object

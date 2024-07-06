@@ -15,11 +15,11 @@ GameObject:
   - component: {fileID: 114000013697282846}
   - component: {fileID: 114000012788668036}
   - component: {fileID: 114000010281602892}
-  - component: {fileID: 6884018545763745445}
+  - component: {fileID: -7111035501543380154}
   - component: {fileID: -6513195632682728618}
   - component: {fileID: 1365915601849943836}
   m_Layer: 12
-  m_Name: KineticProjectile
+  m_Name: KineticPushProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 1177953632, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -282,7 +282,7 @@ MonoBehaviour:
   OnlyDamageMaster: 1
   KillOnMasterHealthDeath: 0
   TargetDamageResistanceProcessor: {fileID: 0}
---- !u!114 &6884018545763745445
+--- !u!114 &-7111035501543380154
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -291,11 +291,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 100002}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b8d82a4bf4d4344ab1f9bbdf35ca079, type: 3}
+  m_Script: {fileID: 11500000, guid: a97d6774434bea845934b5d9dda66f60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  entityKineticForce: {x: 25, y: 15}
-  objectKineticForce: {x: 5, y: 10}
+  isPushProjectile: 1
+  entityPushForce: {x: 10, y: 4}
+  objectPushForce: {x: 3, y: 2}
+  entityPullForce: {x: 0, y: 0}
+  objectPullForce: {x: 0, y: 0}
 --- !u!96 &-6513195632682728618
 TrailRenderer:
   serializedVersion: 3

@@ -339,6 +339,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4e14f81bb9a181429eb933e5568ab99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPushProjectile: 1
+  entityPushForce: {x: 2, y: 1}
+  objectPushForce: {x: 1, y: 1}
+  entityPullForce: {x: 0, y: 0}
+  objectPullForce: {x: 0, y: 0}
   movementMultiplier: 0.3
   jumpMultiplier: 0.5
   slowDuration: 5

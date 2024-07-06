@@ -6,6 +6,8 @@ public abstract class SecondaryAction : MonoBehaviour {
 
     [Header("References")]
     protected PlayerController playerController;
+    private MeterController meterController;
+    private WeaponData weaponData;
 
     [Header("Settings")]
     [SerializeField] private bool isSecondaryAuto;
@@ -15,9 +17,16 @@ public abstract class SecondaryAction : MonoBehaviour {
     [Header("Actions")]
     protected bool isReady;
 
-    protected void Awake() => playerController = GetComponent<PlayerController>();
+    protected void Awake() {
+
+        playerController = GetComponent<PlayerController>();
+        meterController = FindObjectOfType<MeterController>();
+
+    }
 
     protected void Start() => isReady = true;
+
+    public void Initialize(WeaponData weaponData) => this.weaponData = weaponData;
 
     public virtual void OnTriggerRegular() { }
 
@@ -36,6 +45,8 @@ public abstract class SecondaryAction : MonoBehaviour {
         isReady = true;
 
     }
+
+    public Meter CreateMeter(float cooldownDuration) => meterController.CreateMeter(cooldownDuration, weaponData.GetSecondaryIcon(), weaponData.GetWeaponColor());
 
     public abstract bool IsRegularAction(); // regular or hold action
 

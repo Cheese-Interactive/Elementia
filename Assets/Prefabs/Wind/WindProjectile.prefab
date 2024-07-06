@@ -195,12 +195,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a468ef2987c01474dbcf42b9046e0375, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPushProjectile: 1
+  entityPushForce: {x: 25, y: 30}
+  objectPushForce: {x: 15, y: 20}
+  entityPullForce: {x: 0, y: 0}
+  objectPullForce: {x: 0, y: 0}
   minSpeed: 100
   maxSpeed: 300
   totalSpeedTransitionPercentage: 25
   totalMinSpeedDurationPercentage: 60
-  entityWindForce: {x: 25, y: 30}
-  objectWindForce: {x: 15, y: 20}
   windFadeDuration: 1
 --- !u!96 &-6513195632682728618
 TrailRenderer:

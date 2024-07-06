@@ -9,6 +9,7 @@ public class FireSecondaryAction : SecondaryAction {
     [SerializeField] private Weapon flamethrower;
     private CharacterHandleWeapon charWeaponHandler;
     private Weapon prevWeapon;
+    private Meter currMeter;
     private bool prevAlwaysShoot;
 
     [Header("Settings")]
@@ -35,7 +36,7 @@ public class FireSecondaryAction : SecondaryAction {
 
     public override void OnTriggerHold(bool startHold) {
 
-        if (!isReady || isFlamethrowerEquipped == startHold) return; // make sure player is ready and is not already in the desired state
+        if (!isReady || isFlamethrowerEquipped == startHold) return; // make sure action is ready and is not already in the desired state
 
         if (!canUseInAir && !playerController.IsGrounded()) { // make sure player is grounded if required
 
@@ -65,6 +66,12 @@ public class FireSecondaryAction : SecondaryAction {
         prevAlwaysShoot = charWeaponHandler.ForceAlwaysShoot; // store previous always shoot value
         charWeaponHandler.ForceAlwaysShoot = true; // force flamethrower to always shoot
 
+        // destroy current meter if it exists
+        if (currMeter)
+            Destroy(currMeter.gameObject);
+
+        currMeter = CreateMeter(maxDuration); // create new meter for max duration
+
         durationCoroutine = StartCoroutine(HandleMaxDuration()); // start max duration coroutine
 
     }
@@ -80,6 +87,12 @@ public class FireSecondaryAction : SecondaryAction {
         // begin cooldown
         isReady = false;
         Invoke("ReadyAction", secondaryCooldown);
+
+        // destroy current meter if it exists
+        if (currMeter)
+            Destroy(currMeter.gameObject);
+
+        currMeter = CreateMeter(secondaryCooldown); // create new meter for cooldown
 
     }
 

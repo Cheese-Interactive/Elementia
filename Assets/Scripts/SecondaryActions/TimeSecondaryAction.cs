@@ -9,10 +9,10 @@ public class TimeSecondaryAction : SecondaryAction {
     [Header("References")]
     [SerializeField] private LineRenderer channelBeacon;
     private LevelManager levelManager;
-    private CorgiController corgiController;
     private CharacterHandleWeapon charWeaponHandler;
     private Animator anim;
     private Weapon prevWeapon;
+    private Meter currMeter;
 
     [Header("Settings")]
     [SerializeField] private float channelDuration;
@@ -30,7 +30,6 @@ public class TimeSecondaryAction : SecondaryAction {
         base.Start();
 
         levelManager = FindObjectOfType<LevelManager>();
-        corgiController = GetComponent<CorgiController>();
         charWeaponHandler = GetComponent<CharacterHandleWeapon>();
         anim = GetComponent<Animator>();
 
@@ -42,7 +41,7 @@ public class TimeSecondaryAction : SecondaryAction {
 
     public override void OnTriggerHold(bool startHold) {
 
-        if (!isReady || isChanneling == startHold) return; // make sure player is ready and is not already in the desired state
+        if (!isReady || isChanneling == startHold) return; // make sure action is ready and is not already in the desired state
 
         if (!canUseInAir && !playerController.IsGrounded()) { // make sure player is grounded if required
 
@@ -72,7 +71,7 @@ public class TimeSecondaryAction : SecondaryAction {
 
         // show channel beacon
         channelBeacon.gameObject.SetActive(true);
-        Vector3 playerBottomPos = playerController.transform.position - new Vector3(0f, playerController.transform.localScale.y / 2f, 0f); // get player bottom position
+        Vector3 playerBottomPos = playerController.GetBottomPosition(); // get player bottom position
         channelBeacon.SetPositions(new Vector3[] { playerBottomPos, playerBottomPos + (transform.up * channelBeaconHeight) });
 
         // fade channel beacon in
@@ -83,6 +82,12 @@ public class TimeSecondaryAction : SecondaryAction {
         anim.SetBool("isChanneling", true); // start animation
 
         channelCoroutine = StartCoroutine(HandleChannel());
+
+        // destroy current meter if it exists
+        if (currMeter)
+            Destroy(currMeter.gameObject);
+
+        currMeter = CreateMeter(channelDuration); // create new meter for channel duration
 
     }
 
@@ -110,6 +115,12 @@ public class TimeSecondaryAction : SecondaryAction {
         isReady = false;
         Invoke("ReadyAction", secondaryCooldown);
 
+        // destroy current meter if it exists
+        if (currMeter)
+            Destroy(currMeter.gameObject);
+
+        currMeter = CreateMeter(secondaryCooldown); // create new meter for cooldown
+
     }
 
     private IEnumerator HandleChannel() {
@@ -124,5 +135,7 @@ public class TimeSecondaryAction : SecondaryAction {
     }
 
     public override bool IsRegularAction() => false;
+
+    public bool IsChanneling() => isChanneling;
 
 }

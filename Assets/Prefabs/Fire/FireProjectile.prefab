@@ -294,6 +294,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bf9887fda6905f47a289c9d777f68d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPushProjectile: 1
+  entityPushForce: {x: 4, y: 2}
+  objectPushForce: {x: 2, y: 2}
+  entityPullForce: {x: 0, y: 0}
+  objectPullForce: {x: 0, y: 0}
   burnDamage: 5
   burnTicks: 3
   burnDuration: 1

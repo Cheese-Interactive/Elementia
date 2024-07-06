@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 114000013697282846}
   - component: {fileID: 114000012788668036}
   - component: {fileID: 114000010281602892}
+  - component: {fileID: 8759250541399769590}
   - component: {fileID: -6513195632682728618}
   m_Layer: 12
   m_Name: NatureProjectile
@@ -280,6 +281,23 @@ MonoBehaviour:
   OnlyDamageMaster: 1
   KillOnMasterHealthDeath: 0
   TargetDamageResistanceProcessor: {fileID: 0}
+--- !u!114 &8759250541399769590
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3677e7f9b370f9a4fbd08c28f7a7d552, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPushProjectile: 1
+  entityPushForce: {x: 4, y: 2}
+  objectPushForce: {x: 2, y: 2}
+  entityPullForce: {x: 0, y: 0}
+  objectPullForce: {x: 0, y: 0}
 --- !u!96 &-6513195632682728618
 TrailRenderer:
   serializedVersion: 3

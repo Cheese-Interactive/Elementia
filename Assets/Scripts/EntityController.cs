@@ -243,6 +243,8 @@ public class EntityController : MonoBehaviour {
 
     }
 
+    public Vector2 GetBottomPosition() => transform.position - new Vector3(0f, transform.localScale.y / 2f, 0f);
+
     protected virtual void OnRespawn() { }
 
     protected virtual void OnDeath() { }

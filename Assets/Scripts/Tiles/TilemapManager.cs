@@ -7,6 +7,7 @@ using UnityEngine.Tilemaps;
 public class TilemapManager : MonoBehaviour {
 
     [Header("References")]
+    [SerializeField] private Tilemap mainTilemap;
     [SerializeField] private Transform waterTilesParent;
     [SerializeField] private Transform iceTilesParent;
     [SerializeField] private Tilemap waterTilemap;
@@ -65,6 +66,12 @@ public class TilemapManager : MonoBehaviour {
         }
     }
 
-    public Vector3Int WorldToCell(Vector3 worldPos) => waterTilemap.WorldToCell(worldPos);
+    public TileBase GetMainTileAt(Vector3Int cellPos) => mainTilemap.GetTile(cellPos);
+
+    public Vector3Int MainWorldToCell(Vector3 worldPos) => mainTilemap.WorldToCell(worldPos);
+
+    public Vector3 MainCellToWorld(Vector3Int cellPos) => mainTilemap.CellToWorld(cellPos);
+
+    public Vector3Int WaterWorldToCell(Vector3 worldPos) => waterTilemap.WorldToCell(worldPos);
 
 }

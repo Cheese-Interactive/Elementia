@@ -378,9 +378,13 @@ namespace MoreMountains.CorgiEngine
 		protected bool _gravityBeforeUse = true;
 		protected bool _canFlipBeforeUse = true;
 
-		#region Initialization
+        // shoot
+        public delegate void OnShootDelegate();
+        public OnShootDelegate OnShoot;
 
-		protected virtual void Start()
+        #region Initialization
+
+        protected virtual void Start()
 		{
 			if (InitializeOnStart)
 			{
@@ -787,10 +791,13 @@ namespace MoreMountains.CorgiEngine
 
 		protected virtual void CaseWeaponUse()
 		{
-			WeaponUse();
+            if (OnShoot != null) {
+                OnShoot.Invoke();
+            }
+            WeaponUse();
 			_delayBetweenUsesCounter = TimeBetweenUses;
 			WeaponState.ChangeState(WeaponStates.WeaponDelayBetweenUses);
-		}
+        }
 
 		protected virtual void CaseWeaponDelayBetweenUses()
 		{

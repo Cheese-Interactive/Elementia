@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4237984674334015922}
   - component: {fileID: -3073912655475901205}
   m_Layer: 0
-  m_Name: Kinetic
+  m_Name: KineticPull
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

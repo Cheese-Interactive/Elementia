@@ -7,24 +7,38 @@ public class MagicMissilePrimaryAction : PrimaryAction {
 
     [Header("References")]
     private CharacterHandleWeapon charWeaponHandler;
-    private Weapon weapon;
+    private Meter currMeter;
+    private bool hasStartRan;
 
-    [Header("Settings")]
-    [SerializeField] private float groundedLaunchForce;
-    [SerializeField] private float airLaunchForce;
-
-    private void OnEnable() => StartCoroutine(SetRecoil()); // to set recoil after weapon is set
-
-    private IEnumerator SetRecoil() {
-
-        while (!GetComponent<CharacterHandleWeapon>().CurrentWeapon) yield return null; // wait until weapon is set
+    private void OnEnable() {
 
         charWeaponHandler = GetComponent<CharacterHandleWeapon>();
-        weapon = charWeaponHandler.CurrentWeapon.GetComponent<Weapon>();
+        StartCoroutine(WaitForStart());
 
-        weapon.ApplyRecoilOnUse = true; // activate recoil
-        weapon.RecoilOnUseProperties.RecoilForceGrounded = groundedLaunchForce; // set grounded recoil force
-        weapon.RecoilOnUseProperties.RecoilForceAirborne = airLaunchForce; // set air recoil force
+    }
+
+    private new void Start() {
+
+        base.Start();
+        hasStartRan = true; // done because start is called after onenable
+
+    }
+
+    private IEnumerator WaitForStart() {
+
+        while (!hasStartRan) yield return null; // wait until start has ran
+
+        charWeaponHandler.CurrentWeapon.OnShoot += OnShoot; // subscribe to shoot event
+
+    }
+
+    private void OnShoot() {
+
+        // destroy current meter if it exists
+        if (currMeter)
+            Destroy(currMeter.gameObject);
+
+        currMeter = CreateMeter(charWeaponHandler.CurrentWeapon.TimeBetweenUses); // create new meter for cooldown (use the weapon cooldown instead of primary action cooldown)
 
     }
 

@@ -1,11 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class PrimaryAction : MonoBehaviour {
 
     [Header("References")]
     protected PlayerController playerController;
+    private MeterController meterController;
+    private WeaponData weaponData;
 
     [Header("Settings")]
     [SerializeField] private bool isPrimaryAuto;
@@ -15,9 +15,16 @@ public abstract class PrimaryAction : MonoBehaviour {
     [Header("Actions")]
     protected bool isReady;
 
-    protected void Awake() => playerController = GetComponent<PlayerController>();
+    protected void Awake() {
+
+        playerController = GetComponent<PlayerController>();
+        meterController = FindObjectOfType<MeterController>();
+
+    }
 
     protected void Start() => isReady = true;
+
+    public void Initialize(WeaponData weaponData) => this.weaponData = weaponData;
 
     public virtual void OnTriggerRegular() { }
 
@@ -36,6 +43,8 @@ public abstract class PrimaryAction : MonoBehaviour {
         isReady = true;
 
     }
+
+    public Meter CreateMeter(float cooldownDuration) => meterController.CreateMeter(cooldownDuration, weaponData.GetPrimaryIcon(), weaponData.GetWeaponColor());
 
     public abstract bool IsRegularAction(); // regular or hold action
 

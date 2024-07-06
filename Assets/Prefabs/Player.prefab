@@ -328,13 +328,21 @@ GameObject:
   - component: {fileID: 5764598075329143441}
   - component: {fileID: 1478656505548864672}
   - component: {fileID: 2592352146518810568}
+  - component: {fileID: -772895172877787362}
+  - component: {fileID: -569371758860137605}
+  - component: {fileID: 3434021981974967308}
+  - component: {fileID: -8373415171447550248}
   - component: {fileID: 6885750652469125261}
+  - component: {fileID: -1635279773719420177}
+  - component: {fileID: -3277052253356009991}
   - component: {fileID: 2721479856997411025}
   - component: {fileID: 8881875236129953771}
   - component: {fileID: -8039291345281199097}
   - component: {fileID: -5756287154290932317}
+  - component: {fileID: -11100816744397030}
   - component: {fileID: -4817289695206233610}
   - component: {fileID: 504269021816417971}
+  - component: {fileID: 7670200923944158061}
   - component: {fileID: 230583099580174233}
   - component: {fileID: 9206677560049693005}
   - component: {fileID: -2035838217422681104}
@@ -1091,26 +1099,26 @@ MonoBehaviour:
   - weapon: {fileID: 4237984674334015922, guid: 9d60ea47bc8ee1b4a80c55c277f5a949,
       type: 3}
     weaponData: {fileID: 11400000, guid: 240fb2df713a88941845b673fa543e19, type: 2}
-    primaryAction: {fileID: 0}
+    primaryAction: {fileID: -772895172877787362}
     secondaryAction: {fileID: 8881875236129953771}
     switchCooldown: 0.15
   - weapon: {fileID: 4237984674334015922, guid: 9a3122220c3edc64683ed774da57bdca,
       type: 3}
     weaponData: {fileID: 11400000, guid: 0b8316274d5b89d44ab51986d17cc3ba, type: 2}
-    primaryAction: {fileID: 0}
+    primaryAction: {fileID: -569371758860137605}
     secondaryAction: {fileID: -8039291345281199097}
     switchCooldown: 0.15
   - weapon: {fileID: 4237984674334015922, guid: b8a570382a6f4554f90091a497fef835,
       type: 3}
     weaponData: {fileID: 11400000, guid: 6f8080ba3b2a54c459fdce6bcff4b454, type: 2}
-    primaryAction: {fileID: 0}
+    primaryAction: {fileID: 3434021981974967308}
     secondaryAction: {fileID: -5756287154290932317}
     switchCooldown: 0.15
   - weapon: {fileID: 4237984674334015922, guid: 4b35fc7ef435692488cc8c2bc368ca14,
       type: 3}
     weaponData: {fileID: 11400000, guid: ca3ec5979ed33474e8d59fd613d982a1, type: 2}
-    primaryAction: {fileID: 0}
-    secondaryAction: {fileID: 0}
+    primaryAction: {fileID: -8373415171447550248}
+    secondaryAction: {fileID: -11100816744397030}
     switchCooldown: 0.15
   - weapon: {fileID: 4237984674334015922, guid: bc865fae1bcfbae478215777d530f338,
       type: 3}
@@ -1121,14 +1129,14 @@ MonoBehaviour:
   - weapon: {fileID: 4237984674334015922, guid: 63c5a376fdf6dd147a6643aa24e6fac6,
       type: 3}
     weaponData: {fileID: 11400000, guid: 8365a86a489859348aa3f37fc3dd6336, type: 2}
-    primaryAction: {fileID: 0}
+    primaryAction: {fileID: -1635279773719420177}
     secondaryAction: {fileID: 504269021816417971}
     switchCooldown: 0.15
   - weapon: {fileID: 4237984674334015922, guid: b4346063e40a6154faf071c47023849d,
       type: 3}
     weaponData: {fileID: 11400000, guid: 821eb3391acf9b04caa6068d85d517e6, type: 2}
-    primaryAction: {fileID: 0}
-    secondaryAction: {fileID: 0}
+    primaryAction: {fileID: -3277052253356009991}
+    secondaryAction: {fileID: 7670200923944158061}
     switchCooldown: 0.15
 --- !u!114 &2592352146518810568
 MonoBehaviour:
@@ -1145,8 +1153,66 @@ MonoBehaviour:
   isPrimaryAuto: 0
   primaryCooldown: 0
   canUseInAir: 0
-  groundedLaunchForce: 15
-  airLaunchForce: 15
+--- !u!114 &-772895172877787362
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4900122409563817483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00afdd3bc96f5bb4faeac14641f2de84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPrimaryAuto: 0
+  primaryCooldown: 0
+  canUseInAir: 0
+--- !u!114 &-569371758860137605
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4900122409563817483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85a99b79beee03a4da5bcfc9f2300903, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPrimaryAuto: 0
+  primaryCooldown: 0
+  canUseInAir: 0
+--- !u!114 &3434021981974967308
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4900122409563817483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a61b7459627eb949942a24710d6310a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPrimaryAuto: 0
+  primaryCooldown: 0
+  canUseInAir: 0
+--- !u!114 &-8373415171447550248
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4900122409563817483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c50e5f2cde7b7040a267972fa1941fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPrimaryAuto: 0
+  primaryCooldown: 0
+  canUseInAir: 0
 --- !u!114 &6885750652469125261
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1166,6 +1232,36 @@ MonoBehaviour:
   - {fileID: -2339275746217844875, guid: 53bbf0c6ac057d64186b93228b23b5e1, type: 3}
   - {fileID: -8400966328272869936, guid: 4416a01f1ed60604c9fe840b3e7de7a0, type: 3}
   maxThrowDuration: 5
+--- !u!114 &-1635279773719420177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4900122409563817483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abc725f2bcead5f479f2683b4b77a258, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPrimaryAuto: 0
+  primaryCooldown: 0
+  canUseInAir: 0
+--- !u!114 &-3277052253356009991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4900122409563817483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2d62cba59f0d7a42a1783834e6aede9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPrimaryAuto: 0
+  primaryCooldown: 0
+  canUseInAir: 0
 --- !u!114 &2721479856997411025
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1241,6 +1337,23 @@ MonoBehaviour:
   secondaryCooldown: 1.5
   canUseInAir: 1
   playerWindForce: 25
+--- !u!114 &-11100816744397030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4900122409563817483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4f107b938d259c4aa30120039f4beba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isSecondaryAuto: 0
+  secondaryCooldown: 0.8
+  canUseInAir: 1
+  kineticPushWeapon: {fileID: 4237984674334015922, guid: 580f98633fa8d554894addd7c7a21146,
+    type: 3}
 --- !u!114 &-4817289695206233610
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1260,6 +1373,7 @@ MonoBehaviour:
     type: 3}
   boulderExplosion: {fileID: 19800000, guid: 86dd64f6b351da3458a6f9f17b9b9276, type: 3}
   spawnAtMousePosition: 0
+  maxDuration: 3
 --- !u!114 &504269021816417971
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1282,6 +1396,25 @@ MonoBehaviour:
   channelBeaconStartWidth: 1
   channelBeaconEndWidth: 0.5
   channelBeaconHeight: 15
+--- !u!114 &7670200923944158061
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4900122409563817483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9f52c7134449ae4bb4aee537b99feda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isSecondaryAuto: 0
+  secondaryCooldown: 1
+  canUseInAir: 0
+  vinePrefab: {fileID: 2538740281262548292, guid: cf4908451a0f49f4e8aa719771740821,
+    type: 3}
+  gridTileHeight: 0.5
+  beanstalkHeight: 15
 --- !u!114 &230583099580174233
 MonoBehaviour:
   m_ObjectHideFlags: 0

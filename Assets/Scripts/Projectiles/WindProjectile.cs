@@ -6,12 +6,7 @@ using UnityEngine;
 public class WindProjectile : BaseProjectile {
 
     [Header("References")]
-    private Projectile projectile;
-    private DamageOnTouch damageOnTouch;
     private TrailRenderer trailRenderer;
-
-    [Header("Direction")]
-    private Vector2 lastPos;
 
     [Header("Settings")]
     // min -> max -> min
@@ -19,18 +14,14 @@ public class WindProjectile : BaseProjectile {
     [SerializeField] private float maxSpeed;
     [SerializeField][Range(0f, 100f)] private float totalSpeedTransitionPercentage;
     [SerializeField][Range(0f, 100f)] private float totalMinSpeedDurationPercentage;
-    [SerializeField] private Vector2 entityWindForce;
-    [SerializeField] private Vector2 objectWindForce;
     [SerializeField] private float windFadeDuration;
     private float lifetime;
 
     private void OnEnable() {
 
         projectile = GetComponent<Projectile>();
-        damageOnTouch = GetComponent<DamageOnTouch>();
         trailRenderer = GetComponent<TrailRenderer>();
 
-        lastPos = transform.position;
         lifetime = projectile.LifeTime;
 
         projectile.Speed = 0f; // set initial speed to 0
@@ -39,29 +30,6 @@ public class WindProjectile : BaseProjectile {
 
         StartCoroutine(HandleFadeOut());
 
-    }
-
-    void Update() => lastPos = transform.position;
-
-    private void OnTriggerEnter2D(Collider2D collision) { // triggers when projectile collides with something | IMPORTANT: triggers after the object is disabled on death
-
-        if (collision.gameObject.activeInHierarchy && (damageOnTouch.TargetLayerMask & (1 << collision.gameObject.layer)) != 0) { // make sure hit object is active & is in target layer
-
-            /* FORCE DEPENDS ON PROJECTILE VELOCITY DIRECTION */
-            Vector2 entityForce = ((Vector2) transform.position - lastPos).normalized;
-            Vector2 objectForce = entityForce;
-
-            // handle entity force
-            entityForce.x *= entityWindForce.x; // increase horizontal push force
-            entityForce.y *= entityWindForce.y; // increase vertical push force
-            collision.gameObject.GetComponent<CorgiController>()?.SetForce(entityForce); // push entity away from projectile
-
-            // handle object force
-            objectForce.x *= objectWindForce.x; // increase horizontal pull force
-            objectForce.y *= objectWindForce.y; // increase vertical pull force
-            collision.gameObject.GetComponent<Rigidbody2D>()?.AddForce(objectForce, ForceMode2D.Impulse); // push object away from projectile
-
-        }
     }
 
     private IEnumerator HandleSpeed() {

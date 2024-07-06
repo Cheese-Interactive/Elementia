@@ -2,7 +2,6 @@ using MoreMountains.CorgiEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class PlayerController : EntityController {
@@ -22,8 +21,11 @@ public class PlayerController : EntityController {
     private Rock currRock;
     private Coroutine rockSummonCoroutine;
 
-    [Header("Flamethrower")]
+    [Header("Fire")]
     private FireSecondaryAction fireSecondaryAction;
+
+    [Header("Time")]
+    private TimeSecondaryAction timeSecondaryAction;
 
     [Header("Death")]
     private bool isDead; // to deal with death delay
@@ -55,20 +57,34 @@ public class PlayerController : EntityController {
             // enable current primary & secondary action (if they exist), disable the rest
             if (action == weaponActionPairs[0]) {
 
-                if (primaryAction)
+                if (primaryAction) {
+
+                    primaryAction.Initialize(action.GetWeaponData());
                     primaryAction.enabled = true;
 
-                if (secondaryAction)
+                }
+
+                if (secondaryAction) {
+
+                    secondaryAction.Initialize(action.GetWeaponData());
                     secondaryAction.enabled = true;
 
+                }
             } else {
 
-                if (primaryAction)
+                if (primaryAction) {
+
+                    primaryAction.Initialize(action.GetWeaponData());
                     primaryAction.enabled = false;
 
-                if (secondaryAction)
+                }
+
+                if (secondaryAction) {
+
+                    secondaryAction.Initialize(action.GetWeaponData());
                     secondaryAction.enabled = false;
 
+                }
             }
 
             itemSelector.SetWeaponData(action.GetWeaponData(), i); // add weapon item to hotbar
@@ -89,8 +105,8 @@ public class PlayerController : EntityController {
         base.Start();
 
         earthPrimaryAction = GetComponent<EarthPrimaryAction>();
-
         fireSecondaryAction = GetComponent<FireSecondaryAction>();
+        timeSecondaryAction = GetComponent<TimeSecondaryAction>();
 
         currWeapon = weaponActionPairs[0].GetWeapon(); // get first weapon
         charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon to first weapon by default
@@ -164,7 +180,7 @@ public class PlayerController : EntityController {
         #region WEAPON SWITCHING
 
         /* SCROLL WHEEL WEAPON SWITCHING */
-        if (Input.mouseScrollDelta.y > 0f && !fireSecondaryAction.IsFlamethrowerEquipped() && !earthPrimaryAction.IsSummoningRock() && !earthPrimaryAction.IsRockThrowReady()) { // make sure flamethrower isn't equipped, rock isn't being summoned, & rock throw isn't ready before switching
+        if (Input.mouseScrollDelta.y > 0f && !fireSecondaryAction.IsFlamethrowerEquipped() && !earthPrimaryAction.IsSummoningRock() && !earthPrimaryAction.IsRockThrowReady() && !timeSecondaryAction.IsChanneling()) { // make sure flamethrower isn't equipped, rock isn't being summoned, & rock throw isn't ready before switching
 
             itemSelector.CycleSlot(-1); // cycle hotbar slot backwards
 
@@ -209,7 +225,7 @@ public class PlayerController : EntityController {
                 charWeaponHandler.ChangeWeapon(null, null); // remove weapon
 
             }
-        } else if (Input.mouseScrollDelta.y < 0f && !fireSecondaryAction.IsFlamethrowerEquipped() && !earthPrimaryAction.IsSummoningRock() && !earthPrimaryAction.IsRockThrowReady()) { // make sure flamethrower isn't equipped, rock isn't being summoned, & rock throw isn't ready before switching
+        } else if (Input.mouseScrollDelta.y < 0f && !fireSecondaryAction.IsFlamethrowerEquipped() && !earthPrimaryAction.IsSummoningRock() && !earthPrimaryAction.IsRockThrowReady() && !timeSecondaryAction.IsChanneling()) { // make sure flamethrower isn't equipped, rock isn't being summoned, & rock throw isn't ready before switching
 
             itemSelector.CycleSlot(1); // cycle hotbar slot forwards
 
@@ -257,7 +273,7 @@ public class PlayerController : EntityController {
         }
 
         /* KEY WEAPON SWITCHING */
-        if (Input.GetKeyDown(KeyCode.Alpha1) && !fireSecondaryAction.IsFlamethrowerEquipped() && !earthPrimaryAction.IsSummoningRock() && !earthPrimaryAction.IsRockThrowReady()) { // make sure flamethrower isn't equipped, rock isn't being summoned, & rock throw isn't ready before switching
+        if (Input.GetKeyDown(KeyCode.Alpha1) && !fireSecondaryAction.IsFlamethrowerEquipped() && !earthPrimaryAction.IsSummoningRock() && !earthPrimaryAction.IsRockThrowReady() && !timeSecondaryAction.IsChanneling()) { // make sure flamethrower isn't equipped, rock isn't being summoned, & rock throw isn't ready before switching
 
             itemSelector.SelectSlot(0);
 
@@ -302,7 +318,7 @@ public class PlayerController : EntityController {
                 charWeaponHandler.ChangeWeapon(null, null); // remove weapon
 
             }
-        } else if (Input.GetKeyDown(KeyCode.Alpha2) && !fireSecondaryAction.IsFlamethrowerEquipped() && !earthPrimaryAction.IsSummoningRock() && !earthPrimaryAction.IsRockThrowReady()) { // make sure flamethrower isn't equipped, rock isn't being summoned, & rock throw isn't ready before switching
+        } else if (Input.GetKeyDown(KeyCode.Alpha2) && !fireSecondaryAction.IsFlamethrowerEquipped() && !earthPrimaryAction.IsSummoningRock() && !earthPrimaryAction.IsRockThrowReady() && !timeSecondaryAction.IsChanneling()) { // make sure flamethrower isn't equipped, rock isn't being summoned, & rock throw isn't ready before switching
 
             itemSelector.SelectSlot(1);
 
@@ -347,7 +363,7 @@ public class PlayerController : EntityController {
                 charWeaponHandler.ChangeWeapon(null, null); // remove weapon
 
             }
-        } else if (Input.GetKeyDown(KeyCode.Alpha3) && !fireSecondaryAction.IsFlamethrowerEquipped() && !earthPrimaryAction.IsSummoningRock() && !earthPrimaryAction.IsRockThrowReady()) { // make sure flamethrower isn't equipped, rock isn't being summoned, & rock throw isn't ready before switching
+        } else if (Input.GetKeyDown(KeyCode.Alpha3) && !fireSecondaryAction.IsFlamethrowerEquipped() && !earthPrimaryAction.IsSummoningRock() && !earthPrimaryAction.IsRockThrowReady() && !timeSecondaryAction.IsChanneling()) { // make sure flamethrower isn't equipped, rock isn't being summoned, & rock throw isn't ready before switching
 
             itemSelector.SelectSlot(2);
 
@@ -392,7 +408,7 @@ public class PlayerController : EntityController {
                 charWeaponHandler.ChangeWeapon(null, null); // remove weapon
 
             }
-        } else if (Input.GetKeyDown(KeyCode.Alpha4) && !fireSecondaryAction.IsFlamethrowerEquipped() && !earthPrimaryAction.IsSummoningRock() && !earthPrimaryAction.IsRockThrowReady()) { // make sure flamethrower isn't equipped, rock isn't being summoned, & rock throw isn't ready before switching
+        } else if (Input.GetKeyDown(KeyCode.Alpha4) && !fireSecondaryAction.IsFlamethrowerEquipped() && !earthPrimaryAction.IsSummoningRock() && !earthPrimaryAction.IsRockThrowReady() && !timeSecondaryAction.IsChanneling()) { // make sure flamethrower isn't equipped, rock isn't being summoned, & rock throw isn't ready before switching
 
             itemSelector.SelectSlot(3);
 
@@ -437,7 +453,7 @@ public class PlayerController : EntityController {
                 charWeaponHandler.ChangeWeapon(null, null); // remove weapon
 
             }
-        } else if (Input.GetKeyDown(KeyCode.Alpha5) && !fireSecondaryAction.IsFlamethrowerEquipped() && !earthPrimaryAction.IsSummoningRock() && !earthPrimaryAction.IsRockThrowReady()) { // make sure flamethrower isn't equipped, rock isn't being summoned, & rock throw isn't ready before switching
+        } else if (Input.GetKeyDown(KeyCode.Alpha5) && !fireSecondaryAction.IsFlamethrowerEquipped() && !earthPrimaryAction.IsSummoningRock() && !earthPrimaryAction.IsRockThrowReady() && !timeSecondaryAction.IsChanneling()) { // make sure flamethrower isn't equipped, rock isn't being summoned, & rock throw isn't ready before switching
 
             itemSelector.SelectSlot(4);
 
@@ -482,7 +498,7 @@ public class PlayerController : EntityController {
                 charWeaponHandler.ChangeWeapon(null, null); // remove weapon
 
             }
-        } else if (Input.GetKeyDown(KeyCode.Alpha6) && !fireSecondaryAction.IsFlamethrowerEquipped() && !earthPrimaryAction.IsSummoningRock() && !earthPrimaryAction.IsRockThrowReady()) { // make sure flamethrower isn't equipped, rock isn't being summoned, & rock throw isn't ready before switching
+        } else if (Input.GetKeyDown(KeyCode.Alpha6) && !fireSecondaryAction.IsFlamethrowerEquipped() && !earthPrimaryAction.IsSummoningRock() && !earthPrimaryAction.IsRockThrowReady() && !timeSecondaryAction.IsChanneling()) { // make sure flamethrower isn't equipped, rock isn't being summoned, & rock throw isn't ready before switching
 
             itemSelector.SelectSlot(5);
 
@@ -527,7 +543,7 @@ public class PlayerController : EntityController {
                 charWeaponHandler.ChangeWeapon(null, null); // remove weapon
 
             }
-        } else if (Input.GetKeyDown(KeyCode.Alpha7) && !fireSecondaryAction.IsFlamethrowerEquipped() && !earthPrimaryAction.IsSummoningRock() && !earthPrimaryAction.IsRockThrowReady()) { // make sure flamethrower isn't equipped, rock isn't being summoned, & rock throw isn't ready before switching
+        } else if (Input.GetKeyDown(KeyCode.Alpha7) && !fireSecondaryAction.IsFlamethrowerEquipped() && !earthPrimaryAction.IsSummoningRock() && !earthPrimaryAction.IsRockThrowReady() && !timeSecondaryAction.IsChanneling()) { // make sure flamethrower isn't equipped, rock isn't being summoned, & rock throw isn't ready before switching
 
             itemSelector.SelectSlot(6);
 
@@ -572,7 +588,7 @@ public class PlayerController : EntityController {
                 charWeaponHandler.ChangeWeapon(null, null); // remove weapon
 
             }
-        } else if (Input.GetKeyDown(KeyCode.Alpha8) && !fireSecondaryAction.IsFlamethrowerEquipped() && !earthPrimaryAction.IsSummoningRock() && !earthPrimaryAction.IsRockThrowReady()) { // make sure flamethrower isn't equipped, rock isn't being summoned, & rock throw isn't ready before switching
+        } else if (Input.GetKeyDown(KeyCode.Alpha8) && !fireSecondaryAction.IsFlamethrowerEquipped() && !earthPrimaryAction.IsSummoningRock() && !earthPrimaryAction.IsRockThrowReady() && !timeSecondaryAction.IsChanneling()) { // make sure flamethrower isn't equipped, rock isn't being summoned, & rock throw isn't ready before switching
 
             itemSelector.SelectSlot(7);
 
@@ -617,7 +633,7 @@ public class PlayerController : EntityController {
                 charWeaponHandler.ChangeWeapon(null, null); // remove weapon
 
             }
-        } else if (Input.GetKeyDown(KeyCode.Alpha9) && !fireSecondaryAction.IsFlamethrowerEquipped() && !earthPrimaryAction.IsSummoningRock() && !earthPrimaryAction.IsRockThrowReady()) { // make sure flamethrower isn't equipped, rock isn't being summoned, & rock throw isn't ready before switching
+        } else if (Input.GetKeyDown(KeyCode.Alpha9) && !fireSecondaryAction.IsFlamethrowerEquipped() && !earthPrimaryAction.IsSummoningRock() && !earthPrimaryAction.IsRockThrowReady() && !timeSecondaryAction.IsChanneling()) { // make sure flamethrower isn't equipped, rock isn't being summoned, & rock throw isn't ready before switching
 
             itemSelector.SelectSlot(8);
 
@@ -662,7 +678,7 @@ public class PlayerController : EntityController {
                 charWeaponHandler.ChangeWeapon(null, null); // remove weapon
 
             }
-        } else if (Input.GetKeyDown(KeyCode.Alpha0) && !fireSecondaryAction.IsFlamethrowerEquipped() && !earthPrimaryAction.IsSummoningRock() && !earthPrimaryAction.IsRockThrowReady()) { // make sure flamethrower isn't equipped, rock isn't being summoned, & rock throw isn't ready before switching
+        } else if (Input.GetKeyDown(KeyCode.Alpha0) && !fireSecondaryAction.IsFlamethrowerEquipped() && !earthPrimaryAction.IsSummoningRock() && !earthPrimaryAction.IsRockThrowReady() && !timeSecondaryAction.IsChanneling()) { // make sure flamethrower isn't equipped, rock isn't being summoned, & rock throw isn't ready before switching
 
             itemSelector.SelectSlot(9);
 
@@ -768,7 +784,7 @@ public class PlayerController : EntityController {
 
     private IEnumerator HandleRockThrow() {
 
-        // must wait for two frames to allow shot to be fired
+        // must wait for two frames to allow projectile to be fired
         yield return null;
         yield return null;
 

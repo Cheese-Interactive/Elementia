@@ -105,8 +105,8 @@ namespace MoreMountains.CorgiEngine
 		protected bool _charHztlMvmtFlipInitialSettingSet = false;
 		protected Vector2 _invertedHorizontalAimMultiplier = new Vector2(-1f, 1f);
 
-		// Initialization
-		protected override void Initialization () 
+        // Initialization
+        protected override void Initialization () 
 		{
 			base.Initialization();
 			if (_characterHorizontalMovement != null)
@@ -322,7 +322,8 @@ namespace MoreMountains.CorgiEngine
 			PlayAbilityStartFeedbacks();
 			MMCharacterEvent.Trigger(_character, MMCharacterEventTypes.HandleWeapon, MMCharacterEvent.Moments.Start);
 			CurrentWeapon.WeaponInputStart();
-		}
+
+        }
 		
 		/// <summary>
 		/// Causes the character to stop shooting

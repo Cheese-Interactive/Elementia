@@ -7,6 +7,7 @@ public class IceSecondaryAction : SecondaryAction {
 
     [Header("References")]
     private TilemapManager tilemapManager;
+    private Meter currMeter;
 
     [Header("Blast")]
     [SerializeField] private ParticleSystem iceBlastParticles;
@@ -35,7 +36,7 @@ public class IceSecondaryAction : SecondaryAction {
 
     public override void OnTriggerRegular() {
 
-        if (!isReady) return; // make sure player is ready
+        if (!isReady) return; // make sure action is ready
 
         if (!canUseInAir && !playerController.IsGrounded()) return; // make sure player is grounded if required
 
@@ -44,7 +45,7 @@ public class IceSecondaryAction : SecondaryAction {
         iceBlastParticles.transform.localScale = new Vector2(blastRadius, blastRadius); // scale particles to match blast radius
 
         // TODO: possibly make the position the wand tip
-        Vector3Int centerCell = tilemapManager.WorldToCell(transform.position); // get center cell
+        Vector3Int centerCell = tilemapManager.WaterWorldToCell(transform.position); // get center cell
 
         // loop through bounds
         for (int x = -blastRadius; x <= blastRadius; x++) {
@@ -57,9 +58,16 @@ public class IceSecondaryAction : SecondaryAction {
             }
         }
 
+
         // begin cooldown
         isReady = false;
         Invoke("ReadyAction", secondaryCooldown);
+
+        // destroy current meter if it exists
+        if (currMeter)
+            Destroy(currMeter.gameObject);
+
+        currMeter = CreateMeter(secondaryCooldown); // create new meter for cooldown
 
     }
 

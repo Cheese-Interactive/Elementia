@@ -7,6 +7,7 @@ public class WindSecondaryAction : SecondaryAction {
 
     [Header("References")]
     private CorgiController corgiController;
+    private Meter currMeter;
 
     [Header("Settings")]
     [SerializeField] private float playerWindForce;
@@ -20,7 +21,7 @@ public class WindSecondaryAction : SecondaryAction {
 
     public override void OnTriggerRegular() {
 
-        if (!isReady) return; // make sure player is ready
+        if (!isReady) return; // make sure action is ready
 
         if (!canUseInAir && !playerController.IsGrounded()) return; // make sure player is grounded if required
 
@@ -29,6 +30,12 @@ public class WindSecondaryAction : SecondaryAction {
         // begin cooldown
         isReady = false;
         Invoke("ReadyAction", secondaryCooldown);
+
+        // destroy current meter if it exists
+        if (currMeter)
+            Destroy(currMeter.gameObject);
+
+        currMeter = CreateMeter(secondaryCooldown); // create new meter for cooldown
 
     }
 

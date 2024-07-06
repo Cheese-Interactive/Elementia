@@ -294,7 +294,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8de529aa55fb28242bfbd8ad6454db08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectImpactForce: {x: 3, y: 2}
+  isPushProjectile: 1
+  entityPushForce: {x: 10, y: 2}
+  objectPushForce: {x: 4, y: 2}
+  entityPullForce: {x: 0, y: 0}
+  objectPullForce: {x: 0, y: 0}
 --- !u!96 &-6513195632682728618
 TrailRenderer:
   serializedVersion: 3

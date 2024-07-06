@@ -1,7 +1,6 @@
 using MoreMountains.CorgiEngine;
 using MoreMountains.Tools;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EarthPrimaryAction : PrimaryAction {
@@ -9,6 +8,7 @@ public class EarthPrimaryAction : PrimaryAction {
     [Header("References")]
     [SerializeField] private Rock[] rockPrefabs;
     private CharacterHandleWeapon charWeaponHandler;
+    private Meter currMeter;
 
     [Header("Summon")]
     private Rock currRock; // if null, rock hasn't been summoned yet
@@ -32,7 +32,7 @@ public class EarthPrimaryAction : PrimaryAction {
 
     public override void OnTriggerRegular() {
 
-        if (!isReady) return; // make sure player is ready
+        if (!isReady) return; // make sure action is ready
 
         if (!canUseInAir && !playerController.IsGrounded()) return; // make sure player is grounded if required
 
@@ -40,7 +40,7 @@ public class EarthPrimaryAction : PrimaryAction {
 
             MMSimpleObjectPooler pool = charWeaponHandler.CurrentWeapon.GetComponent<MMSimpleObjectPooler>();
             pool.GameObjectToPool = currRock.GetProjectile().gameObject; // set new rock projectile
-            pool.FillObjectPool(); // fill weapon pool
+            pool.FillObjectPool(); // fill projectile pool
 
             ThrowRock();
             return;
@@ -66,10 +66,6 @@ public class EarthPrimaryAction : PrimaryAction {
         isRockThrowReady = false;
         playerController.OnRockThrow();
         DestroyRock(false); // destroy rock after throw (don't activate mechanics)
-
-        // begin cooldown
-        isReady = false;
-        Invoke("ReadyAction", primaryCooldown);
 
     }
 
@@ -104,9 +100,19 @@ public class EarthPrimaryAction : PrimaryAction {
 
         playerController.OnDestroyRock(activateMechanics); // activate mechanics after rock is destroyed
 
+        // reset bools
+        isSummoningRock = false;
+        isRockThrowReady = false;
+
         // begin cooldown
         isReady = false;
         Invoke("ReadyAction", primaryCooldown);
+
+        // destroy current meter if it exists
+        if (currMeter)
+            Destroy(currMeter.gameObject);
+
+        currMeter = CreateMeter(primaryCooldown); // create new meter for cooldown
 
     }
 
