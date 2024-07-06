@@ -186,8 +186,8 @@ MonoBehaviour:
   LifeTime: 1
   FaceDirection: 1
   FaceMovementDirection: 0
-  Speed: 150
-  Acceleration: 400
+  Speed: 220
+  Acceleration: -70
   Direction: {x: -1, y: 0, z: 0}
   DirectionCanBeChangedBySpawner: 1
   FlipValue: {x: -1, y: 1, z: 1}
@@ -215,12 +215,12 @@ MonoBehaviour:
     m_Bits: 270592
   ApplyDamageOnTriggerEnter: 1
   ApplyDamageOnTriggerStay: 1
-  MinDamageCaused: 10
+  MinDamageCaused: 20
   MaxDamageCaused: 0
   TypedDamages: []
   DamageCausedKnockbackType: 1
   DamageCausedKnockbackDirection: 0
-  DamageCausedKnockbackForce: {x: 0, y: 0}
+  DamageCausedKnockbackForce: {x: -2, y: 0}
   InvincibilityDuration: 0
   RepeatDamageOverTime: 0
   AmountOfRepeats: 3
