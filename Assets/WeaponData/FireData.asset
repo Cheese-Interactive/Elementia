@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: FireData
   m_EditorClassIdentifier: 
   primaryIcon: {fileID: 21300000, guid: 2b066b1e153805f4aa7e2e585d2470cf, type: 3}
-  secondaryIcon: {fileID: 21300000, guid: 2a4f1f03d542b4b4bb6bda5bfae841a2, type: 3}
-  weaponColor: {r: 0.6784314, g: 0.32156864, b: 0.1764706, a: 1}
+  secondaryIcon: {fileID: 21300000, guid: 934845049d84e4b45a549ecc3a4990ac, type: 3}
+  weaponColor: {r: 0.9622642, g: 0.778329, b: 0.70354223, a: 1}
