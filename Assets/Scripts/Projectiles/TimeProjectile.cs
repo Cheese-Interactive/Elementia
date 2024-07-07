@@ -4,6 +4,7 @@ using UnityEngine;
 public class TimeProjectile : BaseProjectile {
 
     [Header("Settings")]
+    [Space]
     [SerializeField] private float timeDuration;
 
     private new void OnTriggerEnter2D(Collider2D collision) { // triggers when projectile collides with something | IMPORTANT: triggers after the object is disabled on death

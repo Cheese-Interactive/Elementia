@@ -6,17 +6,22 @@ public class BaseProjectile : MonoBehaviour {
     [Header("References")]
     protected Projectile projectile;
     protected DamageOnTouch damageOnTouch;
+    private bool hasCollided;
 
     [Header("Direction")]
-    private Vector2 lastPos;
+    protected Vector2 lastPos;
 
     [Header("Settings")]
+    [SerializeField] private bool oneCollisionOnly;
+    [Space]
     [SerializeField] private bool isPushProjectile;
     [SerializeField] private Vector2 entityPushForce;
     [SerializeField] private Vector2 objectPushForce;
     [Space]
     [SerializeField] private Vector2 entityPullForce;
     [SerializeField] private Vector2 objectPullForce;
+
+    protected void OnEnable() => hasCollided = false; // reset has collided because object pooling cycles the same objects
 
     protected void Start() {
 
@@ -31,7 +36,7 @@ public class BaseProjectile : MonoBehaviour {
 
     protected void OnTriggerEnter2D(Collider2D collision) { // triggers when projectile collides with something | IMPORTANT: triggers after the object is disabled on death
 
-        if (collision.gameObject.activeInHierarchy && (damageOnTouch.TargetLayerMask & (1 << collision.gameObject.layer)) != 0) { // make sure hit object is active & is in target layer
+        if (collision.gameObject.activeInHierarchy && (damageOnTouch.TargetLayerMask & (1 << collision.gameObject.layer)) != 0 && !hasCollided) { // make sure hit object is active, is in target layer, and has not collided yet
 
             if (isPushProjectile) { // FORCE DEPENDS ON PROJECTILE VELOCITY DIRECTION (PUSH)
 
@@ -64,6 +69,10 @@ public class BaseProjectile : MonoBehaviour {
                 collision.gameObject.GetComponent<Rigidbody2D>()?.AddForce(objectForce, ForceMode2D.Impulse); // pull object towards shooter
 
             }
+
+            if (oneCollisionOnly) // if projectile can only collide once
+                hasCollided = true; // set collided to true
+
         }
     }
 }

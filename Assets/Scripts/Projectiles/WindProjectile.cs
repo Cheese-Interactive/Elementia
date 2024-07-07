@@ -10,6 +10,7 @@ public class WindProjectile : BaseProjectile {
 
     [Header("Settings")]
     // min -> max -> min
+    [Space]
     [SerializeField] private float minSpeed;
     [SerializeField] private float maxSpeed;
     [SerializeField][Range(0f, 100f)] private float totalSpeedTransitionPercentage;
@@ -17,7 +18,9 @@ public class WindProjectile : BaseProjectile {
     [SerializeField] private float windFadeDuration;
     private float lifetime;
 
-    private void OnEnable() {
+    private new void OnEnable() {
+
+        base.OnEnable();
 
         projectile = GetComponent<Projectile>();
         trailRenderer = GetComponent<TrailRenderer>();

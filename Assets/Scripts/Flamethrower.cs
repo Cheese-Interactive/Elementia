@@ -5,6 +5,7 @@ public class Flamethrower : MonoBehaviour {
 
     [Header("References")]
     [SerializeField] private BoxCollider2D rangeCollider;
+    [SerializeField] private FlamethrowerParticles particles;
     private HitscanWeapon weapon;
 
     [Header("Settings")]
@@ -14,7 +15,7 @@ public class Flamethrower : MonoBehaviour {
     private int burnTicks;
     private float burnDuration;
 
-    public void Initialize(Vector2 entityFlamethrowerForce, Vector2 objectFlamethrowerForce, float burnDamage, int burnTicks, float burnDuration) {
+    public void Initialize(float flameSpeed, Vector2 entityFlamethrowerForce, Vector2 objectFlamethrowerForce, float burnDamage, int burnTicks, float burnDuration) {
 
         weapon = GetComponent<HitscanWeapon>();
 
@@ -23,6 +24,8 @@ public class Flamethrower : MonoBehaviour {
         this.burnDamage = burnDamage;
         this.burnTicks = burnTicks;
         this.burnDuration = burnDuration;
+
+        particles.Initialize(weapon, flameSpeed); // initialize particles
 
         // set range collider positioning and size
         rangeCollider.transform.localPosition = new Vector2(weapon.ProjectileSpawnOffset.x, 0f); // set collider local position x axis to weapon spawn offset x axis

@@ -271,7 +271,7 @@ MonoBehaviour:
   GravityOffOnDeath: 0
   PointsWhenDestroyed: 0
   RespawnAtInitialLocation: 0
-  ApplyDeathForce: 1
+  ApplyDeathForce: 0
   DeathForce: {x: 0, y: 10}
   ResetForcesOnDeath: 0
   ResetColorOnRevive: 1
@@ -294,6 +294,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a97d6774434bea845934b5d9dda66f60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  oneCollisionOnly: 1
   isPushProjectile: 1
   entityPushForce: {x: 10, y: 4}
   objectPushForce: {x: 3, y: 2}

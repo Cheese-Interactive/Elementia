@@ -266,7 +266,7 @@ MonoBehaviour:
   TypedDamages: []
   DamageCausedKnockbackType: 1
   DamageCausedKnockbackDirection: 0
-  DamageCausedKnockbackForce: {x: 2, y: 2}
+  DamageCausedKnockbackForce: {x: 0, y: 0}
   InvincibilityDuration: 0
   RepeatDamageOverTime: 0
   AmountOfRepeats: 3
@@ -316,7 +316,7 @@ MonoBehaviour:
   GravityOffOnDeath: 0
   PointsWhenDestroyed: 0
   RespawnAtInitialLocation: 0
-  ApplyDeathForce: 1
+  ApplyDeathForce: 0
   DeathForce: {x: 0, y: 10}
   ResetForcesOnDeath: 0
   ResetColorOnRevive: 1
@@ -339,6 +339,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4e14f81bb9a181429eb933e5568ab99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  oneCollisionOnly: 1
   isPushProjectile: 1
   entityPushForce: {x: 2, y: 1}
   objectPushForce: {x: 1, y: 1}

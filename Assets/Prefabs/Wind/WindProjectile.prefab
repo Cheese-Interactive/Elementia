@@ -195,6 +195,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a468ef2987c01474dbcf42b9046e0375, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  oneCollisionOnly: 0
   isPushProjectile: 1
   entityPushForce: {x: 25, y: 30}
   objectPushForce: {x: 15, y: 20}

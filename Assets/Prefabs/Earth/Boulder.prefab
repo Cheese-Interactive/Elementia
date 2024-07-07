@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6185273497616329014}
   - component: {fileID: 6413733684168419384}
   - component: {fileID: 715053174279618432}
+  - component: {fileID: 8685980453542896938}
   m_Layer: 8
   m_Name: Boulder
   m_TagString: Untagged
@@ -171,7 +172,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81b0aad1de69d854d8aa796e404c5724, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PushSpeed: 0
+  PushSpeed: 3
   GroundedRaycastLength: 1
   GroundedRaycastOffset: 0.1
   GroundedLayerMask:
@@ -180,3 +181,21 @@ MonoBehaviour:
   Grounded: 0
   Pusher: {fileID: 0}
   Direction: {x: 0, y: 0}
+--- !u!114 &8685980453542896938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2532872684494712300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6a612b6d4e22fe48a3ca27538fd6c43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 35
+  isPushForce: 1
+  entityPushForce: {x: 15, y: 12}
+  objectPushForce: {x: 15, y: 12}
+  entityPullForce: {x: 0, y: 0}
+  objectPullForce: {x: 0, y: 0}

@@ -294,6 +294,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8de529aa55fb28242bfbd8ad6454db08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  oneCollisionOnly: 1
   isPushProjectile: 1
   entityPushForce: {x: 5, y: 6}
   objectPushForce: {x: 2, y: 2}

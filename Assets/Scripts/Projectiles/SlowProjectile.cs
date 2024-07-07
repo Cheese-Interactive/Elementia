@@ -4,6 +4,7 @@ using UnityEngine;
 public class SlowProjectile : BaseProjectile {
 
     [Header("Settings")]
+    [Space]
     [SerializeField] private float movementMultiplier;
     [SerializeField] private float jumpMultiplier;
     [SerializeField] private float slowDuration;

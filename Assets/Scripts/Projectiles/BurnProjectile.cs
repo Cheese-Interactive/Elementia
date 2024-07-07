@@ -6,12 +6,10 @@ using UnityEngine;
 public class BurnProjectile : BaseProjectile {
 
     [Header("Settings")]
+    [Space]
     [SerializeField] private float burnDamage;
     [SerializeField] private int burnTicks;
     [SerializeField] private float burnDuration;
-
-    [Header("Direction")]
-    private Vector2 lastPos;
 
     private new void OnTriggerEnter2D(Collider2D collision) { // triggers when projectile collides with something | IMPORTANT: triggers after the object is disabled on death
 

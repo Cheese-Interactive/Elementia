@@ -324,6 +324,7 @@ GameObject:
   - component: {fileID: 8354201413464159754}
   - component: {fileID: 10088441257559901}
   - component: {fileID: 6298585181428920326}
+  - component: {fileID: -1803779125964603725}
   - component: {fileID: 7161239672520688488}
   - component: {fileID: 5764598075329143441}
   - component: {fileID: 1478656505548864672}
@@ -856,6 +857,35 @@ MonoBehaviour:
   BlockingWeaponStates: 
   PreventJumpWhenInZone: 1
   ActivationCooldownDuration: 0
+--- !u!114 &-1803779125964603725
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4900122409563817483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a99d20994733989408d3700750a41df2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AbilityStartFeedbacks: {fileID: 0}
+  AbilityStopFeedbacks: {fileID: 0}
+  AbilityPermitted: 1
+  BlockingMovementStates: 
+  BlockingConditionStates: 
+  BlockingWeaponStates: 
+  PlayerID: Player1
+  MainInventoryName: MainInventory
+  WeaponInventoryName: 
+  HotbarInventoryName: 
+  AutoEquipWeaponOnCharacterSwitch: 0
+  WeaponRotationMode: 0
+  CharacterHandleWeapon: {fileID: 0}
+  InventoryTransform: {fileID: 0}
+  AutoAddItemsMainInventory: []
+  AutoAddItemsHotbar: []
+  AutoEquipWeapon: {fileID: 0}
 --- !u!114 &7161239672520688488
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1315,6 +1345,7 @@ MonoBehaviour:
   canUseInAir: 1
   flamethrower: {fileID: 4813264542210501733, guid: a3d8fb112d7064a45811dfdc7799823e,
     type: 3}
+  flameSpeed: 12
   objectFlamethrowerForce: {x: 2, y: 4}
   entityFlamethrowerForce: {x: 5, y: 2}
   burnDamage: 5

@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: TimeData
   m_EditorClassIdentifier: 
   primaryIcon: {fileID: 21300000, guid: ff3b09931f8eebc4bb8512a0b9bf0700, type: 3}
-  secondaryIcon: {fileID: 21300000, guid: 1a935db72516e5743b8aadd341015b2c, type: 3}
+  secondaryIcon: {fileID: 21300000, guid: c1a5842aae479e144bcf3ac4e7fad46f, type: 3}
   weaponColor: {r: 1, g: 0, b: 0.8666667, a: 1}

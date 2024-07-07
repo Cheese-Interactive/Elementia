@@ -9,12 +9,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6707437497993546744}
+  - component: {fileID: 1780617288842787295}
   - component: {fileID: -3601002809632648221}
   - component: {fileID: 4813264542210501733}
   - component: {fileID: 6658620678597552082}
   - component: {fileID: -3073912655475901205}
-  - component: {fileID: 7450237557767854735}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Flamethrower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40,6 +40,33 @@ Transform:
   - {fileID: 7822532605947133274}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!50 &1780617288842787295
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1147189493814074718}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 1
+  m_SleepingMode: 0
+  m_CollisionDetection: 1
+  m_Constraints: 0
 --- !u!114 &-3601002809632648221
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -216,6 +243,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rangeCollider: {fileID: 570316936470242686}
+  particles: {fileID: 8616150893403882567}
 --- !u!114 &-3073912655475901205
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -234,33 +262,6 @@ MonoBehaviour:
   GameObjectToPool: {fileID: 100002, guid: c3be8791dc15b3d459e957499b7f5177, type: 3}
   PoolSize: 20
   PoolCanExpand: 1
---- !u!50 &7450237557767854735
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1147189493814074718}
-  m_BodyType: 1
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 1
-  m_SleepingMode: 0
-  m_CollisionDetection: 1
-  m_Constraints: 0
 --- !u!1 &3199147200058356316
 GameObject:
   m_ObjectHideFlags: 0
@@ -271,7 +272,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7822532605947133274}
   - component: {fileID: 570316936470242686}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: RangeCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -349,8 +350,9 @@ GameObject:
   - component: {fileID: 424517880093727646}
   - component: {fileID: 6463328347121880406}
   - component: {fileID: 1166363174333050256}
-  m_Layer: 9
-  m_Name: FlamethrowerParticles
+  - component: {fileID: 8616150893403882567}
+  m_Layer: 12
+  m_Name: Particles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -444,7 +446,7 @@ ParticleSystem:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  moveWithTransform: 0
+  moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 2
   randomSeed: 0
@@ -454,7 +456,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.6
+      scalar: 0.25
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -507,7 +509,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 3.94
+      scalar: 12
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -561,7 +563,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 0.651861, b: 0.6273585, a: 1}
+      maxColor: {r: 0.6784314, g: 0.32156864, b: 0.1764706, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -625,7 +627,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.72
+      scalar: 1.5
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -924,7 +926,7 @@ ParticleSystem:
         m_RotationOrder: 4
     randomizeRotationDirection: 0
     gravitySource: 1
-    maxNumParticles: 63
+    maxNumParticles: 30
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
     rotation3D: 0
@@ -984,15 +986,15 @@ ParticleSystem:
   ShapeModule:
     serializedVersion: 6
     enabled: 1
-    type: 18
-    angle: 13
+    type: 4
+    angle: 0
     length: 5
     boxThickness: {x: 0, y: 0, z: 0}
     radiusThickness: 0
     donutRadius: 0.2
     m_Position: {x: 0, y: 0, z: 0}
     m_Rotation: {x: 0, y: 0, z: 0}
-    m_Scale: {x: 0.051796593, y: 0.7391393, z: 0}
+    m_Scale: {x: 0, y: 0, z: 0}
     placementMode: 0
     m_MeshMaterialIndex: 0
     m_MeshNormalOffset: 0
@@ -1071,7 +1073,7 @@ ParticleSystem:
     sphericalDirectionAmount: 0
     randomPositionAmount: 0
     radius:
-      value: 0.0001
+      value: 5
       mode: 0
       spread: 0
       speed:
@@ -1128,7 +1130,7 @@ ParticleSystem:
           m_PostInfinity: 2
           m_RotationOrder: 4
     arc:
-      value: 0.06
+      value: 0
       mode: 3
       spread: 0
       speed:
@@ -1190,7 +1192,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 32.5
+      scalar: 50
       minScalar: 10
       maxCurve:
         serializedVersion: 2
@@ -1443,7 +1445,7 @@ ParticleSystem:
     enabled: 0
     x:
       serializedVersion: 2
-      minMaxState: 0
+      minMaxState: 3
       scalar: 0
       minScalar: 0
       maxCurve:
@@ -1496,7 +1498,7 @@ ParticleSystem:
         m_RotationOrder: 4
     y:
       serializedVersion: 2
-      minMaxState: 0
+      minMaxState: 3
       scalar: 0
       minScalar: 0
       maxCurve:
@@ -3657,7 +3659,7 @@ ParticleSystem:
     enabled: 0
     x:
       serializedVersion: 2
-      minMaxState: 0
+      minMaxState: 3
       scalar: 0
       minScalar: 0
       maxCurve:
@@ -3710,7 +3712,7 @@ ParticleSystem:
         m_RotationOrder: 4
     y:
       serializedVersion: 2
-      minMaxState: 0
+      minMaxState: 3
       scalar: 0
       minScalar: 0
       maxCurve:
@@ -3869,8 +3871,8 @@ ParticleSystem:
   CollisionModule:
     enabled: 0
     serializedVersion: 4
-    type: 0
-    collisionMode: 0
+    type: 1
+    collisionMode: 1
     colliderForce: 0
     multiplyColliderForceByParticleSize: 0
     multiplyColliderForceByParticleSpeed: 0
@@ -3938,7 +3940,7 @@ ParticleSystem:
     m_Bounce:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 0.5
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -4043,32 +4045,27 @@ ParticleSystem:
         m_RotationOrder: 4
     minKillSpeed: 0
     maxKillSpeed: 10000
-    radiusScale: 1
+    radiusScale: 0.3
     collidesWith:
       serializedVersion: 2
       m_Bits: 4294967295
     maxCollisionShapes: 256
     quality: 0
     voxelSize: 0.5
-    collisionMessages: 0
+    collisionMessages: 1
     collidesWithDynamic: 1
     interiorCollisions: 1
   TriggerModule:
-    enabled: 0
+    enabled: 1
     serializedVersion: 2
-    inside: 1
-    outside: 0
+    inside: 0
+    outside: 2
     enter: 0
-    exit: 0
+    exit: 2
     colliderQueryMode: 0
-    radiusScale: 1
+    radiusScale: 0.3
     primitives:
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
+    - {fileID: 7822532605947133274}
   SubModule:
     serializedVersion: 2
     enabled: 0
@@ -5090,6 +5087,18 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &8616150893403882567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3325495923129557609}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1004c0142877074489f3186848a3bf66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4819280329784108086
 GameObject:
   m_ObjectHideFlags: 0
@@ -5101,7 +5110,7 @@ GameObject:
   - component: {fileID: 842300026645340768}
   - component: {fileID: 5965111932964185275}
   - component: {fileID: 3382503487202992464}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Aura
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5117,7 +5126,7 @@ Transform:
   m_GameObject: {fileID: 4819280329784108086}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.5625, y: 0.140625, z: 0}
+  m_LocalPosition: {x: 0.5625, y: 0.125, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5199,7 +5208,7 @@ GameObject:
   - component: {fileID: 8065127029920104577}
   - component: {fileID: 2248003647269269847}
   - component: {fileID: 9133682936874447878}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}

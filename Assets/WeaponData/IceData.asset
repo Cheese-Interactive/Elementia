@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: IceData
   m_EditorClassIdentifier: 
   primaryIcon: {fileID: 21300000, guid: 2046d3e6e9709d34895aa1581c8a3332, type: 3}
-  secondaryIcon: {fileID: 21300000, guid: 209d13ab84f436244bcbc695e607feef, type: 3}
+  secondaryIcon: {fileID: 21300000, guid: 3a03e44d6e7e0094e8dd2f25954d1310, type: 3}
   weaponColor: {r: 0.3882353, g: 0.7647059, b: 0.8, a: 1}
