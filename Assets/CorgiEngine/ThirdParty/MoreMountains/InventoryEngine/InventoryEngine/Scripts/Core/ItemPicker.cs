@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using MoreMountains.Tools;
+using System;
 
 namespace MoreMountains.InventoryEngine
-{	
+{
 	/// <summary>
 	/// Add this component to an object so it can be picked and added to an inventory
 	/// </summary>
@@ -37,10 +38,14 @@ namespace MoreMountains.InventoryEngine
 		protected int _pickedQuantity = 0;
 		protected Inventory _targetInventory;
 
-		/// <summary>
-		/// On Start we initialize our item picker
-		/// </summary>
-		protected virtual void Start()
+        // pick
+        public delegate void OnCollectDelegate(ItemPicker collectible);
+        public OnCollectDelegate OnCollect;
+
+        /// <summary>
+        /// On Start we initialize our item picker
+        /// </summary>
+        protected virtual void Start()
 		{
 			Initialization ();
 		}
@@ -153,8 +158,11 @@ namespace MoreMountains.InventoryEngine
 				RemainingQuantity = RemainingQuantity - _pickedQuantity;
 				PickSuccess();
 				DisableObjectIfNeeded();
-			}			
-		}
+			}
+            if (OnCollect != null) {
+                OnCollect.Invoke(this);
+            }
+        }
 
 		/// <summary>
 		/// Describes what happens when the object is successfully picked

@@ -50,6 +50,7 @@ public class EarthSecondaryAction : SecondaryAction {
     private void DestroyBoulder() {
 
         if (durationCoroutine != null) StopCoroutine(durationCoroutine); // stop max duration coroutine as boulder is being destroyed
+        durationCoroutine = null;
 
         Instantiate(boulderExplosion, currBoulder.transform.position, boulderExplosion.transform.rotation); // spawn explosion particles
         Destroy(currBoulder); // destroy boulder

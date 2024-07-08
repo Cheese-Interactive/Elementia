@@ -8,7 +8,7 @@ public class Meter : MonoBehaviour {
     [SerializeField] private Slider slider;
     [SerializeField] private Image slot;
     [SerializeField] private Image slotFill;
-    private Tweener tweener;
+    private Tweener meterTweener;
 
     public void Initialize(float duration, Sprite icon, Color color) {
 
@@ -19,13 +19,13 @@ public class Meter : MonoBehaviour {
         slot.color = color; // set the slot color
         slotFill.sprite = icon; // set the slot fill icon
 
-        tweener = DOVirtual.Float(duration, 0f, duration, (value) => slider.value = value).SetEase(Ease.Linear).OnComplete(() => Destroy(gameObject)); // tick down slider value over duration and destroy meter when complete
+        meterTweener = DOVirtual.Float(duration, 0f, duration, (value) => slider.value = value).SetEase(Ease.Linear).OnComplete(() => Destroy(gameObject)); // tick down slider value over duration and destroy meter when complete
 
     }
 
     private void OnDestroy() {
 
-        if (tweener != null && tweener.IsActive()) tweener.Kill(); // kill tweener if it exists
+        if (meterTweener != null && meterTweener.IsActive()) meterTweener.Kill(); // kill tweener if it exists
 
     }
 }

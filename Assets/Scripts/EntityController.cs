@@ -77,15 +77,6 @@ public class EntityController : MonoBehaviour {
 
     }
 
-    protected void OnDisable() {
-
-        // remove subscription to on death events
-        health.OnDeath -= slowEffect.RemoveEffect;
-        health.OnDeath -= burnEffect.RemoveEffect;
-        health.OnDeath -= timeEffect.RemoveEffect;
-
-    }
-
     protected void OnDestroy() {
 
         // remove subscription to on death event

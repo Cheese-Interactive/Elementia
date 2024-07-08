@@ -54,6 +54,11 @@ public class Flamethrower : MonoBehaviour {
 
             collision.gameObject.GetComponent<BurnEffect>()?.Burn(gameObject, burnDamage, burnTicks, burnDuration, weapon.DamageCausedInvincibilityDuration, transform.right, true); // apply burn effect to object
 
+            collision.gameObject.GetComponent<BurnableObject>()?.StartBurn(); // burn object if it can be burned
+
         }
     }
+
+    private void OnTriggerExit2D(Collider2D collision) => collision.gameObject.GetComponent<BurnableObject>()?.StopBurn(); // stop object burn if it can be burned
+
 }

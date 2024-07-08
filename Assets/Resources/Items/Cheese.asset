@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9fac9bd89dcafc049b19f543ccf8fd57, type: 3}
-  m_Name: CheeseCollectible
+  m_Name: Cheese
   m_EditorClassIdentifier: 
   ItemID: Cheese
   TargetInventoryName: CollectibleInventory
@@ -41,8 +41,8 @@ MonoBehaviour:
   ItemName: Cheese
   ShortDescription: Most valuable item
   Description: Most valuable item
-  Icon: {fileID: 21300022, guid: f3f4293ccdddd34468f58745d608416e, type: 3}
-  Prefab: {fileID: 1685109598746356, guid: f583ae2987f66c64e9992e29f5e72768, type: 3}
+  Icon: {fileID: 21300000, guid: 3cb48e182744c934dae25adbea67fe6e, type: 3}
+  Prefab: {fileID: 0}
   ForcePrefabDropQuantity: 0
   PrefabDropQuantity: 1
   DropProperties:
@@ -87,7 +87,7 @@ MonoBehaviour:
     MaximumRotation: {x: 0, y: 0, z: 0}
     MinimumScale: {x: 1, y: 1, z: 1}
     MaximumScale: {x: 1, y: 1, z: 1}
-  MaximumStack: 100
+  MaximumStack: 1
   MaximumQuantity: 999999999
   ItemClass: 0
   TargetEquipmentInventoryName: 

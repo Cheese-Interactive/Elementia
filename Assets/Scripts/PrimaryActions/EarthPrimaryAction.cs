@@ -97,6 +97,7 @@ public class EarthPrimaryAction : PrimaryAction {
     private void DestroyRock(bool activateMechanics) {
 
         if (throwDurationCoroutine != null) StopCoroutine(throwDurationCoroutine); // stop max duration coroutine as rock is being destroyed
+        throwDurationCoroutine = null;
 
         playerController.OnDestroyRock(activateMechanics); // activate mechanics after rock is destroyed
 

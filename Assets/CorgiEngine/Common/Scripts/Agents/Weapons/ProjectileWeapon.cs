@@ -48,10 +48,10 @@ namespace MoreMountains.CorgiEngine
 		protected bool _poolInitialized = false;
 		protected Vector2 _offset;
 
-		/// <summary>
-		/// Initialize this weapon
-		/// </summary>
-		public override void Initialization()
+        /// <summary>
+        /// Initialize this weapon
+        /// </summary>
+        public override void Initialization()
 		{
 			base.Initialization();
 			_aimableWeapon = GetComponent<WeaponAim> ();

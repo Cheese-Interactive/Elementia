@@ -94,6 +94,7 @@ public class TimeSecondaryAction : SecondaryAction {
     private void StopChanneling() {
 
         if (channelCoroutine != null) StopCoroutine(channelCoroutine); // stop channeling coroutine if it is running
+        channelCoroutine = null;
 
         if (channelBeaconTweener != null && channelBeaconTweener.IsActive()) channelBeaconTweener.Kill(); // stop channel beacon tweener if it is running
 

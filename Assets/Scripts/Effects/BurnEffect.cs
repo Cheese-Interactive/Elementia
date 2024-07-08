@@ -53,6 +53,7 @@ public class BurnEffect : BaseEffect {
     public void RemoveEffect() {
 
         if (burnCoroutine != null) StopCoroutine(burnCoroutine);
+        burnCoroutine = null;
 
         burnOverlay.HideOverlay(); // hide burn overlay
 

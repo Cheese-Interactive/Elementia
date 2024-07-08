@@ -18,7 +18,7 @@ public class TimeEffect : BaseEffect {
 
         entityController = GetComponent<EntityController>();
 
-        if (!entityController) Debug.LogError("EntityController not found on " + gameObject.name); // make sure entity controller is set
+        if (!entityController) Debug.LogError("EntityController not found on " + gameObject.name + "."); // make sure entity controller is set
 
         timeOverlay.HideOverlay(); // hide slow overlay by default
 
@@ -49,6 +49,7 @@ public class TimeEffect : BaseEffect {
     public void RemoveEffect() {
 
         if (unfreezeTimeCoroutine != null) StopCoroutine(unfreezeTimeCoroutine); // stop time unfreeze coroutine
+        unfreezeTimeCoroutine = null;
 
         timeOverlay.HideOverlay(); // hide slow overlay
 

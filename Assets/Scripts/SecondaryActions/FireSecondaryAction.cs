@@ -80,6 +80,7 @@ public class FireSecondaryAction : SecondaryAction {
     private void UnequipFlamethrower() {
 
         if (durationCoroutine != null) StopCoroutine(durationCoroutine); // stop max duration coroutine as flamethrower is being unequipped
+        durationCoroutine = null;
 
         charWeaponHandler.ForceAlwaysShoot = prevAlwaysShoot; // reset always shoot
         charWeaponHandler.ChangeWeapon(prevWeapon, prevWeapon.WeaponID); // revert back to previous weapon

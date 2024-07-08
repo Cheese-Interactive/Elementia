@@ -1,4 +1,3 @@
-
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +8,7 @@ public class ItemSelector : MonoBehaviour {
     [SerializeField] private Image secondaryWeaponFill;
     [SerializeField] private ItemSlot[] slots;
     private int currSlotIndex;
+    private int placementIndex; // index of the slot to place the weapon
 
     private void Start() {
 
@@ -18,7 +18,13 @@ public class ItemSelector : MonoBehaviour {
 
     }
 
-    public void SetWeaponData(WeaponData weaponData, int slotIndex) => slots[slotIndex].Initialize(weaponData);
+    public void AddWeapon(WeaponData weaponData) {
+
+        if (placementIndex >= slots.Length) return; // if there are no more slots to place the weapon, return
+
+        slots[placementIndex++].Initialize(weaponData); // add weapon to the current placement slot, then increment the placement index
+
+    }
 
     public void SelectSlot(int slotIndex) {
 

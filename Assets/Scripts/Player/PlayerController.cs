@@ -48,25 +48,24 @@ public class PlayerController : EntityController {
         deathSubscriptions = new List<WeaponActionPair>();
 
         // pick the first secondary action as the default, subscribe to death event, initialize hotbar
-        for (int i = 0; i < weaponActionPairs.Length; i++) {
+        foreach (WeaponActionPair pair in weaponActionPairs) {
 
-            WeaponActionPair action = weaponActionPairs[i];
-            PrimaryAction primaryAction = action.GetPrimaryAction();
-            SecondaryAction secondaryAction = action.GetSecondaryAction();
+            PrimaryAction primaryAction = pair.GetPrimaryAction();
+            SecondaryAction secondaryAction = pair.GetSecondaryAction();
 
-            // enable current primary & secondary action (if they exist), disable the rest
-            if (action == weaponActionPairs[0]) {
+            // enable first primary & secondary action (if they exist), disable the rest
+            if (pair == weaponActionPairs[0]) {
 
                 if (primaryAction) {
 
-                    primaryAction.Initialize(action.GetWeaponData());
+                    primaryAction.Initialize(pair.GetWeaponData());
                     primaryAction.enabled = true;
 
                 }
 
                 if (secondaryAction) {
 
-                    secondaryAction.Initialize(action.GetWeaponData());
+                    secondaryAction.Initialize(pair.GetWeaponData());
                     secondaryAction.enabled = true;
 
                 }
@@ -74,20 +73,20 @@ public class PlayerController : EntityController {
 
                 if (primaryAction) {
 
-                    primaryAction.Initialize(action.GetWeaponData());
+                    primaryAction.Initialize(pair.GetWeaponData());
                     primaryAction.enabled = false;
 
                 }
 
                 if (secondaryAction) {
 
-                    secondaryAction.Initialize(action.GetWeaponData());
+                    secondaryAction.Initialize(pair.GetWeaponData());
                     secondaryAction.enabled = false;
 
                 }
             }
 
-            itemSelector.SetWeaponData(action.GetWeaponData(), i); // add weapon item to hotbar
+            itemSelector.AddWeapon(pair.GetWeaponData()); // add weapon item to hotbar
 
             if (primaryAction)
                 health.OnDeath += primaryAction.OnDeath; // subscribe to death event
@@ -95,7 +94,7 @@ public class PlayerController : EntityController {
             if (secondaryAction)
                 health.OnDeath += secondaryAction.OnDeath; // subscribe to death event
 
-            deathSubscriptions.Add(action); // add to list for unsubscribing later
+            deathSubscriptions.Add(pair); // add to list for unsubscribing later
 
         }
     }
@@ -736,9 +735,9 @@ public class PlayerController : EntityController {
 
     }
 
-    private new void OnDisable() {
+    private new void OnDestroy() {
 
-        base.OnDisable();
+        base.OnDestroy();
 
         // unsubscribe from all events
         foreach (WeaponActionPair action in deathSubscriptions) {
@@ -798,6 +797,7 @@ public class PlayerController : EntityController {
     public void OnDestroyRock(bool activateMechanics) {
 
         if (rockSummonCoroutine != null) StopCoroutine(rockSummonCoroutine); // stop rock summon coroutine if it's running
+        rockSummonCoroutine = null;
 
         Destroy(currRock.gameObject); // destroy rock
 

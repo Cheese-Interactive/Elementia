@@ -80,6 +80,7 @@ public class SlowEffect : BaseEffect {
     public void RemoveEffect() {
 
         if (slowResetCoroutine != null) StopCoroutine(slowResetCoroutine);
+        slowResetCoroutine = null;
 
         charMovement.MovementSpeed = initialSpeed;
 
