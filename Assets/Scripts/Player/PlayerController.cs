@@ -10,8 +10,8 @@ public class PlayerController : EntityController {
     private ItemSelector itemSelector;
 
     [Header("Weapons/Primary/Secondary Actions")]
-    [SerializeField] private WeaponPair[] defaultWeaponPairs; // default weapon action pairs (from inspector) that player begins with
-    private List<WeaponPair> weaponPairs; // stores current weapons that player has
+    [SerializeField] private WeaponData[] defaultWeapons; // default weapons (from inspector) that player begins with
+    private List<WeaponData> weapons; // stores current weapons that player has
     private Coroutine switchCoroutine;
 
     [Header("Fire")]
@@ -29,7 +29,7 @@ public class PlayerController : EntityController {
     private bool isDead; // to deal with death delay
 
     [Header("Health")]
-    private List<WeaponPair> deathSubscriptions; // for unsubscribing later
+    private List<WeaponData> deathSubscriptions; // for unsubscribing later
 
     private new void Awake() {
 
@@ -43,8 +43,8 @@ public class PlayerController : EntityController {
             mechanicStatuses.Add(mechanicType, true); // set all mechanics to true by default
 
         itemSelector = FindObjectOfType<ItemSelector>();
-        weaponPairs = new List<WeaponPair>();
-        deathSubscriptions = new List<WeaponPair>();
+        weapons = new List<WeaponData>();
+        deathSubscriptions = new List<WeaponData>();
 
         // disable all primary actions by default
         foreach (PrimaryAction action in GetComponents<PrimaryAction>())
@@ -55,26 +55,26 @@ public class PlayerController : EntityController {
             action.enabled = false;
 
         // add each default weapon action pair to player
-        foreach (WeaponPair pair in defaultWeaponPairs)
-            AddWeapon(pair);
+        foreach (WeaponData data in defaultWeapons)
+            AddWeapon(data);
 
         // enable primary and secondary actions for first weapon (if it exists)
-        if (weaponPairs.Count > 0) {
+        if (weapons.Count > 0) {
 
-            WeaponPair weaponPair = weaponPairs[0];
-            PrimaryAction primaryAction = weaponPair.GetPrimaryAction();
-            SecondaryAction secondaryAction = weaponPair.GetSecondaryAction();
+            WeaponData weaponData = weapons[0];
+            PrimaryAction primaryAction = weaponData.GetPrimaryAction();
+            SecondaryAction secondaryAction = weaponData.GetSecondaryAction();
 
             if (primaryAction) {
 
-                primaryAction.Initialize(weaponPair.GetWeaponData());
+                primaryAction.Initialize(weaponData);
                 primaryAction.enabled = true;
 
             }
 
             if (secondaryAction) {
 
-                secondaryAction.Initialize(weaponPair.GetWeaponData());
+                secondaryAction.Initialize(weaponData);
                 secondaryAction.enabled = true;
 
             }
@@ -103,11 +103,11 @@ public class PlayerController : EntityController {
 
         #region ACTIONS
 
-        if (itemSelector.GetCurrSlotIndex() < weaponPairs.Count) { // make sure slot has a weapon in it
+        if (itemSelector.GetCurrSlotIndex() < weapons.Count) { // make sure slot has a weapon in it
 
-            WeaponPair pair = weaponPairs[itemSelector.GetCurrSlotIndex()]; // get current weapon action pair
-            currPrimaryAction = pair.GetPrimaryAction();
-            currSecondaryAction = pair.GetSecondaryAction();
+            WeaponData weaponData = weapons[itemSelector.GetCurrSlotIndex()]; // get current weapon
+            currPrimaryAction = weaponData.GetPrimaryAction();
+            currSecondaryAction = weaponData.GetSecondaryAction();
 
         }
 
@@ -210,13 +210,13 @@ public class PlayerController : EntityController {
         base.OnDestroy();
 
         // unsubscribe from all events
-        foreach (WeaponPair action in deathSubscriptions) {
+        foreach (WeaponData weaponData in deathSubscriptions) {
 
-            if (action.GetPrimaryAction())
-                health.OnDeath -= action.GetPrimaryAction().OnDeath;
+            if (weaponData.GetPrimaryAction())
+                health.OnDeath -= weaponData.GetPrimaryAction().OnDeath;
 
-            if (action.GetSecondaryAction())
-                health.OnDeath -= action.GetSecondaryAction().OnDeath;
+            if (weaponData.GetSecondaryAction())
+                health.OnDeath -= weaponData.GetSecondaryAction().OnDeath;
 
         }
     }
@@ -287,27 +287,27 @@ public class PlayerController : EntityController {
 
     #region UTILITIES
 
-    public void AddWeapon(WeaponPair weaponPair) {
+    public void AddWeapon(WeaponData weaponData) {
 
-        PrimaryAction primaryAction = weaponPair.GetPrimaryAction();
-        SecondaryAction secondaryAction = weaponPair.GetSecondaryAction();
+        PrimaryAction primaryAction = weaponData.GetPrimaryAction();
+        SecondaryAction secondaryAction = weaponData.GetSecondaryAction();
 
         // disable primary & secondary actions (if they exist)
         if (primaryAction) {
 
-            primaryAction.Initialize(weaponPair.GetWeaponData());
+            primaryAction.Initialize(weaponData);
             primaryAction.enabled = false;
 
         }
 
         if (secondaryAction) {
 
-            secondaryAction.Initialize(weaponPair.GetWeaponData());
+            secondaryAction.Initialize(weaponData);
             secondaryAction.enabled = false;
 
         }
 
-        itemSelector.AddWeapon(weaponPair.GetWeaponData()); // add weapon item to item selector
+        itemSelector.AddWeapon(weaponData); // add weapon item to item selector
 
         if (primaryAction)
             health.OnDeath += primaryAction.OnDeath; // subscribe to death event
@@ -315,16 +315,16 @@ public class PlayerController : EntityController {
         if (secondaryAction)
             health.OnDeath += secondaryAction.OnDeath; // subscribe to death event
 
-        weaponPairs.Add(weaponPair); // add to weapon action pairs list
-        deathSubscriptions.Add(weaponPair); // add to list for unsubscribing later
+        weapons.Add(weaponData); // add to weapon action pairs list
+        deathSubscriptions.Add(weaponData); // add to list for unsubscribing later
 
     }
 
     public void UpdateCurrentWeapon() {
 
-        if (itemSelector.GetCurrSlotIndex() < weaponPairs.Count) { // make sure weapon exists
+        if (itemSelector.GetCurrSlotIndex() < weapons.Count) { // make sure weapon exists
 
-            Weapon currWeapon = weaponPairs[itemSelector.GetCurrSlotIndex()].GetWeapon(); // set new weapon
+            Weapon currWeapon = weapons[itemSelector.GetCurrSlotIndex()].GetWeapon(); // set new weapon
 
             // placed here to make sure weapon exists before starting cooldown
             if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
@@ -332,12 +332,12 @@ public class PlayerController : EntityController {
 
             charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
-            PrimaryAction currPrimaryAction = weaponPairs[itemSelector.GetCurrSlotIndex()].GetPrimaryAction();
-            SecondaryAction currSecondaryAction = weaponPairs[itemSelector.GetCurrSlotIndex()].GetSecondaryAction();
+            PrimaryAction currPrimaryAction = weapons[itemSelector.GetCurrSlotIndex()].GetPrimaryAction();
+            SecondaryAction currSecondaryAction = weapons[itemSelector.GetCurrSlotIndex()].GetSecondaryAction();
 
             if (currPrimaryAction) { // make sure primary action exists
 
-                currPrimaryAction = weaponPairs[itemSelector.GetCurrSlotIndex()].GetPrimaryAction(); // update primary action
+                currPrimaryAction = weapons[itemSelector.GetCurrSlotIndex()].GetPrimaryAction(); // update primary action
 
                 // enable new primary action if it exists
                 if (currPrimaryAction)
@@ -347,7 +347,7 @@ public class PlayerController : EntityController {
 
             if (currSecondaryAction) { // make sure secondary action exists
 
-                currSecondaryAction = weaponPairs[itemSelector.GetCurrSlotIndex()].GetSecondaryAction(); // update secondary action
+                currSecondaryAction = weapons[itemSelector.GetCurrSlotIndex()].GetSecondaryAction(); // update secondary action
 
                 // enable new secondary action if it exists
                 if (currSecondaryAction)
@@ -364,12 +364,12 @@ public class PlayerController : EntityController {
 
     }
 
-    public Weapon GetCurrentWeapon() => weaponPairs[itemSelector.GetCurrSlotIndex()].GetWeapon();
+    public Weapon GetCurrentWeapon() => weapons[itemSelector.GetCurrSlotIndex()].GetWeapon();
 
     private IEnumerator HandleSwitchCooldown() {
 
         charWeaponHandler.AbilityPermitted = false; // disable ability use
-        yield return new WaitForSeconds(weaponPairs[itemSelector.GetCurrSlotIndex()].GetSwitchCooldown()); // wait for switch cooldown
+        yield return new WaitForSeconds(weapons[itemSelector.GetCurrSlotIndex()].GetSwitchCooldown()); // wait for switch cooldown
         charWeaponHandler.AbilityPermitted = true; // enable ability use
 
     }

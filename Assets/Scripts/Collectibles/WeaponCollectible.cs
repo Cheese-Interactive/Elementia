@@ -4,12 +4,12 @@ using UnityEngine;
 public class WeaponCollectible : BaseCollectible {
 
     [Header("Settings")]
-    [SerializeField] private WeaponPair weaponPair;
+    [SerializeField] private WeaponData weaponData;
 
     protected override void OnCollect(ItemPicker collectible) {
 
         base.OnCollect(collectible);
-        playerController.AddWeapon(weaponPair); // give player the weapon
+        playerController.AddWeapon(weaponData); // give player the weapon
         playerController.UpdateCurrentWeapon(); // update the current weapon
 
     }
@@ -19,11 +19,10 @@ public class WeaponCollectible : BaseCollectible {
         Data saveData = JsonUtility.FromJson<Data>(data);
         isCollected = saveData.isCollected; // load data
 
-        // if the collectible has been collected, disable the collectible
         if (isCollected) {
 
-            itemPicker.gameObject.SetActive(false);
-            playerController.AddWeapon(weaponPair); // give player the weapon
+            itemPicker.gameObject.SetActive(false); // disable the collectible
+            playerController.AddWeapon(weaponData); // give player the weapon
 
         }
     }

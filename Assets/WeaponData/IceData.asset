@@ -12,6 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c7768079091df64d97263e34cfd6bcf, type: 3}
   m_Name: IceData
   m_EditorClassIdentifier: 
+  weapon: {fileID: 4237984674334015922, guid: 9d60ea47bc8ee1b4a80c55c277f5a949, type: 3}
+  primaryAction: {fileID: -772895172877787362, guid: c43c134994d81f842868e3d0675d33c9,
+    type: 3}
+  secondaryAction: {fileID: 8881875236129953771, guid: c43c134994d81f842868e3d0675d33c9,
+    type: 3}
+  weaponColor: {r: 0.3882353, g: 0.7647059, b: 0.8, a: 1}
   primaryIcon: {fileID: 21300000, guid: 2046d3e6e9709d34895aa1581c8a3332, type: 3}
   secondaryIcon: {fileID: 21300000, guid: 3a03e44d6e7e0094e8dd2f25954d1310, type: 3}
-  weaponColor: {r: 0.3882353, g: 0.7647059, b: 0.8, a: 1}
+  switchCooldown: 0.15

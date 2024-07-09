@@ -12,6 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c7768079091df64d97263e34cfd6bcf, type: 3}
   m_Name: WindData
   m_EditorClassIdentifier: 
+  weapon: {fileID: 4237984674334015922, guid: b8a570382a6f4554f90091a497fef835, type: 3}
+  primaryAction: {fileID: 3434021981974967308, guid: c43c134994d81f842868e3d0675d33c9,
+    type: 3}
+  secondaryAction: {fileID: -5756287154290932317, guid: c43c134994d81f842868e3d0675d33c9,
+    type: 3}
+  weaponColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
   primaryIcon: {fileID: 21300000, guid: 8034f644bd34aad41844c806ed682132, type: 3}
   secondaryIcon: {fileID: 21300000, guid: 9370aec990900d145b72c5bc4e91c990, type: 3}
-  weaponColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
+  switchCooldown: 0.15

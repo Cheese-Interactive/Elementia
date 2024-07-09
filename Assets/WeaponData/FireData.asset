@@ -12,6 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c7768079091df64d97263e34cfd6bcf, type: 3}
   m_Name: FireData
   m_EditorClassIdentifier: 
+  weapon: {fileID: 4237984674334015922, guid: 9a3122220c3edc64683ed774da57bdca, type: 3}
+  primaryAction: {fileID: -569371758860137605, guid: c43c134994d81f842868e3d0675d33c9,
+    type: 3}
+  secondaryAction: {fileID: -8039291345281199097, guid: c43c134994d81f842868e3d0675d33c9,
+    type: 3}
+  weaponColor: {r: 0.6784314, g: 0.32156864, b: 0.1764706, a: 1}
   primaryIcon: {fileID: 21300000, guid: 2b066b1e153805f4aa7e2e585d2470cf, type: 3}
   secondaryIcon: {fileID: 21300000, guid: 2a4f1f03d542b4b4bb6bda5bfae841a2, type: 3}
-  weaponColor: {r: 0.6784314, g: 0.32156864, b: 0.1764706, a: 1}
+  switchCooldown: 0.15

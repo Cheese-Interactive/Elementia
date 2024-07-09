@@ -185,7 +185,8 @@ namespace MoreMountains.CorgiEngine
 		{
 			base.Awake();
 			_originalBounds = LevelBounds;
-		}
+            InstantiatePlayableCharacters(); // MOVED HERE TO ENSURE PLAYERS ARE INSTANTIATED BEFORE ANYTHING ELSE AND PLAYER SCRIPTS CAN BE OBTAINED MORE EASILY (IN START)
+        }
 
 		/// <summary>
 		/// Instantiate playable characters based on the ones specified in the PlayerPrefabs list in the LevelManager's inspector.
@@ -247,7 +248,6 @@ namespace MoreMountains.CorgiEngine
 		/// </summary>
 		public virtual void Start()
 		{
-			InstantiatePlayableCharacters ();
 			if (Players == null || Players.Count == 0) { return; }
 
 			Initialization ();

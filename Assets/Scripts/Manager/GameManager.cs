@@ -1,4 +1,5 @@
 using MoreMountains.InventoryEngine;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour {
@@ -8,13 +9,20 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private InventoryDisplay collectibleInventoryDisplay;
     [SerializeField] private int collectibleRows;
     [SerializeField] private int collectibleColumns;
-    [SerializeField] private BaseCollectible[] requiredCollectibles;
+    private List<BaseCollectible> requiredCollectibles;
     private bool isLevelComplete;
 
     private void Start() {
 
+        // get all required collectibles
+        requiredCollectibles = new List<BaseCollectible>();
+
+        foreach (BaseCollectible collectible in FindObjectsOfType<BaseCollectible>())
+            if (collectible.IsRequired())
+                requiredCollectibles.Add(collectible);
+
         // check if there are enough slots to hold the required collectibles
-        if (collectibleRows * collectibleColumns < requiredCollectibles.Length)
+        if (collectibleRows * collectibleColumns < requiredCollectibles.Count)
             Debug.LogError("There are not enough slots to hold the amount of required collectibles.");
 
         // setup the inventory display

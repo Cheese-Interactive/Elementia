@@ -10,7 +10,6 @@ public class DataManager : MonoBehaviour {
 
     private void Start() {
 
-        print("start");
         playerCharacter = FindObjectOfType<PlayerController>().GetComponent<Character>();
         levelManager = FindObjectOfType<LevelManager>();
 
@@ -53,7 +52,6 @@ public class DataManager : MonoBehaviour {
 
             foreach (CheckPoint checkpoint in levelManager.Checkpoints) {
 
-                print(levelManager.CurrentCheckPoint.GetComponent<UUID>());
                 if (checkpoint.GetComponent<UUID>().ID == checkpointUUID) {
 
                     levelManager.SetCurrentCheckpoint(checkpoint);

@@ -1,6 +1,7 @@
 using MoreMountains.InventoryEngine;
 using MoreMountains.Tools;
 using System;
+using System.Collections;
 using UnityEngine;
 
 public abstract class BaseCollectible : MMPersistentBase {
@@ -10,6 +11,9 @@ public abstract class BaseCollectible : MMPersistentBase {
     protected ItemPicker itemPicker;
     protected bool isCollected;
     private GameManager gameManager;
+
+    [Header("Settings")]
+    [SerializeField] private bool isRequired;
 
     [Serializable]
     protected struct Data {
@@ -56,5 +60,7 @@ public abstract class BaseCollectible : MMPersistentBase {
     }
 
     public bool IsCollected() => isCollected;
+
+    public bool IsRequired() => isRequired;
 
 }
