@@ -270,7 +270,7 @@ namespace MoreMountains.CorgiEngine
 
 			// we trigger a level start event
 			CorgiEngineEvent.Trigger(CorgiEngineEventTypes.LevelStart, Players[0]);
-			MMGameEvent.Trigger("Load");
+            // MMGameEvent.Trigger("Load"); COMMENTED OUT TO CALL LOAD SOMEWHERE ELSE FOR MORE GAME FLOW CONTROL
 
 			if (SetPlayerAsFeedbackRangeCenter)
 			{

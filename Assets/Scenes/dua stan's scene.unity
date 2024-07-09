@@ -1980,10 +1980,11 @@ MonoBehaviour:
   collectibleRows: 1
   collectibleColumns: 5
   requiredCollectibles:
-  - {fileID: 1812337878}
+  - {fileID: 1812337877}
   - {fileID: 1195441035}
-  - {fileID: 1233808968}
-  - {fileID: 1335427520}
+  - {fileID: 1233808972}
+  - {fileID: 1335427524}
+  - {fileID: 1610610267}
 --- !u!1 &416910124
 GameObject:
   m_ObjectHideFlags: 0
@@ -4791,12 +4792,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1195441029}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 997d314db10a35045889ccec052ab4c1, type: 3}
+  m_Script: {fileID: 11500000, guid: ef7cfc1410edd304fbe505a4aec2eff7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   SaveActive: 1
   UniqueIDSuffix: 
-  _guid: dua stan's scene-CheeseCollectible-8510d2a9-f924-4f28-b67f-0f3a2bad1862
+  _guid: dua stan's scene-CheeseCollectible-f04b4436-2275-44bf-a771-9ab9d23b02ed
   GenerateGuidButton: 0
 --- !u!1 &1224342342
 GameObject:
@@ -4885,7 +4886,7 @@ GameObject:
   - component: {fileID: 1233808971}
   - component: {fileID: 1233808970}
   - component: {fileID: 1233808969}
-  - component: {fileID: 1233808968}
+  - component: {fileID: 1233808972}
   m_Layer: 0
   m_Name: CheeseCollectible
   m_TagString: Untagged
@@ -4893,22 +4894,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1233808968
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1233808967}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 997d314db10a35045889ccec052ab4c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SaveActive: 1
-  UniqueIDSuffix: 
-  _guid: dua stan's scene-CheeseCollectible (1)-275373a4-5e9f-4e70-bc48-d641705a5e07
-  GenerateGuidButton: 0
 --- !u!114 &1233808969
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4988,6 +4973,22 @@ Transform:
   - {fileID: 1366020933}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1233808972
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1233808967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef7cfc1410edd304fbe505a4aec2eff7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SaveActive: 1
+  UniqueIDSuffix: 
+  _guid: dua stan's scene-CheeseCollectible-c503fb00-5561-46a1-bbf4-bf57c817a217
+  GenerateGuidButton: 0
 --- !u!1 &1289772266
 GameObject:
   m_ObjectHideFlags: 0
@@ -5171,7 +5172,7 @@ GameObject:
   - component: {fileID: 1335427523}
   - component: {fileID: 1335427522}
   - component: {fileID: 1335427521}
-  - component: {fileID: 1335427520}
+  - component: {fileID: 1335427524}
   m_Layer: 0
   m_Name: CheeseCollectible
   m_TagString: Untagged
@@ -5179,22 +5180,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1335427520
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1335427519}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 997d314db10a35045889ccec052ab4c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SaveActive: 1
-  UniqueIDSuffix: 
-  _guid: dua stan's scene-CheeseCollectible (1)-bdef803d-877d-4db0-b4a1-a1cdc3219e9d
-  GenerateGuidButton: 0
 --- !u!114 &1335427521
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5274,6 +5259,22 @@ Transform:
   - {fileID: 1768388732}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1335427524
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1335427519}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef7cfc1410edd304fbe505a4aec2eff7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SaveActive: 1
+  UniqueIDSuffix: 
+  _guid: dua stan's scene-CheeseCollectible-0681703e-afdc-4290-a525-01d83f39f032
+  GenerateGuidButton: 0
 --- !u!1 &1366020932
 GameObject:
   m_ObjectHideFlags: 0
@@ -9582,7 +9583,7 @@ GameObject:
   - component: {fileID: 1610610266}
   - component: {fileID: 1610610265}
   - component: {fileID: 1610610264}
-  - component: {fileID: 1610610263}
+  - component: {fileID: 1610610267}
   m_Layer: 0
   m_Name: CheeseCollectible
   m_TagString: Untagged
@@ -9590,22 +9591,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1610610263
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1610610262}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 997d314db10a35045889ccec052ab4c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SaveActive: 1
-  UniqueIDSuffix: 
-  _guid: dua stan's scene-CheeseCollectible (1)-4ca48396-d6b0-49df-8d9b-b6d8a9ea0773
-  GenerateGuidButton: 0
 --- !u!114 &1610610264
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9685,6 +9670,22 @@ Transform:
   - {fileID: 223524224}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1610610267
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1610610262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef7cfc1410edd304fbe505a4aec2eff7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SaveActive: 1
+  UniqueIDSuffix: 
+  _guid: dua stan's scene-CheeseCollectible-2038a0e5-4a40-420e-83de-e9de4a840b86
+  GenerateGuidButton: 0
 --- !u!1 &1632004769
 GameObject:
   m_ObjectHideFlags: 0
@@ -10429,7 +10430,7 @@ GameObject:
   - component: {fileID: 1812337874}
   - component: {fileID: 1812337876}
   - component: {fileID: 1812337875}
-  - component: {fileID: 1812337878}
+  - component: {fileID: 1812337877}
   m_Layer: 0
   m_Name: CheeseCollectible
   m_TagString: Untagged
@@ -10516,7 +10517,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.875, y: 0.875}
   m_EdgeRadius: 0
---- !u!114 &1812337878
+--- !u!114 &1812337877
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -10525,13 +10526,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 1812337873}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 997d314db10a35045889ccec052ab4c1, type: 3}
+  m_Script: {fileID: 11500000, guid: 0a7bbf4dd985ac14d872ded9d7db5c55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   SaveActive: 1
   UniqueIDSuffix: 
-  _guid: dua stan's scene-CheeseCollectible-7f58ec2b-bff5-43bb-9eb3-e3093ce53851
+  _guid: dua stan's scene-CheeseCollectible-f2db18fe-961a-474d-9d50-b6a7ebf49a95
   GenerateGuidButton: 0
+  weaponPair:
+    weapon: {fileID: 4237984674334015922, guid: b4346063e40a6154faf071c47023849d,
+      type: 3}
+    weaponData: {fileID: 11400000, guid: 821eb3391acf9b04caa6068d85d517e6, type: 2}
+    primaryAction: {fileID: -3277052253356009991, guid: c43c134994d81f842868e3d0675d33c9,
+      type: 3}
+    secondaryAction: {fileID: 7670200923944158061, guid: c43c134994d81f842868e3d0675d33c9,
+      type: 3}
+    switchCooldown: 0.15
 --- !u!1 &1895428711
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,23 +6,21 @@ using UnityEngine;
 
 public class PlayerController : EntityController {
 
-    [Header("Mechanics")]
-    private Weapon currWeapon;
-
-    [Header("Hotbar")]
+    [Header("Item Selector")]
     private ItemSelector itemSelector;
 
     [Header("Weapons/Primary/Secondary Actions")]
-    [SerializeField] private WeaponActionPair[] weaponActionPairs;
+    [SerializeField] private WeaponPair[] defaultWeaponPairs; // default weapon action pairs (from inspector) that player begins with
+    private List<WeaponPair> weaponPairs; // stores current weapons that player has
     private Coroutine switchCoroutine;
+
+    [Header("Fire")]
+    private FireSecondaryAction fireSecondaryAction;
 
     [Header("Earth")]
     private EarthPrimaryAction earthPrimaryAction;
     private Rock currRock;
     private Coroutine rockSummonCoroutine;
-
-    [Header("Fire")]
-    private FireSecondaryAction fireSecondaryAction;
 
     [Header("Time")]
     private TimeSecondaryAction timeSecondaryAction;
@@ -31,7 +29,7 @@ public class PlayerController : EntityController {
     private bool isDead; // to deal with death delay
 
     [Header("Health")]
-    private List<WeaponActionPair> deathSubscriptions; // for unsubscribing later
+    private List<WeaponPair> deathSubscriptions; // for unsubscribing later
 
     private new void Awake() {
 
@@ -45,57 +43,41 @@ public class PlayerController : EntityController {
             mechanicStatuses.Add(mechanicType, true); // set all mechanics to true by default
 
         itemSelector = FindObjectOfType<ItemSelector>();
-        deathSubscriptions = new List<WeaponActionPair>();
+        weaponPairs = new List<WeaponPair>();
+        deathSubscriptions = new List<WeaponPair>();
 
-        // pick the first secondary action as the default, subscribe to death event, initialize hotbar
-        foreach (WeaponActionPair pair in weaponActionPairs) {
+        // disable all primary actions by default
+        foreach (PrimaryAction action in GetComponents<PrimaryAction>())
+            action.enabled = false;
 
-            PrimaryAction primaryAction = pair.GetPrimaryAction();
-            SecondaryAction secondaryAction = pair.GetSecondaryAction();
+        // disable all secondary actions by default
+        foreach (SecondaryAction action in GetComponents<SecondaryAction>())
+            action.enabled = false;
 
-            // enable first primary & secondary action (if they exist), disable the rest
-            if (pair == weaponActionPairs[0]) {
+        // add each default weapon action pair to player
+        foreach (WeaponPair pair in defaultWeaponPairs)
+            AddWeapon(pair);
 
-                if (primaryAction) {
+        // enable primary and secondary actions for first weapon (if it exists)
+        if (weaponPairs.Count > 0) {
 
-                    primaryAction.Initialize(pair.GetWeaponData());
-                    primaryAction.enabled = true;
+            WeaponPair weaponPair = weaponPairs[0];
+            PrimaryAction primaryAction = weaponPair.GetPrimaryAction();
+            SecondaryAction secondaryAction = weaponPair.GetSecondaryAction();
 
-                }
+            if (primaryAction) {
 
-                if (secondaryAction) {
+                primaryAction.Initialize(weaponPair.GetWeaponData());
+                primaryAction.enabled = true;
 
-                    secondaryAction.Initialize(pair.GetWeaponData());
-                    secondaryAction.enabled = true;
-
-                }
-            } else {
-
-                if (primaryAction) {
-
-                    primaryAction.Initialize(pair.GetWeaponData());
-                    primaryAction.enabled = false;
-
-                }
-
-                if (secondaryAction) {
-
-                    secondaryAction.Initialize(pair.GetWeaponData());
-                    secondaryAction.enabled = false;
-
-                }
             }
 
-            itemSelector.AddWeapon(pair.GetWeaponData()); // add weapon item to hotbar
+            if (secondaryAction) {
 
-            if (primaryAction)
-                health.OnDeath += primaryAction.OnDeath; // subscribe to death event
+                secondaryAction.Initialize(weaponPair.GetWeaponData());
+                secondaryAction.enabled = true;
 
-            if (secondaryAction)
-                health.OnDeath += secondaryAction.OnDeath; // subscribe to death event
-
-            deathSubscriptions.Add(pair); // add to list for unsubscribing later
-
+            }
         }
     }
 
@@ -107,8 +89,7 @@ public class PlayerController : EntityController {
         fireSecondaryAction = GetComponent<FireSecondaryAction>();
         timeSecondaryAction = GetComponent<TimeSecondaryAction>();
 
-        currWeapon = weaponActionPairs[0].GetWeapon(); // get first weapon
-        charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon to first weapon by default
+        UpdateCurrentWeapon(); // update current weapon
 
     }
 
@@ -117,18 +98,16 @@ public class PlayerController : EntityController {
         if (isDead)
             return; // player is dead, no need to update
 
-        #region ACTIONS
-
-        // IMPORTANT: do this before isDead check to prevent toggle issues on death
-        currWeapon = null;
         PrimaryAction currPrimaryAction = null;
         SecondaryAction currSecondaryAction = null;
 
-        if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+        #region ACTIONS
 
-            currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon();
-            currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
-            currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
+        if (itemSelector.GetCurrSlotIndex() < weaponPairs.Count) { // make sure slot has a weapon in it
+
+            WeaponPair pair = weaponPairs[itemSelector.GetCurrSlotIndex()]; // get current weapon action pair
+            currPrimaryAction = pair.GetPrimaryAction();
+            currSecondaryAction = pair.GetSecondaryAction();
 
         }
 
@@ -179,547 +158,38 @@ public class PlayerController : EntityController {
         #region WEAPON SWITCHING
 
         /* SCROLL WHEEL WEAPON SWITCHING */
-        if (Input.mouseScrollDelta.y > 0f && !fireSecondaryAction.IsFlamethrowerEquipped() && !earthPrimaryAction.IsSummoningRock() && !earthPrimaryAction.IsRockThrowReady() && !timeSecondaryAction.IsChanneling()) { // make sure flamethrower isn't equipped, rock isn't being summoned, & rock throw isn't ready before switching
+        if (Input.mouseScrollDelta.y != 0f && !fireSecondaryAction.IsFlamethrowerEquipped() && !earthPrimaryAction.IsSummoningRock() && !earthPrimaryAction.IsRockThrowReady() && !timeSecondaryAction.IsChanneling()) { // check if scroll wheel has moved, make sure flamethrower isn't equipped, rock isn't being summoned, & rock throw isn't ready before switching
 
-            itemSelector.CycleSlot(-1); // cycle hotbar slot backwards
+            // disable previous primary action if it exists
+            if (currPrimaryAction)
+                currPrimaryAction.enabled = false;
 
-            if (currPrimaryAction) // make sure primary action exists
-                currPrimaryAction.enabled = false; // disable current primary action
+            // disable previous secondary action if it exists
+            if (currSecondaryAction)
+                currSecondaryAction.enabled = false;
 
-            if (currSecondaryAction) // make sure secondary action exists
-                currSecondaryAction.enabled = false; // disable current secondary action
+            itemSelector.CycleSlot(Input.mouseScrollDelta.y < 0f ? 1 : -1);
 
-            // set new weapon and actions
-            if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+            UpdateCurrentWeapon();
 
-                currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon(); // set new weapon
-                currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
-                currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
-
-                // placed here to make sure weapon exists before starting cooldown
-                if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
-                switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start weapon cooldown
-
-                charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
-
-                if (currPrimaryAction) { // make sure primary action exists
-
-                    currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction(); // update primary action
-
-                    if (currPrimaryAction) // check if new primary action exists
-                        currPrimaryAction.enabled = true; // enable new action
-
-                }
-
-                if (currSecondaryAction) { // make sure secondary action exists
-
-                    currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
-
-                    if (currSecondaryAction) // check if new secondary action exists
-                        currSecondaryAction.enabled = true; // enable new action
-
-                }
-            } else {
-
-                charWeaponHandler.ChangeWeapon(null, null); // remove weapon
-
-            }
-        } else if (Input.mouseScrollDelta.y < 0f && !fireSecondaryAction.IsFlamethrowerEquipped() && !earthPrimaryAction.IsSummoningRock() && !earthPrimaryAction.IsRockThrowReady() && !timeSecondaryAction.IsChanneling()) { // make sure flamethrower isn't equipped, rock isn't being summoned, & rock throw isn't ready before switching
-
-            itemSelector.CycleSlot(1); // cycle hotbar slot forwards
-
-            if (currPrimaryAction) // make sure primary action exists
-                currPrimaryAction.enabled = false; // disable current primary action
-
-            if (currSecondaryAction) // make sure secondary action exists
-                currSecondaryAction.enabled = false; // disable current secondary action
-
-            // set new weapon and actions
-            if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
-
-                currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon(); // set new weapon
-                currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
-                currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
-
-                // placed here to make sure weapon exists before starting cooldown
-                if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
-                switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start weapon cooldown
-
-                charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
-
-                if (currPrimaryAction) { // make sure primary action exists
-
-                    currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction(); // update primary action
-
-                    if (currPrimaryAction) // check if new primary action exists
-                        currPrimaryAction.enabled = true; // enable new action
-
-                }
-
-                if (currSecondaryAction) { // make sure secondary action exists
-
-                    currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
-
-                    if (currSecondaryAction) // check if new secondary action exists
-                        currSecondaryAction.enabled = true; // enable new action
-
-                }
-            } else {
-
-                charWeaponHandler.ChangeWeapon(null, null); // remove weapon
-
-            }
         }
 
         /* KEY WEAPON SWITCHING */
-        if (Input.GetKeyDown(KeyCode.Alpha1) && !fireSecondaryAction.IsFlamethrowerEquipped() && !earthPrimaryAction.IsSummoningRock() && !earthPrimaryAction.IsRockThrowReady() && !timeSecondaryAction.IsChanneling()) { // make sure flamethrower isn't equipped, rock isn't being summoned, & rock throw isn't ready before switching
+        for (int i = 0; i < itemSelector.GetSlotCount(); i++) {
 
-            itemSelector.SelectSlot(0);
+            if (Input.GetKeyDown((i + 1) + "") && !fireSecondaryAction.IsFlamethrowerEquipped() && !earthPrimaryAction.IsSummoningRock() && !earthPrimaryAction.IsRockThrowReady() && !timeSecondaryAction.IsChanneling()) { // make sure flamethrower isn't equipped, rock isn't being summoned, & rock throw isn't ready before switching
 
-            if (currPrimaryAction) // make sure primary action exists
-                currPrimaryAction.enabled = false; // disable current primary action
+                // disable previous primary action if it exists
+                if (currPrimaryAction)
+                    currPrimaryAction.enabled = false;
 
-            if (currSecondaryAction) // make sure secondary action exists
-                currSecondaryAction.enabled = false; // disable current secondary action
+                // disable previous secondary action if it exists
+                if (currSecondaryAction)
+                    currSecondaryAction.enabled = false;
 
-            // set new weapon and actions
-            if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
+                itemSelector.SelectSlot(i);
 
-                currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon(); // set new weapon
-                currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
-                currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
-
-                // placed here to make sure weapon exists before starting cooldown
-                if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
-                switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start weapon cooldown
-
-                charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
-
-                if (currPrimaryAction) { // make sure primary action exists
-
-                    currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction(); // update primary action
-
-                    if (currPrimaryAction) // check if new primary action exists
-                        currPrimaryAction.enabled = true; // enable new action
-
-                }
-
-                if (currSecondaryAction) { // make sure secondary action exists
-
-                    currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
-
-                    if (currSecondaryAction) // check if new secondary action exists
-                        currSecondaryAction.enabled = true; // enable new action
-
-                }
-            } else {
-
-                charWeaponHandler.ChangeWeapon(null, null); // remove weapon
-
-            }
-        } else if (Input.GetKeyDown(KeyCode.Alpha2) && !fireSecondaryAction.IsFlamethrowerEquipped() && !earthPrimaryAction.IsSummoningRock() && !earthPrimaryAction.IsRockThrowReady() && !timeSecondaryAction.IsChanneling()) { // make sure flamethrower isn't equipped, rock isn't being summoned, & rock throw isn't ready before switching
-
-            itemSelector.SelectSlot(1);
-
-            if (currPrimaryAction) // make sure primary action exists
-                currPrimaryAction.enabled = false; // disable current primary action
-
-            if (currSecondaryAction) // make sure secondary action exists
-                currSecondaryAction.enabled = false; // disable current secondary action
-
-            // set new weapon and actions
-            if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
-
-                currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon(); // set new weapon
-                currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
-                currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
-
-                // placed here to make sure weapon exists before starting cooldown
-                if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
-                switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start weapon cooldown
-
-                charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
-
-                if (currPrimaryAction) { // make sure primary action exists
-
-                    currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction(); // update primary action
-
-                    if (currPrimaryAction) // check if new primary action exists
-                        currPrimaryAction.enabled = true; // enable new action
-
-                }
-
-                if (currSecondaryAction) { // make sure secondary action exists
-
-                    currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
-
-                    if (currSecondaryAction) // check if new secondary action exists
-                        currSecondaryAction.enabled = true; // enable new action
-
-                }
-            } else {
-
-                charWeaponHandler.ChangeWeapon(null, null); // remove weapon
-
-            }
-        } else if (Input.GetKeyDown(KeyCode.Alpha3) && !fireSecondaryAction.IsFlamethrowerEquipped() && !earthPrimaryAction.IsSummoningRock() && !earthPrimaryAction.IsRockThrowReady() && !timeSecondaryAction.IsChanneling()) { // make sure flamethrower isn't equipped, rock isn't being summoned, & rock throw isn't ready before switching
-
-            itemSelector.SelectSlot(2);
-
-            if (currPrimaryAction) // make sure primary action exists
-                currPrimaryAction.enabled = false; // disable current primary action
-
-            if (currSecondaryAction) // make sure secondary action exists
-                currSecondaryAction.enabled = false; // disable current secondary action
-
-            // set new weapon and actions
-            if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
-
-                currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon(); // set new weapon
-                currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
-                currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
-
-                // placed here to make sure weapon exists before starting cooldown
-                if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
-                switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start weapon cooldown
-
-                charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
-
-                if (currPrimaryAction) { // make sure primary action exists
-
-                    currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction(); // update primary action
-
-                    if (currPrimaryAction) // check if new primary action exists
-                        currPrimaryAction.enabled = true; // enable new action
-
-                }
-
-                if (currSecondaryAction) { // make sure secondary action exists
-
-                    currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
-
-                    if (currSecondaryAction) // check if new secondary action exists
-                        currSecondaryAction.enabled = true; // enable new action
-
-                }
-            } else {
-
-                charWeaponHandler.ChangeWeapon(null, null); // remove weapon
-
-            }
-        } else if (Input.GetKeyDown(KeyCode.Alpha4) && !fireSecondaryAction.IsFlamethrowerEquipped() && !earthPrimaryAction.IsSummoningRock() && !earthPrimaryAction.IsRockThrowReady() && !timeSecondaryAction.IsChanneling()) { // make sure flamethrower isn't equipped, rock isn't being summoned, & rock throw isn't ready before switching
-
-            itemSelector.SelectSlot(3);
-
-            if (currPrimaryAction) // make sure primary action exists
-                currPrimaryAction.enabled = false; // disable current primary action
-
-            if (currSecondaryAction) // make sure secondary action exists
-                currSecondaryAction.enabled = false; // disable current secondary action
-
-            // set new weapon and actions
-            if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
-
-                currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon(); // set new weapon
-                currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
-                currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
-
-                // placed here to make sure weapon exists before starting cooldown
-                if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
-                switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start weapon cooldown
-
-                charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
-
-                if (currPrimaryAction) { // make sure primary action exists
-
-                    currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction(); // update primary action
-
-                    if (currPrimaryAction) // check if new primary action exists
-                        currPrimaryAction.enabled = true; // enable new action
-
-                }
-
-                if (currSecondaryAction) { // make sure secondary action exists
-
-                    currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
-
-                    if (currSecondaryAction) // check if new secondary action exists
-                        currSecondaryAction.enabled = true; // enable new action
-
-                }
-            } else {
-
-                charWeaponHandler.ChangeWeapon(null, null); // remove weapon
-
-            }
-        } else if (Input.GetKeyDown(KeyCode.Alpha5) && !fireSecondaryAction.IsFlamethrowerEquipped() && !earthPrimaryAction.IsSummoningRock() && !earthPrimaryAction.IsRockThrowReady() && !timeSecondaryAction.IsChanneling()) { // make sure flamethrower isn't equipped, rock isn't being summoned, & rock throw isn't ready before switching
-
-            itemSelector.SelectSlot(4);
-
-            if (currPrimaryAction) // make sure primary action exists
-                currPrimaryAction.enabled = false; // disable current primary action
-
-            if (currSecondaryAction) // make sure secondary action exists
-                currSecondaryAction.enabled = false; // disable current secondary action
-
-            // set new weapon and actions
-            if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
-
-                currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon(); // set new weapon
-                currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
-                currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
-
-                // placed here to make sure weapon exists before starting cooldown
-                if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
-                switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start weapon cooldown
-
-                charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
-
-                if (currPrimaryAction) { // make sure primary action exists
-
-                    currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction(); // update primary action
-
-                    if (currPrimaryAction) // check if new primary action exists
-                        currPrimaryAction.enabled = true; // enable new action
-
-                }
-
-                if (currSecondaryAction) { // make sure secondary action exists
-
-                    currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
-
-                    if (currSecondaryAction) // check if new secondary action exists
-                        currSecondaryAction.enabled = true; // enable new action
-
-                }
-            } else {
-
-                charWeaponHandler.ChangeWeapon(null, null); // remove weapon
-
-            }
-        } else if (Input.GetKeyDown(KeyCode.Alpha6) && !fireSecondaryAction.IsFlamethrowerEquipped() && !earthPrimaryAction.IsSummoningRock() && !earthPrimaryAction.IsRockThrowReady() && !timeSecondaryAction.IsChanneling()) { // make sure flamethrower isn't equipped, rock isn't being summoned, & rock throw isn't ready before switching
-
-            itemSelector.SelectSlot(5);
-
-            if (currPrimaryAction) // make sure primary action exists
-                currPrimaryAction.enabled = false; // disable current primary action
-
-            if (currSecondaryAction) // make sure secondary action exists
-                currSecondaryAction.enabled = false; // disable current secondary action
-
-            // set new weapon and actions
-            if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
-
-                currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon(); // set new weapon
-                currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
-                currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
-
-                // placed here to make sure weapon exists before starting cooldown
-                if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
-                switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start weapon cooldown
-
-                charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
-
-                if (currPrimaryAction) { // make sure primary action exists
-
-                    currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction(); // update primary action
-
-                    if (currPrimaryAction) // check if new primary action exists
-                        currPrimaryAction.enabled = true; // enable new action
-
-                }
-
-                if (currSecondaryAction) { // make sure secondary action exists
-
-                    currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
-
-                    if (currSecondaryAction) // check if new secondary action exists
-                        currSecondaryAction.enabled = true; // enable new action
-
-                }
-            } else {
-
-                charWeaponHandler.ChangeWeapon(null, null); // remove weapon
-
-            }
-        } else if (Input.GetKeyDown(KeyCode.Alpha7) && !fireSecondaryAction.IsFlamethrowerEquipped() && !earthPrimaryAction.IsSummoningRock() && !earthPrimaryAction.IsRockThrowReady() && !timeSecondaryAction.IsChanneling()) { // make sure flamethrower isn't equipped, rock isn't being summoned, & rock throw isn't ready before switching
-
-            itemSelector.SelectSlot(6);
-
-            if (currPrimaryAction) // make sure primary action exists
-                currPrimaryAction.enabled = false; // disable current primary action
-
-            if (currSecondaryAction) // make sure secondary action exists
-                currSecondaryAction.enabled = false; // disable current secondary action
-
-            // set new weapon and actions
-            if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
-
-                currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon(); // set new weapon
-                currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
-                currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
-
-                // placed here to make sure weapon exists before starting cooldown
-                if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
-                switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start weapon cooldown
-
-                charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
-
-                if (currPrimaryAction) { // make sure primary action exists
-
-                    currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction(); // update primary action
-
-                    if (currPrimaryAction) // check if new primary action exists
-                        currPrimaryAction.enabled = true; // enable new action
-
-                }
-
-                if (currSecondaryAction) { // make sure secondary action exists
-
-                    currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
-
-                    if (currSecondaryAction) // check if new secondary action exists
-                        currSecondaryAction.enabled = true; // enable new action
-
-                }
-            } else {
-
-                charWeaponHandler.ChangeWeapon(null, null); // remove weapon
-
-            }
-        } else if (Input.GetKeyDown(KeyCode.Alpha8) && !fireSecondaryAction.IsFlamethrowerEquipped() && !earthPrimaryAction.IsSummoningRock() && !earthPrimaryAction.IsRockThrowReady() && !timeSecondaryAction.IsChanneling()) { // make sure flamethrower isn't equipped, rock isn't being summoned, & rock throw isn't ready before switching
-
-            itemSelector.SelectSlot(7);
-
-            if (currPrimaryAction) // make sure primary action exists
-                currPrimaryAction.enabled = false; // disable current primary action
-
-            if (currSecondaryAction) // make sure secondary action exists
-                currSecondaryAction.enabled = false; // disable current secondary action
-
-            // set new weapon and actions
-            if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
-
-                currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon(); // set new weapon
-                currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
-                currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
-
-                // placed here to make sure weapon exists before starting cooldown
-                if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
-                switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start weapon cooldown
-
-                charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
-
-                if (currPrimaryAction) { // make sure primary action exists
-
-                    currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction(); // update primary action
-
-                    if (currPrimaryAction) // check if new primary action exists
-                        currPrimaryAction.enabled = true; // enable new action
-
-                }
-
-                if (currSecondaryAction) { // make sure secondary action exists
-
-                    currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
-
-                    if (currSecondaryAction) // check if new secondary action exists
-                        currSecondaryAction.enabled = true; // enable new action
-
-                }
-            } else {
-
-                charWeaponHandler.ChangeWeapon(null, null); // remove weapon
-
-            }
-        } else if (Input.GetKeyDown(KeyCode.Alpha9) && !fireSecondaryAction.IsFlamethrowerEquipped() && !earthPrimaryAction.IsSummoningRock() && !earthPrimaryAction.IsRockThrowReady() && !timeSecondaryAction.IsChanneling()) { // make sure flamethrower isn't equipped, rock isn't being summoned, & rock throw isn't ready before switching
-
-            itemSelector.SelectSlot(8);
-
-            if (currPrimaryAction) // make sure primary action exists
-                currPrimaryAction.enabled = false; // disable current primary action
-
-            if (currSecondaryAction) // make sure secondary action exists
-                currSecondaryAction.enabled = false; // disable current secondary action
-
-            // set new weapon and actions
-            if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
-
-                currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon(); // set new weapon
-                currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
-                currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
-
-                // placed here to make sure weapon exists before starting cooldown
-                if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
-                switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start weapon cooldown
-
-                charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
-
-                if (currPrimaryAction) { // make sure primary action exists
-
-                    currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction(); // update primary action
-
-                    if (currPrimaryAction) // check if new primary action exists
-                        currPrimaryAction.enabled = true; // enable new action
-
-                }
-
-                if (currSecondaryAction) { // make sure secondary action exists
-
-                    currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
-
-                    if (currSecondaryAction) // check if new secondary action exists
-                        currSecondaryAction.enabled = true; // enable new action
-
-                }
-            } else {
-
-                charWeaponHandler.ChangeWeapon(null, null); // remove weapon
-
-            }
-        } else if (Input.GetKeyDown(KeyCode.Alpha0) && !fireSecondaryAction.IsFlamethrowerEquipped() && !earthPrimaryAction.IsSummoningRock() && !earthPrimaryAction.IsRockThrowReady() && !timeSecondaryAction.IsChanneling()) { // make sure flamethrower isn't equipped, rock isn't being summoned, & rock throw isn't ready before switching
-
-            itemSelector.SelectSlot(9);
-
-            if (currPrimaryAction) // make sure primary action exists
-                currPrimaryAction.enabled = false; // disable current primary action
-
-            if (currSecondaryAction) // make sure secondary action exists
-                currSecondaryAction.enabled = false; // disable current secondary action
-
-            // set new weapon and actions
-            if (itemSelector.GetCurrWeapon() < weaponActionPairs.Length) { // make sure slot has a weapon in it
-
-                currWeapon = weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon(); // set new weapon
-                currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction();
-                currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction();
-
-                // placed here to make sure weapon exists before starting cooldown
-                if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
-                switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start weapon cooldown
-
-                charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
-
-                if (currPrimaryAction) { // make sure primary action exists
-
-                    currPrimaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetPrimaryAction(); // update primary action
-
-                    if (currPrimaryAction) // check if new primary action exists
-                        currPrimaryAction.enabled = true; // enable new action
-
-                }
-
-                if (currSecondaryAction) { // make sure secondary action exists
-
-                    currSecondaryAction = weaponActionPairs[itemSelector.GetCurrWeapon()].GetSecondaryAction(); // update secondary action
-
-                    if (currSecondaryAction) // check if new secondary action exists
-                        currSecondaryAction.enabled = true; // enable new action
-
-                }
-            } else {
-
-                charWeaponHandler.ChangeWeapon(null, null); // remove weapon
+                UpdateCurrentWeapon();
 
             }
         }
@@ -740,7 +210,7 @@ public class PlayerController : EntityController {
         base.OnDestroy();
 
         // unsubscribe from all events
-        foreach (WeaponActionPair action in deathSubscriptions) {
+        foreach (WeaponPair action in deathSubscriptions) {
 
             if (action.GetPrimaryAction())
                 health.OnDeath -= action.GetPrimaryAction().OnDeath;
@@ -817,12 +287,89 @@ public class PlayerController : EntityController {
 
     #region UTILITIES
 
-    public Weapon GetCurrentWeapon() => weaponActionPairs[itemSelector.GetCurrWeapon()].GetWeapon();
+    public void AddWeapon(WeaponPair weaponPair) {
+
+        PrimaryAction primaryAction = weaponPair.GetPrimaryAction();
+        SecondaryAction secondaryAction = weaponPair.GetSecondaryAction();
+
+        // disable primary & secondary actions (if they exist)
+        if (primaryAction) {
+
+            primaryAction.Initialize(weaponPair.GetWeaponData());
+            primaryAction.enabled = false;
+
+        }
+
+        if (secondaryAction) {
+
+            secondaryAction.Initialize(weaponPair.GetWeaponData());
+            secondaryAction.enabled = false;
+
+        }
+
+        itemSelector.AddWeapon(weaponPair.GetWeaponData()); // add weapon item to item selector
+
+        if (primaryAction)
+            health.OnDeath += primaryAction.OnDeath; // subscribe to death event
+
+        if (secondaryAction)
+            health.OnDeath += secondaryAction.OnDeath; // subscribe to death event
+
+        weaponPairs.Add(weaponPair); // add to weapon action pairs list
+        deathSubscriptions.Add(weaponPair); // add to list for unsubscribing later
+
+    }
+
+    public void UpdateCurrentWeapon() {
+
+        if (itemSelector.GetCurrSlotIndex() < weaponPairs.Count) { // make sure weapon exists
+
+            Weapon currWeapon = weaponPairs[itemSelector.GetCurrSlotIndex()].GetWeapon(); // set new weapon
+
+            // placed here to make sure weapon exists before starting cooldown
+            if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
+            switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start weapon cooldown
+
+            charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
+
+            PrimaryAction currPrimaryAction = weaponPairs[itemSelector.GetCurrSlotIndex()].GetPrimaryAction();
+            SecondaryAction currSecondaryAction = weaponPairs[itemSelector.GetCurrSlotIndex()].GetSecondaryAction();
+
+            if (currPrimaryAction) { // make sure primary action exists
+
+                currPrimaryAction = weaponPairs[itemSelector.GetCurrSlotIndex()].GetPrimaryAction(); // update primary action
+
+                // enable new primary action if it exists
+                if (currPrimaryAction)
+                    currPrimaryAction.enabled = true;
+
+            }
+
+            if (currSecondaryAction) { // make sure secondary action exists
+
+                currSecondaryAction = weaponPairs[itemSelector.GetCurrSlotIndex()].GetSecondaryAction(); // update secondary action
+
+                // enable new secondary action if it exists
+                if (currSecondaryAction)
+                    currSecondaryAction.enabled = true;
+
+            }
+        } else {
+
+            charWeaponHandler.ChangeWeapon(null, null); // remove weapon if it doesn't exist
+
+        }
+
+        itemSelector.UpdateWeaponHUD(); // update weapon HUD
+
+    }
+
+    public Weapon GetCurrentWeapon() => weaponPairs[itemSelector.GetCurrSlotIndex()].GetWeapon();
 
     private IEnumerator HandleSwitchCooldown() {
 
         charWeaponHandler.AbilityPermitted = false; // disable ability use
-        yield return new WaitForSeconds(weaponActionPairs[itemSelector.GetCurrWeapon()].GetSwitchCooldown()); // wait for switch cooldown
+        yield return new WaitForSeconds(weaponPairs[itemSelector.GetCurrSlotIndex()].GetSwitchCooldown()); // wait for switch cooldown
         charWeaponHandler.AbilityPermitted = true; // enable ability use
 
     }

@@ -3,12 +3,13 @@ using MoreMountains.Tools;
 using System;
 using UnityEngine;
 
-public class Collectible : MMPersistentBase {
+public abstract class BaseCollectible : MMPersistentBase {
 
     [Header("References")]
+    protected PlayerController playerController;
+    protected ItemPicker itemPicker;
+    protected bool isCollected;
     private GameManager gameManager;
-    private ItemPicker itemPicker;
-    private bool isCollected;
 
     [Serializable]
     protected struct Data {
@@ -24,6 +25,8 @@ public class Collectible : MMPersistentBase {
         itemPicker.OnCollect += OnCollect;
 
     }
+
+    protected void Start() => playerController = FindObjectOfType<PlayerController>();
 
     protected void OnDestroy() => itemPicker.OnCollect -= OnCollect;
 

@@ -312,7 +312,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6028263854266632344}
   - component: {fileID: 6623342494606771417}
-  - component: {fileID: 762952736203830653}
   - component: {fileID: 2489162015849116405}
   - component: {fileID: 4077020468999200023}
   - component: {fileID: 6870399177041132509}
@@ -430,51 +429,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &762952736203830653
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4900122409563817483}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0.060000002, y: -0.120000005}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 0.16, y: 0.16}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.39, y: 0.76471174}
-  m_EdgeRadius: 0
 --- !u!61 &2489162015849116405
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -507,7 +461,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.0551441}
+  m_Offset: {x: 0, y: -0.015625}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -518,7 +472,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.625, y: 0.7647118}
+  m_Size: {x: 0.4375, y: 0.90625}
   m_EdgeRadius: 0
 --- !u!50 &4077020468999200023
 Rigidbody2D:
@@ -1165,48 +1119,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1a7a7f7aeef5af458cc58f98d35ab3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponActionPairs:
+  defaultWeaponPairs:
   - weapon: {fileID: 4237984674334015922, guid: 1146d9a50fe8cfb4491f14c86a6845dc,
       type: 3}
     weaponData: {fileID: 11400000, guid: 3224215c3a45c564ca37fef85f48c954, type: 2}
     primaryAction: {fileID: 2592352146518810568}
     secondaryAction: {fileID: 2721479856997411025}
-    switchCooldown: 0.15
-  - weapon: {fileID: 4237984674334015922, guid: 9d60ea47bc8ee1b4a80c55c277f5a949,
-      type: 3}
-    weaponData: {fileID: 11400000, guid: 240fb2df713a88941845b673fa543e19, type: 2}
-    primaryAction: {fileID: -772895172877787362}
-    secondaryAction: {fileID: 8881875236129953771}
-    switchCooldown: 0.15
-  - weapon: {fileID: 4237984674334015922, guid: 9a3122220c3edc64683ed774da57bdca,
-      type: 3}
-    weaponData: {fileID: 11400000, guid: 0b8316274d5b89d44ab51986d17cc3ba, type: 2}
-    primaryAction: {fileID: -569371758860137605}
-    secondaryAction: {fileID: -8039291345281199097}
-    switchCooldown: 0.15
-  - weapon: {fileID: 4237984674334015922, guid: b8a570382a6f4554f90091a497fef835,
-      type: 3}
-    weaponData: {fileID: 11400000, guid: 6f8080ba3b2a54c459fdce6bcff4b454, type: 2}
-    primaryAction: {fileID: 3434021981974967308}
-    secondaryAction: {fileID: -5756287154290932317}
-    switchCooldown: 0.15
-  - weapon: {fileID: 4237984674334015922, guid: 4b35fc7ef435692488cc8c2bc368ca14,
-      type: 3}
-    weaponData: {fileID: 11400000, guid: ca3ec5979ed33474e8d59fd613d982a1, type: 2}
-    primaryAction: {fileID: -8373415171447550248}
-    secondaryAction: {fileID: -11100816744397030}
-    switchCooldown: 0.15
-  - weapon: {fileID: 4237984674334015922, guid: bc865fae1bcfbae478215777d530f338,
-      type: 3}
-    weaponData: {fileID: 11400000, guid: 6fb9c3a94d1f1cd4582e6ca735c37e39, type: 2}
-    primaryAction: {fileID: 6885750652469125261}
-    secondaryAction: {fileID: -4817289695206233610}
-    switchCooldown: 0.15
-  - weapon: {fileID: 4237984674334015922, guid: 63c5a376fdf6dd147a6643aa24e6fac6,
-      type: 3}
-    weaponData: {fileID: 11400000, guid: 8365a86a489859348aa3f37fc3dd6336, type: 2}
-    primaryAction: {fileID: -1635279773719420177}
-    secondaryAction: {fileID: 504269021816417971}
     switchCooldown: 0.15
 --- !u!114 &2592352146518810568
 MonoBehaviour:
@@ -1324,7 +1242,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4900122409563817483}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2d62cba59f0d7a42a1783834e6aede9, type: 3}
   m_Name: 
@@ -1474,7 +1392,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4900122409563817483}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d9f52c7134449ae4bb4aee537b99feda, type: 3}
   m_Name: 

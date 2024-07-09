@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private InventoryDisplay collectibleInventoryDisplay;
     [SerializeField] private int collectibleRows;
     [SerializeField] private int collectibleColumns;
-    [SerializeField] private Collectible[] requiredCollectibles;
+    [SerializeField] private BaseCollectible[] requiredCollectibles;
     private bool isLevelComplete;
 
     private void Start() {
@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour {
             return;
 
         // check if all required collectibles have been collected
-        foreach (Collectible collectible in requiredCollectibles)
+        foreach (BaseCollectible collectible in requiredCollectibles)
             if (!collectible.IsCollected())
                 return;
 

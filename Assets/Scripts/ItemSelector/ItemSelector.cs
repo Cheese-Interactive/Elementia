@@ -12,9 +12,8 @@ public class ItemSelector : MonoBehaviour {
 
     private void Start() {
 
-        slots[0].SetSelected(true);
-        primaryWeaponFill.sprite = slots[0].GetPrimaryIcon();
-        secondaryWeaponFill.sprite = slots[0].GetSecondaryIcon();
+        slots[currSlotIndex].SetSelected(true);
+        UpdateWeaponHUD(); // update the weapon HUD
 
     }
 
@@ -31,8 +30,8 @@ public class ItemSelector : MonoBehaviour {
         slots[currSlotIndex].SetSelected(false); // deselect the current slot
         currSlotIndex = slotIndex;
         slots[currSlotIndex].SetSelected(true); // select the new slot
-        primaryWeaponFill.sprite = slots[currSlotIndex].GetPrimaryIcon();
-        secondaryWeaponFill.sprite = slots[currSlotIndex].GetSecondaryIcon();
+
+        UpdateWeaponHUD(); // update the weapon HUD
 
     }
 
@@ -44,11 +43,20 @@ public class ItemSelector : MonoBehaviour {
         currSlotIndex = currSlotIndex < 0 ? slots.Length - 1 : currSlotIndex; // if the index is negative, set it to the last index
 
         slots[currSlotIndex].SetSelected(true); // select the new slot
+
+        UpdateWeaponHUD(); // update the weapon HUD
+
+    }
+
+    public void UpdateWeaponHUD() {
+
         primaryWeaponFill.sprite = slots[currSlotIndex].GetPrimaryIcon();
         secondaryWeaponFill.sprite = slots[currSlotIndex].GetSecondaryIcon();
 
     }
 
-    public int GetCurrWeapon() => currSlotIndex;
+    public int GetCurrSlotIndex() => currSlotIndex;
+
+    public int GetSlotCount() => slots.Length;
 
 }

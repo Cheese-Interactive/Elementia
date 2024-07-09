@@ -1,12 +1,9 @@
 using MoreMountains.CorgiEngine;
-using MoreMountains.InventoryEngine;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public class WeaponActionPair {
+public class WeaponPair {
 
     [Header("Data")]
     [SerializeField] private Weapon weapon;
