@@ -347,7 +347,6 @@ GameObject:
   - component: {fileID: 230583099580174233}
   - component: {fileID: 9206677560049693005}
   - component: {fileID: -2035838217422681104}
-  - component: {fileID: 1508539895824781662}
   - component: {fileID: 4640116482856619915}
   m_Layer: 9
   m_Name: Player
@@ -1443,18 +1442,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeOverlay: {fileID: 680182236056119212}
---- !u!114 &1508539895824781662
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4900122409563817483}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ce135e942d05a64ab5d0a78258ca573, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!95 &4640116482856619915
 Animator:
   serializedVersion: 5

@@ -47,7 +47,7 @@ public class DataManager : MonoBehaviour {
 
         if (checkpointObj != null) {
 
-            string checkpointUUID = (string) checkpointObj;
+            string checkpointUUID = (string)checkpointObj;
 
             foreach (CheckPoint checkpoint in levelManager.Checkpoints) {
 
