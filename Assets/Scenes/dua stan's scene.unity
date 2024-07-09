@@ -1779,7 +1779,7 @@ GameObject:
   - component: {fileID: 392197961}
   - component: {fileID: 392197968}
   - component: {fileID: 392197969}
-  - component: {fileID: 392197965}
+  - component: {fileID: 392197970}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -1921,18 +1921,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &392197965
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 392197960}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68528be22d5e3fc40bcd218bd0615cec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &392197968
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1985,6 +1973,18 @@ MonoBehaviour:
   - {fileID: 1233808972}
   - {fileID: 1335427524}
   - {fileID: 1610610267}
+--- !u!114 &392197970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 392197960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68528be22d5e3fc40bcd218bd0615cec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &416910124
 GameObject:
   m_ObjectHideFlags: 0
@@ -4100,7 +4100,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FacingDirection: 1
   ForceAssignation: 1
-  CheckPointOrder: 1
+  CheckPointOrder: 3
   CanBeReachedMoreThanOnce: 1
   OnCheckpointReached:
     m_PersistentCalls:
@@ -9190,7 +9190,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FacingDirection: 1
   ForceAssignation: 1
-  CheckPointOrder: 1
+  CheckPointOrder: 2
   CanBeReachedMoreThanOnce: 1
   OnCheckpointReached:
     m_PersistentCalls:
@@ -13232,8 +13232,6 @@ SceneRoots:
   - {fileID: 943460221}
   - {fileID: 1530505420}
   - {fileID: 1103957014}
-  - {fileID: 771283833}
-  - {fileID: 1398313123}
   - {fileID: 433316577}
   - {fileID: 1932897179}
   - {fileID: 1812337874}
@@ -13241,3 +13239,5 @@ SceneRoots:
   - {fileID: 1233808971}
   - {fileID: 1335427523}
   - {fileID: 1610610266}
+  - {fileID: 771283833}
+  - {fileID: 1398313123}

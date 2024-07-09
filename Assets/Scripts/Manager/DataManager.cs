@@ -10,6 +10,7 @@ public class DataManager : MonoBehaviour {
 
     private void Start() {
 
+        print("start");
         playerCharacter = FindObjectOfType<PlayerController>().GetComponent<Character>();
         levelManager = FindObjectOfType<LevelManager>();
 
@@ -27,6 +28,7 @@ public class DataManager : MonoBehaviour {
 
         #region CHECKPOINT
 
+        print(levelManager.CurrentCheckPoint.GetComponent<UUID>());
         MMSaveLoadManager.Save(levelManager.CurrentCheckPoint.GetComponent<UUID>().ID, "checkpoints.dat", "Data/"); // save the current checkpoint guid
 
         #endregion
@@ -47,10 +49,11 @@ public class DataManager : MonoBehaviour {
 
         if (checkpointObj != null) {
 
-            string checkpointUUID = (string)checkpointObj;
+            string checkpointUUID = (string) checkpointObj;
 
             foreach (CheckPoint checkpoint in levelManager.Checkpoints) {
 
+                print(levelManager.CurrentCheckPoint.GetComponent<UUID>());
                 if (checkpoint.GetComponent<UUID>().ID == checkpointUUID) {
 
                     levelManager.SetCurrentCheckpoint(checkpoint);
