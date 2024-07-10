@@ -11,6 +11,9 @@ public class PlayerController : EntityController {
 
     [Header("Weapons/Primary/Secondary Actions")]
     [SerializeField] private WeaponData[] defaultWeapons; // default weapons (from inspector) that player begins with
+    [SerializeField] private Weapon blankWeapon;
+    private WeaponDatabase weaponDatabase;
+    private WeaponPair currWeaponPair; // to avoid searching dictionary every frame
     private List<WeaponData> weapons; // stores current weapons that player has
     private Coroutine switchCoroutine;
 
@@ -29,7 +32,7 @@ public class PlayerController : EntityController {
     private bool isDead; // to deal with death delay
 
     [Header("Health")]
-    private List<WeaponData> deathSubscriptions; // for unsubscribing later
+    private List<WeaponPair> deathSubscriptions; // for unsubscribing later
 
     private new void Awake() {
 
@@ -42,43 +45,25 @@ public class PlayerController : EntityController {
         foreach (MechanicType mechanicType in mechanics)
             mechanicStatuses.Add(mechanicType, true); // set all mechanics to true by default
 
+        weaponDatabase = GetComponent<WeaponDatabase>();
         itemSelector = FindObjectOfType<ItemSelector>();
         weapons = new List<WeaponData>();
-        deathSubscriptions = new List<WeaponData>();
+        deathSubscriptions = new List<WeaponPair>();
 
-        // disable all primary actions by default
-        foreach (PrimaryAction action in GetComponents<PrimaryAction>())
-            action.enabled = false;
+        weaponDatabase.Initialize(); // initialize weapon database
 
-        // disable all secondary actions by default
-        foreach (SecondaryAction action in GetComponents<SecondaryAction>())
-            action.enabled = false;
+        // disable all primary actions
+        foreach (PrimaryAction primaryAction in GetComponents<PrimaryAction>()) // set player controller for all primary actions
+            primaryAction.enabled = false;
 
-        // add each default weapon action pair to player
-        foreach (WeaponData data in defaultWeapons)
-            AddWeapon(data);
+        // disable all secondary actions
+        foreach (SecondaryAction secondaryAction in GetComponents<SecondaryAction>()) // set player controller for all secondary actions
+            secondaryAction.enabled = false;
 
-        // enable primary and secondary actions for first weapon (if it exists)
-        if (weapons.Count > 0) {
+        // add each default weapon to player
+        foreach (WeaponData weaponData in defaultWeapons)
+            AddWeapon(weaponData);
 
-            WeaponData weaponData = weapons[0];
-            PrimaryAction primaryAction = weaponData.GetPrimaryAction();
-            SecondaryAction secondaryAction = weaponData.GetSecondaryAction();
-
-            if (primaryAction) {
-
-                primaryAction.Initialize(weaponData);
-                primaryAction.enabled = true;
-
-            }
-
-            if (secondaryAction) {
-
-                secondaryAction.Initialize(weaponData);
-                secondaryAction.enabled = true;
-
-            }
-        }
     }
 
     private new void Start() {
@@ -98,57 +83,56 @@ public class PlayerController : EntityController {
         if (isDead)
             return; // player is dead, no need to update
 
-        PrimaryAction currPrimaryAction = null;
-        SecondaryAction currSecondaryAction = null;
+        PrimaryAction primaryAction = null;
+        SecondaryAction secondaryAction = null;
 
         #region ACTIONS
 
         if (itemSelector.GetCurrSlotIndex() < weapons.Count) { // make sure slot has a weapon in it
 
-            WeaponData weaponData = weapons[itemSelector.GetCurrSlotIndex()]; // get current weapon
-            currPrimaryAction = weaponData.GetPrimaryAction();
-            currSecondaryAction = weaponData.GetSecondaryAction();
+            primaryAction = currWeaponPair.GetPrimaryAction();
+            secondaryAction = currWeaponPair.GetSecondaryAction();
 
         }
 
         /* PRIMARY ACTIONS */
-        if (currPrimaryAction) { // make sure slot has a primary action in it
+        if (primaryAction) { // make sure slot has a primary action in it
 
-            if (currPrimaryAction.IsRegularAction()) { // primary action is regular action
+            if (primaryAction.IsRegularAction()) { // primary action is regular action
 
-                if ((currPrimaryAction.IsAutoAction() && Input.GetMouseButton(0)) || // primary action is auto
-                    (!currPrimaryAction.IsAutoAction() && Input.GetMouseButtonDown(0))) { // primary action is not auto
+                if ((primaryAction.IsAutoAction() && Input.GetMouseButton(0)) || // primary action is auto
+                    (!primaryAction.IsAutoAction() && Input.GetMouseButtonDown(0))) { // primary action is not auto
 
-                    currPrimaryAction.OnTriggerRegular(); // trigger regular primary action
+                    primaryAction.OnTriggerRegular(); // trigger regular primary action
 
                 }
             } else { // primary action is hold action
 
                 if (Input.GetMouseButtonDown(0)) // start hold
-                    currPrimaryAction.OnTriggerHold(true);
+                    primaryAction.OnTriggerHold(true);
                 else if (Input.GetMouseButtonUp(0)) // stop hold
-                    currPrimaryAction.OnTriggerHold(false);
+                    primaryAction.OnTriggerHold(false);
 
             }
         }
 
         /* SECONDARY ACTIONS */
-        if (currSecondaryAction) { // make sure slot has a weapon/secondary action in it
+        if (secondaryAction) { // make sure slot has a weapon/secondary action in it
 
-            if (currSecondaryAction.IsRegularAction()) { // secondary action is regular action
+            if (secondaryAction.IsRegularAction()) { // secondary action is regular action
 
-                if ((currSecondaryAction.IsAutoAction() && Input.GetMouseButton(1)) || // secondary action is auto
-                    (!currSecondaryAction.IsAutoAction() && Input.GetMouseButtonDown(1))) { // secondary action is not auto
+                if ((secondaryAction.IsAutoAction() && Input.GetMouseButton(1)) || // secondary action is auto
+                    (!secondaryAction.IsAutoAction() && Input.GetMouseButtonDown(1))) { // secondary action is not auto
 
-                    currSecondaryAction.OnTriggerRegular(); // trigger regular secondary action
+                    secondaryAction.OnTriggerRegular(); // trigger regular secondary action
 
                 }
             } else { // secondary action is hold action
 
                 if (Input.GetMouseButtonDown(1)) // start hold
-                    currSecondaryAction.OnTriggerHold(true);
+                    secondaryAction.OnTriggerHold(true);
                 else if (Input.GetMouseButtonUp(1)) // stop hold
-                    currSecondaryAction.OnTriggerHold(false);
+                    secondaryAction.OnTriggerHold(false);
 
             }
         }
@@ -161,14 +145,14 @@ public class PlayerController : EntityController {
         if (Input.mouseScrollDelta.y != 0f && !fireSecondaryAction.IsFlamethrowerEquipped() && !earthPrimaryAction.IsSummoningRock() && !earthPrimaryAction.IsRockThrowReady() && !timeSecondaryAction.IsChanneling()) { // check if scroll wheel has moved, make sure flamethrower isn't equipped, rock isn't being summoned, & rock throw isn't ready before switching
 
             // disable previous primary action if it exists
-            if (currPrimaryAction)
-                currPrimaryAction.enabled = false;
+            if (primaryAction)
+                primaryAction.enabled = false;
 
             // disable previous secondary action if it exists
-            if (currSecondaryAction)
-                currSecondaryAction.enabled = false;
+            if (secondaryAction)
+                secondaryAction.enabled = false;
 
-            itemSelector.CycleSlot(Input.mouseScrollDelta.y < 0f ? 1 : -1);
+            itemSelector.CycleSlot(Input.mouseScrollDelta.y < 0f ? 1 : -1); // cycle slot based on scroll wheel direction
 
             UpdateCurrentWeapon();
 
@@ -180,14 +164,14 @@ public class PlayerController : EntityController {
             if (Input.GetKeyDown((i + 1) + "") && !fireSecondaryAction.IsFlamethrowerEquipped() && !earthPrimaryAction.IsSummoningRock() && !earthPrimaryAction.IsRockThrowReady() && !timeSecondaryAction.IsChanneling()) { // make sure flamethrower isn't equipped, rock isn't being summoned, & rock throw isn't ready before switching
 
                 // disable previous primary action if it exists
-                if (currPrimaryAction)
-                    currPrimaryAction.enabled = false;
+                if (primaryAction)
+                    primaryAction.enabled = false;
 
                 // disable previous secondary action if it exists
-                if (currSecondaryAction)
-                    currSecondaryAction.enabled = false;
+                if (secondaryAction)
+                    secondaryAction.enabled = false;
 
-                itemSelector.SelectSlot(i);
+                itemSelector.SelectSlot(i); // select slot based on key pressed
 
                 UpdateCurrentWeapon();
 
@@ -210,13 +194,13 @@ public class PlayerController : EntityController {
         base.OnDestroy();
 
         // unsubscribe from all events
-        foreach (WeaponData weaponData in deathSubscriptions) {
+        foreach (WeaponPair weaponPair in deathSubscriptions) {
 
-            if (weaponData.GetPrimaryAction())
-                health.OnDeath -= weaponData.GetPrimaryAction().OnDeath;
+            if (weaponPair.GetPrimaryAction())
+                health.OnDeath -= weaponPair.GetPrimaryAction().OnDeath;
 
-            if (weaponData.GetSecondaryAction())
-                health.OnDeath -= weaponData.GetSecondaryAction().OnDeath;
+            if (weaponPair.GetSecondaryAction())
+                health.OnDeath -= weaponPair.GetSecondaryAction().OnDeath;
 
         }
     }
@@ -240,11 +224,10 @@ public class PlayerController : EntityController {
         anim.SetBool("isSummoningRock", true); // play rock summon animation
 
         yield return null; // wait for animation to start
-        yield return new WaitForSeconds(anim.GetCurrentAnimatorClipInfo(0).Length); // wait for animation to end (so rock can be dropped during animation because this coroutine won't be null)
+        yield return new WaitForSeconds(anim.GetCurrentAnimatorStateInfo(0).length); // wait for animation to end (so rock can be dropped during animation because this coroutine won't be null)
 
         SetWeaponHandlerEnabled(true); // enable weapon handler when rock is fully summoned
         action.OnThrowReady(); // trigger throw ready event
-
         rockSummonCoroutine = null;
 
     }
@@ -287,10 +270,12 @@ public class PlayerController : EntityController {
 
     #region UTILITIES
 
+    // should only require weapon data for ease of use in inspector
     public void AddWeapon(WeaponData weaponData) {
 
-        PrimaryAction primaryAction = weaponData.GetPrimaryAction();
-        SecondaryAction secondaryAction = weaponData.GetSecondaryAction();
+        WeaponPair weaponPair = weaponDatabase.GetWeaponPair(weaponData); // get weapon pair from database
+        PrimaryAction primaryAction = weaponPair.GetPrimaryAction();
+        SecondaryAction secondaryAction = weaponPair.GetSecondaryAction();
 
         // disable primary & secondary actions (if they exist)
         if (primaryAction) {
@@ -307,7 +292,7 @@ public class PlayerController : EntityController {
 
         }
 
-        itemSelector.AddWeapon(weaponData); // add weapon item to item selector
+        itemSelector.AddWeapon(weaponData); // add weapon to item selector
 
         if (primaryAction)
             health.OnDeath += primaryAction.OnDeath; // subscribe to death event
@@ -315,8 +300,8 @@ public class PlayerController : EntityController {
         if (secondaryAction)
             health.OnDeath += secondaryAction.OnDeath; // subscribe to death event
 
-        weapons.Add(weaponData); // add to weapon action pairs list
-        deathSubscriptions.Add(weaponData); // add to list for unsubscribing later
+        weapons.Add(weaponData); // add weapon pair to weapons list
+        deathSubscriptions.Add(weaponPair); // add to list for unsubscribing later
 
     }
 
@@ -324,39 +309,37 @@ public class PlayerController : EntityController {
 
         if (itemSelector.GetCurrSlotIndex() < weapons.Count) { // make sure weapon exists
 
-            Weapon currWeapon = weapons[itemSelector.GetCurrSlotIndex()].GetWeapon(); // set new weapon
+            currWeaponPair = weaponDatabase.GetWeaponPair(weapons[itemSelector.GetCurrSlotIndex()]); // update current weapon pair
+            Weapon currWeapon = currWeaponPair.GetWeapon(); // set new weapon
+            charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
+            WeaponData weaponData = weapons[itemSelector.GetCurrSlotIndex()]; // get weapon data
 
             // placed here to make sure weapon exists before starting cooldown
             if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
             switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start weapon cooldown
 
-            charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
+            PrimaryAction primaryAction = currWeaponPair.GetPrimaryAction(); // get primary action
+            SecondaryAction secondaryAction = currWeaponPair.GetSecondaryAction(); // get secondary action
 
-            PrimaryAction currPrimaryAction = weapons[itemSelector.GetCurrSlotIndex()].GetPrimaryAction();
-            SecondaryAction currSecondaryAction = weapons[itemSelector.GetCurrSlotIndex()].GetSecondaryAction();
+            // initialize & enable new primary action if it exists
+            if (primaryAction) {
 
-            if (currPrimaryAction) { // make sure primary action exists
-
-                currPrimaryAction = weapons[itemSelector.GetCurrSlotIndex()].GetPrimaryAction(); // update primary action
-
-                // enable new primary action if it exists
-                if (currPrimaryAction)
-                    currPrimaryAction.enabled = true;
+                primaryAction.Initialize(weaponData);
+                primaryAction.enabled = true;
 
             }
 
-            if (currSecondaryAction) { // make sure secondary action exists
+            // initialize & enable new secondary action if it exists
+            if (secondaryAction) {
 
-                currSecondaryAction = weapons[itemSelector.GetCurrSlotIndex()].GetSecondaryAction(); // update secondary action
-
-                // enable new secondary action if it exists
-                if (currSecondaryAction)
-                    currSecondaryAction.enabled = true;
+                secondaryAction.Initialize(weaponData);
+                secondaryAction.enabled = true;
 
             }
+
         } else {
 
-            charWeaponHandler.ChangeWeapon(null, null); // remove weapon if it doesn't exist
+            charWeaponHandler.ChangeWeapon(blankWeapon, blankWeapon.WeaponID); // equip blank weapon if no weapon exists
 
         }
 
@@ -364,13 +347,16 @@ public class PlayerController : EntityController {
 
     }
 
-    public Weapon GetCurrentWeapon() => weapons[itemSelector.GetCurrSlotIndex()].GetWeapon();
+    public Weapon GetCurrentWeapon() => currWeaponPair.GetWeapon();
 
     private IEnumerator HandleSwitchCooldown() {
 
         charWeaponHandler.AbilityPermitted = false; // disable ability use
-        yield return new WaitForSeconds(weapons[itemSelector.GetCurrSlotIndex()].GetSwitchCooldown()); // wait for switch cooldown
+        yield return new WaitForSeconds(currWeaponPair.GetSwitchCooldown()); // wait for switch cooldown
         charWeaponHandler.AbilityPermitted = true; // enable ability use
+
+        currWeaponPair.GetPrimaryAction().OnSwitchCooldownComplete(); // trigger primary switch cooldown complete event
+        currWeaponPair.GetSecondaryAction().OnSwitchCooldownComplete(); // trigger secondary switch cooldown complete event
 
     }
 

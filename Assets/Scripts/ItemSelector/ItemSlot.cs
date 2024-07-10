@@ -20,7 +20,6 @@ public class ItemSlot : MonoBehaviour {
     public void Initialize(WeaponData weaponData) {
 
         this.weaponData = weaponData;
-
         fill.color = weaponData.GetWeaponColor();
 
     }

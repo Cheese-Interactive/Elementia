@@ -6,7 +6,7 @@ using UnityEngine;
 public class KineticSecondaryAction : SecondaryAction {
 
     [Header("References")]
-    [SerializeField] private Weapon kineticPushWeapon;
+    [SerializeField] private Weapon secondaryKineticWeapon;
     private CharacterHandleWeapon charWeaponHandler;
     private Weapon prevWeapon;
     private Meter currMeter;
@@ -33,11 +33,11 @@ public class KineticSecondaryAction : SecondaryAction {
     private IEnumerator HandleWeaponSwitch() {
 
         prevWeapon = playerController.GetCurrentWeapon(); // save current weapon
-        charWeaponHandler.ChangeWeapon(kineticPushWeapon, kineticPushWeapon.WeaponID); // change weapon to kinetic push
+        charWeaponHandler.ChangeWeapon(secondaryKineticWeapon, secondaryKineticWeapon.WeaponID); // change weapon to secondary kinetic weapon
 
         yield return null; // wait for weapon change
 
-        charWeaponHandler.ShootStart(); // shoot kinetic push projectile
+        charWeaponHandler.ShootStart(); // shoot kinetic projectile
 
         // must wait for two frames to allow projectile to be fired
         yield return null;

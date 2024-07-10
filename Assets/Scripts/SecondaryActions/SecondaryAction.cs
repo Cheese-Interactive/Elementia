@@ -24,7 +24,7 @@ public abstract class SecondaryAction : MonoBehaviour {
 
     }
 
-    protected void Start() => isReady = true;
+    protected void Start() => isReady = false; // secondary actions are not ready by default because they have a switch cooldown
 
     public void Initialize(WeaponData weaponData) => this.weaponData = weaponData;
 
@@ -35,6 +35,8 @@ public abstract class SecondaryAction : MonoBehaviour {
     public bool IsAutoAction() => isSecondaryAuto;
 
     public float GetCooldown() => secondaryCooldown;
+
+    public virtual void OnSwitchCooldownComplete() { isReady = true; }
 
     protected void ReadyAction() => isReady = true;
 

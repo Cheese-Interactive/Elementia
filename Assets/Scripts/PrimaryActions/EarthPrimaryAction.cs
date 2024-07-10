@@ -22,9 +22,7 @@ public class EarthPrimaryAction : PrimaryAction {
     private new void Start() {
 
         base.Start();
-
         charWeaponHandler = GetComponent<CharacterHandleWeapon>();
-        charWeaponHandler.AbilityPermitted = false; // disable weapon until rock is summoned and ready to be thrown
 
     }
 
@@ -114,6 +112,13 @@ public class EarthPrimaryAction : PrimaryAction {
             Destroy(currMeter.gameObject);
 
         currMeter = CreateMeter(primaryCooldown); // create new meter for cooldown
+
+    }
+
+    public override void OnSwitchCooldownComplete() {
+
+        base.OnSwitchCooldownComplete();
+        charWeaponHandler.AbilityPermitted = false; // disable weapon handler here
 
     }
 

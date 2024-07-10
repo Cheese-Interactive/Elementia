@@ -22,7 +22,7 @@ public abstract class PrimaryAction : MonoBehaviour {
 
     }
 
-    protected void Start() => isReady = true;
+    protected void Start() => isReady = false; // primary actions are not ready by default because they have a switch cooldown
 
     public void Initialize(WeaponData weaponData) => this.weaponData = weaponData;
 
@@ -33,6 +33,8 @@ public abstract class PrimaryAction : MonoBehaviour {
     public bool IsAutoAction() => isPrimaryAuto;
 
     public float GetCooldown() => primaryCooldown;
+
+    public virtual void OnSwitchCooldownComplete() { isReady = true; }
 
     protected void ReadyAction() => isReady = true;
 

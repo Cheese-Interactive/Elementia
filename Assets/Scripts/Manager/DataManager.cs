@@ -27,7 +27,6 @@ public class DataManager : MonoBehaviour {
 
         #region CHECKPOINT
 
-        print(levelManager.CurrentCheckPoint.GetComponent<UUID>());
         MMSaveLoadManager.Save(levelManager.CurrentCheckPoint.GetComponent<UUID>().ID, "checkpoints.dat", "Data/"); // save the current checkpoint guid
 
         #endregion
