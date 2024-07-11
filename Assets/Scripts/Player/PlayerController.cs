@@ -14,7 +14,6 @@ public class PlayerController : EntityController {
     [SerializeField] private Weapon blankWeapon;
     private WeaponDatabase weaponDatabase;
     private WeaponPair currWeaponPair; // to avoid searching dictionary every frame
-    private WeaponData[] weapons; // stores current weapons that player has
     private Coroutine switchCoroutine;
 
     [Header("Fire")]
@@ -47,7 +46,6 @@ public class PlayerController : EntityController {
 
         weaponDatabase = GetComponent<WeaponDatabase>();
         weaponSelector = FindObjectOfType<WeaponSelector>();
-        weapons = new WeaponData[weaponSelector.GetSlotCount()];
         deathSubscriptions = new List<WeaponPair>();
 
         weaponDatabase.Initialize(); // initialize weapon database
@@ -82,7 +80,7 @@ public class PlayerController : EntityController {
 
         #region ACTIONS
 
-        if (weapons[weaponSelector.GetCurrSlotIndex()]) { // make sure slot has a weapon in it
+        if (weaponSelector.GetCurrentWeapon()) { // make sure slot has a weapon in it
 
             primaryAction = currWeaponPair.GetPrimaryAction();
             secondaryAction = currWeaponPair.GetSecondaryAction();
@@ -288,7 +286,6 @@ public class PlayerController : EntityController {
         if (secondaryAction)
             health.OnDeath += secondaryAction.OnDeath; // subscribe to death event
 
-        weapons[slotIndex] = weaponData; // update weapon data at specified slot index
         deathSubscriptions.Add(weaponPair); // add to list for unsubscribing later
 
     }
@@ -296,7 +293,7 @@ public class PlayerController : EntityController {
     // IMPORTANT: DO NOT USE THIS METHOD TO REMOVE WEAPONS, USE WEAPON SELECTOR ONE INSTEAD
     public void RemoveWeapon(int slotIndex) {
 
-        WeaponPair weaponPair = weaponDatabase.GetWeaponPair(weapons[slotIndex]); // get weapon pair from database
+        WeaponPair weaponPair = weaponDatabase.GetWeaponPair(weaponSelector.GetWeaponAt(slotIndex)); // get weapon pair from database
         PrimaryAction primaryAction = weaponPair.GetPrimaryAction();
         SecondaryAction secondaryAction = weaponPair.GetSecondaryAction();
 
@@ -313,7 +310,6 @@ public class PlayerController : EntityController {
         if (secondaryAction)
             health.OnDeath -= secondaryAction.OnDeath; // unsubscribe from death event
 
-        weapons[slotIndex] = null; // remove weapon data at specified slot index
         deathSubscriptions.Remove(weaponPair); // remove from list
 
     }
@@ -321,7 +317,7 @@ public class PlayerController : EntityController {
     // IMPORTANT: DO NOT USE THIS METHOD TO UPDATE WEAPONS, USE WEAPON SELECTOR ONE INSTEAD
     public void UpdateCurrentWeapon() {
 
-        WeaponData weaponData = weapons[weaponSelector.GetCurrSlotIndex()]; // get weapon data from current slot
+        WeaponData weaponData = weaponSelector.GetCurrentWeapon(); // get weapon data from current slot
 
         if (weaponData) { // make sure weapon exists
 

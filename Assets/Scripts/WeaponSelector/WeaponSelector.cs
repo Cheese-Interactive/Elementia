@@ -180,6 +180,10 @@ public class WeaponSelector : MMPersistentBase {
 
     }
 
+    public WeaponData GetCurrentWeapon() => slotData[currSlotIndex];
+
+    public WeaponData GetWeaponAt(int slotIndex) => slotData[slotIndex];
+
     public int GetCurrSlotIndex() => currSlotIndex;
 
     public int GetSlotCount() => slots.Length;
