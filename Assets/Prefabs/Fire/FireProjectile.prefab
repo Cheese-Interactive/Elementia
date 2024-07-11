@@ -295,11 +295,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   oneCollisionOnly: 1
+  hasDistanceMultiplier: 0
   isPushProjectile: 1
-  entityPushForce: {x: 4, y: 2}
-  objectPushForce: {x: 2, y: 2}
-  entityPullForce: {x: 0, y: 0}
-  objectPullForce: {x: 0, y: 0}
+  entityForceMultiplier: {x: 4, y: 2}
+  objectForceMultiplier: {x: 2, y: 2}
   burnDamage: 5
   burnTicks: 3
   burnDuration: 1

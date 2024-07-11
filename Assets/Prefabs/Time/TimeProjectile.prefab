@@ -285,11 +285,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   oneCollisionOnly: 1
+  hasDistanceMultiplier: 0
   isPushProjectile: 0
-  entityPushForce: {x: 0, y: 0}
-  objectPushForce: {x: 0, y: 0}
-  entityPullForce: {x: 0, y: 0}
-  objectPullForce: {x: 0, y: 0}
+  entityForceMultiplier: {x: 0, y: 0}
+  objectForceMultiplier: {x: 0, y: 0}
   timeDuration: 3
 --- !u!96 &-6513195632682728618
 TrailRenderer:

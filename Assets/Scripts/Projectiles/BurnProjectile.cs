@@ -16,7 +16,7 @@ public class BurnProjectile : BaseProjectile {
         base.OnTriggerEnter2D(collision); // call base method
 
         if (collision.gameObject.activeInHierarchy && (damageOnTouch.TargetLayerMask & (1 << collision.gameObject.layer)) != 0) // make sure hit object is active & is in target layer
-            collision.gameObject.GetComponent<BurnEffect>()?.Burn(gameObject, burnDamage, burnTicks, burnDuration, damageOnTouch.DamageTakenInvincibilityDuration, (Vector2) transform.position - lastPos, false); // apply burn effect to object
+            collision.gameObject.GetComponent<BurnEffect>()?.Burn(gameObject, burnDamage, burnTicks, burnDuration, damageOnTouch.DamageTakenInvincibilityDuration, (Vector2) transform.position - startPos, false); // apply burn effect to object
 
     }
 }

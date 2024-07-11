@@ -340,11 +340,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   oneCollisionOnly: 1
+  hasDistanceMultiplier: 0
   isPushProjectile: 1
-  entityPushForce: {x: 2, y: 1}
-  objectPushForce: {x: 1, y: 1}
-  entityPullForce: {x: 0, y: 0}
-  objectPullForce: {x: 0, y: 0}
+  entityForceMultiplier: {x: 2, y: 1}
+  objectForceMultiplier: {x: 1, y: 1}
   movementMultiplier: 0.3
   jumpMultiplier: 0.5
   slowDuration: 5

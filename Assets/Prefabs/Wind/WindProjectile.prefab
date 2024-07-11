@@ -196,11 +196,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   oneCollisionOnly: 0
+  hasDistanceMultiplier: 0
   isPushProjectile: 1
-  entityPushForce: {x: 25, y: 30}
-  objectPushForce: {x: 15, y: 20}
-  entityPullForce: {x: 0, y: 0}
-  objectPullForce: {x: 0, y: 0}
+  entityForceMultiplier: {x: 25, y: 30}
+  objectForceMultiplier: {x: 15, y: 20}
   minSpeed: 100
   maxSpeed: 300
   totalSpeedTransitionPercentage: 25

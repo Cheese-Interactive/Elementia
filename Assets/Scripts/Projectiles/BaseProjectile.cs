@@ -9,66 +9,57 @@ public class BaseProjectile : MonoBehaviour {
     private bool hasCollided;
 
     [Header("Direction")]
-    protected Vector2 lastPos;
+    protected Vector2 startPos;
 
     [Header("Settings")]
     [SerializeField] private bool oneCollisionOnly;
+    [SerializeField] private bool hasDistanceMultiplier;
     [Space]
     [SerializeField] private bool isPushProjectile;
-    [SerializeField] private Vector2 entityPushForce;
-    [SerializeField] private Vector2 objectPushForce;
-    [Space]
-    [SerializeField] private Vector2 entityPullForce;
-    [SerializeField] private Vector2 objectPullForce;
+    [SerializeField] private Vector2 entityForceMultiplier;
+    [SerializeField] private Vector2 objectForceMultiplier;
 
-    protected void OnEnable() => hasCollided = false; // reset has collided because object pooling cycles the same objects
+    protected void OnEnable() { // runs each time projectile is enabled/shot because it is pooled
+
+        hasCollided = false; // reset has collided because object pooling cycles the same objects
+        startPos = transform.position; // set start position to current position
+
+    }
 
     protected void Start() {
 
         projectile = GetComponent<Projectile>();
         damageOnTouch = GetComponent<DamageOnTouch>();
 
-        lastPos = transform.position;
-
     }
-
-    protected void Update() => lastPos = transform.position;
 
     protected void OnTriggerEnter2D(Collider2D collision) { // triggers when projectile collides with something | IMPORTANT: triggers after the object is disabled on death
 
         if (collision.gameObject.activeInHierarchy && (damageOnTouch.TargetLayerMask & (1 << collision.gameObject.layer)) != 0 && !hasCollided) { // make sure hit object is active, is in target layer, and has not collided yet
 
-            if (isPushProjectile) { // FORCE DEPENDS ON PROJECTILE VELOCITY DIRECTION (PUSH)
+            Vector2 entityForce;
 
-                Vector2 entityForce = ((Vector2) transform.position - lastPos).normalized; // get force direction (vector faces projectile velocity direction)
-                Vector2 objectForce = entityForce;
+            // FORCE DIRECTIONS DEPEND ON PROJECTILE SPAWN LOCATION
+            if (isPushProjectile) // push projectile
+                entityForce = ((Vector2) transform.position - startPos).normalized; // get force direction (vector faces projectile spawn location)
+            else // pull projectile
+                entityForce = (startPos - (Vector2) transform.position).normalized; // get force direction (vector faces collision point)
 
-                // handle entity force
-                entityForce.x *= entityPushForce.x; // increase horizontal push force
-                entityForce.y *= entityPushForce.y; // increase vertical push force
-                collision.gameObject.GetComponent<CorgiController>()?.SetForce(entityForce); // push entity away from projectile
+            Vector2 objectForce = entityForce;
 
-                // handle object force
-                objectForce.x *= objectPushForce.x; // increase horizontal pull force
-                objectForce.y *= objectPushForce.y; // increase vertical pull force
-                collision.gameObject.GetComponent<Rigidbody2D>()?.AddForce(objectForce, ForceMode2D.Impulse); // push object away from projectile
+            if (hasDistanceMultiplier) { // if distance multiplier is enabled
 
-            } else { // FORCE DIRECTION DEPENDS ON SHOOTER POSITION (PULL)
-
-                Vector2 entityForce = (projectile.GetOwner().transform.position - collision.transform.position).normalized; // get force direction (vector faces shooter)
-                Vector2 objectForce = entityForce;
-
-                // handle entity force
-                entityForce.x *= entityPullForce.x; // increase horizontal push force
-                entityForce.y *= entityPullForce.y; // increase vertical push force
-                collision.gameObject.GetComponent<CorgiController>()?.SetForce(entityForce); // pull entity towards shooter
-
-                // handle object force
-                objectForce.x *= objectPullForce.x; // increase horizontal pull force
-                objectForce.y *= objectPullForce.y; // increase vertical pull force
-                collision.gameObject.GetComponent<Rigidbody2D>()?.AddForce(objectForce, ForceMode2D.Impulse); // pull object towards shooter
+                float distance = Vector2.Distance(startPos, transform.position); // get distance between start position and current position
+                entityForce *= distance; // apply distance multiplier to entity force
+                objectForce *= distance; // apply distance multiplier to object force
 
             }
+
+            entityForce *= entityForceMultiplier; // apply multiplier to entity force
+            objectForce *= objectForceMultiplier; // apply multiplier to object force
+
+            collision.gameObject.GetComponent<CorgiController>()?.SetForce(entityForce); // push entity away from projectile
+            collision.gameObject.GetComponent<Rigidbody2D>()?.AddForce(objectForce, ForceMode2D.Impulse); // push object away from projectile
 
             if (oneCollisionOnly) // if projectile can only collide once
                 hasCollided = true; // set collided to true

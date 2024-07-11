@@ -22,7 +22,7 @@ public class SlowEffect : BaseEffect {
         charMovement = GetComponent<CharacterHorizontalMovement>();
         charJump = GetComponent<CharacterJump>();
 
-        initialSpeed = charMovement.MovementSpeed;
+        initialSpeed = charMovement.WalkSpeed;
 
         if (charJump) // only set if character can jump
             initialJump = charJump.JumpHeight;
