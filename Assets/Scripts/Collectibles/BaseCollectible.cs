@@ -1,13 +1,12 @@
 using MoreMountains.InventoryEngine;
 using MoreMountains.Tools;
 using System;
-using System.Collections;
 using UnityEngine;
 
 public abstract class BaseCollectible : MMPersistentBase {
 
     [Header("References")]
-    protected PlayerController playerController;
+    protected WeaponSelector weaponSelector;
     protected ItemPicker itemPicker;
     protected bool isCollected;
     private GameManager gameManager;
@@ -30,7 +29,7 @@ public abstract class BaseCollectible : MMPersistentBase {
 
     }
 
-    protected void Start() => playerController = FindObjectOfType<PlayerController>();
+    protected void Start() => weaponSelector = FindObjectOfType<WeaponSelector>();
 
     protected void OnDestroy() => itemPicker.OnCollect -= OnCollect;
 
@@ -44,6 +43,7 @@ public abstract class BaseCollectible : MMPersistentBase {
     public override string OnSave() {
 
         Data saveData = new() { isCollected = isCollected };
+
         return JsonUtility.ToJson(saveData); // save data
 
     }

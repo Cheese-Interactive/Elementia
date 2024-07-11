@@ -2,7 +2,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ItemSlot : MonoBehaviour {
+public class WeaponSlot : MonoBehaviour {
 
     [Header("References")]
     [SerializeField] private Image fill;
@@ -12,15 +12,28 @@ public class ItemSlot : MonoBehaviour {
     [Header("Settings")]
     [SerializeField] private float selectedScale;
     [SerializeField] private float scaleDuration;
-    private Vector3 initialScale;
+    private Vector3 startScale;
+    private Color startColor;
     private Tweener scaleTweener;
 
-    private void Start() => initialScale = transform.localScale;
+    public void Awake() {
 
-    public void Initialize(WeaponData weaponData) {
+        startScale = transform.localScale;
+        startColor = fill.color;
+
+    }
+
+    public void SetWeapon(WeaponData weaponData) {
 
         this.weaponData = weaponData;
         fill.color = weaponData.GetWeaponColor();
+
+    }
+
+    public void RemoveWeapon() {
+
+        weaponData = null;
+        fill.color = startColor;
 
     }
 
@@ -28,7 +41,7 @@ public class ItemSlot : MonoBehaviour {
 
         if (scaleTweener != null && scaleTweener.IsActive()) scaleTweener.Kill(); // kill the previous scale tweener if it's still active
 
-        scaleTweener = transform.DOScale(isSelected ? initialScale * selectedScale : initialScale, scaleDuration);
+        scaleTweener = transform.DOScale(isSelected ? startScale * selectedScale : startScale, scaleDuration);
 
     }
 
