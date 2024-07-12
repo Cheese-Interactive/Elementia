@@ -1,3 +1,4 @@
+using MoreMountains.CorgiEngine;
 using MoreMountains.Tools;
 using System;
 using UnityEngine;
@@ -48,18 +49,11 @@ public class WeaponSelector : MMPersistentBase {
 
     private void Start() => UpdateWeapons(); // update weapons
 
-    private void Update() {
-
-        if (Input.GetKeyDown(KeyCode.J))
-            RemoveWeapon(currSlotIndex);
-
-    }
-
     public void SetWeapon(WeaponData weaponData, int slotIndex) {
 
         if (placementIndex >= slots.Length) return; // if there are no more slots to place the weapon, return
 
-        playerController.SetWeapon(weaponData, slotIndex);
+        playerController.AddWeapon(weaponData);
         slots[slotIndex].SetWeapon(weaponData); // set weapon to the specified slot
         slotData[slotIndex] = weaponData; // update specified slot weapon data
 

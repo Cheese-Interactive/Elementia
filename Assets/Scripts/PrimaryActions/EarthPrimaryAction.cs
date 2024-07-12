@@ -7,8 +7,6 @@ public class EarthPrimaryAction : PrimaryAction {
 
     [Header("References")]
     [SerializeField] private Rock[] rockPrefabs;
-    private CharacterHandleWeapon charWeaponHandler;
-    private Meter currMeter;
 
     [Header("Summon")]
     private Rock currRock; // if null, rock hasn't been summoned yet

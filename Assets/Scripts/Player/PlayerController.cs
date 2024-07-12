@@ -6,6 +6,9 @@ using UnityEngine;
 
 public class PlayerController : EntityController {
 
+    [Header("References")]
+    private GameManager gameManager;
+
     [Header("Weapon Selector")]
     private WeaponSelector weaponSelector;
 
@@ -51,11 +54,11 @@ public class PlayerController : EntityController {
         weaponDatabase.Initialize(); // initialize weapon database
 
         // disable all primary actions
-        foreach (PrimaryAction primaryAction in GetComponents<PrimaryAction>()) // set player controller for all primary actions
+        foreach (PrimaryAction primaryAction in GetComponents<PrimaryAction>())
             primaryAction.enabled = false;
 
         // disable all secondary actions
-        foreach (SecondaryAction secondaryAction in GetComponents<SecondaryAction>()) // set player controller for all secondary actions
+        foreach (SecondaryAction secondaryAction in GetComponents<SecondaryAction>())
             secondaryAction.enabled = false;
 
     }
@@ -63,6 +66,8 @@ public class PlayerController : EntityController {
     private new void Start() {
 
         base.Start();
+
+        gameManager = FindObjectOfType<GameManager>();
 
         earthPrimaryAction = GetComponent<EarthPrimaryAction>();
         fireSecondaryAction = GetComponent<FireSecondaryAction>();
@@ -259,7 +264,7 @@ public class PlayerController : EntityController {
     #region UTILITIES
 
     // IMPORTANT: DO NOT USE THIS METHOD TO ADD WEAPONS, USE WEAPON SELECTOR ONE INSTEAD
-    public void SetWeapon(WeaponData weaponData, int slotIndex) {
+    public void AddWeapon(WeaponData weaponData) {
 
         WeaponPair weaponPair = weaponDatabase.GetWeaponPair(weaponData); // get weapon pair from database
         PrimaryAction primaryAction = weaponPair.GetPrimaryAction();
@@ -348,6 +353,8 @@ public class PlayerController : EntityController {
 
             }
 
+            charWeaponHandler.CurrentWeapon.OnShoot += primaryAction.OnShoot; // subscribe to shoot event (done here because weapon needs to be changed first)
+
         } else {
 
             charWeaponHandler.ChangeWeapon(blankWeapon, blankWeapon.WeaponID); // equip blank weapon if no weapon exists
@@ -374,6 +381,8 @@ public class PlayerController : EntityController {
 
         base.OnDeath();
         isDead = true;
+
+        gameManager.ResetAllResettables(); // reset all resettables
 
     }
 

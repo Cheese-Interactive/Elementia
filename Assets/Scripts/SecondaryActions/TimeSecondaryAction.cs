@@ -8,6 +8,7 @@ public class TimeSecondaryAction : SecondaryAction {
 
     [Header("References")]
     [SerializeField] private LineRenderer channelBeacon;
+    private GameManager gameManager;
     private LevelManager levelManager;
     private CharacterHandleWeapon charWeaponHandler;
     private Animator anim;
@@ -29,6 +30,7 @@ public class TimeSecondaryAction : SecondaryAction {
 
         base.Start();
 
+        gameManager = FindObjectOfType<GameManager>();
         levelManager = FindObjectOfType<LevelManager>();
         charWeaponHandler = GetComponent<CharacterHandleWeapon>();
         anim = GetComponent<Animator>();
@@ -129,6 +131,7 @@ public class TimeSecondaryAction : SecondaryAction {
         yield return new WaitForSeconds(channelDuration); // wait for channel duration
 
         levelManager.CurrentCheckPoint.SpawnPlayer(playerController.GetComponent<Character>()); // teleport player to checkpoint
+        gameManager.ResetAllResettables(); // reset all resettables
         StopChanneling(); // stop channeling
 
         channelCoroutine = null;

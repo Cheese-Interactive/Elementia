@@ -40,7 +40,7 @@ namespace MoreMountains.InventoryEngine
 
         // pick
         public delegate void OnCollectDelegate(ItemPicker collectible);
-        public OnCollectDelegate OnCollect;
+        public event OnCollectDelegate OnCollect;
 
         /// <summary>
         /// On Start we initialize our item picker

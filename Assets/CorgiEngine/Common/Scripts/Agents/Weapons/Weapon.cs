@@ -380,13 +380,12 @@ namespace MoreMountains.CorgiEngine
 
         // shoot
         public delegate void OnShootDelegate();
-        public OnShootDelegate OnShoot;
+        public event OnShootDelegate OnShoot;
 
         #region Initialization
 
-        protected virtual void Start()
-		{
-			if (InitializeOnStart)
+        protected virtual void Start() {
+            if (InitializeOnStart)
 			{
 				Initialization();
 			}
@@ -791,9 +790,7 @@ namespace MoreMountains.CorgiEngine
 
 		protected virtual void CaseWeaponUse()
 		{
-            if (OnShoot != null) {
-                OnShoot.Invoke();
-            }
+            OnShoot?.Invoke();
             WeaponUse();
 			_delayBetweenUsesCounter = TimeBetweenUses;
 			WeaponState.ChangeState(WeaponStates.WeaponDelayBetweenUses);

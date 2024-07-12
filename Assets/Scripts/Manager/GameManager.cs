@@ -32,6 +32,14 @@ public class GameManager : MonoBehaviour {
 
     }
 
+    public void ResetAllResettables() {
+
+        // reset all resettables (don't store in list because resettables can be added/removed from the game at any point)
+        foreach (ResettableObject resettable in FindObjectsOfType<ResettableObject>())
+            resettable.ResetObject();
+
+    }
+
     public void CheckVictory() {
 
         if (isLevelComplete) // if the level is already complete, return
