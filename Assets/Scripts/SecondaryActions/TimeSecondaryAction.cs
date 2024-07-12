@@ -10,10 +10,8 @@ public class TimeSecondaryAction : SecondaryAction {
     [SerializeField] private LineRenderer channelBeacon;
     private GameManager gameManager;
     private LevelManager levelManager;
-    private CharacterHandleWeapon charWeaponHandler;
     private Animator anim;
     private Weapon prevWeapon;
-    private Meter currMeter;
 
     [Header("Settings")]
     [SerializeField] private float channelDuration;
@@ -26,9 +24,7 @@ public class TimeSecondaryAction : SecondaryAction {
     private Coroutine channelCoroutine;
     private Tweener channelBeaconTweener;
 
-    private new void Start() {
-
-        base.Start();
+    private void Start() {
 
         gameManager = FindObjectOfType<GameManager>();
         levelManager = FindObjectOfType<LevelManager>();

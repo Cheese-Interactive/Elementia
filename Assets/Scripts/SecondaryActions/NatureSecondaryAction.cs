@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -8,19 +6,12 @@ public class NatureSecondaryAction : SecondaryAction {
     [Header("References")]
     [SerializeField] private GameObject vinePrefab;
     private TilemapManager tilemapManager;
-    private Meter currMeter;
 
     [Header("Settings")]
     [SerializeField] private float gridTileHeight;
     [SerializeField] private float beanstalkHeight;
 
-    private new void Start() {
-
-        base.Start();
-
-        tilemapManager = FindObjectOfType<TilemapManager>();
-
-    }
+    private void Start() => tilemapManager = FindObjectOfType<TilemapManager>();
 
     public override void OnTriggerRegular() {
 

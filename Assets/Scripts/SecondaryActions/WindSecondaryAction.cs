@@ -1,23 +1,15 @@
 using MoreMountains.CorgiEngine;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class WindSecondaryAction : SecondaryAction {
 
     [Header("References")]
     private CorgiController corgiController;
-    private Meter currMeter;
 
     [Header("Settings")]
     [SerializeField] private float playerWindForce;
 
-    private new void Start() {
-
-        base.Start();
-        corgiController = GetComponent<CorgiController>();
-
-    }
+    private void Start() => corgiController = GetComponent<CorgiController>();
 
     public override void OnTriggerRegular() {
 

@@ -10,7 +10,6 @@ public class WeaponPair {
     [SerializeField] private WeaponData weaponData;
     [SerializeField] private PrimaryAction primaryAction;
     [SerializeField] private SecondaryAction secondaryAction;
-    [SerializeField] private float switchCooldown;
 
     public Weapon GetWeapon() => weapon;
 
@@ -19,7 +18,5 @@ public class WeaponPair {
     public PrimaryAction GetPrimaryAction() => primaryAction;
 
     public SecondaryAction GetSecondaryAction() => secondaryAction;
-
-    public float GetSwitchCooldown() => switchCooldown;
 
 }

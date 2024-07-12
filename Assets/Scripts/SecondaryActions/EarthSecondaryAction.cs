@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EarthSecondaryAction : SecondaryAction {
@@ -8,7 +7,6 @@ public class EarthSecondaryAction : SecondaryAction {
     [SerializeField] private GameObject boulderPrefab;
     [SerializeField] private ParticleSystem boulderExplosion;
     private GameObject currBoulder;
-    private Meter currMeter;
 
     [Header("Settings")]
     [SerializeField] private bool spawnAtMousePosition;

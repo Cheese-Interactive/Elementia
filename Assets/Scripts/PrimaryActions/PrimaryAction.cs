@@ -26,10 +26,21 @@ public abstract class PrimaryAction : MonoBehaviour {
 
     }
 
-    protected void Start() => isReady = false; // primary actions are not ready by default because they have a switch cooldown
+    protected void OnEnable() => currMeter = CreateMeter(charWeaponHandler.CurrentWeapon.TimeBetweenUses);
 
     // runs before weapon is switched
-    private void OnDisable() => charWeaponHandler.CurrentWeapon.OnShoot -= OnShoot; // remove shoot event
+    protected void OnDisable() {
+
+        CancelInvoke("ReadyAction"); // cancel invoke on disable
+
+        // destroy meter if it exists
+        if (currMeter)
+            Destroy(currMeter.gameObject); // destroy meter
+
+        charWeaponHandler.CurrentWeapon.OnShoot -= OnShoot; // remove shoot event
+        isReady = false;
+
+    }
 
     public void Initialize(WeaponData weaponData) => this.weaponData = weaponData;
 

@@ -330,12 +330,12 @@ public class PlayerController : EntityController {
             Weapon currWeapon = currWeaponPair.GetWeapon(); // set new weapon
             charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
 
-            // placed here to make sure weapon exists before starting cooldown
-            if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
-            switchCoroutine = StartCoroutine(HandleSwitchCooldown()); // start weapon cooldown
-
             PrimaryAction primaryAction = currWeaponPair.GetPrimaryAction(); // get primary action
             SecondaryAction secondaryAction = currWeaponPair.GetSecondaryAction(); // get secondary action
+
+            // placed here to make sure weapon exists before starting cooldown
+            if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
+            switchCoroutine = StartCoroutine(HandleSwitchCooldown(primaryAction, secondaryAction)); // start weapon cooldown
 
             // initialize & enable new primary action if it exists
             if (primaryAction) {
@@ -366,10 +366,16 @@ public class PlayerController : EntityController {
 
     public WeaponData[] GetDefaultWeapons() => defaultWeapons;
 
-    private IEnumerator HandleSwitchCooldown() {
+    private IEnumerator HandleSwitchCooldown(PrimaryAction primaryAction, SecondaryAction secondaryAction) {
 
         charWeaponHandler.AbilityPermitted = false; // disable ability use
-        yield return new WaitForSeconds(currWeaponPair.GetSwitchCooldown()); // wait for switch cooldown
+        primaryAction.enabled = false; // disable primary action
+        secondaryAction.enabled = false; // disable secondary action
+
+        yield return new WaitForSeconds(currWeaponPair.GetWeapon().TimeBetweenUses); // wait for switch cooldown
+
+        secondaryAction.enabled = true; // enable secondary action
+        primaryAction.enabled = true; // enable primary action
         charWeaponHandler.AbilityPermitted = true; // enable ability use
 
         currWeaponPair.GetPrimaryAction().OnSwitchCooldownComplete(); // trigger primary switch cooldown complete event
@@ -382,14 +388,14 @@ public class PlayerController : EntityController {
         base.OnDeath();
         isDead = true;
 
-        gameManager.ResetAllResettables(); // reset all resettables
-
     }
 
     protected override void OnRespawn() {
 
         base.OnRespawn();
         isDead = false;
+
+        gameManager.ResetAllResettables(); // reset all resettables
 
     }
 

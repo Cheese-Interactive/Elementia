@@ -17,14 +17,14 @@ public class EarthPrimaryAction : PrimaryAction {
     [SerializeField] private float maxThrowDuration;
     private Coroutine throwDurationCoroutine;
 
-    private new void Start() {
+    private void Start() => charWeaponHandler = GetComponent<CharacterHandleWeapon>();
 
-        base.Start();
-        charWeaponHandler = GetComponent<CharacterHandleWeapon>();
+    private new void OnDisable() {
+
+        base.OnDisable();
+        charWeaponHandler.AbilityPermitted = true; // disables when weapon is switched, re-enable weapon handler
 
     }
-
-    private void OnDisable() => charWeaponHandler.AbilityPermitted = true; // disables when weapon is switched, re-enable weapon handler
 
     public override void OnTriggerRegular() {
 

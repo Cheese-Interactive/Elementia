@@ -7,7 +7,6 @@ public class IceSecondaryAction : SecondaryAction {
 
     [Header("References")]
     private TilemapManager tilemapManager;
-    private Meter currMeter;
 
     [Header("Blast")]
     [SerializeField] private ParticleSystem iceBlastParticles;
@@ -26,13 +25,7 @@ public class IceSecondaryAction : SecondaryAction {
 
     }
 
-    private new void Start() {
-
-        base.Start();
-
-        tilemapManager = FindObjectOfType<TilemapManager>();
-
-    }
+    private void Start() => tilemapManager = FindObjectOfType<TilemapManager>();
 
     public override void OnTriggerRegular() {
 

@@ -1,15 +1,12 @@
 using MoreMountains.CorgiEngine;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class FireSecondaryAction : SecondaryAction {
 
     [Header("References")]
     [SerializeField] private Weapon flamethrower;
-    private CharacterHandleWeapon charWeaponHandler;
     private Weapon prevWeapon;
-    private Meter currMeter;
     private bool prevAlwaysShoot;
 
     [Header("Settings")]
@@ -27,13 +24,7 @@ public class FireSecondaryAction : SecondaryAction {
     [SerializeField] private float maxDuration;
     private Coroutine durationCoroutine;
 
-    private new void Start() {
-
-        base.Start();
-
-        charWeaponHandler = GetComponent<CharacterHandleWeapon>();
-
-    }
+    private void Start() => charWeaponHandler = GetComponent<CharacterHandleWeapon>();
 
     public override void OnTriggerHold(bool startHold) {
 

@@ -1,11 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
+using MoreMountains.CorgiEngine;
 using UnityEngine;
 
 public abstract class SecondaryAction : MonoBehaviour {
 
     [Header("References")]
     protected PlayerController playerController;
+    protected CharacterHandleWeapon charWeaponHandler;
+    protected Meter currMeter;
     private MeterController meterController;
     private WeaponData weaponData;
 
@@ -20,11 +21,24 @@ public abstract class SecondaryAction : MonoBehaviour {
     protected void Awake() {
 
         playerController = GetComponent<PlayerController>();
+        charWeaponHandler = GetComponent<CharacterHandleWeapon>();
         meterController = FindObjectOfType<MeterController>();
 
     }
 
-    protected void Start() => isReady = false; // secondary actions are not ready by default because they have a switch cooldown
+    protected void OnEnable() => currMeter = CreateMeter(charWeaponHandler.CurrentWeapon.TimeBetweenUses);
+
+    protected void OnDisable() {
+
+        CancelInvoke("ReadyAction"); // cancel invoke on disable
+
+        // destroy meter if it exists
+        if (currMeter)
+            Destroy(currMeter.gameObject); // destroy meter
+
+        isReady = false;
+
+    }
 
     public void Initialize(WeaponData weaponData) => this.weaponData = weaponData;
 

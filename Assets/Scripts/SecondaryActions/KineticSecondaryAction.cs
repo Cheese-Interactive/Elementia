@@ -1,5 +1,4 @@
 using MoreMountains.CorgiEngine;
-using MoreMountains.Tools;
 using System.Collections;
 using UnityEngine;
 
@@ -7,18 +6,10 @@ public class KineticSecondaryAction : SecondaryAction {
 
     [Header("References")]
     [SerializeField] private Weapon secondaryKineticWeapon;
-    private CharacterHandleWeapon charWeaponHandler;
     private Weapon prevWeapon;
-    private Meter currMeter;
     private Coroutine weaponSwitchCoroutine;
 
-    private new void Start() {
-
-        base.Start();
-
-        charWeaponHandler = GetComponent<CharacterHandleWeapon>();
-
-    }
+    private void Start() => charWeaponHandler = GetComponent<CharacterHandleWeapon>();
 
     public override void OnTriggerRegular() {
 
