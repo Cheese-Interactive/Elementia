@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
 public class IceSecondaryAction : SecondaryAction {
 
@@ -54,13 +51,13 @@ public class IceSecondaryAction : SecondaryAction {
 
         // begin cooldown
         isReady = false;
-        Invoke("ReadyAction", secondaryCooldown);
+        Invoke("ReadyAction", cooldown);
 
         // destroy current meter if it exists
         if (currMeter)
             Destroy(currMeter.gameObject);
 
-        currMeter = CreateMeter(secondaryCooldown); // create new meter for cooldown
+        currMeter = CreateMeter(cooldown); // create new meter for cooldown
 
     }
 
@@ -72,5 +69,7 @@ public class IceSecondaryAction : SecondaryAction {
     }
 
     public override bool IsRegularAction() => true;
+
+    public override bool IsUsing() => false;
 
 }

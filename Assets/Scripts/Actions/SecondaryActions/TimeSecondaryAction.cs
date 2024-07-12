@@ -1,7 +1,6 @@
 using DG.Tweening;
 using MoreMountains.CorgiEngine;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TimeSecondaryAction : SecondaryAction {
@@ -12,6 +11,7 @@ public class TimeSecondaryAction : SecondaryAction {
     private LevelManager levelManager;
     private Animator anim;
     private Weapon prevWeapon;
+    private bool isChanneling;
 
     [Header("Settings")]
     [SerializeField] private float channelDuration;
@@ -20,7 +20,6 @@ public class TimeSecondaryAction : SecondaryAction {
     [SerializeField] private float channelBeaconStartWidth;
     [SerializeField] private float channelBeaconEndWidth;
     [SerializeField] private float channelBeaconHeight;
-    private bool isChanneling;
     private Coroutine channelCoroutine;
     private Tweener channelBeaconTweener;
 
@@ -43,7 +42,7 @@ public class TimeSecondaryAction : SecondaryAction {
 
         if (!canUseInAir && !playerController.IsGrounded()) { // make sure player is grounded if required
 
-            if (isChanneling) // if flamethrower is equipped, unequip it
+            if (isChanneling) // if player is channeling, cancel it
                 StopChanneling();
 
             return;
@@ -91,7 +90,7 @@ public class TimeSecondaryAction : SecondaryAction {
 
     private void StopChanneling() {
 
-        if (channelCoroutine != null) StopCoroutine(channelCoroutine); // stop channeling coroutine if it is running
+        if (channelCoroutine != null) StopCoroutine(channelCoroutine); // stop channel coroutine if it is running
         channelCoroutine = null;
 
         if (channelBeaconTweener != null && channelBeaconTweener.IsActive()) channelBeaconTweener.Kill(); // stop channel beacon tweener if it is running
@@ -112,13 +111,13 @@ public class TimeSecondaryAction : SecondaryAction {
 
         // begin cooldown
         isReady = false;
-        Invoke("ReadyAction", secondaryCooldown);
+        Invoke("ReadyAction", cooldown);
 
         // destroy current meter if it exists
         if (currMeter)
             Destroy(currMeter.gameObject);
 
-        currMeter = CreateMeter(secondaryCooldown); // create new meter for cooldown
+        currMeter = CreateMeter(cooldown); // create new meter for cooldown
 
     }
 
@@ -136,6 +135,6 @@ public class TimeSecondaryAction : SecondaryAction {
 
     public override bool IsRegularAction() => false;
 
-    public bool IsChanneling() => isChanneling;
+    public override bool IsUsing() => isChanneling;
 
 }

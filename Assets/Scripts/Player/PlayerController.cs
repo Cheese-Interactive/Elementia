@@ -19,16 +19,9 @@ public class PlayerController : EntityController {
     private WeaponPair currWeaponPair; // to avoid searching dictionary every frame
     private Coroutine switchCoroutine;
 
-    [Header("Fire")]
-    private FireSecondaryAction fireSecondaryAction;
-
     [Header("Earth")]
-    private EarthPrimaryAction earthPrimaryAction;
     private Rock currRock;
     private Coroutine rockSummonCoroutine;
-
-    [Header("Time")]
-    private TimeSecondaryAction timeSecondaryAction;
 
     [Header("Death")]
     private bool isDead; // to deal with death delay
@@ -69,10 +62,6 @@ public class PlayerController : EntityController {
 
         gameManager = FindObjectOfType<GameManager>();
 
-        earthPrimaryAction = GetComponent<EarthPrimaryAction>();
-        fireSecondaryAction = GetComponent<FireSecondaryAction>();
-        timeSecondaryAction = GetComponent<TimeSecondaryAction>();
-
     }
 
     private void Update() {
@@ -93,7 +82,7 @@ public class PlayerController : EntityController {
         }
 
         /* PRIMARY ACTIONS */
-        if (primaryAction) { // make sure slot has a primary action in it
+        if (primaryAction && IsMechanicEnabled(MechanicType.PrimaryAction)) { // make sure slot has a primary action in it
 
             if (primaryAction.IsRegularAction()) { // primary action is regular action
 
@@ -114,7 +103,7 @@ public class PlayerController : EntityController {
         }
 
         /* SECONDARY ACTIONS */
-        if (secondaryAction) { // make sure slot has a weapon/secondary action in it
+        if (secondaryAction && IsMechanicEnabled(MechanicType.SecondaryAction)) { // make sure slot has a weapon/secondary action in it
 
             if (secondaryAction.IsRegularAction()) { // secondary action is regular action
 
@@ -137,9 +126,8 @@ public class PlayerController : EntityController {
         #endregion
 
         #region WEAPON SWITCHING
-
         /* SCROLL WHEEL WEAPON SWITCHING */
-        if (Input.mouseScrollDelta.y != 0f && !fireSecondaryAction.IsFlamethrowerEquipped() && !earthPrimaryAction.IsSummoningRock() && !earthPrimaryAction.IsRockThrowReady() && !timeSecondaryAction.IsChanneling()) { // check if scroll wheel has moved, make sure flamethrower isn't equipped, rock isn't being summoned, & rock throw isn't ready before switching
+        if (Input.mouseScrollDelta.y != 0f && (primaryAction ? !primaryAction.IsUsing() : true) && (secondaryAction ? !secondaryAction.IsUsing() : true)) { // make sure primary and secondary actions are not being used if they exist
 
             // disable previous primary action if it exists
             if (primaryAction)
@@ -156,7 +144,7 @@ public class PlayerController : EntityController {
         /* KEY WEAPON SWITCHING */
         for (int i = 0; i < weaponSelector.GetSlotCount(); i++) {
 
-            if (Input.GetKeyDown((i + 1) + "") && !fireSecondaryAction.IsFlamethrowerEquipped() && !earthPrimaryAction.IsSummoningRock() && !earthPrimaryAction.IsRockThrowReady() && !timeSecondaryAction.IsChanneling()) { // make sure flamethrower isn't equipped, rock isn't being summoned, & rock throw isn't ready before switching
+            if (Input.GetKeyDown((i + 1) + "") && (primaryAction ? !primaryAction.IsUsing() : true) && (secondaryAction ? !secondaryAction.IsUsing() : true)) { // make sure primary and secondary actions are not being used if they exist
 
                 // disable previous primary action if it exists
                 if (primaryAction)
@@ -395,6 +383,7 @@ public class PlayerController : EntityController {
         base.OnRespawn();
         isDead = false;
 
+        UpdateCurrentWeapon(); // update current weapon (to activate cooldowns)
         gameManager.ResetAllResettables(); // reset all resettables
 
     }

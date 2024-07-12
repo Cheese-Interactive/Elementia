@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 28c6b2c69c0486849a572fc9fa46abde
+guid: f7747a08a64ecaa4290e5004d1d77d4f
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -81,46 +81,7 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
     buildTarget: Standalone
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: Android
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: Server
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -136,7 +97,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: player_summon_0
+      name: player_reset_0
       rect:
         serializedVersion: 2
         x: 0
@@ -150,14 +111,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f5dd25f379c259848b1b01dd2cf9e6c7
-      internalID: 38241310
+      spriteID: f119e536b58f00943bfc4faf7ce26d8c
+      internalID: 719364632
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: player_summon_1
+      name: player_reset_1
       rect:
         serializedVersion: 2
         x: 16
@@ -171,14 +132,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8a929bd86bfe0454e8393858ebd54ab6
-      internalID: -797331402
+      spriteID: 777bf6ce49bbe934e99d8bb351693763
+      internalID: 1772315068
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: player_summon_2
+      name: player_reset_2
       rect:
         serializedVersion: 2
         x: 32
@@ -192,14 +153,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 013a126c05466264288f22c428a29403
-      internalID: 1580250776
+      spriteID: d5e0e4d7fd9582842bc9bf0f9841cec8
+      internalID: 834572005
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: player_summon_3
+      name: player_reset_3
       rect:
         serializedVersion: 2
         x: 48
@@ -213,14 +174,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2eb4fbb42e53a8947b18affe17ea65b4
-      internalID: -105480398
+      spriteID: ec299724abd333249b1a2ee3e36b2023
+      internalID: -1318033889
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: player_summon_4
+      name: player_reset_4
       rect:
         serializedVersion: 2
         x: 64
@@ -234,8 +195,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8a6db6338efbd664481625bf2e3c5348
-      internalID: 1453495542
+      spriteID: 971ffc8405f5cb24ab74067441860939
+      internalID: -1396139685
       vertices: []
       indices: 
       edges: []
@@ -251,11 +212,11 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      player_summon_0: 38241310
-      player_summon_1: -797331402
-      player_summon_2: 1580250776
-      player_summon_3: -105480398
-      player_summon_4: 1453495542
+      player_reset_0: 719364632
+      player_reset_1: 1772315068
+      player_reset_2: 834572005
+      player_reset_3: -1318033889
+      player_reset_4: -1396139685
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -103,13 +103,13 @@ public class EarthPrimaryAction : PrimaryAction {
 
         // begin cooldown
         isReady = false;
-        Invoke("ReadyAction", primaryCooldown);
+        Invoke("ReadyAction", cooldown);
 
         // destroy current meter if it exists
         if (currMeter)
             Destroy(currMeter.gameObject);
 
-        currMeter = CreateMeter(primaryCooldown); // create new meter for cooldown
+        currMeter = CreateMeter(cooldown); // create new meter for cooldown
 
     }
 
@@ -125,5 +125,7 @@ public class EarthPrimaryAction : PrimaryAction {
     public bool IsSummoningRock() => isSummoningRock;
 
     public bool IsRockThrowReady() => isRockThrowReady;
+
+    public override bool IsUsing() => isSummoningRock;
 
 }

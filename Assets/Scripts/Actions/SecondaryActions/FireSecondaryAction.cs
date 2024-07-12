@@ -8,6 +8,7 @@ public class FireSecondaryAction : SecondaryAction {
     [SerializeField] private Weapon flamethrower;
     private Weapon prevWeapon;
     private bool prevAlwaysShoot;
+    private bool isFlamethrowerEquipped;
 
     [Header("Settings")]
     [SerializeField] private float flameSpeed;
@@ -17,14 +18,9 @@ public class FireSecondaryAction : SecondaryAction {
     [SerializeField] private int burnTicks;
     [SerializeField] private float burnDuration;
 
-    [Header("Toggle")]
-    private bool isFlamethrowerEquipped;
-
     [Header("Duration")]
     [SerializeField] private float maxDuration;
     private Coroutine durationCoroutine;
-
-    private void Start() => charWeaponHandler = GetComponent<CharacterHandleWeapon>();
 
     public override void OnTriggerHold(bool startHold) {
 
@@ -79,13 +75,13 @@ public class FireSecondaryAction : SecondaryAction {
 
         // begin cooldown
         isReady = false;
-        Invoke("ReadyAction", secondaryCooldown);
+        Invoke("ReadyAction", cooldown);
 
         // destroy current meter if it exists
         if (currMeter)
             Destroy(currMeter.gameObject);
 
-        currMeter = CreateMeter(secondaryCooldown); // create new meter for cooldown
+        currMeter = CreateMeter(cooldown); // create new meter for cooldown
 
     }
 
@@ -120,6 +116,6 @@ public class FireSecondaryAction : SecondaryAction {
 
     public override bool IsRegularAction() => false;
 
-    public bool IsFlamethrowerEquipped() => isFlamethrowerEquipped;
+    public override bool IsUsing() => isFlamethrowerEquipped;
 
 }

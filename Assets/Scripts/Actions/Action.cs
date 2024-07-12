@@ -1,7 +1,7 @@
 using MoreMountains.CorgiEngine;
 using UnityEngine;
 
-public abstract class PrimaryAction : MonoBehaviour {
+public abstract class Action : MonoBehaviour {
 
     [Header("References")]
     protected PlayerController playerController;
@@ -11,8 +11,8 @@ public abstract class PrimaryAction : MonoBehaviour {
     private WeaponData weaponData;
 
     [Header("Settings")]
-    [SerializeField] protected float primaryCooldown;
-    [SerializeField] private bool isPrimaryAuto;
+    [SerializeField] protected float cooldown;
+    [SerializeField] private bool isAuto;
     [SerializeField] protected bool canUseInAir;
 
     [Header("Actions")]
@@ -37,7 +37,6 @@ public abstract class PrimaryAction : MonoBehaviour {
         if (currMeter)
             Destroy(currMeter.gameObject); // destroy meter
 
-        charWeaponHandler.CurrentWeapon.OnShoot -= OnShoot; // remove shoot event
         isReady = false;
 
     }
@@ -48,11 +47,9 @@ public abstract class PrimaryAction : MonoBehaviour {
 
     public virtual void OnTriggerHold(bool startHold) { }
 
-    public bool IsAutoAction() => isPrimaryAuto;
+    public bool IsAutoAction() => isAuto;
 
-    public virtual void OnShoot() => currMeter = CreateMeter(charWeaponHandler.CurrentWeapon.TimeBetweenUses); // create new meter for cooldown (use the weapon cooldown instead of primary action cooldown)
-
-    public float GetCooldown() => primaryCooldown;
+    public float GetCooldown() => cooldown;
 
     public virtual void OnSwitchCooldownComplete() { isReady = true; }
 
@@ -69,5 +66,7 @@ public abstract class PrimaryAction : MonoBehaviour {
     public Meter CreateMeter(float cooldownDuration) => meterController.CreateMeter(cooldownDuration, weaponData.GetPrimaryIcon(), weaponData.GetWeaponColor());
 
     public abstract bool IsRegularAction(); // regular or hold action
+
+    public abstract bool IsUsing(); // is action being used (used for hold actions)
 
 }

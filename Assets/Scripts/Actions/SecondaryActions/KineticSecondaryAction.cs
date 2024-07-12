@@ -38,18 +38,20 @@ public class KineticSecondaryAction : SecondaryAction {
 
         // begin cooldown
         isReady = false;
-        Invoke("ReadyAction", secondaryCooldown);
+        Invoke("ReadyAction", cooldown);
 
         // destroy current meter if it exists
         if (currMeter)
             Destroy(currMeter.gameObject);
 
-        currMeter = CreateMeter(secondaryCooldown); // create new meter for cooldown
+        currMeter = CreateMeter(cooldown); // create new meter for cooldown
 
         weaponSwitchCoroutine = null;
 
     }
 
     public override bool IsRegularAction() => true;
+
+    public override bool IsUsing() => false;
 
 }
