@@ -297,8 +297,8 @@ MonoBehaviour:
   oneCollisionOnly: 1
   hasDistanceMultiplier: 1
   isPushProjectile: 0
-  entityForceMultiplier: {x: 3, y: 2}
-  objectForceMultiplier: {x: 3, y: 2}
+  entityForceMultiplier: {x: 3, y: 30}
+  objectForceMultiplier: {x: 4, y: 8}
 --- !u!96 &-6513195632682728618
 TrailRenderer:
   serializedVersion: 3
