@@ -49,7 +49,6 @@ public class MagicMissileSecondaryAction : SecondaryAction {
         prevWeapon = playerController.GetCurrentWeapon(); // store previous weapon
         charWeaponHandler.ChangeWeapon(null, null); // unequip weapon
         playerController.SetCharacterEnabled(false); // disable player character (to prevent corgi built in animations from running)
-        playerController.DisableAllMechanics(); // disable player mechanics
         playerController.DisableCoreScripts(); // disable player core scripts
 
         anim.SetBool("isResetting", true); // start animation
@@ -72,7 +71,6 @@ public class MagicMissileSecondaryAction : SecondaryAction {
         anim.SetBool("isResetting", false); // stop animation
 
         playerController.EnableCoreScripts(); // enable player core scripts
-        playerController.EnableAllMechanics(); // enable player mechanics
         playerController.SetCharacterEnabled(true); // enable player character (to allow corgi built in animations to run)
         charWeaponHandler.ChangeWeapon(prevWeapon, prevWeapon.WeaponID); // re-equip previous weapon
 

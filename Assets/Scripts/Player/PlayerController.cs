@@ -33,13 +33,6 @@ public class PlayerController : EntityController {
 
         base.Awake();
 
-        // set up mechanic statuses early so scripts can change them earlier too
-        Array mechanics = Enum.GetValues(typeof(MechanicType)); // get all mechanic type values
-
-        // add all mechanic types to dictionary
-        foreach (MechanicType mechanicType in mechanics)
-            mechanicStatuses.Add(mechanicType, true); // set all mechanics to true by default
-
         weaponDatabase = GetComponent<WeaponDatabase>();
         weaponSelector = FindObjectOfType<WeaponSelector>();
         deathSubscriptions = new List<WeaponPair>();
@@ -82,7 +75,7 @@ public class PlayerController : EntityController {
         }
 
         /* PRIMARY ACTIONS */
-        if (primaryAction && IsMechanicEnabled(MechanicType.PrimaryAction)) { // make sure slot has a primary action in it
+        if (primaryAction) { // make sure slot has a primary action in it
 
             if (primaryAction.IsRegularAction()) { // primary action is regular action
 
@@ -103,7 +96,7 @@ public class PlayerController : EntityController {
         }
 
         /* SECONDARY ACTIONS */
-        if (secondaryAction && IsMechanicEnabled(MechanicType.SecondaryAction)) { // make sure slot has a weapon/secondary action in it
+        if (secondaryAction) { // make sure slot has a weapon/secondary action in it
 
             if (secondaryAction.IsRegularAction()) { // secondary action is regular action
 
@@ -143,6 +136,8 @@ public class PlayerController : EntityController {
 
         /* KEY WEAPON SWITCHING */
         for (int i = 0; i < weaponSelector.GetSlotCount(); i++) {
+
+            if (i == weaponSelector.GetCurrSlotIndex()) continue; // skip current slot (already selected)
 
             if (Input.GetKeyDown((i + 1) + "") && (primaryAction ? !primaryAction.IsUsing() : true) && (secondaryAction ? !secondaryAction.IsUsing() : true)) { // make sure primary and secondary actions are not being used if they exist
 
@@ -197,8 +192,6 @@ public class PlayerController : EntityController {
 
     private IEnumerator HandleSummonRock(EarthPrimaryAction action, Rock rockPrefab, float maxThrowDuration) {
 
-        DisableAllMechanics(); // disable all mechanics while rock is being summoned (except primary action)
-        EnableMechanic(MechanicType.PrimaryAction); // enable only primary action while rock is summoned
         DisableCoreScripts(); // disable all scripts while rock is being summoned (including weapon handler)
 
         currRock = Instantiate(rockPrefab, transform.position, Quaternion.identity); // instantiate rock (will play summon animation & rotate itself automatically)
@@ -224,7 +217,6 @@ public class PlayerController : EntityController {
         charWeaponHandler.ShootStop(); // stop shooting weapon (to deal with infinite shooting bug | do this before disabling the core scripts)
         EnableCoreScripts(); // enable all scripts after rock is dropped/thrown (except weapon handler | don't want player to use weapon unless rock is fully summoned)
         SetWeaponHandlerEnabled(false); // disable weapon handler when rock is thrown
-        EnableAllMechanics(); // enable all mechanics after rock is dropped/thrown
 
     }
 
@@ -242,7 +234,6 @@ public class PlayerController : EntityController {
 
             EnableCoreScripts(); // enable all scripts after rock is dropped/thrown (except weapon handler | don't want player to use weapon unless rock is fully summoned)
             SetWeaponHandlerEnabled(false); // disable weapon handler when rock is dropped
-            EnableAllMechanics(); // enable all mechanics after rock is dropped/thrown
 
         }
     }
@@ -321,7 +312,6 @@ public class PlayerController : EntityController {
             PrimaryAction primaryAction = currWeaponPair.GetPrimaryAction(); // get primary action
             SecondaryAction secondaryAction = currWeaponPair.GetSecondaryAction(); // get secondary action
 
-            // placed here to make sure weapon exists before starting cooldown
             if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
             switchCoroutine = StartCoroutine(HandleSwitchCooldown(primaryAction, secondaryAction)); // start weapon cooldown
 
@@ -345,6 +335,7 @@ public class PlayerController : EntityController {
 
         } else {
 
+            if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
             charWeaponHandler.ChangeWeapon(blankWeapon, blankWeapon.WeaponID); // equip blank weapon if no weapon exists
 
         }
@@ -360,7 +351,7 @@ public class PlayerController : EntityController {
         primaryAction.enabled = false; // disable primary action
         secondaryAction.enabled = false; // disable secondary action
 
-        yield return new WaitForSeconds(0f); // wait for switch cooldown
+        yield return new WaitForSeconds(currWeaponPair.GetWeapon().TimeBetweenUses); // wait for switch cooldown
 
         secondaryAction.enabled = true; // enable secondary action
         primaryAction.enabled = true; // enable primary action

@@ -1,7 +1,4 @@
 using MoreMountains.CorgiEngine;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class EntityController : MonoBehaviour {
@@ -30,9 +27,6 @@ public class EntityController : MonoBehaviour {
     protected TimeEffect timeEffect;
     protected CharacterHandleWeapon charWeaponHandler;
 
-    [Header("Mechanics")]
-    protected Dictionary<MechanicType, bool> mechanicStatuses;
-
     protected void Awake() {
 
         character = GetComponent<Character>();
@@ -56,9 +50,6 @@ public class EntityController : MonoBehaviour {
         burnEffect = GetComponent<BurnEffect>();
         timeEffect = GetComponent<TimeEffect>();
         charWeaponHandler = GetComponent<CharacterHandleWeapon>();
-
-        // set up mechanic statuses early so scripts can change them earlier too
-        mechanicStatuses = new Dictionary<MechanicType, bool>();
 
         health.OnDeath += slowEffect.RemoveEffect; // remove slow effect on death
         health.OnDeath += burnEffect.RemoveEffect; // remove burn effect on death
@@ -85,35 +76,6 @@ public class EntityController : MonoBehaviour {
         health.OnDeath -= timeEffect.RemoveEffect;
 
     }
-
-    #region MECHANICS
-
-    public void EnableAllMechanics() {
-
-        // enable all mechanics
-        foreach (MechanicType mechanicType in mechanicStatuses.Keys.ToList())
-            mechanicStatuses[mechanicType] = true;
-
-    }
-
-    public void EnableMechanic(MechanicType mechanicType) => mechanicStatuses[mechanicType] = true;
-
-    public void DisableAllMechanics() {
-
-        // disable all mechanics
-        foreach (MechanicType mechanicType in mechanicStatuses.Keys.ToList())
-            mechanicStatuses[mechanicType] = false;
-
-        // send to idle animation
-        anim.SetBool("Walking", false); // stop moving animation
-
-    }
-
-    public void DisableMechanic(MechanicType mechanicType) => mechanicStatuses[mechanicType] = false;
-
-    public bool IsMechanicEnabled(MechanicType mechanicType) => mechanicStatuses[mechanicType];
-
-    #endregion
 
     #region UTILITIES
 
