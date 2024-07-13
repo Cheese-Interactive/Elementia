@@ -360,7 +360,7 @@ public class PlayerController : EntityController {
         primaryAction.enabled = false; // disable primary action
         secondaryAction.enabled = false; // disable secondary action
 
-        yield return new WaitForSeconds(currWeaponPair.GetWeapon().TimeBetweenUses); // wait for switch cooldown
+        yield return new WaitForSeconds(0f); // wait for switch cooldown
 
         secondaryAction.enabled = true; // enable secondary action
         primaryAction.enabled = true; // enable primary action
