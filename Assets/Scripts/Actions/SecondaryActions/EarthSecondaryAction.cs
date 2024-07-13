@@ -10,10 +10,21 @@ public class EarthSecondaryAction : SecondaryAction {
 
     [Header("Settings")]
     [SerializeField] private bool spawnAtMousePosition;
+    [SerializeField][Tooltip("Only for boulder not spawning at mouse position")] private Vector2 spawnOffset;
 
     [Header("Duration")]
-    [SerializeField] private float maxDuration;
+    [SerializeField] private bool hasMaxLifetime;
+    [SerializeField] private float maxLifetimeDuration;
     private Coroutine durationCoroutine;
+
+    private new void OnDisable() {
+
+        base.OnDisable();
+
+        if (currBoulder)
+            DestroyBoulder(); // destroy boulder if it exists
+
+    }
 
     public override void OnTriggerRegular() {
 
@@ -21,37 +32,36 @@ public class EarthSecondaryAction : SecondaryAction {
 
         if (!canUseInAir && !playerController.IsGrounded()) return; // make sure player is grounded if required
 
-        if (!currBoulder)
-            SpawnBoulder(); // spawn boulder
-        else
-            DestroyBoulder(); // destroy boulder
+        if (currBoulder)
+            DestroyBoulder(); // destroy boulder if it exists
+
+        SpawnBoulder(); // spawn boulder
 
     }
 
     private void SpawnBoulder() {
 
-        if (spawnAtMousePosition)
+        if (spawnAtMousePosition) {
+
             currBoulder = Instantiate(boulderPrefab, (Vector2) Camera.main.ScreenToWorldPoint(Input.mousePosition), boulderPrefab.transform.rotation); // spawn boulder at mouse position
-        else
-            currBoulder = Instantiate(boulderPrefab, (Vector2) transform.position + playerController.GetDirectionRight(), boulderPrefab.transform.rotation); // spawn boulder in direction player is facing
 
-        // destroy current meter if it exists
-        if (currMeter)
-            Destroy(currMeter.gameObject);
+        } else {
 
-        currMeter = CreateMeter(maxDuration); // create new meter for max duration
+            Vector2 offset = playerController.GetDirectionRight() * spawnOffset.x + Vector2.up * spawnOffset.y;
+            currBoulder = Instantiate(boulderPrefab, (Vector2) transform.position + offset, boulderPrefab.transform.rotation); // spawn boulder in direction player is facing
 
-        durationCoroutine = StartCoroutine(HandleMaxDuration()); // start max duration coroutine
+        }
 
-    }
+        if (hasMaxLifetime) { // if boulder has max lifetime duration
 
-    private void DestroyBoulder() {
+            // destroy current meter if it exists
+            if (currMeter)
+                Destroy(currMeter.gameObject);
 
-        if (durationCoroutine != null) StopCoroutine(durationCoroutine); // stop max duration coroutine as boulder is being destroyed
-        durationCoroutine = null;
+            currMeter = CreateMeter(maxLifetimeDuration); // create new meter for max duration
+            durationCoroutine = StartCoroutine(HandleMaxDuration()); // start max duration coroutine
 
-        Instantiate(boulderExplosion, currBoulder.transform.position, boulderExplosion.transform.rotation); // spawn explosion particles
-        Destroy(currBoulder); // destroy boulder
+        }
 
         // begin cooldown
         isReady = false;
@@ -65,11 +75,21 @@ public class EarthSecondaryAction : SecondaryAction {
 
     }
 
+    private void DestroyBoulder() {
+
+        if (durationCoroutine != null) StopCoroutine(durationCoroutine); // stop max duration coroutine if it exists as boulder is being destroyed
+        durationCoroutine = null;
+
+        Instantiate(boulderExplosion, currBoulder.transform.position, boulderExplosion.transform.rotation); // spawn explosion particles
+        Destroy(currBoulder); // destroy boulder
+
+    }
+
     private IEnumerator HandleMaxDuration() {
 
         float timer = 0f;
 
-        while (timer < maxDuration) {
+        while (timer < maxLifetimeDuration) {
 
             timer += Time.deltaTime;
             yield return null;

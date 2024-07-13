@@ -12,7 +12,7 @@ public class PlayerController : EntityController {
     [Header("Weapon Selector")]
     private WeaponSelector weaponSelector;
 
-    [Header("Weapons/Primary/Secondary Actions")]
+    [Header("Weapons")]
     [SerializeField] private WeaponData[] defaultWeapons; // default weapons (from inspector) that player begins with
     [SerializeField] private Weapon blankWeapon;
     private WeaponDatabase weaponDatabase;
