@@ -10,7 +10,6 @@ public class WeaponCollectible : BaseCollectible {
 
         base.OnCollect(collectible);
         weaponSelector.AddWeapon(weaponData); // give player the weapon
-        weaponSelector.UpdateWeapons(); // update weapons
 
     }
 }

@@ -2608,7 +2608,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81b0aad1de69d854d8aa796e404c5724, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PushSpeed: 0
+  PushSpeed: 1
   GroundedRaycastLength: 1
   GroundedRaycastOffset: 0.1
   GroundedLayerMask:
@@ -12244,7 +12244,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81b0aad1de69d854d8aa796e404c5724, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PushSpeed: 0
+  PushSpeed: 1
   GroundedRaycastLength: 1
   GroundedRaycastOffset: 0.1
   GroundedLayerMask:
@@ -13223,7 +13223,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 0.000015797094, y: -256}
+  m_AnchoredPosition: {x: 0.000012570061, y: -256}
   m_SizeDelta: {x: 409, y: 0}
   m_Pivot: {x: 0.000000030733645, y: -0.000000059604645}
 --- !u!114 &1999362019

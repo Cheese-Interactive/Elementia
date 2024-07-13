@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,4 +19,14 @@ public class WeaponDatabase : MonoBehaviour {
 
     public WeaponPair GetWeaponPair(WeaponData weaponData) => database[weaponData];
 
+    public WeaponData GetWeaponData(Color weaponColor, Sprite primaryIcon, Sprite secondaryIcon) {
+
+        // search for weapon with matching data
+        foreach (WeaponPair weapon in weapons)
+            if (weapon.GetWeaponData().GetWeaponColor() == weaponColor && weapon.GetWeaponData().GetPrimaryIcon() == primaryIcon && weapon.GetWeaponData().GetSecondaryIcon() == secondaryIcon)
+                return weapon.GetWeaponData();
+
+        return null;
+
+    }
 }
