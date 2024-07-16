@@ -1,14 +1,16 @@
 using MoreMountains.CorgiEngine;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TimeEffect : BaseEffect {
 
     [Header("References")]
     private EntityController entityController;
+    private CharacterHorizontalMovement charMovement;
+    private Rigidbody2D rb;
 
-    [Header("Slow")]
+    [Header("Time")]
+    private float startSpeed;
     private Coroutine unfreezeTimeCoroutine;
 
     [Header("Overlay")]
@@ -17,8 +19,11 @@ public class TimeEffect : BaseEffect {
     private void Start() {
 
         entityController = GetComponent<EntityController>();
+        charMovement = GetComponent<CharacterHorizontalMovement>();
+        rb = GetComponent<Rigidbody2D>();
 
-        if (!entityController) Debug.LogError("EntityController not found on " + gameObject.name + "."); // make sure entity controller is set
+        if (charMovement) // only set if character can move
+            startSpeed = charMovement.WalkSpeed;
 
         timeOverlay.HideOverlay(); // hide slow overlay by default
 
@@ -30,9 +35,23 @@ public class TimeEffect : BaseEffect {
 
         if (unfreezeTimeCoroutine != null) StopCoroutine(unfreezeTimeCoroutine);
 
-        entityController.DisableCoreScripts(); // disable core scripts
-        entityController.SetCharacterEnabled(false); // disable character
-        entityController.SetInvulnerable(true); // set entity invulnerable
+        if (rb) {
+
+            rb.velocity = Vector2.zero;
+            rb.constraints = RigidbodyConstraints2D.FreezeAll; // freeze rigidbody
+
+        }
+
+        if (entityController) {
+
+            if (charMovement)
+                charMovement.MovementSpeed = 0f; // stop movement
+
+            entityController.DisableCoreScripts(); // disable core scripts
+            entityController.SetCharacterEnabled(false); // disable character
+            entityController.SetInvulnerable(true); // set entity invulnerable
+
+        }
 
         unfreezeTimeCoroutine = StartCoroutine(UnfreezeTime(duration));
 
@@ -50,11 +69,21 @@ public class TimeEffect : BaseEffect {
         if (unfreezeTimeCoroutine != null) StopCoroutine(unfreezeTimeCoroutine); // stop time unfreeze coroutine
         unfreezeTimeCoroutine = null;
 
-        timeOverlay.HideOverlay(); // hide slow overlay
+        if (rb)
+            rb.constraints = RigidbodyConstraints2D.None; // unfreeze rigidbody
 
-        entityController.SetInvulnerable(false); // set entity vulnerable
-        entityController.SetCharacterEnabled(true); // enable character
-        entityController.EnableCoreScripts(); // enable core scripts
+        if (entityController) {
+
+            if (charMovement)
+                charMovement.MovementSpeed = startSpeed; // reset movement speed
+
+            entityController.SetInvulnerable(false); // set entity vulnerable
+            entityController.SetCharacterEnabled(true); // enable character
+            entityController.EnableCoreScripts(); // enable core scripts
+
+        }
+
+        timeOverlay.HideOverlay(); // hide slow overlay
 
     }
 }

@@ -66,7 +66,13 @@ public class WeaponSelector : MMPersistentBase {
 
     public void SetWeapon(WeaponData weaponData, int slotIndex) {
 
-        if (placementIndex < 0) return; // if there are no more slots to place the weapon, return
+        // check if there are no more slots to place the weapon
+        if (placementIndex < 0) {
+
+            Debug.LogWarning("No more slots to place weapon: " + weaponData.name); // log a warning if there are no more slots to place the weapon
+            return;
+
+        }
 
         playerController.AddWeapon(weaponData);
         slots[slotIndex].SetWeapon(weaponData); // set weapon to the specified slot
@@ -161,7 +167,7 @@ public class WeaponSelector : MMPersistentBase {
 
         // get serializable data for each slot
         for (int i = 0; i < data.Length; i++)
-            data[i] = slotData[i]?.GetSerializableData(); // get serializable data for each slot
+            data[i] = slotData[i] ? slotData[i].GetSerializableData() : null; // get serializable data for each slot
 
         Data saveData = new Data(data);
         return JsonUtility.ToJson(saveData); // save data
@@ -182,7 +188,7 @@ public class WeaponSelector : MMPersistentBase {
         // load weapons from save data & add loaded weapons to slots
         for (int i = 0; i < saveData.slotData.Length; i++) {
 
-            if (saveData.slotData[i] != null) { // if there is a weapon to load
+            if (!saveData.slotData[i].IsNull()) { // if there is a weapon to load
 
                 slotData[i] = saveData.slotData[i].GetWeaponData(weaponDatabase); // get weapon data from the loaded data and add it to the slot
                 SetWeapon(slotData[i], i); // set the weapon to the slot

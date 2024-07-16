@@ -1,6 +1,5 @@
 using MoreMountains.CorgiEngine;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SlowEffect : BaseEffect {
@@ -10,8 +9,10 @@ public class SlowEffect : BaseEffect {
     private CharacterJump charJump;
 
     [Header("Slow")]
-    private float initialSpeed;
-    private float initialJump;
+    [SerializeField] private bool slowSpeed;
+    [SerializeField] private bool slowJump;
+    private float startSpeed;
+    private float startJump;
     private Coroutine slowResetCoroutine;
 
     [Header("Overlay")]
@@ -22,10 +23,11 @@ public class SlowEffect : BaseEffect {
         charMovement = GetComponent<CharacterHorizontalMovement>();
         charJump = GetComponent<CharacterJump>();
 
-        initialSpeed = charMovement.WalkSpeed;
+        if (charMovement) // only set if character can move
+            startSpeed = charMovement.WalkSpeed;
 
         if (charJump) // only set if character can jump
-            initialJump = charJump.JumpHeight;
+            startJump = charJump.JumpHeight;
 
         freezeOverlay.HideOverlay(); // hide slow overlay by default
 
@@ -37,16 +39,19 @@ public class SlowEffect : BaseEffect {
 
             StopCoroutine(slowResetCoroutine);
 
-            if (initialSpeed * movementMultiplier < charMovement.MovementSpeed) { // only set if new speed is slower than current speed
+            if (slowSpeed && charMovement) { // only set if character can move
 
-                charMovement.MovementSpeed *= movementMultiplier; // set new speed
-                freezeOverlay.ShowOverlay(); // show slow overlay
+                if (startSpeed * movementMultiplier < charMovement.MovementSpeed) { // only set if new speed is slower than current speed
 
+                    charMovement.MovementSpeed *= movementMultiplier; // set new speed
+                    freezeOverlay.ShowOverlay(); // show slow overlay
+
+                }
             }
 
-            if (charJump) { // only set if character can jump
+            if (slowJump && charJump) { // only set if character can jump
 
-                if (initialJump * jumpMultiplier < charJump.JumpHeight) { // only set if new jump height is lower than current jump height
+                if (startJump * jumpMultiplier < charJump.JumpHeight) { // only set if new jump height is lower than current jump height
 
                     charJump.JumpHeight *= jumpMultiplier; // set new jump height
                     freezeOverlay.ShowOverlay(); // show slow overlay
@@ -55,10 +60,14 @@ public class SlowEffect : BaseEffect {
             }
         } else { // coroutine is not running -> start
 
-            charMovement.MovementSpeed *= movementMultiplier; // set new speed
-            freezeOverlay.ShowOverlay(); // show slow overlay
+            if (slowSpeed && charMovement) { // only set if character can move
 
-            if (charJump) { // only set if character can jump
+                charMovement.MovementSpeed *= movementMultiplier; // set new speed
+                freezeOverlay.ShowOverlay(); // show slow overlay
+
+            }
+
+            if (slowJump && charJump) { // only set if character can jump
 
                 charJump.JumpHeight *= jumpMultiplier; // set new jump height
                 freezeOverlay.ShowOverlay(); // show slow overlay
@@ -82,10 +91,11 @@ public class SlowEffect : BaseEffect {
         if (slowResetCoroutine != null) StopCoroutine(slowResetCoroutine);
         slowResetCoroutine = null;
 
-        charMovement.MovementSpeed = initialSpeed;
+        if (slowSpeed && charMovement)
+            charMovement.MovementSpeed = startSpeed;
 
-        if (charJump)
-            charJump.JumpHeight = initialJump;
+        if (slowJump && charJump)
+            charJump.JumpHeight = startJump;
 
         freezeOverlay.HideOverlay(); // hide slow overlay
 

@@ -1440,6 +1440,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba0fdb6e471673d42ab3fc802ef2dc85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slowSpeed: 1
+  slowJump: 1
   freezeOverlay: {fileID: 3706479291433903718}
 --- !u!114 &9206677560049693005
 MonoBehaviour:

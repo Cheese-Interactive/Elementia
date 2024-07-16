@@ -1,7 +1,7 @@
 public abstract class PrimaryAction : Action {
 
     // runs before weapon is switched
-    private new void OnDisable() {
+    protected new void OnDisable() {
 
         base.OnDisable();
         charWeaponHandler.CurrentWeapon.OnShoot -= OnShoot; // remove shoot event

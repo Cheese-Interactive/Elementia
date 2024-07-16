@@ -46,6 +46,13 @@ public class SerializableWeaponData {
 
     }
 
-    public WeaponData GetWeaponData(WeaponDatabase weaponDatabase) => weaponDatabase.GetWeaponData(weaponColor, primaryIcon, secondaryIcon);
+    public WeaponData GetWeaponData(WeaponDatabase weaponDatabase) {
+
+        Debug.Log(weaponColor);
+        return weaponDatabase.GetWeaponData(weaponColor, primaryIcon, secondaryIcon);
+
+    }
+
+    public bool IsNull() => weaponColor == null || primaryIcon == null || secondaryIcon == null;
 
 }
