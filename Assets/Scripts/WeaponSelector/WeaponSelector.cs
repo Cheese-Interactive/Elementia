@@ -188,7 +188,7 @@ public class WeaponSelector : MMPersistentBase {
         // load weapons from save data & add loaded weapons to slots
         for (int i = 0; i < saveData.slotData.Length; i++) {
 
-            if (!saveData.slotData[i].IsNull()) { // if there is a weapon to load
+            if (!saveData.slotData[i].IsNull()) { // if there is a weapon to load (custom null method due to null weapons being serialized as a weapon)
 
                 slotData[i] = saveData.slotData[i].GetWeaponData(weaponDatabase); // get weapon data from the loaded data and add it to the slot
                 SetWeapon(slotData[i], i); // set the weapon to the slot
