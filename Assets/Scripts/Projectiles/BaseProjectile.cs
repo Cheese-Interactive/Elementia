@@ -13,9 +13,9 @@ public class BaseProjectile : MonoBehaviour {
 
     [Header("Settings")]
     [SerializeField] private bool oneCollisionOnly;
-    [SerializeField] private bool hasDistanceMultiplier;
+    [SerializeField] protected bool hasDistanceMultiplier;
     [Space]
-    [SerializeField] private bool isPushProjectile;
+    [SerializeField] protected bool isPushProjectile;
     [SerializeField] private Vector2 entityForceMultiplier;
     [SerializeField] private Vector2 objectForceMultiplier;
 

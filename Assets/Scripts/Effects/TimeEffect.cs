@@ -11,6 +11,7 @@ public class TimeEffect : BaseEffect {
 
     [Header("Time")]
     private float startSpeed;
+    private bool isTimeFrozen;
     private Coroutine unfreezeTimeCoroutine;
 
     [Header("Overlay")]
@@ -31,6 +32,7 @@ public class TimeEffect : BaseEffect {
 
     public void FreezeTime(float duration) {
 
+        isTimeFrozen = true;
         timeOverlay.ShowOverlay(); // show time overlay
 
         if (unfreezeTimeCoroutine != null) StopCoroutine(unfreezeTimeCoroutine);
@@ -84,6 +86,10 @@ public class TimeEffect : BaseEffect {
         }
 
         timeOverlay.HideOverlay(); // hide slow overlay
+        isTimeFrozen = false;
 
     }
+
+    public bool IsTimeFrozen() => isTimeFrozen;
+
 }

@@ -6,10 +6,11 @@ public class KineticSecondaryAction : SecondaryAction {
 
     [Header("References")]
     [SerializeField] private Weapon secondaryKineticWeapon;
+    private KineticPrimaryAction kineticPrimaryAction;
     private Weapon prevWeapon;
     private Coroutine weaponSwitchCoroutine;
 
-    private void Start() => charWeaponHandler = GetComponent<CharacterHandleWeapon>();
+    private void Start() => kineticPrimaryAction = GetComponent<KineticPrimaryAction>();
 
     public override void OnTriggerRegular() {
 
@@ -25,6 +26,7 @@ public class KineticSecondaryAction : SecondaryAction {
 
         prevWeapon = playerController.GetCurrentWeapon(); // save current weapon
         charWeaponHandler.ChangeWeapon(secondaryKineticWeapon, secondaryKineticWeapon.WeaponID); // change weapon to secondary kinetic weapon
+        kineticPrimaryAction.OnSwitchFrom();
 
         yield return null; // wait for weapon change
 
@@ -35,6 +37,7 @@ public class KineticSecondaryAction : SecondaryAction {
         yield return null;
 
         charWeaponHandler.ChangeWeapon(prevWeapon, prevWeapon.WeaponID); // change weapon back to previous weapon
+        kineticPrimaryAction.OnSwitchTo();
 
         // begin cooldown
         isReady = false;

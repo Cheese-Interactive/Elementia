@@ -1,4 +1,6 @@
 using System;
+using Unity.VisualScripting.FullSerializer;
+using UnityEditor;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Weapon Data")]
@@ -35,19 +37,28 @@ public class WeaponData : ScriptableObject {
 public class SerializableWeaponData {
 
     public Color weaponColor;
-    public Sprite primaryIcon;
-    public Sprite secondaryIcon;
+    public string primaryIconPath;
+    public string secondaryIconPath;
 
     public SerializableWeaponData(WeaponData weaponData) {
 
         weaponColor = weaponData.GetWeaponColor();
-        primaryIcon = weaponData.GetPrimaryIcon();
-        secondaryIcon = weaponData.GetSecondaryIcon();
+
+        string tempPrimaryPath = AssetDatabase.GetAssetPath(weaponData.GetPrimaryIcon());
+        primaryIconPath = tempPrimaryPath.Substring(("Assets/Resources/").Length, tempPrimaryPath.LastIndexOf(".") - ("Assets/Resources/").Length); // get the path of the primary icon (disclude "Assets/Resources/" and file extension from the path)
+
+        string tempSecondaryPath = AssetDatabase.GetAssetPath(weaponData.GetSecondaryIcon());
+        secondaryIconPath = tempSecondaryPath.Substring(("Assets/Resources/").Length, tempSecondaryPath.LastIndexOf(".") - ("Assets/Resources/").Length); // get the path of the secondary icon (disclude "Assets/Resources/" and file extension from the path)
 
     }
 
-    public WeaponData GetWeaponData(WeaponDatabase weaponDatabase) => weaponDatabase.GetWeaponData(weaponColor, primaryIcon, secondaryIcon);
+    public WeaponData GetWeaponData(WeaponDatabase weaponDatabase) {
 
-    public bool IsNull() => weaponColor == null || primaryIcon == null || secondaryIcon == null;
+        Debug.Log(primaryIconPath + " " + secondaryIconPath);
+        return weaponDatabase.GetWeaponData(weaponColor, Resources.Load<Sprite>(primaryIconPath), Resources.Load<Sprite>(secondaryIconPath));
+
+    }
+
+    public bool IsNull() => weaponColor == null || primaryIconPath == "" || secondaryIconPath == "";
 
 }

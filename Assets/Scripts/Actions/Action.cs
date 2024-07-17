@@ -35,7 +35,7 @@ public abstract class Action : MonoBehaviour {
 
         // destroy meter if it exists
         if (currMeter)
-            Destroy(currMeter.gameObject); // destroy meter
+            Destroy(currMeter.gameObject);
 
         isReady = false;
 

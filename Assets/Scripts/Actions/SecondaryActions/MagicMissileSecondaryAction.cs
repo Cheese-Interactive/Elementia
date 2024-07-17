@@ -17,7 +17,6 @@ public class MagicMissileSecondaryAction : SecondaryAction {
     private void Start() {
 
         gameManager = FindObjectOfType<GameManager>();
-        charWeaponHandler = GetComponent<CharacterHandleWeapon>();
         anim = GetComponent<Animator>();
 
     }

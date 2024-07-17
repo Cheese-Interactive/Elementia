@@ -1,5 +1,4 @@
 using MoreMountains.CorgiEngine;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -330,9 +329,6 @@ public class PlayerController : EntityController {
                 secondaryAction.enabled = true;
 
             }
-
-            charWeaponHandler.CurrentWeapon.OnShoot += primaryAction.OnShoot; // subscribe to shoot event (done here because weapon needs to be changed first)
-
         } else {
 
             if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running

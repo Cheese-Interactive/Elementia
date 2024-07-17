@@ -27,7 +27,6 @@ public class TimeSecondaryAction : SecondaryAction {
 
         gameManager = FindObjectOfType<GameManager>();
         levelManager = FindObjectOfType<LevelManager>();
-        charWeaponHandler = GetComponent<CharacterHandleWeapon>();
         anim = GetComponent<Animator>();
 
         channelBeacon.gameObject.SetActive(false); // hide channel beacon by default

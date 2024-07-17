@@ -1,4 +1,3 @@
-using MoreMountains.CorgiEngine;
 using UnityEngine;
 
 public class SlowProjectile : BaseProjectile {

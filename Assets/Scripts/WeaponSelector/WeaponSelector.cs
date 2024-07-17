@@ -182,7 +182,6 @@ public class WeaponSelector : MMPersistentBase {
             RemoveWeapon(i);
 
         Data saveData = JsonUtility.FromJson<Data>(data);
-
         placementIndex = 0; // reset placement index to 0 because all slots are blank prior to loading weapons (must be done before adding weapons)
 
         // load weapons from save data & add loaded weapons to slots

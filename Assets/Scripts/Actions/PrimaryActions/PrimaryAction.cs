@@ -1,5 +1,12 @@
 public abstract class PrimaryAction : Action {
 
+    private new void OnEnable() {
+
+        base.OnEnable();
+        charWeaponHandler.CurrentWeapon.OnShoot += OnShoot; // subscribe to shoot event
+
+    }
+
     // runs before weapon is switched
     protected new void OnDisable() {
 

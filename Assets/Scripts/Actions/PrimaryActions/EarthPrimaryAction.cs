@@ -1,4 +1,3 @@
-using MoreMountains.CorgiEngine;
 using MoreMountains.Tools;
 using System.Collections;
 using UnityEngine;
@@ -16,8 +15,6 @@ public class EarthPrimaryAction : PrimaryAction {
     [Header("Duration")]
     [SerializeField] private float maxThrowDuration;
     private Coroutine throwDurationCoroutine;
-
-    private void Start() => charWeaponHandler = GetComponent<CharacterHandleWeapon>();
 
     private new void OnDisable() {
 
