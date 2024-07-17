@@ -52,12 +52,7 @@ public class SerializableWeaponData {
 
     }
 
-    public WeaponData GetWeaponData(WeaponDatabase weaponDatabase) {
-
-        Debug.Log(primaryIconPath + " " + secondaryIconPath);
-        return weaponDatabase.GetWeaponData(weaponColor, Resources.Load<Sprite>(primaryIconPath), Resources.Load<Sprite>(secondaryIconPath));
-
-    }
+    public WeaponData GetWeaponData(WeaponDatabase weaponDatabase) => weaponDatabase.GetWeaponData(weaponColor, Resources.Load<Sprite>(primaryIconPath), Resources.Load<Sprite>(secondaryIconPath));
 
     public bool IsNull() => weaponColor == null || primaryIconPath == "" || secondaryIconPath == "";
 
