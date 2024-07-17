@@ -12,6 +12,7 @@ public class MagicMissileSecondaryAction : SecondaryAction {
 
     [Header("Settings")]
     [SerializeField] private float resetDuration;
+    [SerializeField] private float resetWaitDuration;
     private Coroutine resetCoroutine;
 
     private void Start() {
@@ -91,7 +92,7 @@ public class MagicMissileSecondaryAction : SecondaryAction {
 
         yield return new WaitForSeconds(resetDuration); // wait for reset duration
 
-        gameManager.ResetAllResettables(); // reset all resettables
+        gameManager.ResetAllResettables(transform.position, resetWaitDuration); // reset all resettables with a wait duration (coroutine & distance based reset)
         StopResetting(); // stop resetting
 
         resetCoroutine = null;

@@ -1,5 +1,7 @@
 using MoreMountains.InventoryEngine;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour {
@@ -11,6 +13,7 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private int collectibleColumns;
     private List<BaseCollectible> requiredCollectibles;
     private bool isLevelComplete;
+    private Coroutine resetCoroutine;
 
     private void Start() {
 
@@ -37,6 +40,30 @@ public class GameManager : MonoBehaviour {
         // reset all resettables (don't store in list because resettables can be added/removed from the game at any point)
         foreach (ResettableObject resettable in FindObjectsOfType<ResettableObject>())
             resettable.ResetObject();
+
+    }
+
+    public void ResetAllResettables(Vector3 playerPosition, float resetWaitDuration) {
+
+        if (resetCoroutine != null) StopCoroutine(resetCoroutine); // stop reset coroutine if it is already running
+        resetCoroutine = StartCoroutine(HandleReset(playerPosition, resetWaitDuration));
+
+    }
+
+    private IEnumerator HandleReset(Vector3 playerPosition, float resetWaitDuration) {
+
+        List<ResettableObject> orderedResettables = FindObjectsOfType<ResettableObject>().ToList();
+        orderedResettables.Sort((a, b) => Vector2.Distance(playerPosition, a.transform.position).CompareTo(Vector2.Distance(playerPosition, b.transform.position))); // sort in ascending order of distance from player
+
+        // reset all resettables (don't store in list because resettables can be added/removed from the game at any point)
+        foreach (ResettableObject resettable in FindObjectsOfType<ResettableObject>()) {
+
+            resettable.ResetObject();
+            yield return new WaitForSeconds(resetWaitDuration);
+
+        }
+
+        resetCoroutine = null;
 
     }
 

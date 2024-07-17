@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -10,12 +11,14 @@ public class NatureSecondaryAction : SecondaryAction {
     [Header("Settings")]
     [SerializeField] private float gridTileHeight;
     [SerializeField] private float beanstalkHeight;
+    [SerializeField] private float tileWaitDuration;
+    private Coroutine tileCoroutine;
 
     private void Start() => tilemapManager = FindObjectOfType<TilemapManager>();
 
     public override void OnTriggerRegular() {
 
-        if (!isReady) return; // make sure action is ready
+        if (!isReady || tileCoroutine != null) return; // make sure action is ready and tiles aren't already being placed
 
         if (!canUseInAir && !playerController.IsGrounded()) return; // make sure player is grounded if required
 
@@ -25,18 +28,8 @@ public class NatureSecondaryAction : SecondaryAction {
         if (floorTile == null) return; // make sure player is on a valid tile
 
         Vector3 floorTileWorldPos = tilemapManager.MainCellToWorld(floorTileCellPos) + new Vector3(gridTileHeight / 2f, gridTileHeight / 2f, 0f); // get world position of the tile's center
-        TileBase tile;
 
-        for (float y = gridTileHeight; y < beanstalkHeight; y += gridTileHeight) {
-
-            Vector3 tileWorldPos = floorTileWorldPos + new Vector3(0f, y, 0f);
-            tile = tilemapManager.GetMainTileAt(tilemapManager.MainWorldToCell(tileWorldPos));
-
-            if (tile != null) break; // stop stacking vines if tile is in the way
-
-            Instantiate(vinePrefab, tileWorldPos, Quaternion.identity); // spawn vine
-
-        }
+        tileCoroutine = StartCoroutine(HandleVinePlacement(floorTileWorldPos));
 
         // begin cooldown
         isReady = false;
@@ -47,6 +40,26 @@ public class NatureSecondaryAction : SecondaryAction {
             Destroy(currMeter.gameObject);
 
         currMeter = CreateMeter(cooldown); // create new meter for cooldown
+
+    }
+
+    private IEnumerator HandleVinePlacement(Vector3 floorTileWorldPos) {
+
+        TileBase tile;
+
+        for (float y = gridTileHeight; y < beanstalkHeight; y += gridTileHeight) {
+
+            Vector3 tileWorldPos = floorTileWorldPos + new Vector3(0f, y, 0f);
+            tile = tilemapManager.GetMainTileAt(tilemapManager.MainWorldToCell(tileWorldPos));
+
+            if (tile != null) break; // stop stacking vines if tile is in the way
+
+            Instantiate(vinePrefab, tileWorldPos, Quaternion.identity); // spawn vine
+            yield return new WaitForSeconds(tileWaitDuration);
+
+        }
+
+        tileCoroutine = null;
 
     }
 
