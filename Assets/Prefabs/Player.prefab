@@ -1145,6 +1145,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultWeapons:
   - {fileID: 11400000, guid: 3224215c3a45c564ca37fef85f48c954, type: 2}
+  - {fileID: 11400000, guid: 0b8316274d5b89d44ab51986d17cc3ba, type: 2}
+  - {fileID: 11400000, guid: 240fb2df713a88941845b673fa543e19, type: 2}
+  - {fileID: 11400000, guid: 6f8080ba3b2a54c459fdce6bcff4b454, type: 2}
+  - {fileID: 11400000, guid: ca3ec5979ed33474e8d59fd613d982a1, type: 2}
+  - {fileID: 11400000, guid: 6fb9c3a94d1f1cd4582e6ca735c37e39, type: 2}
+  - {fileID: 11400000, guid: 8365a86a489859348aa3f37fc3dd6336, type: 2}
+  - {fileID: 11400000, guid: 821eb3391acf9b04caa6068d85d517e6, type: 2}
   blankWeapon: {fileID: 4237984674334015922, guid: 0ac9e707aeb2bee41aeef1440418596a,
     type: 3}
 --- !u!114 &2592352146518810568
