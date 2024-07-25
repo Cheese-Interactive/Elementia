@@ -10,7 +10,7 @@ namespace MoreMountains.Tools
 	/// </summary>
 	public static class MMSaveLoadMenu 
 	{
-		[MenuItem("Tools/More Mountains/Delete all saved data",false,31)]
+		[MenuItem("Tools/More Mountains/Delete all saved data %#&r",false,31)]
 		/// <summary>
 		/// Adds a menu item to reset all data saved by the MMSaveLoadManager. No turning back.
 		/// </summary>

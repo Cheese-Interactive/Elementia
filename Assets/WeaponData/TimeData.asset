@@ -12,12 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c7768079091df64d97263e34cfd6bcf, type: 3}
   m_Name: TimeData
   m_EditorClassIdentifier: 
-  weapon: {fileID: 4237984674334015922, guid: 63c5a376fdf6dd147a6643aa24e6fac6, type: 3}
-  primaryAction: {fileID: -1635279773719420177, guid: c43c134994d81f842868e3d0675d33c9,
-    type: 3}
-  secondaryAction: {fileID: 504269021816417971, guid: c43c134994d81f842868e3d0675d33c9,
-    type: 3}
   weaponColor: {r: 1, g: 0, b: 0.8666667, a: 1}
+  cooldownColor: {r: 0.5754717, g: 0, b: 0.49874222, a: 0.84313726}
   primaryIcon: {fileID: 21300000, guid: ff3b09931f8eebc4bb8512a0b9bf0700, type: 3}
   secondaryIcon: {fileID: 21300000, guid: c1a5842aae479e144bcf3ac4e7fad46f, type: 3}
-  switchCooldown: 0.15

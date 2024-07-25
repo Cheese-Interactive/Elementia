@@ -1,3 +1,4 @@
+using MoreMountains.CorgiEngine;
 using MoreMountains.Tools;
 using System.Collections;
 using UnityEngine;
@@ -16,16 +17,16 @@ public class EarthPrimaryAction : PrimaryAction {
     [SerializeField] private float maxThrowDuration;
     private Coroutine throwDurationCoroutine;
 
-    private new void OnDisable() {
+    protected new void OnEnable() {
 
-        base.OnDisable();
-        charWeaponHandler.AbilityPermitted = true; // disables when weapon is switched, re-enable weapon handler
+        base.OnEnable();
+        playerController.SetWeaponHandlerEnabled(false); // disable weapon handler by default
 
     }
 
     public override void OnTriggerRegular() {
 
-        if (!isReady) return; // make sure action is ready
+        if (cooldownTimer > 0f) return; // make sure action is ready
 
         if (!canUseInAir && !playerController.IsGrounded()) return; // make sure player is grounded if required
 
@@ -50,7 +51,7 @@ public class EarthPrimaryAction : PrimaryAction {
     private void SummonRock() {
 
         isSummoningRock = true; // rock is being summoned
-        currRock = playerController.OnSummonRock(this, rockPrefabs[Random.Range(0, rockPrefabs.Length)], maxThrowDuration);
+        currRock = playerController.OnSummonRock(this, rockPrefabs[Random.Range(0, rockPrefabs.Length)]);
 
     }
 
@@ -98,22 +99,18 @@ public class EarthPrimaryAction : PrimaryAction {
         isSummoningRock = false;
         isRockThrowReady = false;
 
-        // begin cooldown
-        isReady = false;
-        Invoke("ReadyAction", cooldown);
-
-        // destroy current meter if it exists
-        if (currMeter)
-            Destroy(currMeter.gameObject);
-
-        currMeter = CreateMeter(cooldown); // create new meter for cooldown
+        cooldownTimer = cooldown; // restart cooldown timer
+        weaponSelector.SetPrimaryCooldownValue(GetNormalizedCooldown(), cooldownTimer); // update primary cooldown meter
 
     }
 
-    public override void OnSwitchCooldownComplete() {
+    public override void OnDeath() {
 
-        base.OnSwitchCooldownComplete();
-        charWeaponHandler.AbilityPermitted = false; // disable weapon handler here
+        base.OnDeath();
+
+        if (!enabled) return; // make sure action is enabled (done to make sure this override only runs on this script, otherwise only run base)
+
+        playerController.SetWeaponHandlerEnabled(false); // disable weapon handler on death
 
     }
 

@@ -6,15 +6,15 @@ public class KineticSecondaryAction : SecondaryAction {
 
     [Header("References")]
     [SerializeField] private Weapon secondaryKineticWeapon;
-    private KineticPrimaryAction kineticPrimaryAction;
+    private KineticPrimaryAction primaryAction;
     private Weapon prevWeapon;
     private Coroutine weaponSwitchCoroutine;
 
-    private void Start() => kineticPrimaryAction = GetComponent<KineticPrimaryAction>();
+    private void Start() => primaryAction = GetComponent<KineticPrimaryAction>();
 
     public override void OnTriggerRegular() {
 
-        if (!isReady || weaponSwitchCoroutine != null) return; // make sure action is ready and weapon switch is not already in progress
+        if (cooldownTimer > 0f || weaponSwitchCoroutine != null) return; // make sure action is ready and weapon switch is not already in progress
 
         if (!canUseInAir && !playerController.IsGrounded()) return; // make sure player is grounded if required
 
@@ -26,7 +26,8 @@ public class KineticSecondaryAction : SecondaryAction {
 
         prevWeapon = playerController.GetCurrentWeapon(); // save current weapon
         charWeaponHandler.ChangeWeapon(secondaryKineticWeapon, secondaryKineticWeapon.WeaponID); // change weapon to secondary kinetic weapon
-        kineticPrimaryAction.OnSwitchFrom();
+        playerController.SetWeaponHandlerEnabled(true); // enable weapon handler so weapon can be shot
+        primaryAction.OnSwitchFrom(); // trigger primary action switch from event
 
         yield return null; // wait for weapon change
 
@@ -37,17 +38,10 @@ public class KineticSecondaryAction : SecondaryAction {
         yield return null;
 
         charWeaponHandler.ChangeWeapon(prevWeapon, prevWeapon.WeaponID); // change weapon back to previous weapon
-        kineticPrimaryAction.OnSwitchTo();
+        primaryAction.OnSwitchTo(); // trigger primary action switch to event
 
-        // begin cooldown
-        isReady = false;
-        Invoke("ReadyAction", cooldown);
-
-        // destroy current meter if it exists
-        if (currMeter)
-            Destroy(currMeter.gameObject);
-
-        currMeter = CreateMeter(cooldown); // create new meter for cooldown
+        cooldownTimer = cooldown; // restart cooldown timer
+        weaponSelector.SetSecondaryCooldownValue(GetNormalizedCooldown(), cooldownTimer); // update secondary cooldown meter
 
         weaponSwitchCoroutine = null;
 

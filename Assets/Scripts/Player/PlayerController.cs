@@ -6,6 +6,7 @@ using UnityEngine;
 public class PlayerController : EntityController {
 
     [Header("References")]
+    private CooldownManager cooldownManager;
     private GameManager gameManager;
 
     [Header("Weapon Selector")]
@@ -16,7 +17,6 @@ public class PlayerController : EntityController {
     [SerializeField] private Weapon blankWeapon;
     private WeaponDatabase weaponDatabase;
     private WeaponPair currWeaponPair; // to avoid searching dictionary every frame
-    private Coroutine switchCoroutine;
 
     [Header("Earth")]
     private Rock currRock;
@@ -25,27 +25,30 @@ public class PlayerController : EntityController {
     [Header("Death")]
     private bool isDead; // to deal with death delay
 
-    [Header("Health")]
-    private List<WeaponPair> deathSubscriptions; // for unsubscribing later
-
     private new void Awake() {
 
         base.Awake();
 
         weaponDatabase = GetComponent<WeaponDatabase>();
         weaponSelector = FindObjectOfType<WeaponSelector>();
-        deathSubscriptions = new List<WeaponPair>();
 
         weaponDatabase.Initialize(); // initialize weapon database
 
         // disable all primary actions
-        foreach (PrimaryAction primaryAction in GetComponents<PrimaryAction>())
+        foreach (PrimaryAction primaryAction in GetComponents<PrimaryAction>()) {
+
+            primaryAction.Initialize(health);
             primaryAction.enabled = false;
 
+        }
+
         // disable all secondary actions
-        foreach (SecondaryAction secondaryAction in GetComponents<SecondaryAction>())
+        foreach (SecondaryAction secondaryAction in GetComponents<SecondaryAction>()) {
+
+            secondaryAction.Initialize(health);
             secondaryAction.enabled = false;
 
+        }
     }
 
     private new void Start() {
@@ -53,6 +56,7 @@ public class PlayerController : EntityController {
         base.Start();
 
         gameManager = FindObjectOfType<GameManager>();
+        cooldownManager = FindObjectOfType<CooldownManager>();
 
     }
 
@@ -164,32 +168,16 @@ public class PlayerController : EntityController {
 
     }
 
-    private new void OnDestroy() {
-
-        base.OnDestroy();
-
-        // unsubscribe from all events
-        foreach (WeaponPair weaponPair in deathSubscriptions) {
-
-            if (weaponPair.GetPrimaryAction())
-                health.OnDeath -= weaponPair.GetPrimaryAction().OnDeath;
-
-            if (weaponPair.GetSecondaryAction())
-                health.OnDeath -= weaponPair.GetSecondaryAction().OnDeath;
-
-        }
-    }
-
     #region EARTH
 
-    public Rock OnSummonRock(EarthPrimaryAction action, Rock rockPrefab, float maxThrowDuration) {
+    public Rock OnSummonRock(EarthPrimaryAction action, Rock rockPrefab) {
 
-        rockSummonCoroutine = StartCoroutine(HandleSummonRock(action, rockPrefab, maxThrowDuration));
+        rockSummonCoroutine = StartCoroutine(HandleSummonRock(action, rockPrefab));
         return currRock;
 
     }
 
-    private IEnumerator HandleSummonRock(EarthPrimaryAction action, Rock rockPrefab, float maxThrowDuration) {
+    private IEnumerator HandleSummonRock(EarthPrimaryAction action, Rock rockPrefab) {
 
         DisableCoreScripts(); // disable all scripts while rock is being summoned (including weapon handler)
 
@@ -249,27 +237,17 @@ public class PlayerController : EntityController {
         SecondaryAction secondaryAction = weaponPair.GetSecondaryAction();
 
         // disable primary & secondary actions (if they exist)
-        if (primaryAction) {
-
-            primaryAction.Initialize(weaponData);
+        if (primaryAction)
             primaryAction.enabled = false;
 
-        }
-
-        if (secondaryAction) {
-
-            secondaryAction.Initialize(weaponData);
+        if (secondaryAction)
             secondaryAction.enabled = false;
-
-        }
 
         if (primaryAction)
             health.OnDeath += primaryAction.OnDeath; // subscribe to death event
 
         if (secondaryAction)
             health.OnDeath += secondaryAction.OnDeath; // subscribe to death event
-
-        deathSubscriptions.Add(weaponPair); // add to list for unsubscribing later
 
     }
 
@@ -293,8 +271,6 @@ public class PlayerController : EntityController {
         if (secondaryAction)
             health.OnDeath -= secondaryAction.OnDeath; // unsubscribe from death event
 
-        deathSubscriptions.Remove(weaponPair); // remove from list
-
     }
 
     // IMPORTANT: DO NOT USE THIS METHOD TO UPDATE WEAPONS, USE WEAPON SELECTOR ONE INSTEAD
@@ -311,28 +287,25 @@ public class PlayerController : EntityController {
             PrimaryAction primaryAction = currWeaponPair.GetPrimaryAction(); // get primary action
             SecondaryAction secondaryAction = currWeaponPair.GetSecondaryAction(); // get secondary action
 
-            if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
-            switchCoroutine = StartCoroutine(HandleSwitchCooldown(primaryAction, secondaryAction)); // start weapon cooldown
-
             // initialize & enable new primary action if it exists
             if (primaryAction) {
 
-                primaryAction.Initialize(weaponData);
                 primaryAction.enabled = true;
+                weaponSelector.SetPrimaryCooldownValue(primaryAction.GetNormalizedCooldown(), primaryAction.GetCooldownTimer());
 
             }
 
             // initialize & enable new secondary action if it exists
             if (secondaryAction) {
 
-                secondaryAction.Initialize(weaponData);
                 secondaryAction.enabled = true;
+                weaponSelector.SetSecondaryCooldownValue(secondaryAction.GetNormalizedCooldown(), secondaryAction.GetCooldownTimer());
 
             }
         } else {
 
-            if (switchCoroutine != null) StopCoroutine(switchCoroutine); // stop switch coroutine if it's running
             charWeaponHandler.ChangeWeapon(blankWeapon, blankWeapon.WeaponID); // equip blank weapon if no weapon exists
+            weaponSelector.ResetCooldownValues(); // reset cooldown values
 
         }
     }
@@ -341,36 +314,20 @@ public class PlayerController : EntityController {
 
     public WeaponData[] GetDefaultWeapons() => defaultWeapons;
 
-    private IEnumerator HandleSwitchCooldown(PrimaryAction primaryAction, SecondaryAction secondaryAction) {
-
-        charWeaponHandler.AbilityPermitted = false; // disable ability use
-        primaryAction.enabled = false; // disable primary action
-        secondaryAction.enabled = false; // disable secondary action
-
-        yield return new WaitForSeconds(currWeaponPair.GetWeapon().TimeBetweenUses); // wait for switch cooldown
-
-        secondaryAction.enabled = true; // enable secondary action
-        primaryAction.enabled = true; // enable primary action
-        charWeaponHandler.AbilityPermitted = true; // enable ability use
-
-        currWeaponPair.GetPrimaryAction().OnSwitchCooldownComplete(); // trigger primary switch cooldown complete event
-        currWeaponPair.GetSecondaryAction().OnSwitchCooldownComplete(); // trigger secondary switch cooldown complete event
-
-    }
-
     protected override void OnDeath() {
 
         base.OnDeath();
         isDead = true;
+        cooldownManager.ClearCooldownData(); // clear all cooldown data
+        weaponSelector.ResetCooldownValues(); // reset cooldown values
 
     }
 
+    // IMPORTANT: THIS GETS CALLED AT THE BEGINNING OF THE GAME, SO THE WEAPON IS ALREADY BEING UPDATED AT THE START
     protected override void OnRespawn() {
 
         base.OnRespawn();
         isDead = false;
-
-        UpdateCurrentWeapon(); // update current weapon (to activate cooldowns)
         gameManager.ResetAllResettables(); // reset all resettables
 
     }

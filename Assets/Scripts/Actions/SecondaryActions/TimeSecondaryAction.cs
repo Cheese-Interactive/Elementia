@@ -37,7 +37,7 @@ public class TimeSecondaryAction : SecondaryAction {
 
     public override void OnTriggerHold(bool startHold) {
 
-        if (!isReady || isChanneling == startHold) return; // make sure action is ready and is not already in the desired state
+        if (cooldownTimer > 0f || isChanneling == startHold) return; // make sure action is ready and is not already in the desired state
 
         if (!canUseInAir && !playerController.IsGrounded()) { // make sure player is grounded if required
 
@@ -78,12 +78,6 @@ public class TimeSecondaryAction : SecondaryAction {
 
         channelCoroutine = StartCoroutine(HandleChannel());
 
-        // destroy current meter if it exists
-        if (currMeter)
-            Destroy(currMeter.gameObject);
-
-        currMeter = CreateMeter(channelDuration); // create new meter for channel duration
-
     }
 
     private void StopChanneling() {
@@ -106,15 +100,8 @@ public class TimeSecondaryAction : SecondaryAction {
 
         isChanneling = false;
 
-        // begin cooldown
-        isReady = false;
-        Invoke("ReadyAction", cooldown);
-
-        // destroy current meter if it exists
-        if (currMeter)
-            Destroy(currMeter.gameObject);
-
-        currMeter = CreateMeter(cooldown); // create new meter for cooldown
+        cooldownTimer = cooldown; // restart cooldown timer
+        weaponSelector.SetSecondaryCooldownValue(GetNormalizedCooldown(), cooldownTimer); // update secondary cooldown meter
 
     }
 

@@ -28,7 +28,7 @@ public class EarthSecondaryAction : SecondaryAction {
 
     public override void OnTriggerRegular() {
 
-        if (!isReady) return; // make sure action is ready
+        if (cooldownTimer > 0f) return; // make sure action is ready
 
         if (!canUseInAir && !playerController.IsGrounded()) return; // make sure player is grounded if required
 
@@ -52,26 +52,11 @@ public class EarthSecondaryAction : SecondaryAction {
 
         }
 
-        if (hasMaxLifetime) { // if boulder has max lifetime duration
-
-            // destroy current meter if it exists
-            if (currMeter)
-                Destroy(currMeter.gameObject);
-
-            currMeter = CreateMeter(maxLifetimeDuration); // create new meter for max duration
+        if (hasMaxLifetime) // if boulder has max lifetime duration
             durationCoroutine = StartCoroutine(HandleMaxDuration()); // start max duration coroutine
 
-        }
-
-        // begin cooldown
-        isReady = false;
-        Invoke("ReadyAction", cooldown);
-
-        // destroy current meter if it exists
-        if (currMeter)
-            Destroy(currMeter.gameObject);
-
-        currMeter = CreateMeter(cooldown); // create new meter for cooldown
+        cooldownTimer = cooldown; // restart cooldown timer
+        weaponSelector.SetSecondaryCooldownValue(GetNormalizedCooldown(), cooldownTimer); // update secondary cooldown meter
 
     }
 

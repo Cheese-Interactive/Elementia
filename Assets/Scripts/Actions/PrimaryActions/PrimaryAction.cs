@@ -1,9 +1,15 @@
+using System.Collections;
+using UnityEngine;
+
 public abstract class PrimaryAction : Action {
 
-    private new void OnEnable() {
+    [Header("References")]
+    private Coroutine shootCoroutine;
+
+    protected new void OnEnable() {
 
         base.OnEnable();
-        charWeaponHandler.CurrentWeapon.OnShoot += OnShoot; // subscribe to shoot event
+        playerController.SetWeaponHandlerEnabled(cooldownTimer == 0f); // enable weapon handler if shot is ready
 
     }
 
@@ -11,10 +17,44 @@ public abstract class PrimaryAction : Action {
     protected new void OnDisable() {
 
         base.OnDisable();
-        charWeaponHandler.CurrentWeapon.OnShoot -= OnShoot; // remove shoot event
+        playerController.SetWeaponHandlerEnabled(true); // enable weapon handler when action is disabled
 
     }
 
-    public virtual void OnShoot() => currMeter = CreateMeter(charWeaponHandler.CurrentWeapon.TimeBetweenUses); // create new meter for cooldown (use the weapon cooldown instead of primary action cooldown)
+    protected new void Update() {
 
+        base.Update();
+
+        if (cooldownTimer == 0f && !charWeaponHandler.AbilityPermitted) // if action is ready and weapon handler is disabled
+            playerController.SetWeaponHandlerEnabled(true); // enable weapon handler when cooldown ends
+
+    }
+
+    public override void OnTriggerRegular() {
+
+        if (cooldownTimer > 0f) return; // make sure action is ready and not already shooting
+
+        if (!canUseInAir && !playerController.IsGrounded()) return; // make sure player is grounded if required
+
+        if (shootCoroutine != null) StopCoroutine(shootCoroutine); // stop shooting coroutine if it exists
+        shootCoroutine = StartCoroutine(HandleShoot()); // handle shooting
+
+    }
+
+    private IEnumerator HandleShoot() {
+
+        // must wait for two frames to allow projectile to be fired
+        yield return null;
+        yield return null;
+
+        charWeaponHandler.ShootStop(); // stop shooting weapon (to deal with infinite shooting bug | do this before disabling the core scripts)
+
+        cooldownTimer = cooldown; // restart cooldown timer
+        weaponSelector.SetPrimaryCooldownValue(GetNormalizedCooldown(), cooldownTimer); // update primary cooldown meter
+
+        playerController.SetWeaponHandlerEnabled(false); // disable weapon handler when shot is fired
+
+        shootCoroutine = null; // reset coroutine
+
+    }
 }

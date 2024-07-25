@@ -24,7 +24,7 @@ public class FireSecondaryAction : SecondaryAction {
 
     public override void OnTriggerHold(bool startHold) {
 
-        if (!isReady || isFlamethrowerEquipped == startHold) return; // make sure action is ready and is not already in the desired state
+        if (cooldownTimer > 0f || isFlamethrowerEquipped == startHold) return; // make sure action is ready and is not already in the desired state
 
         if (!canUseInAir && !playerController.IsGrounded()) { // make sure player is grounded if required
 
@@ -54,12 +54,6 @@ public class FireSecondaryAction : SecondaryAction {
         prevAlwaysShoot = charWeaponHandler.ForceAlwaysShoot; // store previous always shoot value
         charWeaponHandler.ForceAlwaysShoot = true; // force flamethrower to always shoot
 
-        // destroy current meter if it exists
-        if (currMeter)
-            Destroy(currMeter.gameObject);
-
-        currMeter = CreateMeter(maxDuration); // create new meter for max duration
-
         durationCoroutine = StartCoroutine(HandleMaxDuration()); // start max duration coroutine
 
     }
@@ -73,15 +67,8 @@ public class FireSecondaryAction : SecondaryAction {
         charWeaponHandler.ChangeWeapon(prevWeapon, prevWeapon.WeaponID); // revert back to previous weapon
         isFlamethrowerEquipped = false;
 
-        // begin cooldown
-        isReady = false;
-        Invoke("ReadyAction", cooldown);
-
-        // destroy current meter if it exists
-        if (currMeter)
-            Destroy(currMeter.gameObject);
-
-        currMeter = CreateMeter(cooldown); // create new meter for cooldown
+        cooldownTimer = cooldown; // restart cooldown timer
+        weaponSelector.SetSecondaryCooldownValue(GetNormalizedCooldown(), cooldownTimer); // update secondary cooldown meter
 
     }
 
@@ -103,7 +90,7 @@ public class FireSecondaryAction : SecondaryAction {
 
     public override void OnDeath() {
 
-        base.OnDeath();
+        cooldownTimer = 0f; // reset cooldown timer
 
         // if flamethrower is equipped, unequip it
         if (isFlamethrowerEquipped) {

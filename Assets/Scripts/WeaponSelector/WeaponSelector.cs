@@ -16,6 +16,10 @@ public class WeaponSelector : MMPersistentBase {
     private int currSlotIndex;
     private int placementIndex; // index of the slot to place the weapon
 
+    [Header("Cooldown")]
+    [SerializeField] private CooldownMeter primaryCooldownMeter;
+    [SerializeField] private CooldownMeter secondaryCooldownMeter;
+
     [Header("Data")]
     private WeaponData[] slotData;
     private bool isDataLoaded;
@@ -48,7 +52,7 @@ public class WeaponSelector : MMPersistentBase {
             LoadDefaultWeapons();
 
         slots[currSlotIndex].SetSelected(true); // select the first slot
-        UpdateCurrentWeapon(); // update weapons
+        // UpdateCurrentWeapon(); // don't update weapons as they are updated threw the respawn event in the player controller
 
     }
 
@@ -161,6 +165,21 @@ public class WeaponSelector : MMPersistentBase {
 
     }
 
+    public void SetPrimaryCooldownValue(float normalizedCooldown, float cooldownTimer) => primaryCooldownMeter.SetValue(GetCurrentWeapon().GetCooldownColor(), normalizedCooldown, cooldownTimer);
+
+    public void SetSecondaryCooldownValue(float normalizedCooldown, float cooldownTimer) => secondaryCooldownMeter.SetValue(GetCurrentWeapon().GetCooldownColor(), normalizedCooldown, cooldownTimer);
+
+    public void ResetCooldownValues() {
+
+        primaryCooldownMeter.SetValue(Color.white, float.NaN, 0f);
+        secondaryCooldownMeter.SetValue(Color.white, float.NaN, 0f);
+
+    }
+
+    public WeaponData GetCurrentWeapon() => slotData[currSlotIndex];
+
+    public WeaponData GetWeaponAt(int slotIndex) => slotData[slotIndex];
+
     public override string OnSave() {
 
         SerializableWeaponData[] data = new SerializableWeaponData[slots.Length];
@@ -210,10 +229,6 @@ public class WeaponSelector : MMPersistentBase {
         isDataLoaded = true; // set data loaded to true
 
     }
-
-    public WeaponData GetCurrentWeapon() => slotData[currSlotIndex];
-
-    public WeaponData GetWeaponAt(int slotIndex) => slotData[slotIndex];
 
     public int GetCurrSlotIndex() => currSlotIndex;
 

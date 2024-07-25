@@ -18,7 +18,7 @@ public class NatureSecondaryAction : SecondaryAction {
 
     public override void OnTriggerRegular() {
 
-        if (!isReady || tileCoroutine != null) return; // make sure action is ready and tiles aren't already being placed
+        if (cooldownTimer > 0f || tileCoroutine != null) return; // make sure action is ready and tiles aren't already being placed
 
         if (!canUseInAir && !playerController.IsGrounded()) return; // make sure player is grounded if required
 
@@ -31,15 +31,8 @@ public class NatureSecondaryAction : SecondaryAction {
 
         tileCoroutine = StartCoroutine(HandleVinePlacement(floorTileWorldPos));
 
-        // begin cooldown
-        isReady = false;
-        Invoke("ReadyAction", cooldown);
-
-        // destroy current meter if it exists
-        if (currMeter)
-            Destroy(currMeter.gameObject);
-
-        currMeter = CreateMeter(cooldown); // create new meter for cooldown
+        cooldownTimer = cooldown; // restart cooldown timer
+        weaponSelector.SetSecondaryCooldownValue(GetNormalizedCooldown(), cooldownTimer); // update secondary cooldown meter
 
     }
 

@@ -12,12 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c7768079091df64d97263e34cfd6bcf, type: 3}
   m_Name: NatureData
   m_EditorClassIdentifier: 
-  weapon: {fileID: 4237984674334015922, guid: b4346063e40a6154faf071c47023849d, type: 3}
-  primaryAction: {fileID: -3277052253356009991, guid: c43c134994d81f842868e3d0675d33c9,
-    type: 3}
-  secondaryAction: {fileID: 7670200923944158061, guid: c43c134994d81f842868e3d0675d33c9,
-    type: 3}
   weaponColor: {r: 0.101960786, g: 0.32941177, b: 0, a: 1}
+  cooldownColor: {r: 0.064546995, g: 0.1981132, b: 0.0046724807, a: 0.84313726}
   primaryIcon: {fileID: 21300000, guid: a0fccfe4375a19c4d993ba6c9c197061, type: 3}
   secondaryIcon: {fileID: 21300000, guid: 8cc1784e33ddbe84ea215b856998c568, type: 3}
-  switchCooldown: 0.15

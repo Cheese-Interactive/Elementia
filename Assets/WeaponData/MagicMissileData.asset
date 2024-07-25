@@ -12,12 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c7768079091df64d97263e34cfd6bcf, type: 3}
   m_Name: MagicMissileData
   m_EditorClassIdentifier: 
-  weapon: {fileID: 4237984674334015922, guid: 1146d9a50fe8cfb4491f14c86a6845dc, type: 3}
-  primaryAction: {fileID: 2592352146518810568, guid: c43c134994d81f842868e3d0675d33c9,
-    type: 3}
-  secondaryAction: {fileID: 2721479856997411025, guid: c43c134994d81f842868e3d0675d33c9,
-    type: 3}
   weaponColor: {r: 0.6431373, g: 0.2509804, b: 1, a: 1}
+  cooldownColor: {r: 0.35274792, g: 0.0768957, b: 0.6037736, a: 0.84313726}
   primaryIcon: {fileID: 21300000, guid: 1a17bf0991c46894389dc840c3893213, type: 3}
   secondaryIcon: {fileID: 21300000, guid: a1f3c69387393f5439bf91969a4aa3e8, type: 3}
-  switchCooldown: 0.15

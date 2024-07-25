@@ -1159,9 +1159,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8946171227e3bb4280975a335a71490, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cooldown: 0
+  cooldown: 0.8
   isAuto: 0
-  canUseInAir: 0
+  canUseInAir: 1
 --- !u!114 &-772895172877787362
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1174,9 +1174,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00afdd3bc96f5bb4faeac14641f2de84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cooldown: 0
+  cooldown: 0.8
   isAuto: 0
-  canUseInAir: 0
+  canUseInAir: 1
 --- !u!114 &-569371758860137605
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1189,9 +1189,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85a99b79beee03a4da5bcfc9f2300903, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cooldown: 0
+  cooldown: 0.8
   isAuto: 0
-  canUseInAir: 0
+  canUseInAir: 1
 --- !u!114 &3434021981974967308
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1204,9 +1204,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a61b7459627eb949942a24710d6310a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cooldown: 0
+  cooldown: 0.8
   isAuto: 0
-  canUseInAir: 0
+  canUseInAir: 1
 --- !u!114 &-8373415171447550248
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1219,9 +1219,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c50e5f2cde7b7040a267972fa1941fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cooldown: 0
+  cooldown: 0.8
   isAuto: 0
-  canUseInAir: 0
+  canUseInAir: 1
 --- !u!114 &6885750652469125261
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1253,9 +1253,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abc725f2bcead5f479f2683b4b77a258, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cooldown: 0
+  cooldown: 0.8
   isAuto: 0
-  canUseInAir: 0
+  canUseInAir: 1
 --- !u!114 &-3277052253356009991
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1268,9 +1268,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2d62cba59f0d7a42a1783834e6aede9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cooldown: 0
+  cooldown: 0.8
   isAuto: 0
-  canUseInAir: 0
+  canUseInAir: 1
 --- !u!114 &2721479856997411025
 MonoBehaviour:
   m_ObjectHideFlags: 0

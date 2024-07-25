@@ -6,6 +6,7 @@ public class MagicMissileSecondaryAction : SecondaryAction {
 
     [Header("References")]
     private GameManager gameManager;
+    private MagicMissilePrimaryAction primaryAction;
     private Animator anim;
     private Weapon prevWeapon;
     private bool isResetting;
@@ -17,6 +18,7 @@ public class MagicMissileSecondaryAction : SecondaryAction {
 
     private void Start() {
 
+        primaryAction = GetComponent<MagicMissilePrimaryAction>();
         gameManager = FindObjectOfType<GameManager>();
         anim = GetComponent<Animator>();
 
@@ -24,7 +26,7 @@ public class MagicMissileSecondaryAction : SecondaryAction {
 
     public override void OnTriggerHold(bool startHold) {
 
-        if (!isReady || isResetting == startHold) return; // make sure action is ready and is not already in the desired state
+        if (cooldownTimer > 0f || isResetting == startHold) return; // make sure action is ready and is not already in the desired state
 
         if (!canUseInAir && !playerController.IsGrounded()) { // make sure player is grounded if required
 
@@ -47,6 +49,8 @@ public class MagicMissileSecondaryAction : SecondaryAction {
         isResetting = true;
 
         prevWeapon = playerController.GetCurrentWeapon(); // store previous weapon
+
+        primaryAction.enabled = false; // disable primary action
         charWeaponHandler.ChangeWeapon(null, null); // unequip weapon
         playerController.SetCharacterEnabled(false); // disable player character (to prevent corgi built in animations from running)
         playerController.DisableCoreScripts(); // disable player core scripts
@@ -54,12 +58,6 @@ public class MagicMissileSecondaryAction : SecondaryAction {
         anim.SetBool("isResetting", true); // start animation
 
         resetCoroutine = StartCoroutine(HandleReset());
-
-        // destroy current meter if it exists
-        if (currMeter)
-            Destroy(currMeter.gameObject);
-
-        currMeter = CreateMeter(resetDuration); // create new meter for reset duration
 
     }
 
@@ -73,18 +71,12 @@ public class MagicMissileSecondaryAction : SecondaryAction {
         playerController.EnableCoreScripts(); // enable player core scripts
         playerController.SetCharacterEnabled(true); // enable player character (to allow corgi built in animations to run)
         charWeaponHandler.ChangeWeapon(prevWeapon, prevWeapon.WeaponID); // re-equip previous weapon
+        primaryAction.enabled = true; // enable primary action
 
         isResetting = false;
 
-        // begin cooldown
-        isReady = false;
-        Invoke("ReadyAction", cooldown);
-
-        // destroy current meter if it exists
-        if (currMeter)
-            Destroy(currMeter.gameObject);
-
-        currMeter = CreateMeter(cooldown); // create new meter for cooldown
+        cooldownTimer = cooldown; // restart cooldown timer
+        weaponSelector.SetSecondaryCooldownValue(GetNormalizedCooldown(), cooldownTimer); // update secondary cooldown meter
 
     }
 

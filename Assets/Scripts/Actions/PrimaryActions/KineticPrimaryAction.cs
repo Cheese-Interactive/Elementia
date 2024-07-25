@@ -1,24 +1,10 @@
 public class KineticPrimaryAction : PrimaryAction {
 
-    public void OnSwitchTo() { // current weapon is weapon that is being switched to (primary action weapon)
+    // current weapon is weapon that is being switched to (primary action weapon)
+    public void OnSwitchTo() => playerController.SetWeaponHandlerEnabled(cooldownTimer == 0f); // enable weapon handler if shot is ready
 
-        // destroy meter if it exists
-        if (currMeter)
-            Destroy(currMeter.gameObject);
-
-        charWeaponHandler.CurrentWeapon.OnShoot += OnShoot; // subscribe to shoot event
-
-    }
-
-    public void OnSwitchFrom() { // current weapon is weapon that is being switched to (secondary action weapon)
-
-        // destroy meter if it exists
-        if (currMeter)
-            Destroy(currMeter.gameObject);
-
-        charWeaponHandler.CurrentWeapon.OnShoot -= OnShoot; // remove shoot event
-
-    }
+    // current weapon is weapon that is being switched to (secondary action weapon)
+    public void OnSwitchFrom() => playerController.SetWeaponHandlerEnabled(true); // enable weapon handler
 
     public override bool IsRegularAction() => true;
 

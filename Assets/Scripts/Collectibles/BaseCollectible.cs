@@ -13,6 +13,7 @@ public abstract class BaseCollectible : MMPersistentBase {
 
     [Header("Settings")]
     [SerializeField] private bool isRequired;
+    [SerializeField] private bool isKey;
 
     [Serializable]
     protected struct Data {
@@ -26,6 +27,9 @@ public abstract class BaseCollectible : MMPersistentBase {
         gameManager = FindObjectOfType<GameManager>();
         itemPicker = GetComponent<ItemPicker>();
         itemPicker.OnCollect += OnCollect;
+
+        if (isRequired && isKey)
+            Debug.LogWarning("A collectible cannot be both required and a key.");
 
     }
 
@@ -62,5 +66,7 @@ public abstract class BaseCollectible : MMPersistentBase {
     public bool IsCollected() => isCollected;
 
     public bool IsRequired() => isRequired;
+
+    public bool IsKey() => isKey;
 
 }

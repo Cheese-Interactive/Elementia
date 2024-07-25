@@ -1,5 +1,4 @@
 using System;
-using Unity.VisualScripting.FullSerializer;
 using UnityEditor;
 using UnityEngine;
 
@@ -8,10 +7,13 @@ public class WeaponData : ScriptableObject {
 
     [Header("Data")]
     [SerializeField] private Color weaponColor;
+    [SerializeField] private Color cooldownColor;
     [SerializeField] private Sprite primaryIcon;
     [SerializeField] private Sprite secondaryIcon;
 
     public Color GetWeaponColor() => weaponColor;
+
+    public Color GetCooldownColor() => cooldownColor;
 
     public Sprite GetPrimaryIcon() => primaryIcon;
 
