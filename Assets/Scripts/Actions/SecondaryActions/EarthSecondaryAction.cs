@@ -10,6 +10,7 @@ public class EarthSecondaryAction : SecondaryAction {
 
     [Header("Settings")]
     [SerializeField] private bool spawnAtMousePosition;
+    [SerializeField] private bool destroyOnSwitch;
     [SerializeField][Tooltip("Only for boulder not spawning at mouse position")] private Vector2 spawnOffset;
 
     [Header("Duration")]
@@ -21,8 +22,9 @@ public class EarthSecondaryAction : SecondaryAction {
 
         base.OnDisable();
 
-        if (currBoulder)
-            DestroyBoulder(); // destroy boulder if it exists
+        // destroy boulder if destroy on switch is enabled and boulder exists
+        if (currBoulder && destroyOnSwitch)
+            DestroyBoulder();
 
     }
 

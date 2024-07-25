@@ -1385,6 +1385,7 @@ MonoBehaviour:
     type: 3}
   boulderExplosion: {fileID: 19800000, guid: 86dd64f6b351da3458a6f9f17b9b9276, type: 3}
   spawnAtMousePosition: 0
+  destroyOnSwitch: 0
   spawnOffset: {x: 2, y: 1}
   hasMaxLifetime: 0
   maxLifetimeDuration: 3
