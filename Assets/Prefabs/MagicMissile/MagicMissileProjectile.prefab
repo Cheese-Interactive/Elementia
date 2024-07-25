@@ -299,6 +299,9 @@ MonoBehaviour:
   isPushProjectile: 1
   entityForceMultiplier: {x: 5, y: 6}
   objectForceMultiplier: {x: 2, y: 2}
+  isTimeMultiplierEnabled: 0
+  entityTimeForceMultiplier: {x: 0, y: 0}
+  objectTimeForceMultiplier: {x: 0, y: 0}
 --- !u!96 &-6513195632682728618
 TrailRenderer:
   serializedVersion: 3
