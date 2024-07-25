@@ -90,6 +90,26 @@ public class TimeEffect : BaseEffect {
 
     }
 
+    public void AllowHit() => StartCoroutine(HandleAllowHit());
+
+    private IEnumerator HandleAllowHit() {
+
+        if (rb)
+            rb.constraints = RigidbodyConstraints2D.None; // unfreeze rigidbody
+
+        yield return null; // wait for one frame to allow hit to go through
+
+        if (rb) {
+
+            // wait for rigidbody to stop moving
+            while (rb.velocity.magnitude != 0f)
+                yield return null;
+
+            rb.constraints = RigidbodyConstraints2D.FreezeAll; // re-freeze rigidbody
+
+        }
+    }
+
     public bool IsTimeFrozen() => isTimeFrozen;
 
 }

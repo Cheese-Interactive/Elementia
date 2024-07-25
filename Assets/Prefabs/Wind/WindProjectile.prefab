@@ -200,6 +200,9 @@ MonoBehaviour:
   isPushProjectile: 1
   entityForceMultiplier: {x: 25, y: 30}
   objectForceMultiplier: {x: 15, y: 20}
+  isTimeMultiplierEnabled: 0
+  entityTimeForceMultiplier: {x: 0, y: 0}
+  objectTimeForceMultiplier: {x: 0, y: 0}
   minSpeed: 100
   maxSpeed: 300
   totalSpeedTransitionPercentage: 25

@@ -18,6 +18,9 @@ public class BaseProjectile : MonoBehaviour {
     [SerializeField] protected bool isPushProjectile;
     [SerializeField] private Vector2 entityForceMultiplier;
     [SerializeField] private Vector2 objectForceMultiplier;
+    [SerializeField][Tooltip("Only applies to objects, not entities")] private bool isTimeMultiplierEnabled;
+    [SerializeField] private Vector2 entityTimeForceMultiplier;
+    [SerializeField] private Vector2 objectTimeForceMultiplier;
 
     protected void OnEnable() { // runs each time projectile is enabled/shot because it is pooled
 
@@ -57,6 +60,16 @@ public class BaseProjectile : MonoBehaviour {
 
             entityForce *= entityForceMultiplier; // apply multiplier to entity force
             objectForce *= objectForceMultiplier; // apply multiplier to object force
+
+            // handle time multiplier
+            TimeEffect timeEffect = collision.GetComponent<TimeEffect>();
+
+            if (isTimeMultiplierEnabled && timeEffect != null && timeEffect.IsTimeFrozen()) { // if time multiplier is enabled and time is frozen
+
+                objectForce *= objectTimeForceMultiplier; // apply time multiplier to object force
+                timeEffect.AllowHit(); // allow hit on object
+
+            }
 
             collision.gameObject.GetComponent<CorgiController>()?.SetForce(entityForce); // push entity away from projectile
             collision.gameObject.GetComponent<Rigidbody2D>()?.AddForce(objectForce, ForceMode2D.Impulse); // push object away from projectile
