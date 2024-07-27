@@ -33,7 +33,7 @@ public class SlowEffect : BaseEffect {
 
     }
 
-    public void Slow(float movementMultiplier, float jumpMultiplier, float duration) {
+    public void AddEffect(float movementMultiplier, float jumpMultiplier, float duration) {
 
         if (slowResetCoroutine != null) { // coroutine is already running -> restart
 
@@ -86,7 +86,7 @@ public class SlowEffect : BaseEffect {
 
     }
 
-    public void RemoveEffect() {
+    public override void RemoveEffect() {
 
         if (slowResetCoroutine != null) StopCoroutine(slowResetCoroutine);
         slowResetCoroutine = null;

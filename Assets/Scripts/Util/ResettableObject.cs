@@ -7,6 +7,7 @@ public class ResettableObject : MonoBehaviour {
     private Rigidbody2D rb;
     private Vector2 startPos;
     private Quaternion startRot;
+    private GameObject outlineObject;
 
     private void Start() {
 
@@ -14,9 +15,12 @@ public class ResettableObject : MonoBehaviour {
         startPos = transform.position;
         startRot = transform.rotation;
 
-        Instantiate(objectOutlinePrefab, transform.position, transform.rotation);
+        outlineObject = Instantiate(objectOutlinePrefab, transform.position, transform.rotation);
+        outlineObject.transform.localScale = transform.localScale;
 
     }
+
+    private void OnDestroy() => Destroy(outlineObject);
 
     public void ResetObject() {
 

@@ -19,9 +19,9 @@ public class BurnableObject : MonoBehaviour {
 
         spriteRenderer = GetComponent<SpriteRenderer>();
 
-        if (spriteRenderer.color != spriteRenderer.material.color) Debug.LogWarning("Burnable object " + gameObject + " sprite color is not sprite renderer material color, this may cause issues with burn effect");
+        if (spriteRenderer.color != spriteRenderer.material.color) Debug.LogWarning("Burnable object " + gameObject + " sprite color is not sprite renderer material color, this may cause issues with burn effect.");
 
-        if (burnGradient.Evaluate(0f) != spriteRenderer.material.color) Debug.LogWarning("Burnable object " + gameObject + " burn gradient start color is not sprite renderer material color, this may cause issues with burn effect");
+        if (burnGradient.Evaluate(0f) != spriteRenderer.material.color) Debug.LogWarning("Burnable object " + gameObject + " burn gradient start color is not sprite renderer material color, this may cause issues with burn effect.");
 
     }
 

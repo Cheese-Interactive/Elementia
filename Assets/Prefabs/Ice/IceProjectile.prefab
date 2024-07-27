@@ -344,9 +344,6 @@ MonoBehaviour:
   isPushProjectile: 1
   entityForceMultiplier: {x: 2, y: 1}
   objectForceMultiplier: {x: 1, y: 1}
-  isTimeMultiplierEnabled: 0
-  entityTimeForceMultiplier: {x: 0, y: 0}
-  objectTimeForceMultiplier: {x: 0, y: 0}
   movementMultiplier: 0.3
   jumpMultiplier: 0.5
   slowDuration: 5

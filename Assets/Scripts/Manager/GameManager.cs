@@ -64,30 +64,6 @@ public class GameManager : MonoBehaviour {
 
     }
 
-    public void ResetAllResettables(Vector3 playerPosition, float resetWaitDuration) {
-
-        if (resetCoroutine != null) StopCoroutine(resetCoroutine); // stop reset coroutine if it is already running
-        resetCoroutine = StartCoroutine(HandleReset(playerPosition, resetWaitDuration));
-
-    }
-
-    private IEnumerator HandleReset(Vector3 playerPosition, float resetWaitDuration) {
-
-        List<ResettableObject> orderedResettables = FindObjectsOfType<ResettableObject>().ToList();
-        orderedResettables.Sort((a, b) => Vector2.Distance(playerPosition, a.transform.position).CompareTo(Vector2.Distance(playerPosition, b.transform.position))); // sort in ascending order of distance from player
-
-        // reset all resettables (don't store in list because resettables can be added/removed from the game at any point)
-        foreach (ResettableObject resettable in FindObjectsOfType<ResettableObject>()) {
-
-            resettable.ResetObject();
-            yield return new WaitForSeconds(resetWaitDuration);
-
-        }
-
-        resetCoroutine = null;
-
-    }
-
     public void CheckVictory() {
 
         if (isLevelComplete) // if the level is already complete, return

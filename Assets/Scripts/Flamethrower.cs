@@ -50,9 +50,13 @@ public class Flamethrower : MonoBehaviour {
             // handle object force
             objectForce.x *= objectFlamethrowerForce.x; // increase horizontal pull force
             objectForce.y *= objectFlamethrowerForce.y; // increase vertical pull force
-            collision.gameObject.GetComponent<Rigidbody2D>()?.AddForce(objectForce, ForceMode2D.Impulse); // push object away from shooter
 
-            collision.gameObject.GetComponent<BurnEffect>()?.Burn(gameObject, burnDamage, burnTicks, burnDuration, weapon.DamageCausedInvincibilityDuration, transform.right, true); // apply burn effect to object
+            Rigidbody2D objectRb = collision.gameObject.GetComponent<Rigidbody2D>();
+
+            if (objectRb) // make sure rigidbody exists
+                objectRb.AddForce(objectForce, ForceMode2D.Impulse); // push object away from shooter
+
+            collision.gameObject.GetComponent<BurnEffect>()?.AddEffect(gameObject, burnDamage, burnTicks, burnDuration, weapon.DamageCausedInvincibilityDuration, transform.right, true); // apply burn effect to object
 
             collision.gameObject.GetComponent<BurnableObject>()?.StartBurn(); // burn object if it can be burned
 

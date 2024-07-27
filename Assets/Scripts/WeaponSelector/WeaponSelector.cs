@@ -65,6 +65,7 @@ public class WeaponSelector : MMPersistentBase {
             AddWeapon(weaponData);
 
         placementIndex = defaultWeapons.Length < slots.Length ? defaultWeapons.Length : -1; // set placement index to the first empty slot or -1 if there are no empty slots
+        Debug.Log("Default weapons loaded.");
 
     }
 
@@ -73,7 +74,7 @@ public class WeaponSelector : MMPersistentBase {
         // check if there are no more slots to place the weapon
         if (placementIndex < 0) {
 
-            Debug.LogWarning("No more slots to place weapon: " + weaponData.name); // log a warning if there are no more slots to place the weapon
+            Debug.LogWarning("No more slots to place weapon: " + weaponData.name + "."); // log a warning if there are no more slots to place the weapon
             return;
 
         }

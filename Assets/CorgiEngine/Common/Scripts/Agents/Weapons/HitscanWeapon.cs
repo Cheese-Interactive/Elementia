@@ -82,10 +82,14 @@ namespace MoreMountains.CorgiEngine
 		/// a button to test the shoot method
 		public bool TestShootButton;
 
-		/// <summary>
-		/// A test method that triggers the weapon
-		/// </summary>
-		protected virtual void TestShoot()
+        // hit
+        public delegate void OnHitDelegate(GameObject hitObject, Vector3 hitPoint);
+        public event OnHitDelegate OnHit;
+
+        /// <summary>
+        /// A test method that triggers the weapon
+        /// </summary>
+        protected virtual void TestShoot()
 		{
 			if (WeaponState.CurrentState == WeaponStates.WeaponIdle)
 			{
@@ -160,14 +164,16 @@ namespace MoreMountains.CorgiEngine
 			{
 				_hitObject = _hit2D.collider.gameObject;
 				_hitPoint = _hit2D.point;
-			}
+                OnHit?.Invoke(_hitObject, _hitPoint); // invoke on hit with hit point
+            }
 			// otherwise we just draw our laser in front of our weapon 
 			else
 			{
 				_hitObject = null;
 				// we play the miss feedback
 				WeaponMiss();
-			}               
+                OnHit?.Invoke(null, _origin + (_randomSpreadDirection * HitscanMaxDistance)); // invoke on hit with max distance in shoot direction (because it didn't hit anything)
+            }               
 		}
 
 		/// <summary>

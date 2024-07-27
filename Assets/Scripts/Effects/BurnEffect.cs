@@ -22,7 +22,7 @@ public class BurnEffect : BaseEffect {
 
     }
 
-    public void Burn(GameObject instigator, float damage, int ticks, float duration, float invincibilityDuration, Vector3 damageDirection, bool instantTick) {
+    public void AddEffect(GameObject instigator, float damage, int ticks, float duration, float invincibilityDuration, Vector3 damageDirection, bool instantTick) {
 
         burnOverlay.ShowOverlay(); // show burn overlay
 
@@ -50,7 +50,7 @@ public class BurnEffect : BaseEffect {
 
     }
 
-    public void RemoveEffect() {
+    public override void RemoveEffect() {
 
         if (burnCoroutine != null) StopCoroutine(burnCoroutine);
         burnCoroutine = null;

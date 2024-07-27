@@ -18,7 +18,7 @@ public class IceSecondaryAction : SecondaryAction {
         iceBlastParticles.gameObject.SetActive(false); // ice blast particles are not active by default (done in awake so it runs when game starts)
 
         if (iceBlastParticles.main.duration > freezeDuration)
-            Debug.LogWarning("Particle duration must be less than or equal to freeze duration"); // in order to prevent overlapping blasts
+            Debug.LogWarning("Particle duration must be less than or equal to freeze duration."); // in order to prevent overlapping blasts
 
     }
 

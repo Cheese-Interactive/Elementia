@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: -3601002809632648221}
   - component: {fileID: 4813264542210501733}
   - component: {fileID: 6658620678597552082}
-  - component: {fileID: -3073912655475901205}
   m_Layer: 9
   m_Name: Flamethrower
   m_TagString: Untagged
@@ -103,7 +102,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1147189493814074718}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 77fddf2636fbbe046addb38e3c4d030b, type: 3}
   m_Name: 
@@ -136,7 +135,7 @@ MonoBehaviour:
   PermanentMovementMultiplier: 0
   ModifyMovementWhileAttacking: 0
   MovementMultiplier: 0
-  AlwaysResetMultiplierToInitial: 1
+  AlwaysResetMultiplierToInitial: 0
   PreventHorizontalGroundMovementWhileInUse: 0
   PreventHorizontalAirMovementWhileInUse: 0
   SetForceWhileInUse: 0
@@ -244,24 +243,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rangeCollider: {fileID: 570316936470242686}
   particles: {fileID: 8616150893403882567}
---- !u!114 &-3073912655475901205
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1147189493814074718}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b7277539b95c0d45895792ecc99ce66, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MutualizeWaitingPools: 1
-  NestWaitingPool: 1
-  NestUnderThis: 0
-  GameObjectToPool: {fileID: 100002, guid: c3be8791dc15b3d459e957499b7f5177, type: 3}
-  PoolSize: 20
-  PoolCanExpand: 1
 --- !u!1 &3199147200058356316
 GameObject:
   m_ObjectHideFlags: 0

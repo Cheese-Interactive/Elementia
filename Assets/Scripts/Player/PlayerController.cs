@@ -1,6 +1,4 @@
 using MoreMountains.CorgiEngine;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : EntityController {
@@ -18,9 +16,8 @@ public class PlayerController : EntityController {
     private WeaponDatabase weaponDatabase;
     private WeaponPair currWeaponPair; // to avoid searching dictionary every frame
 
-    [Header("Earth")]
-    private Rock currRock;
-    private Coroutine rockSummonCoroutine;
+    [Header("Animations")]
+    [SerializeField][Tooltip("Minimum movement threshold to trigger walking animation")] private float minMovementThreshold;
 
     [Header("Death")]
     private bool isDead; // to deal with death delay
@@ -61,6 +58,8 @@ public class PlayerController : EntityController {
     }
 
     private void Update() {
+
+        anim.SetBool("isWalking", corgiController.State.IsGrounded && Mathf.Abs(corgiController.ForcesApplied.x) > minMovementThreshold && !isDead); // play walking animation if player is grounded, moving, and not dead (place before dead check to allow walking to be reset)
 
         if (isDead)
             return; // player is dead, no need to update
@@ -163,69 +162,10 @@ public class PlayerController : EntityController {
 
     private new void OnTriggerEnter2D(Collider2D collision) {
 
-        if (collision.CompareTag("Water"))  // barrier can save player from water
-            health.Kill();
+        if (collision.CompareTag("Water"))
+            health.ForceKill(); // force kill player so invincibility doesn't protect player from drowning
 
     }
-
-    #region EARTH
-
-    public Rock OnSummonRock(EarthPrimaryAction action, Rock rockPrefab) {
-
-        rockSummonCoroutine = StartCoroutine(HandleSummonRock(action, rockPrefab));
-        return currRock;
-
-    }
-
-    private IEnumerator HandleSummonRock(EarthPrimaryAction action, Rock rockPrefab) {
-
-        DisableCoreScripts(); // disable all scripts while rock is being summoned (including weapon handler)
-
-        currRock = Instantiate(rockPrefab, transform.position, Quaternion.identity); // instantiate rock (will play summon animation & rotate itself automatically)
-        anim.SetBool("isSummoningRock", true); // play rock summon animation
-
-        yield return null; // wait for animation to start
-        yield return new WaitForSeconds(anim.GetCurrentAnimatorStateInfo(0).length); // wait for animation to end (so rock can be dropped during animation because this coroutine won't be null)
-
-        SetWeaponHandlerEnabled(true); // enable weapon handler when rock is fully summoned
-        action.OnThrowReady(); // trigger throw ready event
-        rockSummonCoroutine = null;
-
-    }
-
-    public void OnRockThrow() => StartCoroutine(HandleRockThrow()); // handle rock throw
-
-    private IEnumerator HandleRockThrow() {
-
-        // must wait for two frames to allow projectile to be fired
-        yield return null;
-        yield return null;
-
-        charWeaponHandler.ShootStop(); // stop shooting weapon (to deal with infinite shooting bug | do this before disabling the core scripts)
-        EnableCoreScripts(); // enable all scripts after rock is dropped/thrown (except weapon handler | don't want player to use weapon unless rock is fully summoned)
-        SetWeaponHandlerEnabled(false); // disable weapon handler when rock is thrown
-
-    }
-
-    public void OnDestroyRock(bool activateMechanics) {
-
-        if (rockSummonCoroutine != null) StopCoroutine(rockSummonCoroutine); // stop rock summon coroutine if it's running
-        rockSummonCoroutine = null;
-
-        Destroy(currRock.gameObject); // destroy rock
-
-        corgiController.SetForce(Vector2.zero); // reset player movement
-        anim.SetBool("isSummoningRock", false);
-
-        if (activateMechanics) {
-
-            EnableCoreScripts(); // enable all scripts after rock is dropped/thrown (except weapon handler | don't want player to use weapon unless rock is fully summoned)
-            SetWeaponHandlerEnabled(false); // disable weapon handler when rock is dropped
-
-        }
-    }
-
-    #endregion
 
     #region UTILITIES
 
@@ -235,6 +175,10 @@ public class PlayerController : EntityController {
         WeaponPair weaponPair = weaponDatabase.GetWeaponPair(weaponData); // get weapon pair from database
         PrimaryAction primaryAction = weaponPair.GetPrimaryAction();
         SecondaryAction secondaryAction = weaponPair.GetSecondaryAction();
+
+        // make sure weapon doesn't have a cooldown
+        if (weaponPair.GetWeapon().TimeBetweenUses > 0f)
+            Debug.LogWarning("Weapon " + weaponPair.GetWeapon().name + " has a set cooldown on its weapon object, which will cause issues with primary action cooldowns.");
 
         // disable primary & secondary actions (if they exist)
         if (primaryAction)

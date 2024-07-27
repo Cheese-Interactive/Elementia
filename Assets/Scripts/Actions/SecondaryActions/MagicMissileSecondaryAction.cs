@@ -84,7 +84,7 @@ public class MagicMissileSecondaryAction : SecondaryAction {
 
         yield return new WaitForSeconds(resetDuration); // wait for reset duration
 
-        gameManager.ResetAllResettables(transform.position, resetWaitDuration); // reset all resettables with a wait duration (coroutine & distance based reset)
+        gameManager.ResetAllResettables(); // reset all resettables
         StopResetting(); // stop resetting
 
         resetCoroutine = null;

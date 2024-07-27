@@ -4,6 +4,7 @@ using UnityEngine;
 public class EntityController : MonoBehaviour {
 
     [Header("References")]
+    [SerializeField] private Transform basePos;
     protected Animator anim;
     protected Character character;
     protected CorgiController corgiController;
@@ -22,9 +23,7 @@ public class EntityController : MonoBehaviour {
     protected CharacterLadder charLadder;
     protected CharacterButtonActivation charButton;
     protected DamageOnTouch damageOnTouch;
-    protected SlowEffect slowEffect;
-    protected BurnEffect burnEffect;
-    protected TimeEffect timeEffect;
+    protected BaseEffect[] effects;
     protected CharacterHandleWeapon charWeaponHandler;
 
     protected void Awake() {
@@ -46,14 +45,13 @@ public class EntityController : MonoBehaviour {
         charLadder = GetComponent<CharacterLadder>();
         charButton = GetComponent<CharacterButtonActivation>();
         damageOnTouch = GetComponent<DamageOnTouch>();
-        slowEffect = GetComponent<SlowEffect>();
-        burnEffect = GetComponent<BurnEffect>();
-        timeEffect = GetComponent<TimeEffect>();
+        effects = GetComponents<BaseEffect>();
         charWeaponHandler = GetComponent<CharacterHandleWeapon>();
 
-        health.OnDeath += slowEffect.RemoveEffect; // remove slow effect on death
-        health.OnDeath += burnEffect.RemoveEffect; // remove burn effect on death
-        health.OnDeath += timeEffect.RemoveEffect; // remove time effect on death
+        // subscribe to on death event
+        foreach (BaseEffect effect in effects)
+            health.OnDeath += effect.RemoveEffect;
+
         health.OnDeath += OnDeath;
         health.OnRevive += OnRespawn;
 
@@ -70,10 +68,9 @@ public class EntityController : MonoBehaviour {
 
     protected void OnDestroy() {
 
-        // remove subscription to on death event
-        health.OnDeath -= slowEffect.RemoveEffect;
-        health.OnDeath -= burnEffect.RemoveEffect;
-        health.OnDeath -= timeEffect.RemoveEffect;
+        // remove subscriptions to on death event
+        foreach (BaseEffect effect in effects)
+            health.OnDeath -= effect.RemoveEffect;
 
     }
 
@@ -196,7 +193,7 @@ public class EntityController : MonoBehaviour {
 
     }
 
-    public Vector2 GetBottomPosition() => transform.position - new Vector3(0f, transform.localScale.y / 2f, 0f);
+    public Vector2 GetBottomPosition() => basePos.position;
 
     protected virtual void OnRespawn() { }
 

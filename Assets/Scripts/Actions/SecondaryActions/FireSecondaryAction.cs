@@ -5,7 +5,7 @@ using UnityEngine;
 public class FireSecondaryAction : SecondaryAction {
 
     [Header("References")]
-    [SerializeField] private Weapon flamethrower;
+    [SerializeField] private Weapon flamethrowerWeapon;
     private Weapon prevWeapon;
     private bool prevAlwaysShoot;
     private bool isFlamethrowerEquipped;
@@ -48,7 +48,7 @@ public class FireSecondaryAction : SecondaryAction {
 
         prevWeapon = playerController.GetCurrentWeapon(); // store current weapon to revert back to it later (don't use character weapon handler's current weapon because it gets destroyed when flamethrower is equipped)
 
-        charWeaponHandler.ChangeWeapon(flamethrower, flamethrower.WeaponID); // equip flamethrower
+        charWeaponHandler.ChangeWeapon(flamethrowerWeapon, flamethrowerWeapon.WeaponID); // equip flamethrower
         charWeaponHandler.CurrentWeapon.GetComponent<Flamethrower>().Initialize(flameSpeed, entityFlamethrowerForce, objectFlamethrowerForce, burnDamage, burnTicks, burnDuration); // initialize flamethrower
 
         prevAlwaysShoot = charWeaponHandler.ForceAlwaysShoot; // store previous always shoot value
