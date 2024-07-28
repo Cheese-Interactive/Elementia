@@ -10,6 +10,7 @@ TagManager:
   - NoMask
   - Water
   - Enemy
+  - Hazards
   layers:
   - Default
   - TransparentFX
