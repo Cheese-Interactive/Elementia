@@ -149,7 +149,6 @@ GameObject:
   - component: {fileID: 6185273497616329014}
   - component: {fileID: 6413733684168419384}
   - component: {fileID: 715053174279618432}
-  - component: {fileID: 8685980453542896938}
   - component: {fileID: 7469324586216708642}
   m_Layer: 8
   m_Name: Boulder
@@ -168,7 +167,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_LocalScale: {x: 0.731025, y: 0.731025, z: 0.731025}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4440121893155170000}
@@ -259,18 +258,18 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.0052689314, y: -0.00000011920929}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
+    oldSize: {x: 2, y: 2}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.97, y: 0.97}
+  m_Size: {x: 2.034332, y: 2.0448697}
   m_EdgeRadius: 0
 --- !u!50 &6413733684168419384
 Rigidbody2D:
@@ -291,7 +290,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 536870912
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -320,31 +319,6 @@ MonoBehaviour:
   Grounded: 0
   Pusher: {fileID: 0}
   Direction: {x: 0, y: 0}
---- !u!114 &8685980453542896938
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2532872684494712300}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6a612b6d4e22fe48a3ca27538fd6c43, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  beacon: {fileID: 6715394532299605814}
-  basePos: {fileID: 5759470523926772014}
-  fadeInDurationPercentage: 15
-  fadeOutDurationPercentage: 15
-  beaconStartWidth: 0.25
-  beaconEndWidth: 1
-  beaconHeight: 5
-  damage: 35
-  isPushForce: 1
-  entityPushForce: {x: 15, y: 12}
-  objectPushForce: {x: 15, y: 12}
-  entityPullForce: {x: 0, y: 0}
-  objectPullForce: {x: 0, y: 0}
 --- !u!114 &7469324586216708642
 MonoBehaviour:
   m_ObjectHideFlags: 0

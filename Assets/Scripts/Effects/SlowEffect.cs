@@ -55,7 +55,8 @@ public class SlowEffect : BaseEffect {
 
                 }
             }
-        } else { // coroutine is not running -> start
+        }
+        else { // coroutine is not running -> start
 
             if (slowSpeed && charMovement) { // only set if character can move
 
