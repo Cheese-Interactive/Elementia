@@ -15822,9 +15822,9 @@ MonoBehaviour:
   flameSpeed: 11
   objectFlamethrowerForce: {x: 2, y: 4}
   entityFlamethrowerForce: {x: 5, y: 2}
-  burnDamage: 5
-  burnTicks: 6
-  burnDuration: 2
+  burnDamage: 7
+  burnTicks: 12
+  burnDuration: 3
   maxDuration: Infinity
 --- !u!114 &-5756287154290932317
 MonoBehaviour:
@@ -15894,7 +15894,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9f52c7134449ae4bb4aee537b99feda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cooldown: 3
+  cooldown: 15
   isAuto: 0
   canUseInAir: 0
   vinePrefab: {fileID: 2538740281262548292, guid: cf4908451a0f49f4e8aa719771740821,
@@ -15914,7 +15914,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e23495714f1338f40b3da1a3a8fdc4c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cooldown: 15
+  cooldown: 4
   isAuto: 0
   canUseInAir: 1
   speedMultiplier: 1.8
