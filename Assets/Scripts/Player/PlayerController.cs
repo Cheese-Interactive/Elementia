@@ -87,7 +87,8 @@ public class PlayerController : EntityController {
                     primaryAction.OnTriggerRegular(); // trigger regular primary action
 
                 }
-            } else { // primary action is hold action
+            }
+            else { // primary action is hold action
 
                 if (Input.GetMouseButtonDown(0)) // start hold
                     primaryAction.OnTriggerHold(true);
@@ -108,7 +109,8 @@ public class PlayerController : EntityController {
                     secondaryAction.OnTriggerRegular(); // trigger regular secondary action
 
                 }
-            } else { // secondary action is hold action
+            }
+            else { // secondary action is hold action
 
                 if (Input.GetMouseButtonDown(1)) // start hold
                     secondaryAction.OnTriggerHold(true);
@@ -162,8 +164,8 @@ public class PlayerController : EntityController {
 
     private new void OnTriggerEnter2D(Collider2D collision) {
 
-        if (collision.CompareTag("Water"))
-            health.ForceKill(); // force kill player so invincibility doesn't protect player from drowning
+        if (collision.CompareTag("Water") || collision.CompareTag("Hazards"))
+            health.ForceKill(); // force kill player so invincibility doesn't protect player
 
     }
 
@@ -246,7 +248,8 @@ public class PlayerController : EntityController {
                 weaponSelector.SetSecondaryCooldownValue(secondaryAction.GetNormalizedCooldown(), secondaryAction.GetCooldownTimer());
 
             }
-        } else {
+        }
+        else {
 
             charWeaponHandler.ChangeWeapon(blankWeapon, blankWeapon.WeaponID); // equip blank weapon if no weapon exists
             weaponSelector.ResetCooldownValues(); // reset cooldown values
