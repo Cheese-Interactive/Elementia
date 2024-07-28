@@ -11,6 +11,9 @@ public class IceSecondaryAction : SecondaryAction {
     [SerializeField][Tooltip("Must be >= particle duration")] private float slowDuration; // in order to prevent overlapping blasts
     [SerializeField] private LayerMask waterMask;
 
+    [Header("Debug")]
+    [SerializeField] private Color iceBlastVisualizerColor;
+
     private new void Awake() {
 
         base.Awake();
@@ -48,14 +51,13 @@ public class IceSecondaryAction : SecondaryAction {
             }
         }
 
-        cooldownTimer = cooldown; // restart cooldown timer
-        weaponSelector.SetSecondaryCooldownValue(GetNormalizedCooldown(), cooldownTimer); // update secondary cooldown meter
+        StartCooldown(); // start cooldown
 
     }
 
     private void OnDrawGizmosSelected() {
 
-        Gizmos.color = new Color(100f / 255f, 180f / 255f, 220f / 255f, 0.3f);
+        Gizmos.color = iceBlastVisualizerColor;
         Gizmos.DrawSphere(transform.position, blastRadius);
 
     }

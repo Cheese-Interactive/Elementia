@@ -1,3 +1,4 @@
+using MoreMountains.CorgiEngine;
 using System.Collections;
 using UnityEngine;
 
@@ -57,8 +58,7 @@ public class EarthSecondaryAction : SecondaryAction {
         if (hasMaxLifetime) // if boulder has max lifetime duration
             durationCoroutine = StartCoroutine(HandleMaxDuration()); // start max duration coroutine
 
-        cooldownTimer = cooldown; // restart cooldown timer
-        weaponSelector.SetSecondaryCooldownValue(GetNormalizedCooldown(), cooldownTimer); // update secondary cooldown meter
+        StartCooldown(); // start cooldown
 
     }
 

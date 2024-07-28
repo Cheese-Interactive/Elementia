@@ -6,14 +6,12 @@ using UnityEngine;
 public abstract class BaseCollectible : MMPersistentBase {
 
     [Header("References")]
-    protected WeaponSelector weaponSelector;
     protected ItemPicker itemPicker;
     protected bool isCollected;
     private GameManager gameManager;
 
     [Header("Settings")]
     [SerializeField] private bool isRequired;
-    [SerializeField] private bool isKey;
 
     [Serializable]
     protected struct Data {
@@ -28,12 +26,7 @@ public abstract class BaseCollectible : MMPersistentBase {
         itemPicker = GetComponent<ItemPicker>();
         itemPicker.OnCollect += OnCollect;
 
-        if (isRequired && isKey)
-            Debug.LogWarning("A collectible cannot be both required and a key.");
-
     }
-
-    protected void Start() => weaponSelector = FindObjectOfType<WeaponSelector>();
 
     protected void OnDestroy() => itemPicker.OnCollect -= OnCollect;
 
@@ -47,7 +40,6 @@ public abstract class BaseCollectible : MMPersistentBase {
     public override string OnSave() {
 
         Data saveData = new() { isCollected = isCollected };
-
         return JsonUtility.ToJson(saveData); // save data
 
     }
@@ -66,7 +58,5 @@ public abstract class BaseCollectible : MMPersistentBase {
     public bool IsCollected() => isCollected;
 
     public bool IsRequired() => isRequired;
-
-    public bool IsKey() => isKey;
 
 }

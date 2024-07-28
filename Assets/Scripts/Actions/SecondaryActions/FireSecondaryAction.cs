@@ -67,8 +67,7 @@ public class FireSecondaryAction : SecondaryAction {
         charWeaponHandler.ChangeWeapon(prevWeapon, prevWeapon.WeaponID); // revert back to previous weapon
         isFlamethrowerEquipped = false;
 
-        cooldownTimer = cooldown; // restart cooldown timer
-        weaponSelector.SetSecondaryCooldownValue(GetNormalizedCooldown(), cooldownTimer); // update secondary cooldown meter
+        StartCooldown(); // start cooldown
 
     }
 

@@ -5283,8 +5283,8 @@ ParticleSystem:
         m_RotationOrder: 0
     startColor:
       serializedVersion: 2
-      minMaxState: 0
-      minColor: {r: 0.3490566, g: 0.3047827, b: 0.07409222, a: 1}
+      minMaxState: 2
+      minColor: {r: 0.101960786, g: 0.08627451, b: 0, a: 1}
       maxColor: {r: 0.80784315, g: 0.6745098, b: 0, a: 1}
       maxGradient:
         serializedVersion: 2
@@ -9958,7 +9958,7 @@ GameObject:
   - component: {fileID: 6513254684983501943}
   - component: {fileID: 7973188474096741526}
   m_Layer: 0
-  m_Name: Lightning
+  m_Name: ElectricOverlay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14861,8 +14861,8 @@ Transform:
   - {fileID: 5452681496835425656}
   - {fileID: 5009877571481399508}
   - {fileID: 725880419585612595}
-  - {fileID: 7801193457109610589}
   - {fileID: 5770548812843838976}
+  - {fileID: 7801193457109610589}
   - {fileID: 6895793851411871897}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -15761,9 +15761,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 101c2fbd1f0c3c842b9b074762f5a655, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cooldown: 0.15
+  cooldown: 0.3
   isAuto: 1
   canUseInAir: 1
+  lightningDuration: 0.15
+  hasDistanceMultiplier: 0
+  isPushProjectile: 1
+  entityForceMultiplier: {x: 5, y: 6}
+  objectForceMultiplier: {x: 2, y: 2}
 --- !u!114 &2721479856997411025
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15802,6 +15807,7 @@ MonoBehaviour:
   waterMask:
     serializedVersion: 2
     m_Bits: 16
+  iceBlastVisualizerColor: {r: 0, g: 1, b: 1, a: 0.49019608}
 --- !u!114 &-8039291345281199097
 MonoBehaviour:
   m_ObjectHideFlags: 0

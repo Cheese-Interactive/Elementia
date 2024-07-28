@@ -31,8 +31,7 @@ public class NatureSecondaryAction : SecondaryAction {
 
         tileCoroutine = StartCoroutine(HandleVinePlacement(floorTileWorldPos));
 
-        cooldownTimer = cooldown; // restart cooldown timer
-        weaponSelector.SetSecondaryCooldownValue(GetNormalizedCooldown(), cooldownTimer); // update secondary cooldown meter
+        StartCooldown(); // start cooldown
 
     }
 

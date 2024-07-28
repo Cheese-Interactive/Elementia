@@ -4,11 +4,14 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour {
 
+    [Header("References")]
+    private CooldownManager cooldownManager;
+
     [Header("Settings")]
     private List<BaseCollectible> requiredCollectibles;
-    private List<BaseCollectible> keyCollectibles;
+    private List<KeyCollectible> keyCollectibles;
     private bool isLevelComplete;
-    private Coroutine resetCoroutine;
+    private bool isCooldownsEnabled;
 
     [Header("Collectible Inventory")]
     [SerializeField] private Inventory collectibleInventory;
@@ -24,15 +27,20 @@ public class GameManager : MonoBehaviour {
 
     private void Start() {
 
+        cooldownManager = FindObjectOfType<CooldownManager>();
+
         // get all required & key collectibles
         requiredCollectibles = new List<BaseCollectible>();
-        keyCollectibles = new List<BaseCollectible>();
+        keyCollectibles = new List<KeyCollectible>();
 
-        foreach (BaseCollectible collectible in FindObjectsOfType<BaseCollectible>())
+        foreach (BaseCollectible collectible in FindObjectsOfType<BaseCollectible>()) {
+
             if (collectible.IsRequired())
                 requiredCollectibles.Add(collectible);
-            else if (collectible.IsKey())
-                keyCollectibles.Add(collectible);
+            else if (collectible is KeyCollectible)
+                keyCollectibles.Add((KeyCollectible) collectible);
+
+        }
 
         // check if there are enough slots to hold the required collectibles
         if (collectibleRows * collectibleColumns < requiredCollectibles.Count)
@@ -51,6 +59,8 @@ public class GameManager : MonoBehaviour {
         keyInventoryDisplay.NumberOfRows = keyRows;
         keyInventoryDisplay.NumberOfColumns = keyColumns;
         keyInventoryDisplay.SetupInventoryDisplay();
+
+        isCooldownsEnabled = true; // enable cooldowns by default
 
     }
 
@@ -77,4 +87,17 @@ public class GameManager : MonoBehaviour {
         isLevelComplete = true;
 
     }
+
+    public void SetCooldownsEnabled(bool isCooldownsEnabled) {
+
+        // clear all cooldown data if cooldowns are disabled
+        if (!isCooldownsEnabled)
+            cooldownManager.ClearCooldownData();
+
+        this.isCooldownsEnabled = isCooldownsEnabled;
+
+    }
+
+    public bool IsCooldownsEnabled() => isCooldownsEnabled;
+
 }

@@ -6,23 +6,25 @@ using UnityEngine;
 public class ElectricWeapon : MonoBehaviour {
 
     [Header("References")]
-    [SerializeField] private Lightning lightning;
+    [SerializeField] private Lightning lightningPrefab;
     private HitscanWeapon weapon;
 
     [Header("Settings")]
-    [SerializeField] private float lightningDuration;
-    [Space]
-    [SerializeField] protected bool hasDistanceMultiplier;
-    [Space]
-    [SerializeField] protected bool isPushProjectile;
-    [SerializeField] private Vector2 entityForceMultiplier;
-    [SerializeField] private Vector2 objectForceMultiplier;
+    private float lightningDuration;
+    private bool hasDistanceMultiplier;
+    private bool isPushProjectile;
+    private Vector2 entityForceMultiplier;
+    private Vector2 objectForceMultiplier;
 
-    private void Start() {
+    public void Initialize(float lightningDuration, bool hasDistanceMultiplier, bool isPushProjectile, Vector2 entityForceMultiplier, Vector2 objectForceMultiplier) {
+
+        this.lightningDuration = lightningDuration;
+        this.hasDistanceMultiplier = hasDistanceMultiplier;
+        this.isPushProjectile = isPushProjectile;
+        this.entityForceMultiplier = entityForceMultiplier;
+        this.objectForceMultiplier = objectForceMultiplier;
 
         weapon = GetComponent<HitscanWeapon>();
-        lightning.gameObject.SetActive(false); // disable lightning by default
-
         weapon.OnHit += OnHit;
 
     }
@@ -31,47 +33,54 @@ public class ElectricWeapon : MonoBehaviour {
 
     private IEnumerator HandleHit(GameObject hitObject, Vector3 hitPoint) {
 
-        if (hitObject && hitObject.activeInHierarchy && (weapon.HitscanTargetLayers & (1 << hitObject.layer)) != 0) { // make sure hit object exists, is active, & is in target layer
+        if (hitObject && hitObject.activeInHierarchy) { // make sure hit object exists and is active
 
-            Vector2 entityForce;
-            Vector2 lightningSpawn = (Vector2) transform.TransformPoint(transform.localPosition + weapon.ProjectileSpawnOffset); // get lightning spawn position
+            if ((weapon.HitscanTargetLayers & (1 << hitObject.layer)) != 0) { // make sure hit object is in target layer
 
-            // FORCE DIRECTIONS DEPEND ON LIGHTNING SPAWN LOCATION
-            if (isPushProjectile) // push effect
-                entityForce = ((Vector2) hitPoint - lightningSpawn).normalized; // get force direction (vector faces lightning spawn location)
-            else // pull effect
-                entityForce = (lightningSpawn - (Vector2) hitPoint).normalized; // get force direction (vector faces collision point)
+                Vector2 entityForce;
+                Vector2 lightningSpawn = (Vector2) transform.TransformPoint(transform.localPosition + weapon.ProjectileSpawnOffset); // get lightning spawn position
 
-            Vector2 objectForce = entityForce;
+                // FORCE DIRECTIONS DEPEND ON LIGHTNING SPAWN LOCATION
+                if (isPushProjectile) // push effect
+                    entityForce = ((Vector2) hitPoint - lightningSpawn).normalized; // get force direction (vector faces lightning spawn location)
+                else // pull effect
+                    entityForce = (lightningSpawn - (Vector2) hitPoint).normalized; // get force direction (vector faces collision point)
 
-            if (hasDistanceMultiplier) { // if distance multiplier is enabled
+                Vector2 objectForce = entityForce;
 
-                float distance = Vector2.Distance(lightningSpawn, hitPoint); // get distance between lightning spawn position and collision point
-                entityForce *= distance; // apply distance multiplier to entity force
-                objectForce *= distance; // apply distance multiplier to object force
+                if (hasDistanceMultiplier) { // if distance multiplier is enabled
+
+                    float distance = Vector2.Distance(lightningSpawn, hitPoint); // get distance between lightning spawn position and collision point
+                    entityForce *= distance; // apply distance multiplier to entity force
+                    objectForce *= distance; // apply distance multiplier to object force
+
+                }
+
+                entityForce *= entityForceMultiplier; // apply multiplier to entity force
+                objectForce *= objectForceMultiplier; // apply multiplier to object force
+
+                hitObject.GetComponent<CorgiController>()?.SetForce(entityForce); // add force to entity
+
+                Rigidbody2D objectRb = hitObject.GetComponent<Rigidbody2D>();
+
+                if (objectRb) // make sure rigidbody exists
+                    objectRb.AddForce(objectForce, ForceMode2D.Impulse); // add force to object
 
             }
 
-            entityForce *= entityForceMultiplier; // apply multiplier to entity force
-            objectForce *= objectForceMultiplier; // apply multiplier to object force
-
-            hitObject.GetComponent<CorgiController>()?.SetForce(entityForce); // add force to entity
-
-            Rigidbody2D objectRb = hitObject.GetComponent<Rigidbody2D>();
-
-            if (objectRb) // make sure rigidbody exists
-                objectRb.AddForce(objectForce, ForceMode2D.Impulse); // add force to object
+            hitObject.GetComponent<ElectricGenerator>()?.Activate(); // activate electric generator on hit object if it exists
 
         }
 
+        Lightning lightning = Instantiate(lightningPrefab, transform); // instantiate lightning on player position (triggers automatically)
+        lightning.transform.localPosition = Vector2.zero; // set local position to zero to allow proper positioning for start and end objects
         lightning.StartObject.transform.localPosition = weapon.ProjectileSpawnOffset; // set local position to projectile offset
         lightning.EndObject.transform.position = hitPoint; // set global position to hit point
-        lightning.gameObject.SetActive(true); // enable lightning (triggers automatically)
+        lightning.Trigger(); // trigger lightning
 
         yield return new WaitForSeconds(lightningDuration); // wait for lightning duration
 
-        lightning.Cancel(); // cancel lightning
-        lightning.gameObject.SetActive(false); // disable lightning
+        Destroy(lightning.gameObject); // destroy lightning
 
     }
 }

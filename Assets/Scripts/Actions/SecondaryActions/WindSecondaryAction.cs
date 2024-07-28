@@ -19,8 +19,7 @@ public class WindSecondaryAction : SecondaryAction {
 
         corgiController.SetForce(((Vector2) Camera.main.ScreenToWorldPoint(Input.mousePosition) - (Vector2) transform.position).normalized * playerWindForce);
 
-        cooldownTimer = cooldown; // restart cooldown timer
-        weaponSelector.SetSecondaryCooldownValue(GetNormalizedCooldown(), cooldownTimer); // update secondary cooldown meter
+        StartCooldown(); // start cooldown
 
     }
 

@@ -87,8 +87,7 @@ public class PlayerController : EntityController {
                     primaryAction.OnTriggerRegular(); // trigger regular primary action
 
                 }
-            }
-            else { // primary action is hold action
+            } else { // primary action is hold action
 
                 if (Input.GetMouseButtonDown(0)) // start hold
                     primaryAction.OnTriggerHold(true);
@@ -109,8 +108,7 @@ public class PlayerController : EntityController {
                     secondaryAction.OnTriggerRegular(); // trigger regular secondary action
 
                 }
-            }
-            else { // secondary action is hold action
+            } else { // secondary action is hold action
 
                 if (Input.GetMouseButtonDown(1)) // start hold
                     secondaryAction.OnTriggerHold(true);
@@ -166,6 +164,16 @@ public class PlayerController : EntityController {
 
         if (collision.CompareTag("Water") || collision.CompareTag("Hazards"))
             health.ForceKill(); // force kill player so invincibility doesn't protect player
+
+        if (collision.CompareTag("GeneratorField"))
+            gameManager.SetCooldownsEnabled(false); // disable cooldowns when player enters generator field
+
+    }
+
+    private void OnTriggerExit2D(Collider2D collision) {
+
+        if (collision.CompareTag("GeneratorField"))
+            gameManager.SetCooldownsEnabled(true); // enable cooldowns when player exits generator field
 
     }
 
@@ -234,22 +242,14 @@ public class PlayerController : EntityController {
             SecondaryAction secondaryAction = currWeaponPair.GetSecondaryAction(); // get secondary action
 
             // initialize & enable new primary action if it exists
-            if (primaryAction) {
-
+            if (primaryAction)
                 primaryAction.enabled = true;
-                weaponSelector.SetPrimaryCooldownValue(primaryAction.GetNormalizedCooldown(), primaryAction.GetCooldownTimer());
-
-            }
 
             // initialize & enable new secondary action if it exists
-            if (secondaryAction) {
-
+            if (secondaryAction)
                 secondaryAction.enabled = true;
-                weaponSelector.SetSecondaryCooldownValue(secondaryAction.GetNormalizedCooldown(), secondaryAction.GetCooldownTimer());
 
-            }
-        }
-        else {
+        } else {
 
             charWeaponHandler.ChangeWeapon(blankWeapon, blankWeapon.WeaponID); // equip blank weapon if no weapon exists
             weaponSelector.ResetCooldownValues(); // reset cooldown values

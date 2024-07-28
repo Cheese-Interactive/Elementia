@@ -40,8 +40,7 @@ public class KineticSecondaryAction : SecondaryAction {
         charWeaponHandler.ChangeWeapon(prevWeapon, prevWeapon.WeaponID); // change weapon back to previous weapon
         primaryAction.OnSwitchTo(); // trigger primary action switch to event
 
-        cooldownTimer = cooldown; // restart cooldown timer
-        weaponSelector.SetSecondaryCooldownValue(GetNormalizedCooldown(), cooldownTimer); // update secondary cooldown meter
+        StartCooldown(); // start cooldown
 
         weaponSwitchCoroutine = null;
 

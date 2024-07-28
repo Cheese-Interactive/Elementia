@@ -30,8 +30,7 @@ public abstract class PrimaryAction : Action {
         if (shootCoroutine != null) StopCoroutine(shootCoroutine); // stop shooting coroutine if it exists
         shootCoroutine = StartCoroutine(HandleShoot()); // handle shooting
 
-        cooldownTimer = cooldown; // restart cooldown timer
-        weaponSelector.SetPrimaryCooldownValue(GetNormalizedCooldown(), cooldownTimer); // update primary cooldown meter
+        StartCooldown(); // start cooldown
 
     }
 
@@ -49,6 +48,15 @@ public abstract class PrimaryAction : Action {
         playerController.SetWeaponHandlerEnabled(false); // disable weapon handler when shot is fired
 
         shootCoroutine = null; // reset coroutine
+
+    }
+
+    protected override void StartCooldown(bool restartTimer = true) {
+
+        base.StartCooldown(restartTimer);
+
+        if (gameManager.IsCooldownsEnabled())
+            weaponSelector.SetPrimaryCooldownValue(GetNormalizedCooldown(), cooldownTimer); // update primary cooldown meter
 
     }
 }

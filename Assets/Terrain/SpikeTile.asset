@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: SpikeTile_1
+  m_Name: SpikeTile
   m_EditorClassIdentifier: 
   m_Sprite: {fileID: 8897823241344945089, guid: 405b4d380018c76488393934e221152e,
     type: 3}

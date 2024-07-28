@@ -36,8 +36,9 @@ public class ElectricSecondaryAction : SecondaryAction {
     private IEnumerator HandleEffect() {
 
         yield return new WaitForSeconds(electricDuration);
-        cooldownTimer = cooldown; // restart cooldown timer
-        weaponSelector.SetSecondaryCooldownValue(GetNormalizedCooldown(), cooldownTimer); // update secondary cooldown meter
+
+        StartCooldown(); // start cooldown
+
         effectCoroutine = null; // reset effect coroutine
 
     }

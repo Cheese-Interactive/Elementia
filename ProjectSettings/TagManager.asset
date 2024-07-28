@@ -11,6 +11,7 @@ TagManager:
   - Water
   - Enemy
   - Hazards
+  - GeneratorField
   layers:
   - Default
   - TransparentFX

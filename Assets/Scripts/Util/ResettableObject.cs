@@ -3,6 +3,7 @@ using UnityEngine;
 public class ResettableObject : MonoBehaviour {
 
     [Header("References")]
+    [SerializeField] private GameObject beacon;
     [SerializeField] private GameObject objectOutlinePrefab;
     private Rigidbody2D rb;
     private Vector2 startPos;

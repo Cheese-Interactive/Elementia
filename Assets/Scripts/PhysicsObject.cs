@@ -36,6 +36,12 @@ public abstract class PhysicsObject : MonoBehaviour {
 
         this.resetDuration = resetDuration;
 
+        float fadeIn = (fadeInDurationPercentage / 100f) * resetDuration;
+        float fadeOut = (fadeOutDurationPercentage / 100f) * resetDuration;
+
+        if (fadeIn + fadeOut > resetDuration)
+            Debug.LogWarning("Reset fade in and fade out durations exceed reset duration.");
+
         // show channel beacon
         beacon.gameObject.SetActive(true);
         beacon.SetPositions(new Vector3[] { basePos.position, basePos.position + (transform.up * beaconHeight) });

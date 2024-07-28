@@ -3,8 +3,13 @@ using UnityEngine;
 
 public class WeaponCollectible : BaseCollectible {
 
+    [Header("References")]
+    private WeaponSelector weaponSelector;
+
     [Header("Settings")]
     [SerializeField] private WeaponData weaponData;
+
+    private void Start() => weaponSelector = FindObjectOfType<WeaponSelector>();
 
     protected override void OnCollect(ItemPicker collectible) {
 

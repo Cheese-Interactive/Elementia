@@ -7,8 +7,9 @@ public abstract class Action : MonoBehaviour {
     protected PlayerController playerController;
     protected CharacterHandleWeapon charWeaponHandler;
     protected WeaponSelector weaponSelector;
-    private CooldownManager cooldownManager;
+    protected GameManager gameManager;
     protected Health health;
+    private CooldownManager cooldownManager;
 
     [Header("Settings")]
     [SerializeField] protected float cooldown;
@@ -28,6 +29,7 @@ public abstract class Action : MonoBehaviour {
         playerController = GetComponent<PlayerController>();
         charWeaponHandler = GetComponent<CharacterHandleWeapon>();
         weaponSelector = FindObjectOfType<WeaponSelector>();
+        gameManager = FindObjectOfType<GameManager>();
         cooldownManager = FindObjectOfType<CooldownManager>();
 
     }
@@ -36,12 +38,19 @@ public abstract class Action : MonoBehaviour {
 
         CooldownData cooldownData = cooldownManager.GetCooldown(this); // get cooldown data
 
-        if (cooldownData != null) { // if cooldown data exists
+        if (cooldownData != null && gameManager.IsCooldownsEnabled()) { // if cooldown data exists and cooldowns are enabled
 
             float cooldown = cooldownData.GetCooldownTimer() - (Time.time - cooldownData.GetUnequipTime()); // calculate current cooldown
             cooldownTimer = cooldown > 0f ? cooldown : 0f; // set cooldown timer to current cooldown or 0 if cooldown has ended
 
+        } else {
+
+            cooldownTimer = 0f; // reset cooldown timer (no data or cooldowns disabled)
+
         }
+
+        StartCooldown(false); // start cooldown without restarting timer
+
     }
 
     // runs before weapon is switched
@@ -60,6 +69,13 @@ public abstract class Action : MonoBehaviour {
                 cooldownTimer = 0f;
 
         }
+    }
+
+    protected virtual void StartCooldown(bool restartTimer = true) { // restart timer exists so initial timer can be set based on cooldown data
+
+        if (gameManager.IsCooldownsEnabled() && restartTimer)
+            cooldownTimer = cooldown; // restart cooldown timer
+
     }
 
     public virtual void OnTriggerRegular() { }

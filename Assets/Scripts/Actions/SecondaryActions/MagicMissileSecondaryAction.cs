@@ -5,7 +5,6 @@ using UnityEngine;
 public class MagicMissileSecondaryAction : SecondaryAction {
 
     [Header("References")]
-    private GameManager gameManager;
     private MagicMissilePrimaryAction primaryAction;
     private Animator anim;
     private Weapon prevWeapon;
@@ -19,13 +18,13 @@ public class MagicMissileSecondaryAction : SecondaryAction {
     private void Start() {
 
         primaryAction = GetComponent<MagicMissilePrimaryAction>();
-        gameManager = FindObjectOfType<GameManager>();
         anim = GetComponent<Animator>();
 
     }
 
     public override void OnTriggerHold(bool startHold) {
 
+        print(cooldownTimer);
         if (cooldownTimer > 0f || isResetting == startHold) return; // make sure action is ready and is not already in the desired state
 
         if (!canUseInAir && !playerController.IsGrounded()) { // make sure player is grounded if required
@@ -75,8 +74,7 @@ public class MagicMissileSecondaryAction : SecondaryAction {
 
         isResetting = false;
 
-        cooldownTimer = cooldown; // restart cooldown timer
-        weaponSelector.SetSecondaryCooldownValue(GetNormalizedCooldown(), cooldownTimer); // update secondary cooldown meter
+        StartCooldown(); // start cooldown
 
     }
 
