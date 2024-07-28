@@ -213,11 +213,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lightning: {fileID: 6362014187463928354}
-  lightningDuration: 0.15
+  lightningDuration: 0.1
   hasDistanceMultiplier: 0
   isPushProjectile: 1
-  entityForceMultiplier: {x: 5, y: 6}
-  objectForceMultiplier: {x: 2, y: 2}
+  entityForceMultiplier: {x: 2, y: 0}
+  objectForceMultiplier: {x: 2, y: 0}
 --- !u!1 &3016606344381137045
 GameObject:
   m_ObjectHideFlags: 0
