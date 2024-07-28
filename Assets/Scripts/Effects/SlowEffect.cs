@@ -5,56 +5,53 @@ using UnityEngine;
 public class SlowEffect : BaseEffect {
 
     [Header("References")]
+    [SerializeField] private Overlay slowOverlay;
     private CharacterHorizontalMovement charMovement;
     private CharacterJump charJump;
 
     [Header("Slow")]
     [SerializeField] private bool slowSpeed;
     [SerializeField] private bool slowJump;
-    private float startSpeed;
-    private float startJump;
-    private Coroutine slowResetCoroutine;
-
-    [Header("Overlay")]
-    [SerializeField] private Overlay freezeOverlay;
+    private Coroutine resetEffectCoroutine;
+    private float prevSpeed;
+    private float prevJump;
 
     private void Start() {
 
         charMovement = GetComponent<CharacterHorizontalMovement>();
         charJump = GetComponent<CharacterJump>();
+        slowOverlay.HideOverlay(); // hide slow overlay by default
 
-        if (charMovement) // only set if character can move
-            startSpeed = charMovement.WalkSpeed;
+        if (slowSpeed && charMovement)
+            prevSpeed = charMovement.WalkSpeed; // store initial speed
 
-        if (charJump) // only set if character can jump
-            startJump = charJump.JumpHeight;
-
-        freezeOverlay.HideOverlay(); // hide slow overlay by default
+        if (slowJump && charJump)
+            prevJump = charJump.JumpHeight; // store initial jump height
 
     }
 
     public void AddEffect(float movementMultiplier, float jumpMultiplier, float duration) {
 
-        if (slowResetCoroutine != null) { // coroutine is already running -> restart
+        if (resetEffectCoroutine != null) { // coroutine is already running -> restart
 
-            StopCoroutine(slowResetCoroutine);
+            StopCoroutine(resetEffectCoroutine); // stop previous effect coroutine if it exists
 
             if (slowSpeed && charMovement) { // only set if character can move
 
-                if (startSpeed * movementMultiplier < charMovement.MovementSpeed) { // only set if new speed is slower than current speed
+                if (prevSpeed * movementMultiplier < charMovement.MovementSpeed) { // only set if new speed is slower than current speed
 
                     charMovement.MovementSpeed *= movementMultiplier; // set new speed
-                    freezeOverlay.ShowOverlay(); // show slow overlay
+                    slowOverlay.ShowOverlay(); // show slow overlay
 
                 }
             }
 
             if (slowJump && charJump) { // only set if character can jump
 
-                if (startJump * jumpMultiplier < charJump.JumpHeight) { // only set if new jump height is lower than current jump height
+                if (prevJump * jumpMultiplier < charJump.JumpHeight) { // only set if new jump height is lower than current jump height
 
                     charJump.JumpHeight *= jumpMultiplier; // set new jump height
-                    freezeOverlay.ShowOverlay(); // show slow overlay
+                    slowOverlay.ShowOverlay(); // show slow overlay
 
                 }
             }
@@ -62,42 +59,44 @@ public class SlowEffect : BaseEffect {
 
             if (slowSpeed && charMovement) { // only set if character can move
 
+                prevSpeed = charMovement.WalkSpeed; // store current speed each time before slow effect
                 charMovement.MovementSpeed *= movementMultiplier; // set new speed
-                freezeOverlay.ShowOverlay(); // show slow overlay
+                slowOverlay.ShowOverlay(); // show slow overlay
 
             }
 
             if (slowJump && charJump) { // only set if character can jump
 
+                prevJump = charJump.JumpHeight; // store current jump height each time before slow effect
                 charJump.JumpHeight *= jumpMultiplier; // set new jump height
-                freezeOverlay.ShowOverlay(); // show slow overlay
+                slowOverlay.ShowOverlay(); // show slow overlay
 
             }
         }
 
-        slowResetCoroutine = StartCoroutine(ResetSlow(duration));
+        resetEffectCoroutine = StartCoroutine(ResetEffect(duration)); // start effect coroutine
 
     }
 
-    private IEnumerator ResetSlow(float duration) {
+    private IEnumerator ResetEffect(float duration) {
 
         yield return new WaitForSeconds(duration);
-        RemoveEffect();
+        RemoveEffect(); // remove effect after duration
 
     }
 
     public override void RemoveEffect() {
 
-        if (slowResetCoroutine != null) StopCoroutine(slowResetCoroutine);
-        slowResetCoroutine = null;
+        if (resetEffectCoroutine != null) StopCoroutine(resetEffectCoroutine); // stop effect coroutine if it exists
+        resetEffectCoroutine = null; // reset coroutine
 
         if (slowSpeed && charMovement)
-            charMovement.MovementSpeed = startSpeed;
+            charMovement.MovementSpeed = prevSpeed;
 
         if (slowJump && charJump)
-            charJump.JumpHeight = startJump;
+            charJump.JumpHeight = prevJump;
 
-        freezeOverlay.HideOverlay(); // hide slow overlay
+        slowOverlay.HideOverlay(); // hide slow overlay
 
     }
 }

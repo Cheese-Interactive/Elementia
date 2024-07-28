@@ -6,6 +6,7 @@ public class Flamethrower : MonoBehaviour {
     [Header("References")]
     [SerializeField] private BoxCollider2D rangeCollider;
     [SerializeField] private FlamethrowerParticles particles;
+    private Character character;
     private HitscanWeapon weapon;
 
     [Header("Settings")]
@@ -17,6 +18,7 @@ public class Flamethrower : MonoBehaviour {
 
     public void Initialize(float flameSpeed, Vector2 entityFlamethrowerForce, Vector2 objectFlamethrowerForce, float burnDamage, int burnTicks, float burnDuration) {
 
+        character = FindObjectOfType<PlayerController>().GetComponent<Character>();
         weapon = GetComponent<HitscanWeapon>();
 
         this.objectFlamethrowerForce = objectFlamethrowerForce;
@@ -56,7 +58,7 @@ public class Flamethrower : MonoBehaviour {
             if (objectRb) // make sure rigidbody exists
                 objectRb.AddForce(objectForce, ForceMode2D.Impulse); // push object away from shooter
 
-            collision.gameObject.GetComponent<BurnEffect>()?.AddEffect(gameObject, burnDamage, burnTicks, burnDuration, weapon.DamageCausedInvincibilityDuration, transform.right, true); // apply burn effect to object
+            collision.gameObject.GetComponent<BurnEffect>()?.AddEffect(gameObject, burnDamage, burnTicks, burnDuration, weapon.DamageCausedInvincibilityDuration, character.IsFacingRight ? transform.right : -transform.right, true); // apply burn effect to object (get direction flamethrower is facing through character facing direction)
 
             collision.gameObject.GetComponent<BurnableObject>()?.StartBurn(); // burn object if it can be burned
 

@@ -34,18 +34,19 @@ public class ElectricWeapon : MonoBehaviour {
         if (hitObject && hitObject.activeInHierarchy && (weapon.HitscanTargetLayers & (1 << hitObject.layer)) != 0) { // make sure hit object exists, is active, & is in target layer
 
             Vector2 entityForce;
+            Vector2 lightningSpawn = (Vector2) transform.TransformPoint(transform.localPosition + weapon.ProjectileSpawnOffset); // get lightning spawn position
 
             // FORCE DIRECTIONS DEPEND ON LIGHTNING SPAWN LOCATION
             if (isPushProjectile) // push effect
-                entityForce = ((Vector2) hitPoint - (Vector2) transform.position).normalized; // get force direction (vector faces lightning spawn location)
+                entityForce = ((Vector2) hitPoint - lightningSpawn).normalized; // get force direction (vector faces lightning spawn location)
             else // pull effect
-                entityForce = ((Vector2) transform.position - (Vector2) hitPoint).normalized; // get force direction (vector faces collision point)
+                entityForce = (lightningSpawn - (Vector2) hitPoint).normalized; // get force direction (vector faces collision point)
 
             Vector2 objectForce = entityForce;
 
             if (hasDistanceMultiplier) { // if distance multiplier is enabled
 
-                float distance = Vector2.Distance((Vector2) transform.position, hitPoint); // get distance between lightning spawn position and collision point
+                float distance = Vector2.Distance(lightningSpawn, hitPoint); // get distance between lightning spawn position and collision point
                 entityForce *= distance; // apply distance multiplier to entity force
                 objectForce *= distance; // apply distance multiplier to object force
 
@@ -65,7 +66,7 @@ public class ElectricWeapon : MonoBehaviour {
 
         lightning.StartObject.transform.localPosition = weapon.ProjectileSpawnOffset; // set local position to projectile offset
         lightning.EndObject.transform.position = hitPoint; // set global position to hit point
-        lightning.gameObject.SetActive(true); // enable lightning
+        lightning.gameObject.SetActive(true); // enable lightning (triggers automatically)
 
         yield return new WaitForSeconds(lightningDuration); // wait for lightning duration
 

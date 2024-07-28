@@ -8,7 +8,7 @@ public class IceSecondaryAction : SecondaryAction {
     [Header("Blast")]
     [SerializeField] private ParticleSystem iceBlastParticles;
     [SerializeField] private int blastRadius;
-    [SerializeField][Tooltip("Must be >= particle duration")] private float freezeDuration; // in order to prevent overlapping blasts
+    [SerializeField][Tooltip("Must be >= particle duration")] private float slowDuration; // in order to prevent overlapping blasts
     [SerializeField] private LayerMask waterMask;
 
     private new void Awake() {
@@ -17,8 +17,8 @@ public class IceSecondaryAction : SecondaryAction {
 
         iceBlastParticles.gameObject.SetActive(false); // ice blast particles are not active by default (done in awake so it runs when game starts)
 
-        if (iceBlastParticles.main.duration > freezeDuration)
-            Debug.LogWarning("Particle duration must be less than or equal to freeze duration."); // in order to prevent overlapping blasts
+        if (iceBlastParticles.main.duration > slowDuration)
+            Debug.LogWarning("Particle duration must be less than or equal to slow duration."); // in order to prevent overlapping blasts
 
     }
 
@@ -43,7 +43,7 @@ public class IceSecondaryAction : SecondaryAction {
             for (int y = -blastRadius; y <= blastRadius; y++) {
 
                 Vector3Int tilePos = centerCell + new Vector3Int(x, y, 0);
-                tilemapManager.Freeze(transform.position, tilePos, freezeDuration, blastRadius); // freeze water tile
+                tilemapManager.Freeze(transform.position, tilePos, slowDuration, blastRadius); // freeze water tile
 
             }
         }

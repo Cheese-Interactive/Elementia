@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3715172652439076251}
   - component: {fileID: 1313002164489704439}
   m_Layer: 13
-  m_Name: FreezeOverlay
+  m_Name: SlowOverlay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1022,9 +1022,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba0fdb6e471673d42ab3fc802ef2dc85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slowOverlay: {fileID: 1313002164489704439}
   slowSpeed: 1
   slowJump: 1
-  freezeOverlay: {fileID: 1313002164489704439}
 --- !u!114 &5961798001602708637
 MonoBehaviour:
   m_ObjectHideFlags: 0

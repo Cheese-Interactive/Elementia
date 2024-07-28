@@ -4958,7 +4958,7 @@ GameObject:
   - component: {fileID: 8231221148931468357}
   - component: {fileID: 3706479291433903718}
   m_Layer: 9
-  m_Name: FreezeOverlay
+  m_Name: SlowOverlay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9963,7 +9963,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5770548812843838976
 Transform:
   m_ObjectHideFlags: 0
@@ -14835,6 +14835,7 @@ GameObject:
   - component: {fileID: -7887266572679722791}
   - component: {fileID: 230583099580174233}
   - component: {fileID: 9206677560049693005}
+  - component: {fileID: -7801754209545729083}
   - component: {fileID: 4640116482856619915}
   - component: {fileID: -6563107637201858564}
   m_Layer: 9
@@ -15797,7 +15798,7 @@ MonoBehaviour:
   canUseInAir: 1
   iceBlastParticles: {fileID: 2345786623437224621}
   blastRadius: 5
-  freezeDuration: 6
+  slowDuration: 6
   waterMask:
     serializedVersion: 2
     m_Bits: 16
@@ -15816,7 +15817,8 @@ MonoBehaviour:
   cooldown: 2
   isAuto: 0
   canUseInAir: 1
-  flamethrowerWeapon: {fileID: 0}
+  flamethrowerWeapon: {fileID: 4813264542210501733, guid: a3d8fb112d7064a45811dfdc7799823e,
+    type: 3}
   flameSpeed: 12
   objectFlamethrowerForce: {x: 2, y: 4}
   entityFlamethrowerForce: {x: 5, y: 2}
@@ -15915,9 +15917,10 @@ MonoBehaviour:
   cooldown: 5
   isAuto: 0
   canUseInAir: 1
-  electricEffect: {fileID: 7973188474096741526}
   speedMultiplier: 2
-  effectDuration: 5
+  electricDuration: 5
+  electricDamage: 15
+  electricDamageInvincibilityDuration: 0.25
 --- !u!114 &230583099580174233
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15930,9 +15933,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba0fdb6e471673d42ab3fc802ef2dc85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slowOverlay: {fileID: 3706479291433903718}
   slowSpeed: 1
   slowJump: 1
-  freezeOverlay: {fileID: 3706479291433903718}
 --- !u!114 &9206677560049693005
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15946,6 +15949,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   burnOverlay: {fileID: 4224931691841699186}
+--- !u!114 &-7801754209545729083
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4900122409563817483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 081b4be1ace510e4ea9c42f87242672d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  electricOverlay: {fileID: 7973188474096741526}
 --- !u!95 &4640116482856619915
 Animator:
   serializedVersion: 5

@@ -1,16 +1,13 @@
 using MoreMountains.CorgiEngine;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BurnEffect : BaseEffect {
 
     [Header("References")]
-    private Health health;
-
-    [Header("Overlay")]
     [SerializeField] private Overlay burnOverlay;
-    private Coroutine burnCoroutine;
+    private Health health;
+    private Coroutine resetEffectCoroutine;
 
     private void Start() {
 
@@ -26,9 +23,8 @@ public class BurnEffect : BaseEffect {
 
         burnOverlay.ShowOverlay(); // show burn overlay
 
-        if (burnCoroutine != null) StopCoroutine(burnCoroutine); // stop previous burn coroutine if it exists
-
-        burnCoroutine = StartCoroutine(HandleBurn(instigator, damage, ticks, duration, invincibilityDuration, damageDirection, instantTick)); // start burn coroutine
+        if (resetEffectCoroutine != null) StopCoroutine(resetEffectCoroutine); // stop previous effect coroutine if it exists
+        resetEffectCoroutine = StartCoroutine(HandleBurn(instigator, damage, ticks, duration, invincibilityDuration, damageDirection, instantTick)); // start effect coroutine
 
     }
 
@@ -46,14 +42,14 @@ public class BurnEffect : BaseEffect {
 
         }
 
-        burnOverlay.HideOverlay(); // hide burn overlay after burn effect is over
+        RemoveEffect(); // remove effect after all ticks are done
 
     }
 
     public override void RemoveEffect() {
 
-        if (burnCoroutine != null) StopCoroutine(burnCoroutine);
-        burnCoroutine = null;
+        if (resetEffectCoroutine != null) StopCoroutine(resetEffectCoroutine); // stop effect coroutine if it exists
+        resetEffectCoroutine = null; // reset effect coroutine
 
         burnOverlay.HideOverlay(); // hide burn overlay
 

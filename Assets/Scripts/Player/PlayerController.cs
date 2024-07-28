@@ -59,7 +59,7 @@ public class PlayerController : EntityController {
 
     private void Update() {
 
-        anim.SetBool("isWalking", corgiController.State.IsGrounded && Mathf.Abs(corgiController.ForcesApplied.x) > minMovementThreshold && !isDead); // play walking animation if player is grounded, moving, and not dead (place before dead check to allow walking to be reset)
+        anim.SetBool("isWalking", IsGrounded() && Mathf.Abs(corgiController.ForcesApplied.x) > minMovementThreshold && !isDead); // play walking animation if player is grounded, moving, and not dead (place before dead check to allow walking to be reset)
 
         if (isDead)
             return; // player is dead, no need to update
