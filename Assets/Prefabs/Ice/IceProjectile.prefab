@@ -232,8 +232,8 @@ MonoBehaviour:
   LifeTime: 1
   FaceDirection: 1
   FaceMovementDirection: 0
-  Speed: 100
-  Acceleration: 100
+  Speed: 110
+  Acceleration: 80
   Direction: {x: -1, y: 0, z: 0}
   DirectionCanBeChangedBySpawner: 1
   FlipValue: {x: -1, y: 1, z: 1}
@@ -344,9 +344,9 @@ MonoBehaviour:
   isPushProjectile: 1
   entityForceMultiplier: {x: 2, y: 1}
   objectForceMultiplier: {x: 1, y: 1}
-  movementMultiplier: 0.3
+  movementMultiplier: 0.2
   jumpMultiplier: 0.5
-  slowDuration: 5
+  slowDuration: 7
 --- !u!96 &-6513195632682728618
 TrailRenderer:
   serializedVersion: 3

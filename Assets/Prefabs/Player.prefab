@@ -15320,7 +15320,7 @@ MonoBehaviour:
   BlockingMovementStates: 
   BlockingConditionStates: 
   BlockingWeaponStates: 
-  LadderClimbingSpeed: 2
+  LadderClimbingSpeed: 4
   ForceRightFacing: 0
   ForceAnchorToGroundOnExit: 0
   MinimumTimeAfterLadderJump: 0.5
@@ -15333,7 +15333,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4900122409563817483}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aa5a7ef00889da64b8219cd27ef14979, type: 3}
   m_Name: 
@@ -15634,8 +15634,8 @@ MonoBehaviour:
   basePos: {fileID: 6895793851411871897}
   defaultWeapons:
   - {fileID: 11400000, guid: 3224215c3a45c564ca37fef85f48c954, type: 2}
-  - {fileID: 11400000, guid: 0b8316274d5b89d44ab51986d17cc3ba, type: 2}
   - {fileID: 11400000, guid: 240fb2df713a88941845b673fa543e19, type: 2}
+  - {fileID: 11400000, guid: 0b8316274d5b89d44ab51986d17cc3ba, type: 2}
   - {fileID: 11400000, guid: 6f8080ba3b2a54c459fdce6bcff4b454, type: 2}
   - {fileID: 11400000, guid: ca3ec5979ed33474e8d59fd613d982a1, type: 2}
   - {fileID: 11400000, guid: 6fb9c3a94d1f1cd4582e6ca735c37e39, type: 2}
@@ -15761,8 +15761,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 101c2fbd1f0c3c842b9b074762f5a655, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cooldown: 0.8
-  isAuto: 0
+  cooldown: 0.15
+  isAuto: 1
   canUseInAir: 1
 --- !u!114 &2721479856997411025
 MonoBehaviour:
@@ -15793,12 +15793,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3648bbb33f21cc044a335cd760bf99e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cooldown: 2
+  cooldown: 0.5
   isAuto: 0
   canUseInAir: 1
   iceBlastParticles: {fileID: 2345786623437224621}
   blastRadius: 5
-  slowDuration: 6
+  slowDuration: 12
   waterMask:
     serializedVersion: 2
     m_Bits: 16
@@ -15814,18 +15814,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0a5ab79b7d32dd4d9c3f850804f7224, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cooldown: 2
+  cooldown: 0
   isAuto: 0
   canUseInAir: 1
   flamethrowerWeapon: {fileID: 4813264542210501733, guid: a3d8fb112d7064a45811dfdc7799823e,
     type: 3}
-  flameSpeed: 12
+  flameSpeed: 11
   objectFlamethrowerForce: {x: 2, y: 4}
   entityFlamethrowerForce: {x: 5, y: 2}
   burnDamage: 5
   burnTicks: 6
   burnDuration: 2
-  maxDuration: 5
+  maxDuration: Infinity
 --- !u!114 &-5756287154290932317
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15914,10 +15914,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e23495714f1338f40b3da1a3a8fdc4c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cooldown: 5
+  cooldown: 15
   isAuto: 0
   canUseInAir: 1
-  speedMultiplier: 2
+  speedMultiplier: 1.8
   electricDuration: 5
   electricDamage: 15
   electricDamageInvincibilityDuration: 0.25

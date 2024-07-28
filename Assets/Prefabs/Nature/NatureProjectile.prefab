@@ -215,7 +215,7 @@ MonoBehaviour:
     m_Bits: 270592
   ApplyDamageOnTriggerEnter: 1
   ApplyDamageOnTriggerStay: 1
-  MinDamageCaused: 20
+  MinDamageCaused: 11
   MaxDamageCaused: 0
   TypedDamages: []
   DamageCausedKnockbackType: 1
@@ -227,7 +227,7 @@ MonoBehaviour:
   DurationBetweenRepeats: 1
   DamageOverTimeInterruptible: 1
   RepeatedDamageType: {fileID: 0}
-  DamageTakenEveryTime: 10
+  DamageTakenEveryTime: 12
   DamageTakenDamageable: 5
   DamageTakenNonDamageable: 10
   DamageTakenKnockbackType: 0
@@ -296,7 +296,7 @@ MonoBehaviour:
   oneCollisionOnly: 1
   hasDistanceMultiplier: 0
   isPushProjectile: 1
-  entityForceMultiplier: {x: 20, y: 20}
+  entityForceMultiplier: {x: 6, y: 6}
   objectForceMultiplier: {x: 2, y: 2}
 --- !u!96 &-6513195632682728618
 TrailRenderer:

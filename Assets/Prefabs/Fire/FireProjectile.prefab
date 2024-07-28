@@ -188,7 +188,7 @@ MonoBehaviour:
   FaceDirection: 1
   FaceMovementDirection: 0
   Speed: 0
-  Acceleration: 400
+  Acceleration: 420
   Direction: {x: -1, y: 0, z: 0}
   DirectionCanBeChangedBySpawner: 1
   FlipValue: {x: -1, y: 1, z: 1}
@@ -216,7 +216,7 @@ MonoBehaviour:
     m_Bits: 270592
   ApplyDamageOnTriggerEnter: 1
   ApplyDamageOnTriggerStay: 1
-  MinDamageCaused: 5
+  MinDamageCaused: 10
   MaxDamageCaused: 0
   TypedDamages: []
   DamageCausedKnockbackType: 1
@@ -229,7 +229,7 @@ MonoBehaviour:
   DamageOverTimeInterruptible: 1
   RepeatedDamageType: {fileID: 0}
   DamageTakenEveryTime: 10
-  DamageTakenDamageable: 5
+  DamageTakenDamageable: 6
   DamageTakenNonDamageable: 10
   DamageTakenKnockbackType: 0
   DamageTakenKnockbackDirection: 0
@@ -299,9 +299,9 @@ MonoBehaviour:
   isPushProjectile: 1
   entityForceMultiplier: {x: 4, y: 2}
   objectForceMultiplier: {x: 2, y: 2}
-  burnDamage: 5
-  burnTicks: 3
-  burnDuration: 1
+  burnDamage: 6.2
+  burnTicks: 7
+  burnDuration: 2
 --- !u!96 &-6513195632682728618
 TrailRenderer:
   serializedVersion: 3
