@@ -17,7 +17,7 @@ public class SimpleSway : MonoBehaviour {
         if (time < 0)
             throw new ArgumentException("time must be greater than or equal to 0 lil bro");
         startRot = transform.rotation.eulerAngles.z;
-        transform.rotation = Quaternion.Euler(new Vector3(transform.rotation.x, transform.rotation.y, startRot + degreeOffset));
+        transform.rotation = Quaternion.Euler(new Vector3(transform.rotation.x, transform.rotation.y, startRot - degreeOffset));
     }
 
     // Update is called once per frame
