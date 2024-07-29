@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2326893393966851885}
   - component: {fileID: 5709210243239998849}
   - component: {fileID: 5089658859029872562}
+  - component: {fileID: 1097327932110085032}
   m_Layer: 0
   m_Name: Abel
   m_TagString: Untagged
@@ -101,6 +102,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   height: 0.3
   duration: 0.5
+--- !u!114 &1097327932110085032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2269311079105019742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef7cfc1410edd304fbe505a4aec2eff7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SaveActive: 1
+  UniqueIDSuffix: cheese
+  _guid: 
+  GenerateGuidButton: 0
+  isRequired: 1
 --- !u!1 &3948261873148463972
 GameObject:
   m_ObjectHideFlags: 0

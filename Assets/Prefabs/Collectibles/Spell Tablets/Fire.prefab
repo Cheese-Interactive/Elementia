@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3940412877839952455}
   - component: {fileID: 8866214235533226582}
   - component: {fileID: 4962853148295133494}
+  - component: {fileID: 7398793469299058837}
   - component: {fileID: 7187804269164326998}
   - component: {fileID: 8385112770037088061}
   - component: {fileID: 8716980343139768507}
@@ -119,6 +120,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   degreeOffset: 6
   time: 4
+--- !u!114 &7398793469299058837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5501031581172428775}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a7bbf4dd985ac14d872ded9d7db5c55, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SaveActive: 1
+  UniqueIDSuffix: spell
+  _guid: 
+  GenerateGuidButton: 0
+  isRequired: 0
+  weaponData: {fileID: 11400000, guid: 0b8316274d5b89d44ab51986d17cc3ba, type: 2}
 --- !u!61 &7187804269164326998
 BoxCollider2D:
   m_ObjectHideFlags: 0

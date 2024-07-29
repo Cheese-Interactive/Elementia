@@ -167,7 +167,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SaveActive: 1
-  UniqueIDSuffix: 
+  UniqueIDSuffix: key
   _guid: 
   GenerateGuidButton: 0
   isRequired: 0

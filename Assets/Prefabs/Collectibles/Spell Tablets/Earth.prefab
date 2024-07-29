@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5077134786151492027}
   - component: {fileID: 7887382295481242674}
   - component: {fileID: 6273217306726715214}
+  - component: {fileID: -5883698489327907952}
   - component: {fileID: 2630649385847005175}
   - component: {fileID: 2063704546658144700}
   - component: {fileID: 6912322007837661594}
@@ -118,6 +119,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   height: 0.2
   duration: 2
+--- !u!114 &-5883698489327907952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8836408024875522727}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a7bbf4dd985ac14d872ded9d7db5c55, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SaveActive: 1
+  UniqueIDSuffix: spell
+  _guid: 
+  GenerateGuidButton: 0
+  isRequired: 0
+  weaponData: {fileID: 11400000, guid: 6fb9c3a94d1f1cd4582e6ca735c37e39, type: 2}
 --- !u!198 &2630649385847005175
 ParticleSystem:
   m_ObjectHideFlags: 0

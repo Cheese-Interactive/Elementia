@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1375707136775648208}
   - component: {fileID: 4661149686044587001}
   - component: {fileID: 4130128780130593591}
+  - component: {fileID: 1662047530240128565}
   m_Layer: 0
   m_Name: Messi
   m_TagString: Untagged
@@ -101,6 +102,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   height: 0.3
   duration: 0.5
+--- !u!114 &1662047530240128565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1454331817094796094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef7cfc1410edd304fbe505a4aec2eff7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SaveActive: 1
+  UniqueIDSuffix: cheese
+  _guid: 
+  GenerateGuidButton: 0
+  isRequired: 1
 --- !u!1 &9009567590161964574
 GameObject:
   m_ObjectHideFlags: 0
