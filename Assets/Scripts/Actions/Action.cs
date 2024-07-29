@@ -17,13 +17,6 @@ public abstract class Action : MonoBehaviour {
     [SerializeField] protected bool canUseInAir;
     protected float cooldownTimer;
 
-    public void Initialize(Health health) {
-
-        this.health = health;
-        health.OnDeath += OnDeath; // initialize action on death
-
-    }
-
     protected void Awake() {
 
         playerController = GetComponent<PlayerController>();
@@ -31,6 +24,13 @@ public abstract class Action : MonoBehaviour {
         weaponSelector = FindObjectOfType<WeaponSelector>();
         gameManager = FindObjectOfType<GameManager>();
         cooldownManager = FindObjectOfType<CooldownManager>();
+
+    }
+
+    public void Initialize(Health health) {
+
+        this.health = health;
+        health.OnDeath += OnDeath; // initialize action on death
 
     }
 
@@ -49,7 +49,7 @@ public abstract class Action : MonoBehaviour {
 
         }
 
-        StartCooldown(false); // start cooldown without restarting timer
+        StartCooldown(restartTimer: false); // start cooldown without restarting timer
 
     }
 

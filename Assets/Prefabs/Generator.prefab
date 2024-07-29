@@ -265,12 +265,12 @@ GameObject:
   - component: {fileID: 1648508670111374466}
   - component: {fileID: 2861472899011566019}
   m_Layer: 8
-  m_Name: ElectricGenerator
+  m_Name: Generator
   m_TagString: Generator
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1064598266861270437
 Transform:
   m_ObjectHideFlags: 0
@@ -405,6 +405,6 @@ MonoBehaviour:
   activateDuration: 15
   coolingDuration: 5
   targetFieldColor: {r: 0.3137255, g: 0, b: 0.48235294, a: 0.29411766}
-  fadeInDurationPercentage: 8
-  fadeOutDurationPercentage: 3
+  fieldFadeInDurationPercentage: 8
+  fieldFadeOutDurationPercentage: 3
   fieldOutlineVisualizerColor: {r: 0.029683553, g: 0.6698113, b: 0, a: 1}

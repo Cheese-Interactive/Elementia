@@ -22,8 +22,7 @@ public class ElectricSecondaryAction : SecondaryAction {
 
     private void OnTriggerEnter2D(Collider2D collision) {
 
-        // activate generator if player collides with it
-        if (collision.gameObject.activeInHierarchy && collision.gameObject.CompareTag("Generator"))
+        if (enabled && collision.gameObject.activeInHierarchy && collision.gameObject.CompareTag("Generator")) // make sure action is enabled, collider is active, and collider is a generator
             collision.gameObject.GetComponent<Generator>()?.Activate();
 
     }

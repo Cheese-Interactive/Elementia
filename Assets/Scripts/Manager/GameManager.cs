@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour {
 
     [Header("References")]
     private CooldownManager cooldownManager;
+    private List<PhysicsObject> objectsToReset;
 
     [Header("Settings")]
     private List<BaseCollectible> requiredCollectibles;
@@ -64,11 +65,29 @@ public class GameManager : MonoBehaviour {
 
     }
 
-    public void ResetAllResettables() {
+    public void ResetAllResettables(float resetDuration) {
+
+        objectsToReset = new List<PhysicsObject>();
 
         // reset all resettables (don't store in list because resettables can be added/removed from the game at any point)
-        foreach (ResettableObject resettable in FindObjectsOfType<ResettableObject>())
-            resettable.ResetObject();
+        foreach (PhysicsObject physicsObject in FindObjectsOfType<PhysicsObject>()) {
+
+            if (physicsObject.IsResettable()) {
+
+                physicsObject.StartReset(resetDuration);
+                objectsToReset.Add(physicsObject);
+
+            }
+        }
+    }
+
+    public void CancelResets() {
+
+        // cancel all resets
+        foreach (PhysicsObject physicsObject in objectsToReset)
+            physicsObject.CancelReset();
+
+        objectsToReset.Clear();
 
     }
 

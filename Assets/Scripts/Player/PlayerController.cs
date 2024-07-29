@@ -5,6 +5,7 @@ public class PlayerController : EntityController {
 
     [Header("References")]
     private CooldownManager cooldownManager;
+    private LevelManager levelManager;
     private GameManager gameManager;
 
     [Header("Weapon Selector")]
@@ -46,8 +47,9 @@ public class PlayerController : EntityController {
 
         base.Start();
 
-        gameManager = FindObjectOfType<GameManager>();
         cooldownManager = FindObjectOfType<CooldownManager>();
+        gameManager = FindObjectOfType<GameManager>();
+        levelManager = FindObjectOfType<LevelManager>();
 
     }
 
@@ -264,16 +266,11 @@ public class PlayerController : EntityController {
         base.OnDeath();
         cooldownManager.ClearCooldownData(); // clear all cooldown data
         weaponSelector.ResetCooldownValues(); // reset cooldown values
+        gameManager.ResetAllResettables(levelManager.RespawnDelay); // reset all resettables
 
     }
 
-    // IMPORTANT: THIS GETS CALLED AT THE BEGINNING OF THE GAME, SO THE WEAPON IS ALREADY BEING UPDATED AT THE START
-    protected override void OnRespawn() {
-
-        base.OnRespawn();
-        gameManager.ResetAllResettables(); // reset all resettables
-
-    }
+    // IMPORTANT: RESPAWN METHOD GETS CALLED AT THE BEGINNING OF THE GAME, SO THE WEAPON IS ALREADY BEING UPDATED AT THE START
 
     public Vector2 GetDirectionRight() => character.IsFacingRight ? transform.right : -transform.right;
 

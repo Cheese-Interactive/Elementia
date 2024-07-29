@@ -19,11 +19,11 @@ public class Generator : MonoBehaviour {
     [SerializeField] private float activateDuration; // basically the duration of the field
     [SerializeField] private float coolingDuration; // basically the cooldown duration
     [SerializeField] private Color targetFieldColor;
-    [SerializeField][Range(0f, 100f)] private float fadeInDurationPercentage;
-    [SerializeField][Range(0f, 100f)] private float fadeOutDurationPercentage;
+    [SerializeField][Range(0f, 100f)] private float fieldFadeInDurationPercentage;
+    [SerializeField][Range(0f, 100f)] private float fieldFadeOutDurationPercentage;
     private Color startColor;
-    private float fadeIn;
-    private float fadeOut;
+    private float fadeInDuration;
+    private float fadeOutDuration;
 
     [Header("Debug")]
     [SerializeField] private Color fieldOutlineVisualizerColor;
@@ -37,11 +37,12 @@ public class Generator : MonoBehaviour {
         fieldSpriteRenderer.color = new Color(fieldSpriteRenderer.color.r, fieldSpriteRenderer.color.g, fieldSpriteRenderer.color.b, 0f); // set field opacity to 0
         startColor = fieldSpriteRenderer.color; // store start color of field
 
-        fadeIn = (fadeInDurationPercentage / 100f) * activateDuration; // calculate fade in duration
-        fadeOut = (fadeOutDurationPercentage / 100f) * activateDuration; // calculate fade out duration
+        // make sure fade in and fade out durations do not exceed field duration
+        if (fieldFadeInDurationPercentage + fieldFadeOutDurationPercentage > 100)
+            Debug.LogError("Field fade in and fade out durations exceed field duration.");
 
-        if (fadeIn + fadeOut > activateDuration)
-            Debug.LogWarning("Field fade in and fade out durations exceed field duration.");
+        fadeInDuration = (fieldFadeInDurationPercentage / 100f) * activateDuration; // calculate fade in duration
+        fadeOutDuration = (fieldFadeOutDurationPercentage / 100f) * activateDuration; // calculate fade out duration
 
     }
 
@@ -59,10 +60,10 @@ public class Generator : MonoBehaviour {
 
         gameManager.SetCooldownsEnabled(false); // disable cooldowns
 
-        fieldTweener = fieldSpriteRenderer.DOColor(targetFieldColor, fadeIn).SetEase(Ease.InExpo); // fade in field
-        yield return new WaitForSeconds(activateDuration - fadeOut); // wait till start of fade out
-        fieldTweener = fieldSpriteRenderer.DOColor(startColor, fadeOut).SetEase(Ease.OutExpo); // fade out field
-        yield return new WaitForSeconds(fadeOut); // wait for fade out to finish
+        fieldTweener = fieldSpriteRenderer.DOColor(targetFieldColor, fadeInDuration).SetEase(Ease.InExpo); // fade in field
+        yield return new WaitForSeconds(activateDuration - fadeOutDuration); // wait till start of fade out
+        fieldTweener = fieldSpriteRenderer.DOColor(startColor, fadeOutDuration).SetEase(Ease.OutExpo); // fade out field
+        yield return new WaitForSeconds(fadeOutDuration); // wait for fade out to finish
 
         field.SetActive(false);
         gameManager.SetCooldownsEnabled(true); // re-enable cooldowns

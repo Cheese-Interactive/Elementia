@@ -29,20 +29,20 @@ public class MagicMissileSecondaryAction : SecondaryAction {
         if (!canUseInAir && !playerController.IsGrounded()) { // make sure player is grounded if required
 
             if (isResetting) // if player is resetting, cancel it
-                StopResetting();
+                StopReset(false);
 
             return;
 
         }
 
         if (startHold) // mouse button pressed
-            StartResetting();
-        else // mouse button released
-            StopResetting();
+            StartReset();
+        else // mouse button released (cancel action)
+            StopReset(false);
 
     }
 
-    private void StartResetting() {
+    private void StartReset() {
 
         isResetting = true;
 
@@ -59,7 +59,17 @@ public class MagicMissileSecondaryAction : SecondaryAction {
 
     }
 
-    private void StopResetting() {
+    private IEnumerator HandleReset() {
+
+        gameManager.ResetAllResettables(resetDuration); // start reset all resettables
+        yield return new WaitForSeconds(resetDuration); // wait for reset duration
+        StopReset(true); // stop resetting as it has completed
+
+        resetCoroutine = null;
+
+    }
+
+    private void StopReset(bool resetCompleted) {
 
         if (resetCoroutine != null) StopCoroutine(resetCoroutine); // stop reset coroutine if it is running
         resetCoroutine = null;
@@ -71,20 +81,12 @@ public class MagicMissileSecondaryAction : SecondaryAction {
         charWeaponHandler.ChangeWeapon(prevWeapon, prevWeapon.WeaponID); // re-equip previous weapon
         primaryAction.enabled = true; // enable primary action
 
+        if (!resetCompleted)
+            gameManager.CancelResets(); // cancel resets
+
         isResetting = false;
 
         StartCooldown(); // start cooldown
-
-    }
-
-    private IEnumerator HandleReset() {
-
-        yield return new WaitForSeconds(resetDuration); // wait for reset duration
-
-        gameManager.ResetAllResettables(); // reset all resettables
-        StopResetting(); // stop resetting
-
-        resetCoroutine = null;
 
     }
 

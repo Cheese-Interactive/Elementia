@@ -1,82 +1,119 @@
-using DG.Tweening;
 using System.Collections;
 using UnityEngine;
 
-public abstract class PhysicsObject : MonoBehaviour {
+public class PhysicsObject : MonoBehaviour {
 
     [Header("References")]
-    [SerializeField] private LineRenderer beacon;
-    [SerializeField] private Transform basePos;
-    protected Rigidbody2D rb;
-    private GameManager gameManager;
+    [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] private GameObject objectOutlinePrefab;
+    [SerializeField] private ResetBeacon resetBeaconPrefab;
+    private Rigidbody2D rb;
+    private ResetBeacon currResetBeacon;
+    private Coroutine resetCoroutine;
+    private GameObject outlineObject;
+    private Vector2 startPos;
+    private Quaternion startRot;
+    private bool isResetting;
 
     [Header("Settings")]
-    [SerializeField][Range(0f, 100f)] private float fadeInDurationPercentage;
-    [SerializeField][Range(0f, 100f)] private float fadeOutDurationPercentage;
+    [SerializeField][Range(0f, 100f)] private float beaconFadeInDurationPercentage;
+    [SerializeField][Range(0f, 100f)] private float beaconFadeOutDurationPercentage;
     [SerializeField] private float beaconStartWidth;
     [SerializeField] private float beaconEndWidth;
     [SerializeField] private float beaconHeight;
-    private Coroutine resetCoroutine;
-    private Tweener beaconTweener;
+    [SerializeField][Tooltip("Should be high enough to cover cases where a corner is slightly higher than another and doesn't skew the beacon position")] private float cornerLeniency;
+    [SerializeField] private bool isResettable;
+    private float fadeInDuration;
+    private float fadeOutDuration;
     private float resetDuration;
+
+    [Header("Debug")]
+    [SerializeField] private Color lowestCornerVisualizerColor;
+    [SerializeField] private float lowestCornerVisualizerRadius;
 
     protected void Start() {
 
         rb = GetComponent<Rigidbody2D>();
 
-        gameManager = FindObjectOfType<GameManager>();
+        startPos = transform.position;
+        startRot = transform.rotation;
 
-        beacon.gameObject.SetActive(false); // hide channel beacon by default
-        beacon.startWidth = beaconStartWidth;
-        beacon.endWidth = beaconEndWidth;
+        outlineObject = Instantiate(objectOutlinePrefab, transform.position, transform.rotation);
+        outlineObject.transform.localScale = transform.localScale;
 
     }
 
-    public void StartResetting(float resetDuration) {
+    private void OnDestroy() => Destroy(outlineObject);
 
+    public void StartReset(float resetDuration) {
+
+        if (!isResettable || isResetting) return; // make sure object is resettable and is not already resetting
+
+        isResetting = true;
         this.resetDuration = resetDuration;
 
-        float fadeIn = (fadeInDurationPercentage / 100f) * resetDuration;
-        float fadeOut = (fadeOutDurationPercentage / 100f) * resetDuration;
+        // make sure fade in and fade out durations do not exceed field duration
+        if (beaconFadeInDurationPercentage + beaconFadeOutDurationPercentage > 100)
+            Debug.LogError("Reset fade in and fade out durations exceed reset duration.");
 
-        if (fadeIn + fadeOut > resetDuration)
-            Debug.LogWarning("Reset fade in and fade out durations exceed reset duration.");
+        fadeInDuration = (beaconFadeInDurationPercentage / 100f) * resetDuration;
+        fadeOutDuration = (beaconFadeOutDurationPercentage / 100f) * resetDuration;
 
-        // show channel beacon
-        beacon.gameObject.SetActive(true);
-        beacon.SetPositions(new Vector3[] { basePos.position, basePos.position + (transform.up * beaconHeight) });
-
-        // fade channel beacon in
-        float channelFadeDuration = resetDuration * (fadeInDurationPercentage / 100f);
-        Color color = beacon.material.GetColor("_Color");
-        beaconTweener = DOVirtual.Float(0f, 1f, channelFadeDuration, (float alpha) => beacon.material.SetColor("_Color", new Color(color.r, color.g, color.b, alpha))).SetEase(Ease.InExpo);
+        // instantiate reset beacon and start reset
+        currResetBeacon = Instantiate(resetBeaconPrefab, transform.position, Quaternion.identity);
+        currResetBeacon.StartReset(transform, spriteRenderer, fadeInDuration, beaconStartWidth, beaconEndWidth, beaconHeight, cornerLeniency);
 
         resetCoroutine = StartCoroutine(HandleReset());
 
     }
 
-    private void StopResetting() {
-
-        if (resetCoroutine != null) StopCoroutine(resetCoroutine); // stop channel coroutine if it is running
-        resetCoroutine = null;
-
-        if (beaconTweener != null && beaconTweener.IsActive()) beaconTweener.Kill(); // stop channel beacon tweener if it is running
-
-        // fade channel beacon out
-        float channelFadeDuration = resetDuration * (fadeOutDurationPercentage / 100f);
-        Color color = beacon.material.GetColor("_Color");
-        beaconTweener = DOVirtual.Float(1f, 0f, channelFadeDuration, (float alpha) => beacon.material.SetColor("_Color", new Color(color.r, color.g, color.b, alpha))).SetEase(Ease.OutCubic).OnComplete(() => beacon.gameObject.SetActive(false)); // fade out and hide channel beacon after fade out
-
-    }
-
     private IEnumerator HandleReset() {
 
-        yield return new WaitForSeconds(resetDuration); // wait for channel duration
-
-        gameManager.ResetAllResettables(); // reset all resettables
-        StopResetting(); // stop channeling
-
+        yield return new WaitForSeconds(resetDuration); // wait for reset duration
+        StopReset(true); // stop resetting as it has completed
         resetCoroutine = null;
 
     }
+
+    public void CancelReset() {
+
+        if (!isResetting) return;
+        StopReset(false);
+
+    }
+
+    private void StopReset(bool resetCompleted) {
+
+        if (resetCoroutine != null) StopCoroutine(resetCoroutine); // stop reset coroutine if it is running
+        resetCoroutine = null;
+
+        if (resetCompleted) {
+
+            // reset object position and rotation
+            transform.position = startPos;
+            transform.rotation = startRot;
+
+            // reset velocity if object has a rigidbody
+            if (rb)
+                rb.velocity = Vector2.zero;
+
+        }
+
+        // stop reset beacon and reset current reset beacon value
+        currResetBeacon.StopReset(fadeOutDuration);
+        currResetBeacon = null;
+
+        isResetting = false;
+
+    }
+
+    private void OnDrawGizmos() {
+
+        Gizmos.color = lowestCornerVisualizerColor;
+        Gizmos.DrawWireSphere(Utilities.GetLowestCorner(spriteRenderer, cornerLeniency), lowestCornerVisualizerRadius);
+
+    }
+
+    public bool IsResettable() => isResettable;
+
 }
