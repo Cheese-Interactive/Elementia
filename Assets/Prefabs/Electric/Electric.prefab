@@ -183,11 +183,11 @@ MonoBehaviour:
     RecoilStyle: 2
     Delay: 0
     RecoilFeedback: {fileID: 0}
-  ProjectileSpawnOffset: {x: 0.6875, y: 0.125, z: 0}
+  ProjectileSpawnOffset: {x: 0.66, y: 0.125, z: 0}
   Spread: {x: 0, y: 0, z: 0}
   RotateWeaponOnSpread: 0
   RandomSpread: 1
-  SpawnPosition: {x: 0.6875, y: 0.125, z: 0}
+  SpawnPosition: {x: 0.66, y: 0.125, z: 0}
   HitscanTargetLayers:
     serializedVersion: 2
     m_Bits: 270592
@@ -224,6 +224,7 @@ GameObject:
   - component: {fileID: 5206930746566404265}
   - component: {fileID: 6524467831800907828}
   - component: {fileID: 8043544325344972347}
+  - component: {fileID: 963257553132184721}
   m_Layer: 0
   m_Name: Aura
   m_TagString: Untagged
@@ -241,7 +242,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.5625, y: 0.125, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.7663823, y: 1.7663823, z: 1.7663823}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6707437497993546744}
@@ -287,7 +288,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: 21300000, guid: 1146a8f17a6252446a36a36ead994a17, type: 3}
+  m_Sprite: {fileID: -3575478881242482044, guid: 623b2d0327abfbb4bad5094f799c99bd,
+    type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -311,6 +313,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotAmount: 0.3
+--- !u!95 &963257553132184721
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3016606344381137045}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 4862a0d3e69692b43b0c9c20ee24a45d, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &5294270777027740188
 GameObject:
   m_ObjectHideFlags: 0
