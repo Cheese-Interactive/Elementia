@@ -1010,6 +1010,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   basePos: {fileID: 5920919626058669840}
+  minMovementThreshold: 0.1
 --- !u!114 &8469143975430368763
 MonoBehaviour:
   m_ObjectHideFlags: 0

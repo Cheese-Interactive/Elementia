@@ -26,6 +26,12 @@ public class EntityController : MonoBehaviour {
     protected BaseEffect[] effects;
     protected CharacterHandleWeapon charWeaponHandler;
 
+    [Header("Animations")]
+    [SerializeField][Tooltip("Minimum movement threshold to trigger walking animation")] private float minMovementThreshold;
+
+    [Header("Death")]
+    protected bool isDead; // to deal with death/respawn delay
+
     protected void Awake() {
 
         character = GetComponent<Character>();
@@ -58,6 +64,16 @@ public class EntityController : MonoBehaviour {
     }
 
     protected void Start() => anim = GetComponent<Animator>();
+
+    protected void Update() {
+
+        // player is dead, no need to update
+        if (isDead)
+            return;
+
+        anim.SetBool("isWalking", IsGrounded() && Mathf.Abs(corgiController.ForcesApplied.x) > minMovementThreshold && !isDead); // play walking animation if player is grounded, moving, and not dead (place before dead check to allow walking to be reset)
+
+    }
 
     protected void OnTriggerEnter2D(Collider2D collision) {
 
@@ -195,9 +211,11 @@ public class EntityController : MonoBehaviour {
 
     public Vector2 GetBottomPosition() => basePos.position;
 
-    protected virtual void OnRespawn() { }
+    protected virtual void OnDeath() => isDead = true;
 
-    protected virtual void OnDeath() { }
+    protected virtual void OnRespawn() => isDead = false;
+
+    public bool IsGrounded() => corgiController.State.IsGrounded;
 
     #endregion
 

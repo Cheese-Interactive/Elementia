@@ -24,7 +24,6 @@ public class MagicMissileSecondaryAction : SecondaryAction {
 
     public override void OnTriggerHold(bool startHold) {
 
-        print(cooldownTimer);
         if (cooldownTimer > 0f || isResetting == startHold) return; // make sure action is ready and is not already in the desired state
 
         if (!canUseInAir && !playerController.IsGrounded()) { // make sure player is grounded if required

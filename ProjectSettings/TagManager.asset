@@ -11,6 +11,7 @@ TagManager:
   - Water
   - Enemy
   - Hazards
+  - Generator
   - GeneratorField
   layers:
   - Default

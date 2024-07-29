@@ -44,11 +44,11 @@ public class GameManager : MonoBehaviour {
 
         // check if there are enough slots to hold the required collectibles
         if (collectibleRows * collectibleColumns < requiredCollectibles.Count)
-            Debug.LogError("There are not enough slots to hold the amount of required collectibles.");
+            Debug.LogError("There are not enough slots to hold the amount of required collectibles. There are " + requiredCollectibles.Count + " required collectibles in this scene.");
 
         // check if there are enough slots to hold the key collectibles
         if (keyRows * keyColumns < keyCollectibles.Count)
-            Debug.LogError("There are not enough slots to hold the amount of key collectibles.");
+            Debug.LogError("There are not enough slots to hold the amount of key collectibles. There are " + keyCollectibles.Count + " key collectibles in this scene.");
 
         // setup the collectible inventory display
         collectibleInventoryDisplay.NumberOfRows = collectibleRows;

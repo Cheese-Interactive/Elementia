@@ -16,12 +16,6 @@ public class PlayerController : EntityController {
     private WeaponDatabase weaponDatabase;
     private WeaponPair currWeaponPair; // to avoid searching dictionary every frame
 
-    [Header("Animations")]
-    [SerializeField][Tooltip("Minimum movement threshold to trigger walking animation")] private float minMovementThreshold;
-
-    [Header("Death")]
-    private bool isDead; // to deal with death delay
-
     private new void Awake() {
 
         base.Awake();
@@ -57,12 +51,13 @@ public class PlayerController : EntityController {
 
     }
 
-    private void Update() {
+    private new void Update() {
 
-        anim.SetBool("isWalking", IsGrounded() && Mathf.Abs(corgiController.ForcesApplied.x) > minMovementThreshold && !isDead); // play walking animation if player is grounded, moving, and not dead (place before dead check to allow walking to be reset)
-
+        // player is dead, no need to update
         if (isDead)
-            return; // player is dead, no need to update
+            return;
+
+        base.Update();
 
         PrimaryAction primaryAction = null;
         SecondaryAction secondaryAction = null;
@@ -162,18 +157,21 @@ public class PlayerController : EntityController {
 
     private new void OnTriggerEnter2D(Collider2D collision) {
 
+        // kill player if they enter water or hazards
         if (collision.CompareTag("Water") || collision.CompareTag("Hazards"))
             health.ForceKill(); // force kill player so invincibility doesn't protect player
 
+        // disable cooldowns when player enters generator field
         if (collision.CompareTag("GeneratorField"))
-            gameManager.SetCooldownsEnabled(false); // disable cooldowns when player enters generator field
+            gameManager.SetCooldownsEnabled(false);
 
     }
 
     private void OnTriggerExit2D(Collider2D collision) {
 
+        // enable cooldowns when player exits generator field
         if (collision.CompareTag("GeneratorField"))
-            gameManager.SetCooldownsEnabled(true); // enable cooldowns when player exits generator field
+            gameManager.SetCooldownsEnabled(true);
 
     }
 
@@ -264,7 +262,6 @@ public class PlayerController : EntityController {
     protected override void OnDeath() {
 
         base.OnDeath();
-        isDead = true;
         cooldownManager.ClearCooldownData(); // clear all cooldown data
         weaponSelector.ResetCooldownValues(); // reset cooldown values
 
@@ -274,16 +271,11 @@ public class PlayerController : EntityController {
     protected override void OnRespawn() {
 
         base.OnRespawn();
-        isDead = false;
         gameManager.ResetAllResettables(); // reset all resettables
 
     }
 
     public Vector2 GetDirectionRight() => character.IsFacingRight ? transform.right : -transform.right;
-
-    public bool IsGrounded() => corgiController.State.IsGrounded;
-
-    public Animator GetAnimator() => anim;
 
     #endregion
 

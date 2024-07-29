@@ -20,6 +20,14 @@ public class ElectricSecondaryAction : SecondaryAction {
 
     }
 
+    private void OnTriggerEnter2D(Collider2D collision) {
+
+        // activate generator if player collides with it
+        if (collision.gameObject.activeInHierarchy && collision.gameObject.CompareTag("Generator"))
+            collision.gameObject.GetComponent<Generator>()?.Activate();
+
+    }
+
     public override void OnTriggerRegular() {
 
         if (cooldownTimer > 0f || effectCoroutine != null) return; // make sure action is ready and effect is not active
