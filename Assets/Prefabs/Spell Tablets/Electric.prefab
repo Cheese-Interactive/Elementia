@@ -11,10 +11,11 @@ GameObject:
   - component: {fileID: 6136629163080664547}
   - component: {fileID: 3403368249053289606}
   - component: {fileID: 2082439431508788995}
+  - component: {fileID: 6964321455976158407}
   - component: {fileID: 4872790193281026564}
   - component: {fileID: 4120815729885605160}
   - component: {fileID: 8830331987226498199}
-  - component: {fileID: 6964321455976158407}
+  - component: {fileID: 6280643072919930072}
   m_Layer: 0
   m_Name: Electric
   m_TagString: Untagged
@@ -104,6 +105,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   height: 0.2
   duration: 2
+--- !u!114 &6964321455976158407
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 961714589910317575}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 126b96d94f4827240a0ee3c52175fb36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  degreeOffset: 6
+  time: 4
 --- !u!95 &4872790193281026564
 Animator:
   serializedVersion: 5
@@ -4949,17 +4964,24 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
---- !u!114 &6964321455976158407
-MonoBehaviour:
+--- !u!65 &6280643072919930072
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 961714589910317575}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 126b96d94f4827240a0ee3c52175fb36, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  degreeOffset: 6
-  time: 4
+  serializedVersion: 3
+  m_Size: {x: 0.16, y: 0.15999998, z: 0.19999999}
+  m_Center: {x: 0, y: 0, z: 0}
