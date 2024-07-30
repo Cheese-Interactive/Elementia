@@ -3,7 +3,7 @@ using UnityEngine;
 
 public static class Utilities {
 
-    // finds the Vector2 position of the lowest corner of the object | if there are two corners with the same lowest y value, the position in between them is returned
+    // finds the Vector2 position of the lowest corner of the object | if there are multiple corners with the same lowest y value, the position in between them is returned
     public static Vector2 GetLowestCorner(SpriteRenderer spriteRenderer, float cornerLeniency) {
 
         Vector2 tR = spriteRenderer.transform.TransformPoint(spriteRenderer.sprite.bounds.max);

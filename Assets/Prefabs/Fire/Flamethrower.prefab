@@ -213,11 +213,11 @@ MonoBehaviour:
     RecoilStyle: 2
     Delay: 0
     RecoilFeedback: {fileID: 0}
-  ProjectileSpawnOffset: {x: 0.6875, y: 0.125, z: 0}
+  ProjectileSpawnOffset: {x: 0.6875, y: 0, z: 0}
   Spread: {x: 0, y: 0, z: 0}
   RotateWeaponOnSpread: 0
   RandomSpread: 1
-  SpawnPosition: {x: 0.6875, y: 0.125, z: 0}
+  SpawnPosition: {x: 0.6875, y: 0, z: 0}
   HitscanTargetLayers:
     serializedVersion: 2
     m_Bits: 270592
@@ -5107,7 +5107,7 @@ Transform:
   m_GameObject: {fileID: 4819280329784108086}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.5625, y: 0.125, z: 0}
+  m_LocalPosition: {x: 0.5625, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
