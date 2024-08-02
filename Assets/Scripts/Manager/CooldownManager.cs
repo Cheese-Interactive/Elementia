@@ -6,7 +6,7 @@ public class CooldownManager : MonoBehaviour {
     [Header("Cooldowns")]
     private Dictionary<Action, CooldownData> cooldownData;
 
-    private void Start() => cooldownData = new Dictionary<Action, CooldownData>();
+    private void Awake() => cooldownData = new Dictionary<Action, CooldownData>();
 
     public void SetCooldown(Action action, float cooldownTimer, float unequipTime) {
 

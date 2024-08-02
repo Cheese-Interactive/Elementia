@@ -35,10 +35,10 @@ namespace MoreMountains.CorgiEngine
 		protected bool _reached = false;
 		protected List<Respawnable> _listeners;
 
-		/// <summary>
-		/// Initializes the list of listeners
-		/// </summary>
-		protected virtual void Awake () 
+        /// <summary>
+        /// Initializes the list of listeners
+        /// </summary>
+        protected virtual void Awake () 
 		{
 			_listeners = new List<Respawnable>();
 		}

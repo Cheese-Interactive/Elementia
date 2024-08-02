@@ -1,6 +1,7 @@
 using MoreMountains.CorgiEngine;
 using MoreMountains.Tools;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class DataManager : MonoBehaviour {
 
@@ -27,7 +28,7 @@ public class DataManager : MonoBehaviour {
 
         #region CHECKPOINT
 
-        MMSaveLoadManager.Save(levelManager.CurrentCheckPoint.GetComponent<UUID>().ID, "checkpoints.dat", "Data/"); // save the current checkpoint guid
+        MMSaveLoadManager.Save(levelManager.CurrentCheckPoint.GetComponent<UUID>().ID, "checkpoints.dat", "Data/" + SceneManager.GetActiveScene().name); // save the current checkpoint guid
 
         #endregion
 
@@ -43,7 +44,7 @@ public class DataManager : MonoBehaviour {
 
         #region CHECKPOINT
 
-        object checkpointObj = MMSaveLoadManager.Load(typeof(string), "checkpoints.dat", "Data/");
+        object checkpointObj = MMSaveLoadManager.Load(typeof(string), "checkpoints.dat", "Data/" + SceneManager.GetActiveScene().name);
 
         if (checkpointObj != null) {
 

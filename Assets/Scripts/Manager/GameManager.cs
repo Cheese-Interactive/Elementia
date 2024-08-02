@@ -1,11 +1,14 @@
 using MoreMountains.InventoryEngine;
+using MoreMountains.Tools;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour {
 
     [Header("References")]
+    private DataManager dataManager;
     private CooldownManager cooldownManager;
+    private GameCore gameCore;
     private List<PhysicsObject> objectsToReset;
 
     [Header("Settings")]
@@ -15,20 +18,24 @@ public class GameManager : MonoBehaviour {
     private bool isCooldownsEnabled;
 
     [Header("Collectible Inventory")]
-    [SerializeField] private Inventory collectibleInventory;
-    [SerializeField] private InventoryDisplay collectibleInventoryDisplay;
     [SerializeField] private int collectibleRows;
     [SerializeField] private int collectibleColumns;
+    private InventoryDisplay collectibleInventoryDisplay;
 
     [Header("Key Inventory")]
-    [SerializeField] private Inventory keyInventory;
-    [SerializeField] private InventoryDisplay keyInventoryDisplay;
     [SerializeField] private int keyRows;
     [SerializeField] private int keyColumns;
+    private InventoryDisplay keyInventoryDisplay;
 
     private void Start() {
 
+        dataManager = FindObjectOfType<DataManager>();
+        gameCore = FindObjectOfType<GameCore>();
         cooldownManager = FindObjectOfType<CooldownManager>();
+
+        // get the collectible inventory display & key inventory display
+        collectibleInventoryDisplay = gameCore.GetCollectibleInventoryDisplay();
+        keyInventoryDisplay = gameCore.GetKeyInventoryDisplay();
 
         // get all required & key collectibles
         requiredCollectibles = new List<Collectible>();
@@ -114,6 +121,13 @@ public class GameManager : MonoBehaviour {
             cooldownManager.ClearCooldownData();
 
         this.isCooldownsEnabled = isCooldownsEnabled;
+
+    }
+
+    public void LoadScene(string sceneName) {
+
+        dataManager.SaveData();
+        MMSceneLoadingManager.LoadScene(sceneName);
 
     }
 

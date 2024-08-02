@@ -10,6 +10,12 @@ public class CooldownMeter : MonoBehaviour {
 
     private void Start() => gameObject.SetActive(false); // disable the cooldown meter by default
 
+    private void OnDestroy() {
+
+        if (cooldownTweener != null && cooldownTweener.IsActive()) cooldownTweener.Kill(); // stop cooldown tweener if it is playing
+        
+    }
+
     public void SetValue(Color color, float normalizedCooldown, float cooldownTimer) {
 
         // if value is not a number, reset the cooldown meter
