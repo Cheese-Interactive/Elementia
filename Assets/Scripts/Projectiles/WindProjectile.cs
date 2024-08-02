@@ -1,5 +1,4 @@
 using DG.Tweening;
-using MoreMountains.CorgiEngine;
 using System.Collections;
 using UnityEngine;
 
@@ -22,7 +21,6 @@ public class WindProjectile : BaseProjectile {
 
         base.OnEnable();
 
-        projectile = GetComponent<Projectile>();
         trailRenderer = GetComponent<TrailRenderer>();
 
         lifetime = projectile.LifeTime;

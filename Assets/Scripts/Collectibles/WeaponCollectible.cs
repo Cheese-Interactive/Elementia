@@ -1,7 +1,7 @@
 using MoreMountains.InventoryEngine;
 using UnityEngine;
 
-public class WeaponCollectible : BaseCollectible {
+public class WeaponCollectible : Collectible {
 
     [Header("References")]
     private WeaponSelector weaponSelector;

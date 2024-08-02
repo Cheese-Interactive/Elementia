@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour {
     private List<PhysicsObject> objectsToReset;
 
     [Header("Settings")]
-    private List<BaseCollectible> requiredCollectibles;
+    private List<Collectible> requiredCollectibles;
     private List<KeyCollectible> keyCollectibles;
     private bool isLevelComplete;
     private bool isCooldownsEnabled;
@@ -31,10 +31,10 @@ public class GameManager : MonoBehaviour {
         cooldownManager = FindObjectOfType<CooldownManager>();
 
         // get all required & key collectibles
-        requiredCollectibles = new List<BaseCollectible>();
+        requiredCollectibles = new List<Collectible>();
         keyCollectibles = new List<KeyCollectible>();
 
-        foreach (BaseCollectible collectible in FindObjectsOfType<BaseCollectible>()) {
+        foreach (Collectible collectible in FindObjectsOfType<Collectible>()) {
 
             if (collectible.IsRequired())
                 requiredCollectibles.Add(collectible);
@@ -97,7 +97,7 @@ public class GameManager : MonoBehaviour {
             return;
 
         // check if all required collectibles have been collected
-        foreach (BaseCollectible collectible in requiredCollectibles)
+        foreach (Collectible collectible in requiredCollectibles)
             if (!collectible.IsCollected())
                 return;
 

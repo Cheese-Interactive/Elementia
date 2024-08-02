@@ -13,6 +13,7 @@ TagManager:
   - Hazards
   - Generator
   - GeneratorField
+  - Door
   layers:
   - Default
   - TransparentFX
@@ -28,7 +29,7 @@ TagManager:
   - OneWayPlatforms
   - Projectiles
   - Enemies
-  - 
+  - Interactable
   - Ladders
   - PlayerProjectiles
   - MovingObjects

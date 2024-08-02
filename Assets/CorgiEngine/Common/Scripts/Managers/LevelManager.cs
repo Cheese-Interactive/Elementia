@@ -452,6 +452,7 @@ namespace MoreMountains.CorgiEngine
 				return;
 			}
 
+			print(CurrentCheckPoint);
 			if (CurrentCheckPoint != null)
 			{
 				CurrentCheckPoint.SpawnPlayer(Players[0]);

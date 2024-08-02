@@ -14812,6 +14812,7 @@ GameObject:
   - component: {fileID: 8354201413464159754}
   - component: {fileID: 10088441257559901}
   - component: {fileID: -818257627329327814}
+  - component: {fileID: 2597575006400095669}
   - component: {fileID: 6298585181428920326}
   - component: {fileID: -1803779125964603725}
   - component: {fileID: 7161239672520688488}
@@ -14950,7 +14951,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.015625}
+  m_Offset: {x: 0, y: -0.046875}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -14961,7 +14962,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.4375, y: 0.90625}
+  m_Size: {x: 0.4375, y: 0.84375}
   m_EdgeRadius: 0
 --- !u!50 &4077020468999200023
 Rigidbody2D:
@@ -15349,6 +15350,34 @@ MonoBehaviour:
   PushWhenGroundedOnly: 1
   DetectionRaycastLength: 0.2
   MinimumPushSpeed: 0.05
+--- !u!114 &2597575006400095669
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4900122409563817483}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f59e06702d6be45948936bd909420d61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AbilityStartFeedbacks: {fileID: 0}
+  AbilityStopFeedbacks: {fileID: 0}
+  AbilityPermitted: 1
+  BlockingMovementStates: 
+  BlockingConditionStates: 
+  BlockingWeaponStates: 
+  MuteSfxTrackSounds: 1
+  MuteUITrackSounds: 0
+  MuteMusicTrackSounds: 0
+  MuteMasterTrackSounds: 0
+  OnPause:
+    m_PersistentCalls:
+      m_Calls: []
+  OnUnpause:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &6298585181428920326
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15388,7 +15417,7 @@ MonoBehaviour:
   BlockingConditionStates: 
   BlockingWeaponStates: 
   PlayerID: Player1
-  MainInventoryName: MainInventory
+  MainInventoryName: KeyInventory
   WeaponInventoryName: 
   HotbarInventoryName: 
   AutoEquipWeaponOnCharacterSwitch: 0
@@ -15632,6 +15661,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   basePos: {fileID: 6895793851411871897}
+  minMovementThreshold: 0.1
   defaultWeapons:
   - {fileID: 11400000, guid: 3224215c3a45c564ca37fef85f48c954, type: 2}
   - {fileID: 11400000, guid: 240fb2df713a88941845b673fa543e19, type: 2}
@@ -15643,7 +15673,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 08c47dfd8be2ccf408b6f3f7f3c9ee2a, type: 2}
   blankWeapon: {fileID: 4237984674334015922, guid: 0ac9e707aeb2bee41aeef1440418596a,
     type: 3}
-  minMovementThreshold: 0.1
+  interactLayer:
+    serializedVersion: 2
+    m_Bits: 16384
+  interactRadius: 3
 --- !u!114 &2592352146518810568
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21246,7 +21279,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5452681496835425656
 Transform:
   m_ObjectHideFlags: 0
@@ -25169,18 +25202,13 @@ ParticleSystem:
   TriggerModule:
     enabled: 0
     serializedVersion: 2
-    inside: 1
-    outside: 0
+    inside: 0
+    outside: 1
     enter: 0
-    exit: 0
+    exit: 1
     colliderQueryMode: 0
     radiusScale: 1
     primitives:
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
     - {fileID: 0}
   SubModule:
     serializedVersion: 2

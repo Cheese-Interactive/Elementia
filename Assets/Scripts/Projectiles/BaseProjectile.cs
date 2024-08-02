@@ -21,15 +21,10 @@ public class BaseProjectile : MonoBehaviour {
 
     protected void OnEnable() { // runs each time projectile is enabled/shot because it is pooled
 
-        hasCollided = false; // reset has collided because object pooling cycles the same objects
-        startPos = transform.position; // set start position to current position
-
-    }
-
-    protected void Start() {
-
         projectile = GetComponent<Projectile>();
         damageOnTouch = GetComponent<DamageOnTouch>();
+        hasCollided = false; // reset has collided because object pooling cycles the same objects
+        startPos = transform.position; // set start position to current position
 
     }
 

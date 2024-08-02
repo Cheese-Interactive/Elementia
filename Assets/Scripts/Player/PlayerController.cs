@@ -17,6 +17,10 @@ public class PlayerController : EntityController {
     private WeaponDatabase weaponDatabase;
     private WeaponPair currWeaponPair; // to avoid searching dictionary every frame
 
+    [Header("Interacting")]
+    [SerializeField] private LayerMask interactLayer; // layer mask for interactable objects
+    [SerializeField] private float interactRadius;
+
     private new void Awake() {
 
         base.Awake();
@@ -150,6 +154,27 @@ public class PlayerController : EntityController {
 
                 weaponSelector.SelectSlot(i); // select slot based on key pressed
 
+            }
+        }
+
+        #endregion
+
+        #region INTERACTING
+
+        if (Input.GetKeyDown(KeyCode.E)) { // interact key pressed
+
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, interactRadius, interactLayer); // get all colliders in interact radius
+
+            foreach (Collider2D collider in colliders) {
+
+                Interactable interactable = collider.GetComponent<Interactable>(); // get first interactable component
+
+                if (interactable) { // make sure object is interactable
+
+                    interactable.Interact(); // interact with object
+                    break;
+
+                }
             }
         }
 

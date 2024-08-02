@@ -1,3 +1,3 @@
-public class KeyCollectible : BaseCollectible {
+public class KeyCollectible : Collectible {
 
 }

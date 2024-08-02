@@ -4040,9 +4040,9 @@ ParticleSystem:
     enabled: 1
     serializedVersion: 2
     inside: 0
-    outside: 2
+    outside: 1
     enter: 0
-    exit: 2
+    exit: 1
     colliderQueryMode: 0
     radiusScale: 0.3
     primitives:
