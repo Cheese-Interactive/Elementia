@@ -1,3 +1,4 @@
+using MoreMountains.Feedbacks;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -13,6 +14,10 @@ public class NatureSecondaryAction : SecondaryAction {
     [SerializeField] private float beanstalkHeight;
     [SerializeField] private float tileWaitDuration;
     private Coroutine tileCoroutine;
+
+    [Header("MM Feedbacks")]
+    [SerializeField] private MMF_Player[] onTickFeedbacks;
+
 
     private void Start() => tilemapManager = FindObjectOfType<TilemapManager>();
 
@@ -47,6 +52,9 @@ public class NatureSecondaryAction : SecondaryAction {
             if (tile != null) break; // stop stacking vines if tile is in the way
 
             Instantiate(vinePrefab, tileWorldPos, Quaternion.identity); // spawn vine
+
+            onTickFeedbacks[Random.Range(0, onTickFeedbacks.Length - 1)].PlayFeedbacks(); //play a random ticking noise
+
             yield return new WaitForSeconds(tileWaitDuration);
 
         }

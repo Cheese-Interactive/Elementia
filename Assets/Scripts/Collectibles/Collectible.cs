@@ -1,3 +1,4 @@
+using MoreMountains.Feedbacks;
 using MoreMountains.InventoryEngine;
 using MoreMountains.Tools;
 using System;
@@ -12,6 +13,9 @@ public class Collectible : MMPersistentBase {
 
     [Header("Settings")]
     [SerializeField] private bool isRequired;
+
+    [Header("MM Feedbacks")]
+    [SerializeField] private MMF_Player onCollectFeedback;
 
     [Serializable]
     private struct Data {
@@ -32,10 +36,13 @@ public class Collectible : MMPersistentBase {
 
     protected virtual void OnCollect(ItemPicker collectible) {
 
+        onCollectFeedback.PlayFeedbacks(transform.position);
         isCollected = true;
         gameManager.CheckVictory();
 
+
     }
+
 
     public override string OnSave() {
 

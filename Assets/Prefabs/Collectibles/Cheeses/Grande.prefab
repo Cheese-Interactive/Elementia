@@ -284,3 +284,4 @@ MonoBehaviour:
   _guid: 
   GenerateGuidButton: 0
   isRequired: 1
+  onCollectFeedback: {fileID: 0}

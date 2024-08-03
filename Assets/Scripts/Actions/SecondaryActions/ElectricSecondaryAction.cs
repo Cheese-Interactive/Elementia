@@ -1,3 +1,4 @@
+using MoreMountains.Feedbacks;
 using System.Collections;
 using UnityEngine;
 
@@ -12,6 +13,10 @@ public class ElectricSecondaryAction : SecondaryAction {
     [SerializeField] private float electricDuration;
     [SerializeField] private float electricDamage;
     [SerializeField] private float electricDamageInvincibilityDuration;
+
+    [Header("MM Feedbacks")]
+    [SerializeField] private MMF_Player onActivateFeedback;
+    [SerializeField] private MMF_Player onEndFeedback;
 
     private new void Awake() {
 
@@ -35,6 +40,8 @@ public class ElectricSecondaryAction : SecondaryAction {
 
         electricEffect.AddEffect(gameObject, electricDamage, electricDuration, electricDamageInvincibilityDuration, speedMultiplier); // apply electric effect
 
+        onActivateFeedback.PlayFeedbacks(); //sound
+
         if (effectCoroutine != null) StopCoroutine(effectCoroutine); // stop previous effect coroutine if it exists
         effectCoroutine = StartCoroutine(HandleEffect()); // start effect coroutine
 
@@ -45,6 +52,8 @@ public class ElectricSecondaryAction : SecondaryAction {
         yield return new WaitForSeconds(electricDuration);
 
         StartCooldown(); // start cooldown
+
+        onEndFeedback.PlayFeedbacks(); //sound
 
         effectCoroutine = null; // reset effect coroutine
 

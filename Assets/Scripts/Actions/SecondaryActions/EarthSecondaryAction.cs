@@ -1,3 +1,4 @@
+using MoreMountains.Feedbacks;
 using System.Collections;
 using UnityEngine;
 
@@ -17,6 +18,9 @@ public class EarthSecondaryAction : SecondaryAction {
     [SerializeField] private bool hasMaxLifetime;
     [SerializeField] private float maxLifetimeDuration;
     private Coroutine durationCoroutine;
+
+    [Header("MM Feedbacks")]
+    [SerializeField] private MMF_Player onUseFeedback;
 
     private new void OnDisable() {
 
@@ -43,14 +47,17 @@ public class EarthSecondaryAction : SecondaryAction {
 
     private void SpawnBoulder() {
 
+        onUseFeedback.PlayFeedbacks();
+
         if (spawnAtMousePosition) {
 
-            currBoulder = Instantiate(boulderPrefab, (Vector2) Camera.main.ScreenToWorldPoint(Input.mousePosition), boulderPrefab.transform.rotation); // spawn boulder at mouse position
+            currBoulder = Instantiate(boulderPrefab, (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition), boulderPrefab.transform.rotation); // spawn boulder at mouse position
 
-        } else {
+        }
+        else {
 
             Vector2 offset = playerController.GetDirectionRight() * spawnOffset.x + Vector2.up * spawnOffset.y;
-            currBoulder = Instantiate(boulderPrefab, (Vector2) transform.position + offset, boulderPrefab.transform.rotation); // spawn boulder in direction player is facing
+            currBoulder = Instantiate(boulderPrefab, (Vector2)transform.position + offset, boulderPrefab.transform.rotation); // spawn boulder in direction player is facing
 
         }
 

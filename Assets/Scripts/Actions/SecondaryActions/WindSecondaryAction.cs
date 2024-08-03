@@ -1,4 +1,5 @@
 using MoreMountains.CorgiEngine;
+using MoreMountains.Feedbacks;
 using UnityEngine;
 
 public class WindSecondaryAction : SecondaryAction {
@@ -9,6 +10,9 @@ public class WindSecondaryAction : SecondaryAction {
     [Header("Settings")]
     [SerializeField] private float playerWindForce;
 
+    [Header("MM Feedbacks")]
+    [SerializeField] private MMF_Player onUseFeedback;
+
     private void Start() => corgiController = GetComponent<CorgiController>();
 
     public override void OnTriggerRegular() {
@@ -17,7 +21,8 @@ public class WindSecondaryAction : SecondaryAction {
 
         if (!canUseInAir && !playerController.IsGrounded()) return; // make sure player is grounded if required
 
-        corgiController.SetForce(((Vector2) Camera.main.ScreenToWorldPoint(Input.mousePosition) - (Vector2) transform.position).normalized * playerWindForce);
+        corgiController.SetForce(((Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition) - (Vector2)transform.position).normalized * playerWindForce);
+        onUseFeedback.PlayFeedbacks();
 
         StartCooldown(); // start cooldown
 

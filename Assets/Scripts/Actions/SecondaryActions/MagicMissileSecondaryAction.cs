@@ -1,4 +1,5 @@
 using MoreMountains.CorgiEngine;
+using MoreMountains.Feedbacks;
 using System.Collections;
 using UnityEngine;
 
@@ -14,6 +15,10 @@ public class MagicMissileSecondaryAction : SecondaryAction {
     [SerializeField] private float resetDuration;
     [SerializeField] private float resetWaitDuration;
     private Coroutine resetCoroutine;
+
+    [Header("MM Feedbacks")]
+    [SerializeField] private MMF_Player onUseFeedback;
+    [SerializeField] private MMF_Player onResetFeedback;
 
     private void Start() {
 
@@ -46,6 +51,8 @@ public class MagicMissileSecondaryAction : SecondaryAction {
 
         isResetting = true;
 
+        onUseFeedback.PlayFeedbacks();
+
         prevWeapon = playerController.GetCurrentWeapon(); // store previous weapon
 
         primaryAction.enabled = false; // disable primary action
@@ -61,6 +68,8 @@ public class MagicMissileSecondaryAction : SecondaryAction {
 
     private IEnumerator HandleReset() {
 
+        onResetFeedback.PlayFeedbacks();
+
         gameManager.ResetAllResettables(resetDuration); // start reset all resettables
         yield return new WaitForSeconds(resetDuration); // wait for reset duration
         StopReset(true); // stop resetting as it has completed
@@ -75,6 +84,8 @@ public class MagicMissileSecondaryAction : SecondaryAction {
         resetCoroutine = null;
 
         anim.SetBool("isResetting", false); // stop animation
+
+        onResetFeedback.PlayFeedbacks();
 
         playerController.EnableCoreScripts(); // enable player core scripts
         playerController.SetCharacterEnabled(true); // enable player character (to allow corgi built in animations to run)
