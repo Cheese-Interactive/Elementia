@@ -16,6 +16,9 @@ public class MenuUIController : MonoBehaviour {
     [SerializeField] private Button cancelButton;
     [SerializeField] private Button quitButton;
 
+    [Header("Settings")]
+    [SerializeField] private string gameSceneName;
+
     [Header("Coroutines")]
     private Coroutine confirmationButtonsCoroutine;
 
@@ -49,7 +52,7 @@ public class MenuUIController : MonoBehaviour {
 
     }
 
-    private void Play() => print("Play");
+    private void Play() => MMSceneLoadingManager.LoadScene(gameSceneName);
 
     private void ResetData() {
 

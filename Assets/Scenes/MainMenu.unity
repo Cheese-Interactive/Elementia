@@ -1027,6 +1027,7 @@ MonoBehaviour:
   confirmButton: {fileID: 1251176612}
   cancelButton: {fileID: 294446851}
   quitButton: {fileID: 825934235}
+  gameSceneName: arianas
 --- !u!1 &758131176
 GameObject:
   m_ObjectHideFlags: 0
