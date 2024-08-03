@@ -1,5 +1,7 @@
+using DG.Tweening;
 using MoreMountains.InventoryEngine;
 using MoreMountains.Tools;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,8 +12,13 @@ public class GameManager : MonoBehaviour {
     private CooldownManager cooldownManager;
     private GameCore gameCore;
     private List<PhysicsObject> objectsToReset;
+    private Coroutine sceneLoadCoroutine;
+
+    [Header("UI References")]
+    [SerializeField] private CanvasGroup loadingScreen;
 
     [Header("Settings")]
+    [SerializeField] private float loadingScreenFadeDuration;
     private List<Collectible> requiredCollectibles;
     private List<KeyCollectible> keyCollectibles;
     private bool isLevelComplete;
@@ -72,9 +79,9 @@ public class GameManager : MonoBehaviour {
 
         isCooldownsEnabled = true; // enable cooldowns by default
 
-    }
+        HideLoadingScreen(); // hide the loading screen when game starts
 
-    public bool TryRemoveKey() => keyInventory.RemoveItem(keyInventory.NumberOfFilledSlots - 1, 1, false); // remove key if possible without showing warnings
+    }
 
     public void ResetAllResettables(float resetDuration) {
 
@@ -128,10 +135,39 @@ public class GameManager : MonoBehaviour {
 
     }
 
+    public bool TryRemoveKey() => keyInventory.RemoveItem(keyInventory.NumberOfFilledSlots - 1, 1, false); // remove key if possible without showing warnings
+
     public void LoadScene(string sceneName) {
 
+        if (sceneLoadCoroutine != null) StopCoroutine(sceneLoadCoroutine); // stop the previous scene load coroutine if it exists
+        sceneLoadCoroutine = StartCoroutine(HandleSceneLoad(sceneName));
+
+    }
+
+    private IEnumerator HandleSceneLoad(string sceneName) {
+
         dataManager.SaveData(); // IMPORTANT: save data before loading a new scene
+        ShowLoadingScreen(); // show the loading screen before loading the scene
+        yield return new WaitForSeconds(loadingScreenFadeDuration); // wait for the loading screen to fade in
         MMSceneLoadingManager.LoadScene(sceneName);
+
+    }
+
+    public void ShowLoadingScreen() {
+
+        // enable the loading screen and fade it in
+        loadingScreen.alpha = 0f;
+        loadingScreen.gameObject.SetActive(true);
+        loadingScreen.DOFade(1f, loadingScreenFadeDuration);
+
+    }
+
+    private void HideLoadingScreen() {
+
+        // fade out the loading screen and then disable it
+        loadingScreen.alpha = 1f;
+        loadingScreen.gameObject.SetActive(true);
+        loadingScreen.DOFade(0f, loadingScreenFadeDuration).OnComplete(() => loadingScreen.gameObject.SetActive(false));
 
     }
 
