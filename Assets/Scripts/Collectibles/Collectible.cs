@@ -14,7 +14,7 @@ public class Collectible : MMPersistentBase {
     [SerializeField] private bool isRequired;
 
     [Serializable]
-    protected struct Data {
+    private struct Data {
 
         public bool isCollected;
 

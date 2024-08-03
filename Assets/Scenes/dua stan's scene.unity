@@ -743,7 +743,7 @@ GameObject:
   - component: {fileID: 41641635}
   m_Layer: 14
   m_Name: Door
-  m_TagString: Door
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -828,6 +828,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c00e3ed431297b4f8789cbc5c5dbe4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SaveActive: 1
+  UniqueIDSuffix: 
+  _guid: dua stan's scene-Door-caeb603b-4bd4-477d-bfe7-14baff3e2e90
+  GenerateGuidButton: 0
+  maxInteractions: 0
   sceneName: arianas
 --- !u!61 &41641635
 BoxCollider2D:
@@ -1070,8 +1075,8 @@ MonoBehaviour:
   CheckpointAttributionDirection: 0
   CurrentCheckPoint: {fileID: 0}
   PointsOfEntry: []
-  IntroFadeDuration: 1
-  OutroFadeDuration: 1
+  IntroFadeDuration: 5
+  OutroFadeDuration: 5
   FaderID: 0
   FadeTween:
     MMTweenDefinitionType: 0

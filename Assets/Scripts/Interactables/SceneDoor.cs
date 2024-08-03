@@ -1,26 +1,39 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SceneDoor : Door {
+public class SceneDoor : Interactable {
+
+    [Header("References")]
+    private GameManager gameManager;
 
     [Header("Scene")]
     public string sceneName;
 
-    protected new void Start() {
+    private void Start() {
 
-        base.Start();
+        gameManager = FindObjectOfType<GameManager>();
 
         if (string.IsNullOrEmpty(sceneName) || SceneManager.GetSceneByName(sceneName) == null) // make sure scene name is valid
             Debug.LogError("Scene name is not valid " + name);
 
     }
 
-    public override bool TryInteract() {
+    public override void TryInteract() {
 
-        if (!base.TryInteract()) return false; // return if door cannot be opened
+        if (isInteracted) {
 
-        gameManager.LoadScene(sceneName);
-        return true;
+            isInteracted = true;
+            gameManager.LoadScene(sceneName); // load scene if door is already open
+            return;
 
+        }
+
+        if (gameManager.TryRemoveKey()) { // remove key if key is available
+
+            isInteracted = true;
+            gameManager.LoadScene(sceneName);
+            return;
+
+        }
     }
 }

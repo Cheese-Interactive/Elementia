@@ -25,7 +25,7 @@ public class WeaponSelector : MMPersistentBase {
     private bool isDataLoaded;
 
     [Serializable]
-    protected struct Data {
+    private struct Data {
 
         public SerializableWeaponData[] slotData;
 
