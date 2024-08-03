@@ -151,7 +151,7 @@ MonoBehaviour:
   Item: {fileID: 11400000, guid: b47ead756c3aa224ebbdbca0dc4f6b4c, type: 2}
   Quantity: 1
   RemainingQuantity: 1
-  PickableIfInventoryIsFull: 0
+  PickableIfInventoryIsFull: 1
   DisableObjectWhenDepleted: 1
   RequirePlayerTag: 1
 --- !u!114 &5089658859029872562

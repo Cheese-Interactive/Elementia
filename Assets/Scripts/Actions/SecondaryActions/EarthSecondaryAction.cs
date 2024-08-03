@@ -53,8 +53,7 @@ public class EarthSecondaryAction : SecondaryAction {
 
             currBoulder = Instantiate(boulderPrefab, (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition), boulderPrefab.transform.rotation); // spawn boulder at mouse position
 
-        }
-        else {
+        } else {
 
             Vector2 offset = playerController.GetDirectionRight() * spawnOffset.x + Vector2.up * spawnOffset.y;
             currBoulder = Instantiate(boulderPrefab, (Vector2)transform.position + offset, boulderPrefab.transform.rotation); // spawn boulder in direction player is facing

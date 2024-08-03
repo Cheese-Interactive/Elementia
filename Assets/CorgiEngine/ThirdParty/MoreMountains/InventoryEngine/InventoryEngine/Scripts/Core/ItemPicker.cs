@@ -137,7 +137,10 @@ namespace MoreMountains.InventoryEngine
 				return;
 			}
 
-			DetermineMaxQuantity ();
+            if (OnCollect != null)
+                OnCollect.Invoke(this);
+
+            DetermineMaxQuantity ();
 			if (!Application.isPlaying)
 			{
 				if (!Item.ForceSlotIndex)
@@ -159,9 +162,6 @@ namespace MoreMountains.InventoryEngine
 				PickSuccess();
 				DisableObjectIfNeeded();
 			}
-            if (OnCollect != null) {
-                OnCollect.Invoke(this);
-            }
         }
 
 		/// <summary>

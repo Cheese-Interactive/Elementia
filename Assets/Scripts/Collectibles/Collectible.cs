@@ -40,9 +40,7 @@ public class Collectible : MMPersistentBase {
         isCollected = true;
         gameManager.CheckVictory();
 
-
     }
-
 
     public override string OnSave() {
 

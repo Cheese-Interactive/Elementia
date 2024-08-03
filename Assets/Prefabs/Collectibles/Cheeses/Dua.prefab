@@ -345,8 +345,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 7676991480352842713}
   - {fileID: 1462546728620328601}
+  - {fileID: 7676991480352842713}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &6850140984181298823
@@ -462,7 +462,7 @@ MonoBehaviour:
   Item: {fileID: 11400000, guid: b47ead756c3aa224ebbdbca0dc4f6b4c, type: 2}
   Quantity: 1
   RemainingQuantity: 1
-  PickableIfInventoryIsFull: 0
+  PickableIfInventoryIsFull: 1
   DisableObjectWhenDepleted: 1
   RequirePlayerTag: 1
 --- !u!114 &3542528880888046321

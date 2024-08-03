@@ -18,7 +18,6 @@ public class NatureSecondaryAction : SecondaryAction {
     [Header("MM Feedbacks")]
     [SerializeField] private MMF_Player[] onTickFeedbacks;
 
-
     private void Start() => tilemapManager = FindObjectOfType<TilemapManager>();
 
     public override void OnTriggerRegular() {
