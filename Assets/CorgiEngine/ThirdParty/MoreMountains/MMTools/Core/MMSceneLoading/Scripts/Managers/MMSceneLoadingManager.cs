@@ -43,6 +43,8 @@ namespace MoreMountains.Tools
 		public static string LoadingScreenSceneName="LoadingScreen";
 
 		[Header("GameObjects")]
+		// the canvas group containing all the loading elements
+		public CanvasGroup LoadingCanvas;
 		/// the text object where you want the loading message to be displayed
 		public Text LoadingText;
 		/// the canvas group containing the progress bar
@@ -55,10 +57,10 @@ namespace MoreMountains.Tools
 		[Header("Time")]
 		/// the duration (in seconds) of the initial fade in
 		public float StartFadeDuration=0.2f;
-		/// the speed of the progress bar
-		public float ProgressBarSpeed=2f;
 		/// the duration (in seconds) of the load complete fade out
 		public float ExitFadeDuration=0.2f;
+		/// the speed of the progress bar
+		public float ProgressBarSpeed=2f;
 		/// the delay (in seconds) before leaving the scene when complete
 		public float LoadCompleteDelay=0.5f;
 
@@ -129,16 +131,21 @@ namespace MoreMountains.Tools
 			// we setup our various visual elements
 			LoadingSetup();
 
-			// we fade from black
-			MMFadeOutEvent.Trigger(StartFadeDuration, _tween);
-			yield return new WaitForSeconds(StartFadeDuration);
+			// fade in loading canvas
+            LoadingCanvas.alpha = 0f;
+            StartCoroutine(MMFade.FadeCanvasGroup(LoadingCanvas, StartFadeDuration, 1f));
             
-			// we start loading the scene
+			// we start loading the scene (before waiting for fade to complete)
 			_asyncOperation = SceneManager.LoadSceneAsync(_sceneToLoad,LoadSceneMode.Single );
 			_asyncOperation.allowSceneActivation = false;
 
-			// while the scene loads, we assign its progress to a target that we'll use to fill the progress bar smoothly
-			while (_asyncOperation.progress < 0.9f) 
+            // we fade from black
+            //MMFadeOutEvent.Trigger(StartFadeDuration, _tween);
+
+            yield return new WaitForSeconds(StartFadeDuration); // make sure fade is complete before continuing
+
+            // while the scene loads, we assign its progress to a target that we'll use to fill the progress bar smoothly
+            while (_asyncOperation.progress < 0.9f) 
 			{
 				_fillTarget = _asyncOperation.progress;
 				yield return null;
@@ -154,11 +161,12 @@ namespace MoreMountains.Tools
 
 			// the load is now complete, we replace the bar with the complete animation
 			LoadingComplete();
-			yield return new WaitForSeconds(LoadCompleteDelay);
+			//yield return new WaitForSeconds(LoadCompleteDelay);
+			yield return new WaitForSeconds(ExitFadeDuration);
 
 			// we fade to black
-			MMFadeInEvent.Trigger(ExitFadeDuration, _tween);
-			yield return new WaitForSeconds(ExitFadeDuration);
+			//MMFadeInEvent.Trigger(ExitFadeDuration, _tween);
+			//yield return new WaitForSeconds(ExitFadeDuration);
 
 			// we switch to the new scene
 			_asyncOperation.allowSceneActivation = true;
@@ -183,7 +191,7 @@ namespace MoreMountains.Tools
 			LoadingSceneEvent.Trigger(_sceneToLoad, LoadingStatus.InterpolatedLoadProgressComplete);
 			//LoadingCompleteAnimation.gameObject.SetActive(true);
 			//StartCoroutine(MMFade.FadeCanvasGroup(LoadingProgressBar,0.1f,0f));
-			StartCoroutine(MMFade.FadeCanvasGroup(LoadingAnimation,0.1f,0f));
+			StartCoroutine(MMFade.FadeCanvasGroup(LoadingCanvas, ExitFadeDuration, 0f)); // fade out loading canvas
 			//StartCoroutine(MMFade.FadeCanvasGroup(LoadingCompleteAnimation,0.1f,1f));
 		}
 	}

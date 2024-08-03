@@ -1,14 +1,18 @@
+using DG.Tweening;
 using MoreMountains.Tools;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MenuUIController : MonoBehaviour {
+public class MenuManager : MonoBehaviour {
 
     [Header("References")]
     private Animator anim;
+    private Coroutine confirmationButtonsCoroutine;
+    private Coroutine sceneLoadCoroutine;
 
     [Header("UI References")]
+    [SerializeField] private CanvasGroup loadingScreen;
     [SerializeField] private Button playButton;
     [SerializeField] private Button resetDataButton;
     [SerializeField] private GameObject confirmationButtons;
@@ -18,9 +22,7 @@ public class MenuUIController : MonoBehaviour {
 
     [Header("Settings")]
     [SerializeField] private string gameSceneName;
-
-    [Header("Coroutines")]
-    private Coroutine confirmationButtonsCoroutine;
+    [SerializeField] private float loadingScreenFadeDuration;
 
     private IEnumerator Start() {
 
@@ -43,6 +45,8 @@ public class MenuUIController : MonoBehaviour {
         // disable confirmation buttons
         confirmationButtons.SetActive(false);
 
+        HideLoadingScreen(); // hide the loading screen when game starts
+
         yield return new WaitForSeconds(anim.GetCurrentAnimatorStateInfo(0).length); // wait for menu animations to finish
 
         // enable buttons
@@ -52,7 +56,7 @@ public class MenuUIController : MonoBehaviour {
 
     }
 
-    private void Play() => MMSceneLoadingManager.LoadScene(gameSceneName); // no game manager exists in this scene, no need to use that method
+    private void Play() => LoadScene(gameSceneName);
 
     private void ResetData() {
 
@@ -129,4 +133,36 @@ public class MenuUIController : MonoBehaviour {
 
     private void Quit() => Application.Quit();
 
+    public void LoadScene(string sceneName) {
+
+        if (sceneLoadCoroutine != null) StopCoroutine(sceneLoadCoroutine); // stop the previous scene load coroutine if it exists
+        sceneLoadCoroutine = StartCoroutine(HandleSceneLoad(sceneName));
+
+    }
+
+    private IEnumerator HandleSceneLoad(string sceneName) {
+
+        ShowLoadingScreen(); // show the loading screen before loading the scene
+        yield return new WaitForSeconds(loadingScreenFadeDuration); // wait for the loading screen to fade in
+        MMSceneLoadingManager.LoadScene(sceneName);
+
+    }
+
+    public void ShowLoadingScreen() {
+
+        // enable the loading screen and fade it in
+        loadingScreen.alpha = 0f;
+        loadingScreen.gameObject.SetActive(true);
+        loadingScreen.DOFade(1f, loadingScreenFadeDuration);
+
+    }
+
+    private void HideLoadingScreen() {
+
+        // fade out the loading screen and then disable it
+        loadingScreen.alpha = 1f;
+        loadingScreen.gameObject.SetActive(true);
+        loadingScreen.DOFade(0f, loadingScreenFadeDuration).OnComplete(() => loadingScreen.gameObject.SetActive(false));
+
+    }
 }
