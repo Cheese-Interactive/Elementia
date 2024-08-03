@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -7,50 +6,61 @@ public class SimpleSway : MonoBehaviour {
     [Header("Customization")]
     [SerializeField] float degreeOffset;
     [SerializeField] float time;
+    private float startRot;
+    private bool goingRight; // imagine an arrow placed on top of the object pointing up
+    private bool readyToGo;
 
-    float startRot;
-    bool goingRight = true; //imagine an arrow placed on top of the object pointing up
-    bool readyToGo = true;
+    private void Start() {
 
-    // Start is called before the first frame update
-    void Start() {
         if (time < 0)
-            throw new ArgumentException("time must be greater than or equal to 0 lil bro");
+            Debug.LogError("Time must be greater than or equal to 0.");
+
         startRot = transform.rotation.eulerAngles.z;
         transform.rotation = Quaternion.Euler(new Vector3(transform.rotation.x, transform.rotation.y, startRot - degreeOffset));
+
+        goingRight = true;
+        readyToGo = true;
+
     }
 
-    // Update is called once per frame
-    void Update() {
+    private void Update() {
+
         if (readyToGo) {
+
             if (goingRight)
                 StartCoroutine(EaseLerpTo(new Vector3(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y,
                                                     startRot + degreeOffset)));
             else
                 StartCoroutine(EaseLerpTo(new Vector3(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y,
                                                     startRot - degreeOffset)));
+
             goingRight = !goingRight;
+
         }
     }
 
 
     private IEnumerator EaseLerpTo(Vector3 targetRot) {
+
         readyToGo = false;
         float elapsed = 0;
         Vector3 startRotEuler = transform.rotation.eulerAngles;
         Quaternion targetQ = Quaternion.Euler(targetRot);
         Quaternion startQ = Quaternion.Euler(startRotEuler);
-        float t = 0; //smoothening formula
+        float time; //smoothening formula
 
-        while (elapsed < time) {
-            t = elapsed / time;
-            t = t * t * (3 - 2 * t);
-            transform.rotation = Quaternion.Lerp(startQ, targetQ, t);
+        while (elapsed < this.time) {
+
+            time = elapsed / this.time;
+            time = time * time * (3 - 2 * time);
+            transform.rotation = Quaternion.Lerp(startQ, targetQ, time);
             elapsed += Time.deltaTime;
             yield return null;
+
         }
+
         transform.rotation = targetQ;
         readyToGo = true;
-    }
 
+    }
 }

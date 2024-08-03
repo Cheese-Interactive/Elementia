@@ -8,6 +8,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour {
 
     [Header("References")]
+    private PlayerController playerController;
     private DataManager dataManager;
     private CooldownManager cooldownManager;
     private GameCore gameCore;
@@ -35,8 +36,12 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private int keyColumns;
     private InventoryDisplay keyInventoryDisplay;
 
+    [Header("Pausing")]
+    private bool isPaused;
+
     private void Start() {
 
+        playerController = FindObjectOfType<PlayerController>();
         dataManager = FindObjectOfType<DataManager>();
         gameCore = FindObjectOfType<GameCore>();
         cooldownManager = FindObjectOfType<CooldownManager>();
@@ -171,6 +176,39 @@ public class GameManager : MonoBehaviour {
 
     }
 
+    public void TogglePause() {
+
+        if (isPaused)
+            UnpauseGame();
+        else
+            PauseGame();
+
+    }
+
+    public void PauseGame() {
+
+        if (isPaused) return; // if the game is already paused, return
+
+        playerController.SetWeaponAimEnabled(false); // disable weapon aiming (to hide reticle)
+        playerController.DisableCoreScripts(); // disable core scripts
+        Time.timeScale = 0f;
+        isPaused = true;
+
+    }
+
+    public void UnpauseGame() {
+
+        if (!isPaused) return; // if the game is not paused, return
+
+        playerController.EnableCoreScripts(); // enable core scripts
+        playerController.SetWeaponAimEnabled(true); // enable weapon aiming (to show reticle)
+        Time.timeScale = 1f;
+        isPaused = false;
+
+    }
+
     public bool IsCooldownsEnabled() => isCooldownsEnabled;
+
+    public bool IsPaused() => isPaused;
 
 }

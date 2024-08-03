@@ -137,6 +137,8 @@ namespace MoreMountains.CorgiEngine {
             Initialization();
         }
 
+        protected virtual void OnDisable() => _reticle.SetActive(false);
+
         /// <summary>
         /// Grabs the weapon component, initializes the angle values
         /// </summary>

@@ -202,6 +202,13 @@ public class EntityController : MonoBehaviour {
 
     }
 
+    public void SetWeaponAimEnabled(bool enabled) {
+
+        if (charWeaponHandler)
+            charWeaponHandler.CurrentWeapon.GetComponent<WeaponAim>().enabled = enabled;
+
+    }
+
     public void SetInvulnerable(bool invulnerable) {
 
         if (health)

@@ -67,7 +67,6 @@ namespace MoreMountains.Tools
 			{
 				//If I am the first instance, make me the Singleton
 				_instance = this as T;
-				print(transform.name);
 				DontDestroyOnLoad (transform.gameObject);
 				_enabled = true;
 			}

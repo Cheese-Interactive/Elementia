@@ -59,8 +59,11 @@ public class PlayerController : EntityController {
 
     private new void Update() {
 
-        // player is dead, no need to update
-        if (isDead)
+        if (Input.GetKeyDown(KeyCode.Escape)) // toggle game pause
+            gameManager.TogglePause();
+
+        // player is dead or game is paused, no need to update
+        if (isDead || gameManager.IsPaused())
             return;
 
         base.Update();
