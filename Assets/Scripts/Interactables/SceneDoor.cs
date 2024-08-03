@@ -1,28 +1,26 @@
-using MoreMountains.Tools;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class SceneDoor : Door {
 
-    [Header("References")]
-    private GameManager gameManager;
-
     [Header("Scene")]
     public string sceneName;
 
-    private void Start() {
+    protected new void Start() {
 
-        gameManager = FindObjectOfType<GameManager>();
+        base.Start();
 
         if (string.IsNullOrEmpty(sceneName) || SceneManager.GetSceneByName(sceneName) == null) // make sure scene name is valid
             Debug.LogError("Scene name is not valid " + name);
 
     }
 
-    public override void Interact() {
+    public override bool TryInteract() {
 
-        base.Interact();
+        if (!base.TryInteract()) return false; // return if door cannot be opened
+
         gameManager.LoadScene(sceneName);
+        return true;
 
     }
 }

@@ -171,7 +171,7 @@ public class PlayerController : EntityController {
 
                 if (interactable) { // make sure object is interactable
 
-                    interactable.Interact(); // interact with object
+                    interactable.TryInteract(); // interact with object
                     break;
 
                 }

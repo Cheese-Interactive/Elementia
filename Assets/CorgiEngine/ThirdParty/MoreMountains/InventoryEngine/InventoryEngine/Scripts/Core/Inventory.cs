@@ -377,16 +377,18 @@ namespace MoreMountains.InventoryEngine
 		/// </summary>
 		/// <returns><c>true</c>, if item was removed, <c>false</c> otherwise.</returns>
 		/// <param name="itemToRemove">Item to remove.</param>
-		public virtual bool RemoveItem(int i, int quantity)
+		public virtual bool RemoveItem(int i, int quantity, bool showWarnings = true)
 		{
 			if (i < 0 || i >= Content.Length)
 			{
-				Debug.LogWarning("InventoryEngine : you're trying to remove an item from an invalid index.");
+				if (showWarnings)
+					Debug.LogWarning("InventoryEngine : you're trying to remove an item from an invalid index.");
 				return false;
 			}
-			if (InventoryItem.IsNull(Content[i]))
+			if (InventoryItem.IsNull(Content[i])) 
 			{
-				Debug.LogWarning("InventoryEngine : you're trying to remove from an empty slot.");
+                if (showWarnings)
+                    Debug.LogWarning("InventoryEngine : you're trying to remove from an empty slot.");
 				return false;
 			}
 
@@ -412,17 +414,19 @@ namespace MoreMountains.InventoryEngine
 		/// <param name="itemID"></param>
 		/// <param name="quantity"></param>
 		/// <returns></returns>
-		public virtual bool RemoveItemByID(string itemID, int quantity)
+		public virtual bool RemoveItemByID(string itemID, int quantity, bool showWarnings = true)
 		{
 			if (quantity < 1)
 			{
-				Debug.LogWarning("InventoryEngine : you're trying to remove an incorrect quantity ("+quantity+") from your inventory.");
+                if (showWarnings)
+                    Debug.LogWarning("InventoryEngine : you're trying to remove an incorrect quantity ("+quantity+") from your inventory.");
 				return false;
 			}
             
 			if (itemID == null || itemID == "")
 			{
-				Debug.LogWarning("InventoryEngine : you're trying to remove an item but itemID hasn't been specified.");
+                if (showWarnings)
+                    Debug.LogWarning("InventoryEngine : you're trying to remove an item but itemID hasn't been specified.");
 				return false;
 			}
 

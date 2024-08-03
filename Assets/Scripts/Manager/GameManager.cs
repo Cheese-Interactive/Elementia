@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour {
     [Header("Collectible Inventory")]
     [SerializeField] private int collectibleRows;
     [SerializeField] private int collectibleColumns;
+    private Inventory keyInventory;
     private InventoryDisplay collectibleInventoryDisplay;
 
     [Header("Key Inventory")]
@@ -35,6 +36,7 @@ public class GameManager : MonoBehaviour {
 
         // get the collectible inventory display & key inventory display
         collectibleInventoryDisplay = gameCore.GetCollectibleInventoryDisplay();
+        keyInventory = gameCore.GetKeyInventory();
         keyInventoryDisplay = gameCore.GetKeyInventoryDisplay();
 
         // get all required & key collectibles
@@ -71,6 +73,8 @@ public class GameManager : MonoBehaviour {
         isCooldownsEnabled = true; // enable cooldowns by default
 
     }
+
+    public bool TryRemoveKey() => keyInventory.RemoveItem(keyInventory.NumberOfFilledSlots - 1, 1, false); // remove key if possible without showing warnings
 
     public void ResetAllResettables(float resetDuration) {
 

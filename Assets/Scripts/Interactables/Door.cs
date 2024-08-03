@@ -3,13 +3,19 @@ using UnityEngine;
 public class Door : Interactable {
 
     [Header("References")]
-    private Animator animator;
+    protected GameManager gameManager;
 
-    private void Start() => animator = GetComponent<Animator>();
+    protected void Start() => gameManager = FindObjectOfType<GameManager>();
 
-    public override void Interact() {
+    public override bool TryInteract() {
 
-        print("Opening door...");
+        bool keyRemoved = gameManager.TryRemoveKey();
+
+        // TODO: add door opening animation here
+        if (keyRemoved)
+            Debug.Log("Key removed.");
+
+        return keyRemoved;
 
     }
 }

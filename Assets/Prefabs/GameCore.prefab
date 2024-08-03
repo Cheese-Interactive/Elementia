@@ -460,7 +460,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60a174a2dea41c243b0e1c7721def2c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UUID: 601b2a84-a24b-40c8-9dae-f897df32b9cf
+  m_UUID: cb7a3644-2ac9-4b77-af33-027c040331ff
 --- !u!1 &867019409514360499
 GameObject:
   m_ObjectHideFlags: 0
@@ -587,6 +587,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   collectibleInventoryDisplay: {fileID: 2155200155271703298}
+  keyInventory: {fileID: 5939521045866148279}
   keyInventoryDisplay: {fileID: 6720565074409211535}
 --- !u!1 &1161608660580208155
 GameObject:
@@ -2847,7 +2848,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60a174a2dea41c243b0e1c7721def2c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UUID: e9805ed8-f4c2-41af-a9f2-43195b5aa7f5
+  m_UUID: 7c67416e-b9e7-43ae-9e6b-7669f2340710
 --- !u!1 &5524021902108215322
 GameObject:
   m_ObjectHideFlags: 0
@@ -4092,7 +4093,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60a174a2dea41c243b0e1c7721def2c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UUID: 4a273198-1a57-4b95-803a-b9678e1c9499
+  m_UUID: b0f70d7e-30a5-4923-942a-4e69985acbea
 --- !u!1 &7552223720914610799
 GameObject:
   m_ObjectHideFlags: 0
