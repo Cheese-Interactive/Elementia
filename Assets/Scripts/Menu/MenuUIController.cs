@@ -52,7 +52,7 @@ public class MenuUIController : MonoBehaviour {
 
     }
 
-    private void Play() => MMSceneLoadingManager.LoadScene(gameSceneName);
+    private void Play() => MMSceneLoadingManager.LoadScene(gameSceneName); // no game manager exists in this scene, no need to use that method
 
     private void ResetData() {
 

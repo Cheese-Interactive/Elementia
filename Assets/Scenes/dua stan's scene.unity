@@ -832,7 +832,6 @@ MonoBehaviour:
   UniqueIDSuffix: 
   _guid: dua stan's scene-Door-caeb603b-4bd4-477d-bfe7-14baff3e2e90
   GenerateGuidButton: 0
-  maxInteractions: 0
   sceneName: arianas
 --- !u!61 &41641635
 BoxCollider2D:

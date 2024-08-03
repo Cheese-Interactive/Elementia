@@ -130,7 +130,7 @@ public class GameManager : MonoBehaviour {
 
     public void LoadScene(string sceneName) {
 
-        dataManager.SaveData();
+        dataManager.SaveData(); // IMPORTANT: save data before loading a new scene
         MMSceneLoadingManager.LoadScene(sceneName);
 
     }

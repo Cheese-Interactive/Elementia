@@ -20,18 +20,10 @@ public class SceneDoor : Interactable {
 
     public override void TryInteract() {
 
-        if (isInteracted) {
+        if (isInteracted || gameManager.TryRemoveKey()) { // make sure door is already open or key can be removed
 
             isInteracted = true;
-            gameManager.LoadScene(sceneName); // load scene if door is already open
-            return;
-
-        }
-
-        if (gameManager.TryRemoveKey()) { // remove key if key is available
-
-            isInteracted = true;
-            gameManager.LoadScene(sceneName);
+            gameManager.LoadScene(sceneName); // load scene
             return;
 
         }
