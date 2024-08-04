@@ -1391,9 +1391,9 @@ MonoBehaviour:
   LoadingProgressBar: {fileID: 485648907}
   LoadingAnimation: {fileID: 1383385375}
   LoadingCompleteAnimation: {fileID: 1858372246}
-  StartFadeDuration: 1
-  ProgressBarSpeed: 2
+  StartFadeDuration: 2.5
   ExitFadeDuration: 1
+  ProgressBarSpeed: 2
   LoadCompleteDelay: 0.5
 --- !u!4 &1904868560
 Transform:

@@ -16609,7 +16609,6 @@ GameObject:
   - component: {fileID: 8354201413464159754}
   - component: {fileID: 10088441257559901}
   - component: {fileID: -818257627329327814}
-  - component: {fileID: 2597575006400095669}
   - component: {fileID: 6298585181428920326}
   - component: {fileID: -1803779125964603725}
   - component: {fileID: 7161239672520688488}
@@ -16749,7 +16748,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.046875}
+  m_Offset: {x: 0, y: -0.03125}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -16760,7 +16759,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.4375, y: 0.84375}
+  m_Size: {x: 0.4375, y: 0.9375}
   m_EdgeRadius: 0
 --- !u!50 &4077020468999200023
 Rigidbody2D:
@@ -17148,34 +17147,6 @@ MonoBehaviour:
   PushWhenGroundedOnly: 1
   DetectionRaycastLength: 0.2
   MinimumPushSpeed: 0.05
---- !u!114 &2597575006400095669
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4900122409563817483}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f59e06702d6be45948936bd909420d61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  AbilityStartFeedbacks: {fileID: 0}
-  AbilityStopFeedbacks: {fileID: 0}
-  AbilityPermitted: 1
-  BlockingMovementStates: 
-  BlockingConditionStates: 
-  BlockingWeaponStates: 
-  MuteSfxTrackSounds: 1
-  MuteUITrackSounds: 0
-  MuteMusicTrackSounds: 0
-  MuteMasterTrackSounds: 0
-  OnPause:
-    m_PersistentCalls:
-      m_Calls: []
-  OnUnpause:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &6298585181428920326
 MonoBehaviour:
   m_ObjectHideFlags: 0
