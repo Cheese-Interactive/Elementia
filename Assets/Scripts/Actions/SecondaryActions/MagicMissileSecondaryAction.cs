@@ -16,9 +16,8 @@ public class MagicMissileSecondaryAction : SecondaryAction {
     [SerializeField] private float resetWaitDuration;
     private Coroutine resetCoroutine;
 
-    [Header("MM Feedbacks")]
+    [Header("Feedback")]
     [SerializeField] private MMF_Player onUseFeedback;
-    [SerializeField] private MMF_Player onResetFeedback;
 
     private void Start() {
 
@@ -51,8 +50,6 @@ public class MagicMissileSecondaryAction : SecondaryAction {
 
         isResetting = true;
 
-        onUseFeedback.PlayFeedbacks();
-
         prevWeapon = playerController.GetCurrentWeapon(); // store previous weapon
 
         primaryAction.enabled = false; // disable primary action
@@ -62,13 +59,12 @@ public class MagicMissileSecondaryAction : SecondaryAction {
 
         anim.SetBool("isResetting", true); // start animation
 
+        onUseFeedback.PlayFeedbacks(); // play use sound
         resetCoroutine = StartCoroutine(HandleReset());
 
     }
 
     private IEnumerator HandleReset() {
-
-        onResetFeedback.PlayFeedbacks();
 
         gameManager.ResetAllResettables(resetDuration); // start reset all resettables
         yield return new WaitForSeconds(resetDuration); // wait for reset duration
@@ -80,12 +76,12 @@ public class MagicMissileSecondaryAction : SecondaryAction {
 
     private void StopReset(bool resetCompleted) {
 
+        if (!isResetting) return; // make sure player is resetting
+
         if (resetCoroutine != null) StopCoroutine(resetCoroutine); // stop reset coroutine if it is running
         resetCoroutine = null;
 
         anim.SetBool("isResetting", false); // stop animation
-
-        onResetFeedback.PlayFeedbacks();
 
         playerController.EnableCoreScripts(); // enable player core scripts
         playerController.SetCharacterEnabled(true); // enable player character (to allow corgi built in animations to run)
@@ -98,6 +94,13 @@ public class MagicMissileSecondaryAction : SecondaryAction {
         isResetting = false;
 
         StartCooldown(); // start cooldown
+
+    }
+
+    public override void OnDeath() {
+
+        cooldownTimer = 0f; // reset cooldown timer
+        StopReset(false); // stop reset if resetting (without completion)
 
     }
 

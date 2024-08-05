@@ -12,11 +12,11 @@ public class IceSecondaryAction : SecondaryAction {
     [SerializeField][Tooltip("Must be >= particle duration")] private float slowDuration; // in order to prevent overlapping blasts
     [SerializeField] private LayerMask waterMask;
 
+    [Header("Feedback")]
+    [SerializeField] private MMF_Player onUseFeedback;
+
     [Header("Debug")]
     [SerializeField] private Color iceBlastVisualizerColor;
-
-    [Header("MM Feedbacks")]
-    [SerializeField] private MMF_Player onUseFeedback;
 
     private new void Awake() {
 
@@ -41,8 +41,6 @@ public class IceSecondaryAction : SecondaryAction {
         iceBlastParticles.gameObject.SetActive(true); // show ice blast particles (disables itself after duration) | to modify duration check particle settings
         iceBlastParticles.transform.localScale = new Vector2(blastRadius, blastRadius); // scale particles to match blast radius
 
-        onUseFeedback.PlayFeedbacks();
-
         // TODO: possibly make the position the wand tip
         Vector3Int centerCell = tilemapManager.WaterWorldToCell(transform.position); // get center cell
 
@@ -57,6 +55,7 @@ public class IceSecondaryAction : SecondaryAction {
             }
         }
 
+        onUseFeedback.PlayFeedbacks(); // play use sound
         StartCooldown(); // start cooldown
 
     }

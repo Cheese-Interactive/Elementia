@@ -59,7 +59,7 @@ public class ElectricWeapon : MonoBehaviour {
                 entityForce *= entityForceMultiplier; // apply multiplier to entity force
                 objectForce *= objectForceMultiplier; // apply multiplier to object force
 
-                hitObject.GetComponent<CorgiController>()?.SetForce(entityForce); // add force to entity
+                hitObject.GetComponent<CorgiController>()?.AddForce(entityForce); // add force to entity
 
                 Rigidbody2D objectRb = hitObject.GetComponent<Rigidbody2D>();
 

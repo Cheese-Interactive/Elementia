@@ -10,7 +10,7 @@ public class WindSecondaryAction : SecondaryAction {
     [Header("Settings")]
     [SerializeField] private float playerWindForce;
 
-    [Header("MM Feedbacks")]
+    [Header("Feedback")]
     [SerializeField] private MMF_Player onUseFeedback;
 
     private void Start() => corgiController = GetComponent<CorgiController>();
@@ -21,9 +21,9 @@ public class WindSecondaryAction : SecondaryAction {
 
         if (!canUseInAir && !playerController.IsGrounded()) return; // make sure player is grounded if required
 
-        corgiController.SetForce(((Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition) - (Vector2)transform.position).normalized * playerWindForce);
-        onUseFeedback.PlayFeedbacks();
+        corgiController.AddForce(((Vector2) Camera.main.ScreenToWorldPoint(Input.mousePosition) - (Vector2) transform.position).normalized * playerWindForce); // add force to player
 
+        onUseFeedback.PlayFeedbacks(); // play use sound
         StartCooldown(); // start cooldown
 
     }

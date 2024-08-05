@@ -10,6 +10,8 @@ public class KineticSecondaryAction : SecondaryAction {
     private Weapon prevWeapon;
     private Coroutine weaponSwitchCoroutine;
 
+    // feedbacks done in weapon
+
     private void Start() => primaryAction = GetComponent<KineticPrimaryAction>();
 
     public override void OnTriggerRegular() {

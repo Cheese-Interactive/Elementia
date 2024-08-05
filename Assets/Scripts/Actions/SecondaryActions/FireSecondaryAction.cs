@@ -1,4 +1,5 @@
 using MoreMountains.CorgiEngine;
+using MoreMountains.Feedbacks;
 using System.Collections;
 using UnityEngine;
 
@@ -21,6 +22,9 @@ public class FireSecondaryAction : SecondaryAction {
     [Header("Duration")]
     [SerializeField] private float maxDuration;
     private Coroutine durationCoroutine;
+
+    [Header("Feedback")]
+    [SerializeField] private MMF_Player onUseFeedback;
 
     public override void OnTriggerHold(bool startHold) {
 
@@ -60,6 +64,8 @@ public class FireSecondaryAction : SecondaryAction {
 
     private void UnequipFlamethrower() {
 
+        if (!isFlamethrowerEquipped) return; // make sure flamethrower is equipped
+
         if (durationCoroutine != null) StopCoroutine(durationCoroutine); // stop max duration coroutine as flamethrower is being unequipped
         durationCoroutine = null;
 
@@ -67,6 +73,7 @@ public class FireSecondaryAction : SecondaryAction {
         charWeaponHandler.ChangeWeapon(prevWeapon, prevWeapon.WeaponID); // revert back to previous weapon
         isFlamethrowerEquipped = false;
 
+        onUseFeedback.StopFeedbacks(); // stop use sound
         StartCooldown(); // start cooldown
 
     }
@@ -74,6 +81,7 @@ public class FireSecondaryAction : SecondaryAction {
     private IEnumerator HandleMaxDuration() {
 
         float timer = 0f;
+        onUseFeedback.PlayFeedbacks(); // play use sound
 
         while (timer < maxDuration) {
 
@@ -82,6 +90,7 @@ public class FireSecondaryAction : SecondaryAction {
 
         }
 
+        onUseFeedback.StopFeedbacks(); // stop use sound
         UnequipFlamethrower(); // unequip flamethrower after max duration
         durationCoroutine = null;
 
@@ -90,14 +99,8 @@ public class FireSecondaryAction : SecondaryAction {
     public override void OnDeath() {
 
         cooldownTimer = 0f; // reset cooldown timer
+        UnequipFlamethrower(); // unequip flamethrower if equipped
 
-        // if flamethrower is equipped, unequip it
-        if (isFlamethrowerEquipped) {
-
-            charWeaponHandler.ChangeWeapon(prevWeapon, prevWeapon.WeaponID);
-            isFlamethrowerEquipped = false;
-
-        }
     }
 
     public override bool IsRegularAction() => false;

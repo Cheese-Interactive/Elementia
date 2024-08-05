@@ -47,7 +47,7 @@ public class Flamethrower : MonoBehaviour {
             // handle entity force
             entityForce.x *= entityFlamethrowerForce.x; // increase horizontal push force
             entityForce.y *= entityFlamethrowerForce.y; // increase vertical push force
-            collision.gameObject.GetComponent<CorgiController>()?.SetForce(entityForce); // push entity away from shooter
+            collision.gameObject.GetComponent<CorgiController>()?.AddForce(entityForce); // push entity away from shooter
 
             // handle object force
             objectForce.x *= objectFlamethrowerForce.x; // increase horizontal pull force

@@ -52,7 +52,7 @@ public class NatureSecondaryAction : SecondaryAction {
 
             Instantiate(vinePrefab, tileWorldPos, Quaternion.identity); // spawn vine
 
-            onTickFeedbacks[Random.Range(0, onTickFeedbacks.Length - 1)].PlayFeedbacks(); //play a random ticking noise
+            onTickFeedbacks[Random.Range(0, onTickFeedbacks.Length - 1)].PlayFeedbacks(); // play random ticking noise
 
             yield return new WaitForSeconds(tileWaitDuration);
 

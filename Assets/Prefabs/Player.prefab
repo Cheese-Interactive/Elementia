@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4011245218159902857}
   - component: {fileID: 5722239372573110190}
   m_Layer: 9
-  m_Name: NatureSecondary
+  m_Name: NatureSecondary1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -140,7 +140,7 @@ MonoBehaviour:
       data:
         Active: 1
         UniqueID: 1251832534
-        Label: Corgi Engine Sound
+        Label: Use1
         ChannelMode: 0
         Channel: 0
         MMChannelDefinition: {fileID: 0}
@@ -209,7 +209,7 @@ MonoBehaviour:
           ButtonText: 
         Owner: {fileID: 5722239372573110190}
         DebugActive: 0
-        SoundFX: {fileID: 8300000, guid: 25b8bcb805c60a448a5fbb10cc742098, type: 3}
+        SoundFX: {fileID: 8300000, guid: fde97bdebf70f4f4eb2ff23aeca3b9a4, type: 3}
         Loop: 0
 --- !u!1 &922261110217246507
 GameObject:
@@ -241,39 +241,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5770548812843838976}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1361054293296947868
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1102610369170219582}
-  m_Layer: 9
-  m_Name: MagicMissile
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1102610369170219582
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1361054293296947868}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 6813509711959897926}
-  - {fileID: 430575658044570475}
-  m_Father: {fileID: 5104935459601365514}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1370456802540718778
 GameObject:
@@ -307,12 +274,13 @@ Transform:
   - {fileID: 4331877612719541082}
   - {fileID: 5830715132302904097}
   - {fileID: 4890235427668884221}
-  - {fileID: 1102610369170219582}
+  - {fileID: 6813509711959897926}
   - {fileID: 799562679070036124}
+  - {fileID: 5748270789824927381}
   - {fileID: 7678189557239804579}
   - {fileID: 7643223154079567959}
-  - {fileID: 4997632050365125716}
   - {fileID: 1683919040464600484}
+  - {fileID: 4997632050365125716}
   m_Father: {fileID: 6028263854266632344}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1460629380776302327
@@ -5391,7 +5359,7 @@ GameObject:
   - component: {fileID: 8153437610856579360}
   - component: {fileID: 9118702181185998274}
   m_Layer: 9
-  m_Name: ELectricSecondaryStart
+  m_Name: Start
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5520,7 +5488,7 @@ MonoBehaviour:
       data:
         Active: 1
         UniqueID: 1251832534
-        Label: Corgi Engine Sound
+        Label: UseStart
         ChannelMode: 0
         Channel: 0
         MMChannelDefinition: {fileID: 0}
@@ -5731,7 +5699,7 @@ MonoBehaviour:
       data:
         Active: 1
         UniqueID: 1251832534
-        Label: Corgi Engine Sound
+        Label: Use
         ChannelMode: 0
         Channel: 0
         MMChannelDefinition: {fileID: 0}
@@ -10663,7 +10631,7 @@ GameObject:
   - component: {fileID: 3803689170207621207}
   - component: {fileID: 6996654002666817296}
   m_Layer: 9
-  m_Name: NatureSecondary (1)
+  m_Name: NatureSecondary2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10792,7 +10760,7 @@ MonoBehaviour:
       data:
         Active: 1
         UniqueID: 1251832534
-        Label: Corgi Engine Sound
+        Label: Use2
         ChannelMode: 0
         Channel: 0
         MMChannelDefinition: {fileID: 0}
@@ -10861,7 +10829,7 @@ MonoBehaviour:
           ButtonText: 
         Owner: {fileID: 6996654002666817296}
         DebugActive: 0
-        SoundFX: {fileID: 8300000, guid: 3abe4a4116bdd2c4cabffe92bd26497c, type: 3}
+        SoundFX: {fileID: 8300000, guid: cdd9739f54349c147a7e1104a97b2f10, type: 3}
         Loop: 0
 --- !u!1 &3202094593762103047
 GameObject:
@@ -11003,7 +10971,7 @@ MonoBehaviour:
       data:
         Active: 1
         UniqueID: 1251832534
-        Label: Corgi Engine Sound
+        Label: Use
         ChannelMode: 0
         Channel: 0
         MMChannelDefinition: {fileID: 0}
@@ -11214,7 +11182,7 @@ MonoBehaviour:
       data:
         Active: 1
         UniqueID: 1251832534
-        Label: Corgi Engine Sound
+        Label: Use
         ChannelMode: 0
         Channel: 0
         MMChannelDefinition: {fileID: 0}
@@ -11295,7 +11263,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1683919040464600484}
   m_Layer: 9
-  m_Name: Nature
+  m_Name: NatureSecondary
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11332,7 +11300,7 @@ GameObject:
   - component: {fileID: 4841156546139432325}
   - component: {fileID: 7225833453597756708}
   m_Layer: 9
-  m_Name: NatureSecondary (2)
+  m_Name: NatureSecondary3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11461,7 +11429,7 @@ MonoBehaviour:
       data:
         Active: 1
         UniqueID: 1251832534
-        Label: Corgi Engine Sound
+        Label: Use3
         ChannelMode: 0
         Channel: 0
         MMChannelDefinition: {fileID: 0}
@@ -16387,7 +16355,7 @@ GameObject:
   - component: {fileID: 4331877612719541082}
   - component: {fileID: 3990226344942361064}
   m_Layer: 9
-  m_Name: PlayerTakeDamage
+  m_Name: TakeDamage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16516,7 +16484,7 @@ MonoBehaviour:
       data:
         Active: 1
         UniqueID: 1251832534
-        Label: Corgi Engine Sound
+        Label: TakeDamage
         ChannelMode: 0
         Channel: 0
         MMChannelDefinition: {fileID: 0}
@@ -17589,7 +17557,6 @@ MonoBehaviour:
   resetDuration: 1.2
   resetWaitDuration: 0.2
   onUseFeedback: {fileID: 7644175962019327701}
-  onResetFeedback: {fileID: 986277763403924550}
 --- !u!114 &8881875236129953771
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17611,8 +17578,8 @@ MonoBehaviour:
   waterMask:
     serializedVersion: 2
     m_Bits: 16
-  iceBlastVisualizerColor: {r: 0, g: 1, b: 1, a: 0.49019608}
   onUseFeedback: {fileID: 219794725582615051}
+  iceBlastVisualizerColor: {r: 0, g: 1, b: 1, a: 0.49019608}
 --- !u!114 &-8039291345281199097
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17637,6 +17604,7 @@ MonoBehaviour:
   burnTicks: 12
   burnDuration: 3
   maxDuration: Infinity
+  onUseFeedback: {fileID: 5009358021737474999}
 --- !u!114 &-5756287154290932317
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17740,7 +17708,7 @@ MonoBehaviour:
   electricDuration: 5
   electricDamage: 15
   electricDamageInvincibilityDuration: 0.25
-  onActivateFeedback: {fileID: 9118702181185998274}
+  onUseFeedback: {fileID: 9118702181185998274}
   onEndFeedback: {fileID: 1258330564990990074}
 --- !u!114 &230583099580174233
 MonoBehaviour:
@@ -17868,7 +17836,7 @@ GameObject:
   - component: {fileID: 5830715132302904097}
   - component: {fileID: 758001101984015262}
   m_Layer: 9
-  m_Name: PlayerDie
+  m_Name: Death
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17997,7 +17965,7 @@ MonoBehaviour:
       data:
         Active: 1
         UniqueID: 1251832534
-        Label: Corgi Engine Sound
+        Label: Death
         ChannelMode: 0
         Channel: 0
         MMChannelDefinition: {fileID: 0}
@@ -18078,7 +18046,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4997632050365125716}
   m_Layer: 9
-  m_Name: Electric
+  m_Name: ElectricSecondary
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18097,8 +18065,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4062821579177639636}
   - {fileID: 8153437610856579360}
+  - {fileID: 4062821579177639636}
   m_Father: {fileID: 5104935459601365514}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5726229559786236287
@@ -23012,7 +22980,7 @@ GameObject:
   - component: {fileID: 4890235427668884221}
   - component: {fileID: 6803300935181172869}
   m_Layer: 9
-  m_Name: PlayerLand
+  m_Name: Land
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23141,7 +23109,7 @@ MonoBehaviour:
       data:
         Active: 1
         UniqueID: 1251832534
-        Label: Corgi Engine Sound
+        Label: Land
         ChannelMode: 0
         Channel: 0
         MMChannelDefinition: {fileID: 0}
@@ -23212,7 +23180,7 @@ MonoBehaviour:
         DebugActive: 0
         SoundFX: {fileID: 8300000, guid: 1899882633f6ad44a901da0e6bbed0b7, type: 3}
         Loop: 0
---- !u!1 &6740010211444452963
+--- !u!1 &6214663961198120693
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -23220,37 +23188,37 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 430575658044570475}
-  - component: {fileID: 986277763403924550}
+  - component: {fileID: 5748270789824927381}
+  - component: {fileID: 5009358021737474999}
   m_Layer: 9
-  m_Name: MagicMissileSecondaryEnd
+  m_Name: FireSecondary
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &430575658044570475
+--- !u!4 &5748270789824927381
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6740010211444452963}
+  m_GameObject: {fileID: 6214663961198120693}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1102610369170219582}
+  m_Father: {fileID: 5104935459601365514}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &986277763403924550
+--- !u!114 &5009358021737474999
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6740010211444452963}
+  m_GameObject: {fileID: 6214663961198120693}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6da43522623d4704e979466dc7650b65, type: 3}
@@ -23352,7 +23320,7 @@ MonoBehaviour:
       data:
         Active: 1
         UniqueID: 1251832534
-        Label: Corgi Engine Sound
+        Label: Use
         ChannelMode: 0
         Channel: 0
         MMChannelDefinition: {fileID: 0}
@@ -23419,10 +23387,10 @@ MonoBehaviour:
         RemapRangeFalloff: {x: 0, y: 1}
         AutomaticShakerSetupButton:
           ButtonText: 
-        Owner: {fileID: 986277763403924550}
+        Owner: {fileID: 5009358021737474999}
         DebugActive: 0
-        SoundFX: {fileID: 8300000, guid: c9be64f54b4462149a1ecbe64c178389, type: 3}
-        Loop: 0
+        SoundFX: {fileID: 8300000, guid: 26f7999acbbf09d40809af847ae3f3cd, type: 3}
+        Loop: 1
 --- !u!1 &6800810178875950185
 GameObject:
   m_ObjectHideFlags: 0
@@ -23570,7 +23538,7 @@ GameObject:
   - component: {fileID: 4062821579177639636}
   - component: {fileID: 1258330564990990074}
   m_Layer: 9
-  m_Name: ElectricSecondaryEnd
+  m_Name: End
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23699,7 +23667,7 @@ MonoBehaviour:
       data:
         Active: 1
         UniqueID: 1251832534
-        Label: Corgi Engine Sound
+        Label: UseEnd
         ChannelMode: 0
         Channel: 0
         MMChannelDefinition: {fileID: 0}
@@ -28827,7 +28795,7 @@ GameObject:
   - component: {fileID: 6139374239567227719}
   - component: {fileID: 2574654672330722744}
   m_Layer: 9
-  m_Name: NatureSecondary (3)
+  m_Name: NatureSecondary4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28956,7 +28924,7 @@ MonoBehaviour:
       data:
         Active: 1
         UniqueID: 1251832534
-        Label: Corgi Engine Sound
+        Label: Use4
         ChannelMode: 0
         Channel: 0
         MMChannelDefinition: {fileID: 0}
@@ -29025,7 +28993,7 @@ MonoBehaviour:
           ButtonText: 
         Owner: {fileID: 2574654672330722744}
         DebugActive: 0
-        SoundFX: {fileID: 8300000, guid: cdd9739f54349c147a7e1104a97b2f10, type: 3}
+        SoundFX: {fileID: 8300000, guid: 3abe4a4116bdd2c4cabffe92bd26497c, type: 3}
         Loop: 0
 --- !u!1 &9014540847344267486
 GameObject:
@@ -29038,7 +29006,7 @@ GameObject:
   - component: {fileID: 6813509711959897926}
   - component: {fileID: 7644175962019327701}
   m_Layer: 9
-  m_Name: MagicMissileSecondaryStart
+  m_Name: MagicMissileSecondary
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29057,7 +29025,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1102610369170219582}
+  m_Father: {fileID: 5104935459601365514}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7644175962019327701
 MonoBehaviour:
@@ -29167,7 +29135,7 @@ MonoBehaviour:
       data:
         Active: 1
         UniqueID: 1251832534
-        Label: Corgi Engine Sound
+        Label: Use
         ChannelMode: 0
         Channel: 0
         MMChannelDefinition: {fileID: 0}
@@ -29249,7 +29217,7 @@ GameObject:
   - component: {fileID: 5008204049979711885}
   - component: {fileID: 6698593178663374970}
   m_Layer: 9
-  m_Name: NatureSecondary (4)
+  m_Name: NatureSecondary5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29378,7 +29346,7 @@ MonoBehaviour:
       data:
         Active: 1
         UniqueID: 1251832534
-        Label: Corgi Engine Sound
+        Label: Use5
         ChannelMode: 0
         Channel: 0
         MMChannelDefinition: {fileID: 0}
@@ -29447,5 +29415,5 @@ MonoBehaviour:
           ButtonText: 
         Owner: {fileID: 6698593178663374970}
         DebugActive: 0
-        SoundFX: {fileID: 8300000, guid: fde97bdebf70f4f4eb2ff23aeca3b9a4, type: 3}
+        SoundFX: {fileID: 8300000, guid: 25b8bcb805c60a448a5fbb10cc742098, type: 3}
         Loop: 0

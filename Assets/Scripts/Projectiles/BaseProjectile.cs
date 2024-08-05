@@ -53,7 +53,7 @@ public class BaseProjectile : MonoBehaviour {
             entityForce *= entityForceMultiplier; // apply multiplier to entity force
             objectForce *= objectForceMultiplier; // apply multiplier to object force
 
-            collision.gameObject.GetComponent<CorgiController>()?.SetForce(entityForce); // add force to entity
+            collision.gameObject.GetComponent<CorgiController>()?.AddForce(entityForce); // add force to entity
 
             Rigidbody2D objectRb = collision.gameObject.GetComponent<Rigidbody2D>();
 
