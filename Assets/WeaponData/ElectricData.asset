@@ -15,5 +15,4 @@ MonoBehaviour:
   weaponColor: {r: 0.80784315, g: 0.6745098, b: 0, a: 1}
   cooldownColor: {r: 0.4716981, g: 0.39384502, b: 0, a: 0.84313726}
   primaryIcon: {fileID: 21300000, guid: 9d6ce95b5362f0548b0598eb87754805, type: 3}
-  secondaryIcon: {fileID: 7376842627898150627, guid: 6214e05198a53e14781b5cc2a87b7663,
-    type: 3}
+  secondaryIcon: {fileID: 21300000, guid: da209143e7b672a409cc36a71f34eb24, type: 3}

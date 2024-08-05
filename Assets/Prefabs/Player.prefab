@@ -17573,7 +17573,7 @@ MonoBehaviour:
   isAuto: 0
   canUseInAir: 1
   iceBlastParticles: {fileID: 2345786623437224621}
-  blastRadius: 2
+  blastRadius: 3
   slowDuration: 12
   waterMask:
     serializedVersion: 2
