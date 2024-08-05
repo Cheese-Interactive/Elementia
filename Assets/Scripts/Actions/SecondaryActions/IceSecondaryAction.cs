@@ -45,12 +45,12 @@ public class IceSecondaryAction : SecondaryAction {
         Vector3Int centerCell = tilemapManager.WaterWorldToCell(transform.position); // get center cell
 
         // loop through bounds
-        for (int x = -blastRadius; x <= blastRadius; x++) {
+        for (int x = -blastRadius * 2; x <= blastRadius * 2; x++) {
 
-            for (int y = -blastRadius; y <= blastRadius; y++) {
+            for (int y = -blastRadius * 2; y <= blastRadius * 2; y++) {
 
                 Vector3Int tilePos = centerCell + new Vector3Int(x, y, 0);
-                tilemapManager.Freeze(transform.position, tilePos, slowDuration, blastRadius); // freeze water tile
+                tilemapManager.Freeze(transform.position, tilePos, slowDuration, blastRadius); // freeze water tile (radius is checked in this method)
 
             }
         }

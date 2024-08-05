@@ -2062,6 +2062,7 @@ MonoBehaviour:
   waterTileBottom: {fileID: 11400000, guid: af32e7cbb65e2f24d8a1913a8c98522d, type: 2}
   iceTileTop: {fileID: 11400000, guid: ff3a6da3e7e74ca43a8907e67aa4385f, type: 2}
   iceTileBottom: {fileID: 11400000, guid: 9601bb1e629c1e646aa872d19ce36988, type: 2}
+  icePlaceholderTile: {fileID: 11400000, guid: 9f571564e7d89a646848146a79d914f2, type: 2}
 --- !u!1 &900480012
 GameObject:
   m_ObjectHideFlags: 0

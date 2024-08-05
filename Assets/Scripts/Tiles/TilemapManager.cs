@@ -14,6 +14,7 @@ public class TilemapManager : MonoBehaviour {
     [SerializeField] private TileBase waterTileBottom;
     [SerializeField] private TileBase iceTileTop;
     [SerializeField] private TileBase iceTileBottom;
+    [SerializeField] private TileBase icePlaceholderTile;
 
     [Header("Freeze")]
     private Dictionary<Vector3Int, WaterTile> waterTiles;
@@ -37,7 +38,7 @@ public class TilemapManager : MonoBehaviour {
 
                     WaterTile waterTile = new GameObject("WaterTile " + tilePos).AddComponent<WaterTile>();
                     waterTile.transform.SetParent(waterTilesParent);
-                    waterTile.Initialize(waterTilemap, tilePos, isTopTile ? waterTileTop : waterTileBottom);
+                    waterTile.Initialize(waterTilemap, tilePos, isTopTile ? waterTileTop : waterTileBottom, icePlaceholderTile);
                     waterTiles.Add(tilePos, waterTile);
 
                     IceTile iceTile = new GameObject("IceTile " + tilePos).AddComponent<IceTile>();
@@ -56,7 +57,7 @@ public class TilemapManager : MonoBehaviour {
 
         Vector3 tileWorldPos = waterTilemap.GetCellCenterWorld(tilePos); // calculate the world position of the tile's center
 
-        if (Vector3.Distance(origin, tileWorldPos) <= radius && waterTiles.ContainsKey(tilePos)) { // check if the tile is within the radius and tile exists in the dictionary
+        if (Vector3.Distance(origin, tileWorldPos) <= radius && waterTiles.ContainsKey(tilePos)) { // check if the tile is within the radius and tile exists in the dictionary (goes by bottom left corner)
 
             waterTiles[tilePos].Freeze(freezeDuration);
             iceTiles[tilePos].Freeze(freezeDuration);
