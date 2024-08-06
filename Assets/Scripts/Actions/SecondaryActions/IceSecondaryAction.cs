@@ -1,4 +1,5 @@
 using MoreMountains.Feedbacks;
+using System.Linq;
 using UnityEngine;
 
 public class IceSecondaryAction : SecondaryAction {
@@ -7,7 +8,6 @@ public class IceSecondaryAction : SecondaryAction {
     private TilemapManager tilemapManager;
 
     [Header("Blast")]
-    [SerializeField] private ParticleSystem iceBlastParticles;
     [SerializeField] private int blastRadius;
     [SerializeField][Tooltip("Must be >= particle duration")] private float slowDuration; // in order to prevent overlapping blasts
     [SerializeField] private LayerMask waterMask;
@@ -22,11 +22,15 @@ public class IceSecondaryAction : SecondaryAction {
 
         base.Awake();
 
-        iceBlastParticles.gameObject.SetActive(false); // ice blast particles are not active by default (done in awake so it runs when game starts)
+        // overlapping blast prevention
+        // this is so weird bruh
 
-        if (iceBlastParticles.main.duration > slowDuration)
-            Debug.LogWarning("Particle duration must be less than or equal to slow duration."); // in order to prevent overlapping blasts
-
+        //get the particle feedback
+        //get the associated particle system
+        //check the liftime of the particles (aka the duration of the effect)
+        //check if its lower than the cooldown (to prevent overlapping blasts)
+        if (onUseFeedback.FeedbacksList.OfType<MMF_Particles>().FirstOrDefault().BoundParticleSystem.main.startLifetime.constantMax < cooldown)
+            Debug.LogWarning("Particle duration must be less than or equal to slow duration.");
     }
 
     private void Start() => tilemapManager = FindObjectOfType<TilemapManager>();
@@ -36,10 +40,6 @@ public class IceSecondaryAction : SecondaryAction {
         if (cooldownTimer > 0f) return; // make sure action is ready
 
         if (!canUseInAir && !playerController.IsGrounded()) return; // make sure player is grounded if required
-
-        iceBlastParticles.gameObject.SetActive(false); // set to false to make sure particle activates on awake
-        iceBlastParticles.gameObject.SetActive(true); // show ice blast particles (disables itself after duration) | to modify duration check particle settings
-        iceBlastParticles.transform.localScale = new Vector2(blastRadius, blastRadius); // scale particles to match blast radius
 
         // TODO: possibly make the position the wand tip
         Vector3Int centerCell = tilemapManager.WaterWorldToCell(transform.position); // get center cell
