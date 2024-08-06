@@ -285,9 +285,9 @@ MonoBehaviour:
   ProjectileSpawnTransform: {fileID: 0}
   ProjectileSpawnOffset: {x: 0.6875, y: 0, z: 0}
   ProjectilesPerShot: 1
-  Spread: {x: 0, y: 0, z: 0}
+  Spread: {x: 0, y: 0, z: 30}
   RotateWeaponOnSpread: 0
-  RandomSpread: 1
+  RandomSpread: 0
   ObjectPooler: {fileID: 0}
   SpawnPosition: {x: 0.6875, y: 0, z: 0}
 --- !u!114 &-3073912655475901205
