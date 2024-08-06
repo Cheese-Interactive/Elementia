@@ -88,6 +88,8 @@ public class GameManager : MonoBehaviour {
 
     }
 
+    private void OnDestroy() => DOTween.KillAll(); // kill all tweens
+
     public void ResetAllResettables(float resetDuration) {
 
         objectsToReset = new List<PhysicsObject>();

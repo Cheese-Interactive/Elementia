@@ -56,6 +56,8 @@ public class MenuManager : MonoBehaviour {
 
     }
 
+    private void OnDestroy() => DOTween.KillAll(); // kill all tweens
+
     private void Play() => LoadScene(gameSceneName);
 
     private void ResetData() {
