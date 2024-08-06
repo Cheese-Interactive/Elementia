@@ -5900,7 +5900,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_RenderMode: 0
   m_MeshDistribution: 0
   m_SortMode: 0
@@ -22143,7 +22143,7 @@ MonoBehaviour:
   AmmoDisplayID: 0
   ContinuousPress: 0
   GettingHitInterruptsAttack: 1
-  CanShootFromLadders: 0
+  CanShootFromLadders: 1
   FaceWeaponDirection: 1
   InvertHorizontalAimWhenWallclinging: 0
   ForceAlwaysShoot: 0

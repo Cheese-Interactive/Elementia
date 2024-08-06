@@ -22,15 +22,10 @@ public class IceSecondaryAction : SecondaryAction {
 
         base.Awake();
 
-        // overlapping blast prevention
-        // this is so weird bruh
-
-        //get the particle feedback
-        //get the associated particle system
-        //check the liftime of the particles (aka the duration of the effect)
-        //check if its lower than the cooldown (to prevent overlapping blasts)
+        // overlapping blast prevention: check the liftime of the particles (the duration of the effect) and check if its lower than the cooldown (to prevent overlapping blasts) [SIMPLIFIED: cooldown >= particle duration to prevent multiple blasts at once]
         if (onUseFeedback.FeedbacksList.OfType<MMF_Particles>().FirstOrDefault().BoundParticleSystem.main.startLifetime.constantMax > cooldown)
-            Debug.LogWarning("Particle duration (lifetime) must be less than or equal to slow duration.");
+            Debug.LogWarning("Particle duration/lifetime must be less than or equal to slow duration.");
+
     }
 
     private void Start() => tilemapManager = FindObjectOfType<TilemapManager>();

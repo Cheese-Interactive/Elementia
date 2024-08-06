@@ -183,6 +183,12 @@ public class PlayerController : EntityController {
 
         #endregion
 
+        #region CLIMBING
+
+        anim.SetBool("isClimbing", charLadder.CurrentLadderClimbingSpeed.magnitude > 0f); // play climbing animation only when player is climbing (to prevent animation from playing player is still on the ladder)
+
+        #endregion
+
     }
 
     private new void OnTriggerEnter2D(Collider2D collision) {

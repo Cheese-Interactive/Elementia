@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 951bea84fde74b440a54902c165ea4f6
+guid: 5a0b34fcb56398c4fa74f857dce27a61
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -81,46 +81,7 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
     buildTarget: Standalone
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: Android
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: Server
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -136,7 +97,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: player_channel_0
+      name: player_climb_0
       rect:
         serializedVersion: 2
         x: 0
@@ -150,14 +111,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 34fc60ea9de8c3841aa0329cd134ca63
-      internalID: 1988490310
+      spriteID: 03088730a42a58345b6f02ce8943e390
+      internalID: -2082902653
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: player_channel_1
+      name: player_climb_1
       rect:
         serializedVersion: 2
         x: 16
@@ -171,14 +132,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2355e697b928b8247818e82a2cedce4e
-      internalID: -562859056
+      spriteID: 622d86e0afcb37448ab155bcc9e040c2
+      internalID: -648206304
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: player_channel_2
+      name: player_climb_2
       rect:
         serializedVersion: 2
         x: 32
@@ -192,14 +153,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1a0c3602dc37ab5459d985d5fa72ff18
-      internalID: 280634334
+      spriteID: 8cc485a63dc6cda448776d0c2fefd2da
+      internalID: -718146803
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: player_channel_3
+      name: player_climb_3
       rect:
         serializedVersion: 2
         x: 48
@@ -213,29 +174,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: fb5e1873149441141ab8ce23e4d14876
-      internalID: -1388234335
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: player_channel_4
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 0
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 932f8895b22fb87479b48350bc333bfb
-      internalID: -1024078170
+      spriteID: 338b996347feb0446bee194dd2902447
+      internalID: 143763408
       vertices: []
       indices: 
       edges: []
@@ -251,11 +191,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      player_channel_0: 1988490310
-      player_channel_1: -562859056
-      player_channel_2: 280634334
-      player_channel_3: -1388234335
-      player_channel_4: -1024078170
+      player_climb_0: -2082902653
+      player_climb_1: -648206304
+      player_climb_2: -718146803
+      player_climb_3: 143763408
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
