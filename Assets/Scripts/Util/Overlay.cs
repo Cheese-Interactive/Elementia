@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Overlay : MonoBehaviour {
@@ -16,9 +14,9 @@ public class Overlay : MonoBehaviour {
 
         // deal with flipped player (gets flipped on sprite renderer)
         if (spriteRenderer.flipX)
-            transform.rotation = Quaternion.Euler(0f, 180f, 0f); // flip overlay
+            transform.localRotation = Quaternion.Euler(0f, 180f, 0f); // flip overlay
         else
-            transform.rotation = Quaternion.identity; // reset overlay rotation
+            transform.localRotation = Quaternion.identity; // reset overlay rotation
 
     }
 

@@ -1509,8 +1509,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slowOverlay: {fileID: 1313002164489704439}
-  slowSpeed: 1
-  slowJump: 1
+  affectSpeed: 1
+  affectJump: 1
 --- !u!114 &5961798001602708637
 MonoBehaviour:
   m_ObjectHideFlags: 0

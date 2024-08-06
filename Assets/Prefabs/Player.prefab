@@ -5778,7 +5778,7 @@ MonoBehaviour:
       data:
         Active: 1
         UniqueID: -2114989519
-        Label: Particles Play
+        Label: Blast
         ChannelMode: 0
         Channel: 0
         MMChannelDefinition: {fileID: 0}
@@ -16214,7 +16214,7 @@ MonoBehaviour:
       data:
         Active: 1
         UniqueID: -1147064925
-        Label: Particles Play
+        Label: Trail
         ChannelMode: 0
         Channel: 0
         MMChannelDefinition: {fileID: 0}
@@ -27569,8 +27569,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slowOverlay: {fileID: 3706479291433903718}
-  slowSpeed: 1
-  slowJump: 1
+  affectSpeed: 1
+  affectJump: 1
 --- !u!114 &9206677560049693005
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27597,6 +27597,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   electricOverlay: {fileID: 7973188474096741526}
+  affectSpeed: 1
+  affectClimb: 1
+  affectDamageImmunity: 1
 --- !u!95 &4640116482856619915
 Animator:
   serializedVersion: 5
