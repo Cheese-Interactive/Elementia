@@ -29,8 +29,8 @@ public class IceSecondaryAction : SecondaryAction {
         //get the associated particle system
         //check the liftime of the particles (aka the duration of the effect)
         //check if its lower than the cooldown (to prevent overlapping blasts)
-        if (onUseFeedback.FeedbacksList.OfType<MMF_Particles>().FirstOrDefault().BoundParticleSystem.main.startLifetime.constantMax < cooldown)
-            Debug.LogWarning("Particle duration must be less than or equal to slow duration.");
+        if (onUseFeedback.FeedbacksList.OfType<MMF_Particles>().FirstOrDefault().BoundParticleSystem.main.startLifetime.constantMax > cooldown)
+            Debug.LogWarning("Particle duration (lifetime) must be less than or equal to slow duration.");
     }
 
     private void Start() => tilemapManager = FindObjectOfType<TilemapManager>();
