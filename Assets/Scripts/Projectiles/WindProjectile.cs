@@ -9,7 +9,6 @@ public class WindProjectile : BaseProjectile {
 
     [Header("Settings")]
     // min -> max -> min
-    [Space]
     [SerializeField] private float minSpeed;
     [SerializeField] private float maxSpeed;
     [SerializeField][Range(0f, 100f)] private float totalSpeedTransitionPercentage;

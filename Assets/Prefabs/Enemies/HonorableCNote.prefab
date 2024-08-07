@@ -140,7 +140,7 @@ MonoBehaviour:
       data:
         Active: 1
         UniqueID: 1037308327
-        Label: Corgi Engine Sound
+        Label: Death
         ChannelMode: 0
         Channel: 0
         MMChannelDefinition: {fileID: 0}
@@ -351,7 +351,7 @@ MonoBehaviour:
       data:
         Active: 1
         UniqueID: 1037308327
-        Label: Corgi Engine Sound
+        Label: Hit
         ChannelMode: 0
         Channel: 0
         MMChannelDefinition: {fileID: 0}

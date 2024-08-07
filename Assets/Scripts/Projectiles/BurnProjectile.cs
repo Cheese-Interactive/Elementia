@@ -3,7 +3,6 @@ using UnityEngine;
 public class BurnProjectile : BaseProjectile {
 
     [Header("Settings")]
-    [Space]
     [SerializeField] private float burnDamage;
     [SerializeField] private int burnTicks;
     [SerializeField] private float burnDuration;

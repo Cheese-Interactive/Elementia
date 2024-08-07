@@ -7,6 +7,7 @@ public class ElectricSecondaryAction : SecondaryAction {
     [Header("References")]
     private ElectricEffect electricEffect;
     private Coroutine effectCoroutine;
+    private bool hasEffect;
 
     [Header("Settings")]
     [SerializeField] private float speedMultiplier;
@@ -38,8 +39,17 @@ public class ElectricSecondaryAction : SecondaryAction {
 
         if (!canUseInAir && !playerController.IsGrounded()) return; // make sure player is grounded if required
 
-        electricEffect.AddEffect(gameObject, electricDamage, electricDuration, electricDamageInvincibilityDuration, speedMultiplier); // apply electric effect
+        AddEffect(); // add electric effect
 
+    }
+
+    private void AddEffect() {
+
+        if (hasEffect) return; // make sure effect is not already active
+
+        hasEffect = true;
+
+        electricEffect.AddEffect(gameObject, electricDamage, electricDuration, electricDamageInvincibilityDuration, speedMultiplier); // apply electric effect
         onUseFeedback.PlayFeedbacks(); // play start sound
 
         if (effectCoroutine != null) StopCoroutine(effectCoroutine); // stop previous effect coroutine if it exists
@@ -50,12 +60,31 @@ public class ElectricSecondaryAction : SecondaryAction {
     private IEnumerator HandleEffect() {
 
         yield return new WaitForSeconds(electricDuration);
+        RemoveEffect(); // remove electric effect
+        effectCoroutine = null; // reset effect coroutine
+
+    }
+
+    private void RemoveEffect() {
+
+        if (!hasEffect) return; // make sure effect is active
+
+        if (effectCoroutine != null) StopCoroutine(effectCoroutine); // stop effect coroutine if it exists
+        effectCoroutine = null;
+
+        electricEffect.RemoveEffect(); // remove electric effect
+        onEndFeedback.PlayFeedbacks(); // play end sound
+
+        hasEffect = false;
 
         StartCooldown(); // start cooldown
 
-        onEndFeedback.PlayFeedbacks(); // play end sound
+    }
 
-        effectCoroutine = null; // reset effect coroutine
+    public override void OnDeath() {
+
+        cooldownTimer = 0f; // reset cooldown timere
+        RemoveEffect(); // remove electric effect
 
     }
 
