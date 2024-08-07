@@ -9,31 +9,38 @@ public class MainMenuConfettiBlast : MonoBehaviour {
     private ParticleSystem particles;
     private new Light2D light;
 
-    [Header("Light Customization")]
+    [Header("Settings")]
     [SerializeField] private float maxLightBrightness;
     [SerializeField] private float lightDuration;
-    [SerializeField][Range(0f, 1f)] private float lightFadeInDurMult;
+    [SerializeField][Range(0f, 1f)] private float lightFadeInDurationMultiplier;
 
+    private void Start() {
 
-    // Start is called before the first frame update
-    void Start() {
         particles = GetComponent<ParticleSystem>();
         light = GetComponent<Light2D>();
         StartCoroutine(PlayConfetti());
+
     }
 
     private IEnumerator PlayConfetti() {
-        light.intensity = 0; //off just in case
-        particles.Play(); //yay
-        float fadeInDuration = lightDuration * lightFadeInDurMult;
+
+        light.intensity = 0;
+        particles.Play();
+
+        float fadeInDuration = lightDuration * lightFadeInDurationMultiplier;
         float fadeOutDuration = lightDuration - fadeInDuration;
 
         StartCoroutine(LerpLightIntensityTo(maxLightBrightness, fadeInDuration));
+
         yield return new WaitForSeconds(fadeInDuration);
+
         StartCoroutine(LerpLightIntensityTo(0, fadeOutDuration));
+
         yield return new WaitForSeconds(fadeOutDuration);
         yield return new WaitForSeconds(particles.main.startLifetime.constant);
+
         Destroy(gameObject);
+
     }
 
     private IEnumerator LerpLightIntensityTo(float target, float duration) {

@@ -22,15 +22,20 @@ public class Overlay : MonoBehaviour {
     }
 
     public void ShowOverlay() {
+
         gameObject.SetActive(true);
+
         if (particles)
             particles.Play();
+
     }
 
     public void HideOverlay() {
+
         gameObject.SetActive(false);
+
         if (particles)
             particles.Stop();
-    }
 
+    }
 }
