@@ -4,6 +4,7 @@ public class Overlay : MonoBehaviour {
 
     [Header("References")]
     [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] private ParticleSystem particles;
     private SpriteMask spriteMask;
 
     private void Start() => spriteMask = GetComponent<SpriteMask>();
@@ -20,8 +21,16 @@ public class Overlay : MonoBehaviour {
 
     }
 
-    public void ShowOverlay() => gameObject.SetActive(true);
+    public void ShowOverlay() {
+        gameObject.SetActive(true);
+        if (particles)
+            particles.Play();
+    }
 
-    public void HideOverlay() => gameObject.SetActive(false);
+    public void HideOverlay() {
+        gameObject.SetActive(false);
+        if (particles)
+            particles.Stop();
+    }
 
 }
