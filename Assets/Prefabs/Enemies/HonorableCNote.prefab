@@ -606,7 +606,11 @@ Transform:
   m_Father: {fileID: 6152934920223498922}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 --- !u!1 &4712888194325213601
+=======
+--- !u!1 &5523283603798491915
+>>>>>>> Stashed changes
 =======
 --- !u!1 &5523283603798491915
 >>>>>>> Stashed changes
@@ -618,6 +622,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   - component: {fileID: 3466696275848157560}
   - component: {fileID: 4599673709617075068}
   - component: {fileID: 4165733521896633417}
@@ -625,19 +630,29 @@ GameObject:
   m_Layer: 13
   m_Name: ElectricOverlay
 =======
+=======
+>>>>>>> Stashed changes
   - component: {fileID: 3638624828205453792}
   - component: {fileID: 3322900873775534474}
   - component: {fileID: 1891272131315317022}
   m_Layer: 13
   m_Name: BurnOverlayParticles
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   m_IsActive: 0
 --- !u!4 &3466696275848157560
+=======
+  m_IsActive: 1
+--- !u!4 &3638624828205453792
+>>>>>>> Stashed changes
 =======
   m_IsActive: 1
 --- !u!4 &3638624828205453792
@@ -648,15 +663,21 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   m_GameObject: {fileID: 4712888194325213601}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
 =======
+=======
+>>>>>>> Stashed changes
   m_GameObject: {fileID: 5523283603798491915}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.02, z: 0}
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -664,8 +685,14 @@ Transform:
   m_Father: {fileID: 6152934920223498922}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 --- !u!212 &4599673709617075068
 SpriteRenderer:
+=======
+--- !u!199 &3322900873775534474
+ParticleSystemRenderer:
+  serializedVersion: 6
+>>>>>>> Stashed changes
 =======
 --- !u!199 &3322900873775534474
 ParticleSystemRenderer:
@@ -676,7 +703,11 @@ ParticleSystemRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   m_GameObject: {fileID: 4712888194325213601}
+=======
+  m_GameObject: {fileID: 5523283603798491915}
+>>>>>>> Stashed changes
 =======
   m_GameObject: {fileID: 5523283603798491915}
 >>>>>>> Stashed changes
@@ -687,8 +718,13 @@ ParticleSystemRenderer:
   m_StaticShadowCaster: 0
   m_MotionVectors: 1
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+=======
+  m_LightProbeUsage: 0
+  m_ReflectionProbeUsage: 0
+>>>>>>> Stashed changes
 =======
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
@@ -698,6 +734,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
   - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
@@ -756,6 +793,9 @@ SpriteMask:
 =======
   - {fileID: 2100000, guid: 17a427cc9a39f544fbce7cda5485a0ab, type: 2}
 >>>>>>> Stashed changes
+=======
+  - {fileID: 2100000, guid: 17a427cc9a39f544fbce7cda5485a0ab, type: 2}
+>>>>>>> Stashed changes
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -777,6 +817,7 @@ SpriteMask:
   m_SortingLayer: 0
   m_SortingOrder: 0
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   m_Sprite: {fileID: 21300000, guid: 17f2be2782189c342a207cc5faf38679, type: 3}
   m_MaskAlphaCutoff: 0.2
   m_FrontSortingLayerID: 0
@@ -790,6 +831,8 @@ SpriteMask:
 --- !u!114 &2648981927183504080
 MonoBehaviour:
 =======
+=======
+>>>>>>> Stashed changes
   m_RenderMode: 0
   m_MeshDistribution: 0
   m_SortMode: 0
@@ -824,11 +867,15 @@ MonoBehaviour:
   m_MaskInteraction: 0
 --- !u!198 &1891272131315317022
 ParticleSystem:
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
   m_GameObject: {fileID: 4712888194325213601}
   m_Enabled: 1
@@ -838,6 +885,8 @@ ParticleSystem:
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 484395999368391840}
 =======
+=======
+>>>>>>> Stashed changes
   m_GameObject: {fileID: 5523283603798491915}
   serializedVersion: 8
   lengthInSec: 5
@@ -5680,6 +5729,9 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 --- !u!1 &6340531845314296799
 GameObject:
@@ -5915,7 +5967,11 @@ Transform:
   - {fileID: 519905167199366169}
   - {fileID: 8082258310860714757}
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   - {fileID: 3466696275848157560}
+=======
+  - {fileID: 3638624828205453792}
+>>>>>>> Stashed changes
 =======
   - {fileID: 3638624828205453792}
 >>>>>>> Stashed changes
