@@ -1,4 +1,6 @@
+using MoreMountains.Feedbacks;
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 
 public class PhysicsObject : MonoBehaviour {
@@ -26,6 +28,9 @@ public class PhysicsObject : MonoBehaviour {
     private float fadeInDuration;
     private float fadeOutDuration;
     private float resetDuration;
+
+    [Header("Feedbacks")]
+    [SerializeField] private MMF_Player particlesFeedback;
 
     [Header("Debug")]
     [SerializeField] private Color lowestCornerVisualizerColor;
@@ -59,9 +64,11 @@ public class PhysicsObject : MonoBehaviour {
         fadeInDuration = (beaconFadeInDurationPercentage / 100f) * resetDuration;
         fadeOutDuration = (beaconFadeOutDurationPercentage / 100f) * resetDuration;
 
-        // instantiate reset beacon and start reset
-        currResetBeacon = Instantiate(resetBeaconPrefab, transform.position, Quaternion.identity);
-        currResetBeacon.StartReset(transform, spriteRenderer, fadeInDuration, beaconStartWidth, beaconEndWidth, beaconHeight, cornerLeniency);
+        //play particles and start reset
+        getFeedbackParticles(particlesFeedback).Stop(); //failsafe
+        ResetParticlesTransform(getFeedbackParticles(particlesFeedback), gameObject); //visual effect for particles, makes them follow the object
+        particlesFeedback.PlayFeedbacks(); //play particles
+
 
         resetCoroutine = StartCoroutine(HandleReset());
 
@@ -89,6 +96,10 @@ public class PhysicsObject : MonoBehaviour {
 
         if (resetCompleted) {
 
+            //visual effect for particles, makes them no longer follow the object
+            ResetParticlesTransform(getFeedbackParticles(particlesFeedback), FindObjectOfType<Grid>().gameObject); //using the grid is hacky... but hey what can you doooooooooooo... im a touchy feely foooohhhhh... i would do anything to not give a $&@! about youuuuuu... life is pretty cruellll..... for a touchy feely fooohhhh.... i would do anything to nto give a shit but i doooo
+            //particleFeedbackShape.position = transform.position;
+
             // reset object position and rotation
             transform.position = startPos;
             transform.rotation = startRot;
@@ -99,9 +110,8 @@ public class PhysicsObject : MonoBehaviour {
 
         }
 
-        // stop reset beacon and reset current reset beacon value
-        currResetBeacon.StopReset(fadeOutDuration);
-        currResetBeacon = null;
+        // stop particles
+        getFeedbackParticles(particlesFeedback).Stop();
 
         isResetting = false;
 
@@ -116,4 +126,12 @@ public class PhysicsObject : MonoBehaviour {
 
     public bool IsResettable() => isResettable;
 
+    private ParticleSystem getFeedbackParticles(MMF_Player feedback) => feedback.FeedbacksList.OfType<MMF_Particles>().FirstOrDefault().BoundParticleSystem;
+
+    private void ResetParticlesTransform(ParticleSystem particles, GameObject transformParent) {
+        ParticleSystem.MainModule particlesMain = particles.main;
+        //particlesMain.simulationSpace = simSpace;
+        particles.gameObject.transform.parent = transformParent.transform;
+        particles.gameObject.transform.position = gameObject.transform.position;
+    }
 }
