@@ -1,4 +1,5 @@
 using DG.Tweening;
+using MoreMountains.Feedbacks;
 using System.Collections;
 using UnityEngine;
 
@@ -24,6 +25,11 @@ public class Generator : MonoBehaviour {
     private Color startColor;
     private float fadeInDuration;
     private float fadeOutDuration;
+
+    [Header("Feedbacks")]
+    [SerializeField] private MMF_Player activationFeedback;
+    [SerializeField] private MMF_Player deactivationFeedback;
+    //[SerializeField] private MMF_Player playingFeedback;
 
     [Header("Debug")]
     [SerializeField] private Color fieldOutlineVisualizerColor;
@@ -97,7 +103,8 @@ public class Generator : MonoBehaviour {
 
             Gizmos.DrawWireCube(transform.position, rectangleFieldCollider.bounds.size);
 
-        } else if (fieldType == FieldType.Circle) {
+        }
+        else if (fieldType == FieldType.Circle) {
 
             if (!circleFieldCollider.gameObject.activeInHierarchy || rectangleFieldCollider.gameObject.activeInHierarchy) { // if circle collider is not active or rectangle collider is active
 
