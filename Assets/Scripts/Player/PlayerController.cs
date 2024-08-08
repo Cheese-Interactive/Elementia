@@ -298,7 +298,6 @@ public class PlayerController : EntityController {
     protected override void OnDeath() {
 
         base.OnDeath();
-        cooldownManager.ClearCooldownData(); // clear all cooldown data
         weaponSelector.ResetCooldownValues(); // reset cooldown values
         gameManager.ResetAllResettables(levelManager.RespawnDelay); // reset all resettables
 
@@ -307,6 +306,8 @@ public class PlayerController : EntityController {
     // IMPORTANT: RESPAWN METHOD GETS CALLED AT THE BEGINNING OF THE GAME, SO THE WEAPON IS ALREADY BEING UPDATED AT THE START
 
     public Vector2 GetDirectionRight() => character.IsFacingRight ? transform.right : -transform.right;
+
+    public bool IsDead() => isDead;
 
     #endregion
 

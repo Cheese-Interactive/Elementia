@@ -73,6 +73,8 @@ public abstract class Action : MonoBehaviour {
 
     protected virtual void StartCooldown(bool restartTimer = true) { // restart timer exists so initial timer can be set based on cooldown data
 
+        if (playerController.IsDead()) return; // do not start cooldown if player is dead
+
         if (gameManager.IsCooldownsEnabled() && restartTimer)
             cooldownTimer = cooldown; // restart cooldown timer
 
