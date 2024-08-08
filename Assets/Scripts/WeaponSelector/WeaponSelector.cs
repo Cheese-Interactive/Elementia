@@ -175,7 +175,6 @@ public class WeaponSelector : MMPersistentBase {
 
     public void ResetCooldownValues() {
 
-        print("reset");
         cooldownManager.ClearCooldownData(); // clear all cooldown data
         primaryCooldownMeter.SetValue(Color.white, float.NaN, 0f);
         secondaryCooldownMeter.SetValue(Color.white, float.NaN, 0f);

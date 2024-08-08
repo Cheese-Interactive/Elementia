@@ -4,7 +4,6 @@ using UnityEngine;
 public class PlayerController : EntityController {
 
     [Header("References")]
-    private CooldownManager cooldownManager;
     private LevelManager levelManager;
     private GameManager gameManager;
 
@@ -20,6 +19,7 @@ public class PlayerController : EntityController {
     [Header("Interacting")]
     [SerializeField] private LayerMask interactLayer; // layer mask for interactable objects
     [SerializeField] private float interactRadius;
+    private InteractIndicator interactIndicator;
 
     private new void Awake() {
 
@@ -51,9 +51,10 @@ public class PlayerController : EntityController {
 
         base.Start();
 
-        cooldownManager = FindObjectOfType<CooldownManager>();
         gameManager = FindObjectOfType<GameManager>();
         levelManager = FindObjectOfType<LevelManager>();
+        interactIndicator = FindObjectOfType<InteractIndicator>(true);
+        interactIndicator.Initialize(); // initialize interact indicator
 
     }
 
@@ -164,22 +165,34 @@ public class PlayerController : EntityController {
 
         #region INTERACTING
 
-        if (Input.GetKeyDown(KeyCode.E)) { // interact key pressed
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, interactRadius, interactLayer); // get all colliders in interact radius
+        bool interactableFound = false; // flag to check if interactable object is found
 
-            Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, interactRadius, interactLayer); // get all colliders in interact radius
+        foreach (Collider2D collider in colliders) {
 
-            foreach (Collider2D collider in colliders) {
+            Interactable interactable = collider.GetComponent<Interactable>(); // get first interactable component
 
-                Interactable interactable = collider.GetComponent<Interactable>(); // get first interactable component
+            if (interactable) { // make sure object is interactable
 
-                if (interactable) { // make sure object is interactable
+                if (!interactable.IsInteractable()) continue; // skip object if it's not interactable
 
-                    interactable.TryInteract(); // interact with object
-                    break;
+                interactIndicator.Show(); // show interact indicator
+
+                if (Input.GetKeyDown(KeyCode.E)) { // interact key pressed
+
+                    interactable.Interact(); // interact with object
+                    interactIndicator.OnInteract();
 
                 }
+
+                interactableFound = true; // set flag to true
+                break;
+
             }
         }
+
+        if (!interactableFound) // no interactable object found
+            interactIndicator.Hide(); // hide interact indicator
 
         #endregion
 
@@ -298,8 +311,17 @@ public class PlayerController : EntityController {
     protected override void OnDeath() {
 
         base.OnDeath();
+        SetWeaponAimEnabled(false); // disable weapon aiming
+        ResetAllAnimations(); // reset all animations
         weaponSelector.ResetCooldownValues(); // reset cooldown values
         gameManager.ResetAllResettables(levelManager.RespawnDelay); // reset all resettables
+
+    }
+
+    protected override void OnRespawn() {
+
+        base.OnRespawn();
+        SetWeaponAimEnabled(true); // enable weapon aiming
 
     }
 

@@ -142,7 +142,9 @@ public class GameManager : MonoBehaviour {
 
     }
 
-    public bool TryRemoveKey() => keyInventory.RemoveItem(keyInventory.NumberOfFilledSlots - 1, 1, false); // remove key if possible without showing warnings
+    public void RemoveKey() => keyInventory.RemoveItem(keyInventory.NumberOfFilledSlots - 1, 1, false); // remove key if possible without showing warnings
+
+    public bool HasKey() => keyInventory.NumberOfFilledSlots > 0;
 
     public void LoadScene(string sceneName) {
 

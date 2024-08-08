@@ -5,6 +5,7 @@ using UnityEngine;
 public abstract class Interactable : MMPersistentBase {
 
     [Header("References")]
+    protected bool isInteractable;
     protected bool isInteracted;
 
     [Serializable]
@@ -14,7 +15,7 @@ public abstract class Interactable : MMPersistentBase {
 
     }
 
-    public abstract void TryInteract();
+    public abstract void Interact();
 
     public override string OnSave() {
 
@@ -29,4 +30,7 @@ public abstract class Interactable : MMPersistentBase {
         isInteracted = saveData.isInteracted; // load data
 
     }
+
+    public abstract bool IsInteractable();
+
 }

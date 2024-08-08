@@ -8,9 +8,7 @@ public class PhysicsObject : MonoBehaviour {
     [Header("References")]
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private GameObject objectOutlinePrefab;
-    [SerializeField] private ResetBeacon resetBeaconPrefab;
     private Rigidbody2D rb;
-    private ResetBeacon currResetBeacon;
     private Coroutine resetCoroutine;
     private GameObject outlineObject;
     private Vector2 startPos;
@@ -18,15 +16,8 @@ public class PhysicsObject : MonoBehaviour {
     private bool isResetting;
 
     [Header("Settings")]
-    [SerializeField][Range(0f, 100f)] private float beaconFadeInDurationPercentage;
-    [SerializeField][Range(0f, 100f)] private float beaconFadeOutDurationPercentage;
-    [SerializeField] private float beaconStartWidth;
-    [SerializeField] private float beaconEndWidth;
-    [SerializeField] private float beaconHeight;
-    [SerializeField][Tooltip("Should be high enough to cover cases where a corner is slightly higher than another and doesn't skew the beacon position")] private float cornerLeniency;
+    [SerializeField] private float cornerLeniency;
     [SerializeField] private bool isResettable;
-    private float fadeInDuration;
-    private float fadeOutDuration;
     private float resetDuration;
 
     [Header("Feedbacks")]
@@ -57,17 +48,10 @@ public class PhysicsObject : MonoBehaviour {
         isResetting = true;
         this.resetDuration = resetDuration;
 
-        // make sure fade in and fade out durations do not exceed field duration
-        if (beaconFadeInDurationPercentage + beaconFadeOutDurationPercentage > 100)
-            Debug.LogError("Reset fade in and fade out durations exceed reset duration.");
-
-        fadeInDuration = (beaconFadeInDurationPercentage / 100f) * resetDuration;
-        fadeOutDuration = (beaconFadeOutDurationPercentage / 100f) * resetDuration;
-
-        //play particles and start reset
-        getFeedbackParticles(particlesFeedback).Stop(); //failsafe
-        ResetParticlesTransform(getFeedbackParticles(particlesFeedback), gameObject); //visual effect for particles, makes them follow the object
-        particlesFeedback.PlayFeedbacks(); //play particles
+        // play particles and start reset
+        GetFeedbackParticles(particlesFeedback).Stop(); // stop particles if they are already playing
+        ResetParticlesTransform(GetFeedbackParticles(particlesFeedback), gameObject); // visual effect for particles, makes them follow the object
+        particlesFeedback.PlayFeedbacks(); // play feedbacks
 
 
         resetCoroutine = StartCoroutine(HandleReset());
@@ -96,8 +80,7 @@ public class PhysicsObject : MonoBehaviour {
 
         if (resetCompleted) {
 
-            //visual effect for particles, makes them no longer follow the object
-            ResetParticlesTransform(getFeedbackParticles(particlesFeedback), FindObjectOfType<Grid>().gameObject); //using the grid is hacky... but hey what can you doooooooooooo... im a touchy feely foooohhhhh... i would do anything to not give a $&@! about youuuuuu... life is pretty cruellll..... for a touchy feely fooohhhh.... i would do anything to nto give a shit but i doooo
+            ResetParticlesTransform(GetFeedbackParticles(particlesFeedback), FindObjectOfType<Grid>().gameObject); // visual effect for particles, makes them no longer follow the object
             //particleFeedbackShape.position = transform.position;
 
             // reset object position and rotation
@@ -111,7 +94,7 @@ public class PhysicsObject : MonoBehaviour {
         }
 
         // stop particles
-        getFeedbackParticles(particlesFeedback).Stop();
+        GetFeedbackParticles(particlesFeedback).Stop();
 
         isResetting = false;
 
@@ -126,12 +109,15 @@ public class PhysicsObject : MonoBehaviour {
 
     public bool IsResettable() => isResettable;
 
-    private ParticleSystem getFeedbackParticles(MMF_Player feedback) => feedback.FeedbacksList.OfType<MMF_Particles>().FirstOrDefault().BoundParticleSystem;
-
     private void ResetParticlesTransform(ParticleSystem particles, GameObject transformParent) {
-        ParticleSystem.MainModule particlesMain = particles.main;
+
+        //ParticleSystem.MainModule main = particles.main;
         //particlesMain.simulationSpace = simSpace;
         particles.gameObject.transform.parent = transformParent.transform;
         particles.gameObject.transform.position = gameObject.transform.position;
+
     }
+
+    private ParticleSystem GetFeedbackParticles(MMF_Player feedback) => feedback.FeedbacksList.OfType<MMF_Particles>().FirstOrDefault().BoundParticleSystem;
+
 }

@@ -12319,7 +12319,7 @@ MonoBehaviour:
   DeathFeedbacks: {fileID: 758001101984015262}
   DestroyOnDeath: 1
   DelayBeforeDestruction: 0
-  CollisionsOffOnDeath: 0
+  CollisionsOffOnDeath: 1
   GravityOffOnDeath: 0
   PointsWhenDestroyed: 0
   RespawnAtInitialLocation: 0

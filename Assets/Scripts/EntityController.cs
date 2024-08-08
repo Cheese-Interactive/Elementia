@@ -222,6 +222,14 @@ public class EntityController : MonoBehaviour {
 
     protected virtual void OnRespawn() => isDead = false;
 
+    protected void ResetAllAnimations() {
+
+        anim.SetBool("isWalking", false);
+        anim.SetBool("isResetting", false);
+        anim.SetBool("isClimbing", false);
+
+    }
+
     public bool IsGrounded() => corgiController.State.IsGrounded;
 
     #endregion

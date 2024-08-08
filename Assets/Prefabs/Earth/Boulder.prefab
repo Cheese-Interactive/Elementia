@@ -197,13 +197,6 @@ MonoBehaviour:
   spriteRenderer: {fileID: 1746333546649239677}
   objectOutlinePrefab: {fileID: 6171242287599287164, guid: b04ee432d8e4ac24fa63cccb7ba055fd,
     type: 3}
-  resetBeaconPrefab: {fileID: -942278860663835104, guid: 46f893c8d676ff84ebfaac791a12a55b,
-    type: 3}
-  beaconFadeInDurationPercentage: 75
-  beaconFadeOutDurationPercentage: 25
-  beaconStartWidth: 2
-  beaconEndWidth: 1.5
-  beaconHeight: 6
   cornerLeniency: 1
   isResettable: 1
   particlesFeedback: {fileID: 4665044164438848089}
@@ -383,7 +376,7 @@ MonoBehaviour:
       data:
         Active: 1
         UniqueID: -1098800627
-        Label: Particles Play
+        Label: Reset
         ChannelMode: 0
         Channel: 0
         MMChannelDefinition: {fileID: 0}
@@ -505,7 +498,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_RenderMode: 0
   m_MeshDistribution: 0
   m_SortMode: 0
