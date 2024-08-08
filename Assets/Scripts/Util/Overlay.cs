@@ -4,7 +4,8 @@ public class Overlay : MonoBehaviour {
 
     [Header("References")]
     [SerializeField] private SpriteRenderer spriteRenderer;
-    [SerializeField] private ParticleSystem particles;
+    [SerializeField] private OverlayParticles particlesPrefab;
+    private OverlayParticles currParticles;
     private SpriteMask spriteMask;
 
     private void Start() => spriteMask = GetComponent<SpriteMask>();
@@ -25,17 +26,20 @@ public class Overlay : MonoBehaviour {
 
         gameObject.SetActive(true);
 
-        if (particles)
-            particles.Play();
+        if (particlesPrefab && !currParticles) { // if the particle prefab exists and there are no current particles
 
+            currParticles = Instantiate(particlesPrefab, transform.position, Quaternion.identity);
+            currParticles.Initialize(transform);
+
+        }
     }
 
     public void HideOverlay() {
 
         gameObject.SetActive(false);
 
-        if (particles)
-            particles.Stop();
+        if (currParticles)
+            currParticles.HideParticle();
 
     }
 }
