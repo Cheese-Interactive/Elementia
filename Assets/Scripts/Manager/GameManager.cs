@@ -4,6 +4,7 @@ using MoreMountains.Tools;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
 
@@ -30,11 +31,13 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private int collectibleColumns;
     private Inventory keyInventory;
     private InventoryDisplay collectibleInventoryDisplay;
+    private RectTransform collectibleInventoryTransform;
 
     [Header("Key Inventory")]
     [SerializeField] private int keyRows;
     [SerializeField] private int keyColumns;
     private InventoryDisplay keyInventoryDisplay;
+    private RectTransform keyInventoryTransform;
 
     [Header("Pausing")]
     private bool isPaused;
@@ -46,10 +49,14 @@ public class GameManager : MonoBehaviour {
         gameCore = FindObjectOfType<GameCore>();
         cooldownManager = FindObjectOfType<CooldownManager>();
 
-        // get the collectible inventory display & key inventory display
+        // get the collectible inventory display and transform
         collectibleInventoryDisplay = gameCore.GetCollectibleInventoryDisplay();
+        collectibleInventoryTransform = collectibleInventoryDisplay.GetComponent<RectTransform>();
+
+        // get the key inventory, display, and transform
         keyInventory = gameCore.GetKeyInventory();
         keyInventoryDisplay = gameCore.GetKeyInventoryDisplay();
+        keyInventoryTransform = keyInventoryDisplay.GetComponent<RectTransform>();
 
         // get all required & key collectibles
         requiredCollectibles = new List<Collectible>();
@@ -145,6 +152,13 @@ public class GameManager : MonoBehaviour {
     public void RemoveKey() => keyInventory.RemoveItem(keyInventory.NumberOfFilledSlots - 1, 1, false); // remove key if possible without showing warnings
 
     public bool HasKey() => keyInventory.NumberOfFilledSlots > 0;
+
+    public void RefreshInventoryLayouts() {
+
+        LayoutRebuilder.ForceRebuildLayoutImmediate(collectibleInventoryTransform);
+        LayoutRebuilder.ForceRebuildLayoutImmediate(keyInventoryTransform);
+
+    }
 
     public void LoadScene(string sceneName) {
 

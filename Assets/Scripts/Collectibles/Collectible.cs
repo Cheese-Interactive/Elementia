@@ -39,6 +39,7 @@ public class Collectible : MMPersistentBase {
         onCollectFeedback.PlayFeedbacks(transform.position);
         isCollected = true;
         gameManager.CheckVictory();
+        gameManager.RefreshInventoryLayouts();
 
     }
 
