@@ -36,7 +36,7 @@ public class Collectible : MMPersistentBase {
 
     protected virtual void OnCollect(ItemPicker collectible) {
 
-        onCollectFeedback.PlayFeedbacks(transform.position);
+        onCollectFeedback.PlayFeedbacks(FindObjectOfType<PlayerController>().transform.position);
         isCollected = true;
         gameManager.CheckVictory();
         gameManager.RefreshInventoryLayouts();

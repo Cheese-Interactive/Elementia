@@ -198,8 +198,8 @@ MonoBehaviour:
   oneCollisionOnly: 0
   hasDistanceMultiplier: 0
   isPushProjectile: 1
-  entityForceMultiplier: {x: 25, y: 30}
-  objectForceMultiplier: {x: 15, y: 20}
+  entityForceMultiplier: {x: 40, y: 25}
+  objectForceMultiplier: {x: 3.75, y: 5}
   minSpeed: 100
   maxSpeed: 300
   totalSpeedTransitionPercentage: 25
