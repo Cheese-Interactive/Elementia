@@ -5,11 +5,9 @@ using UnityEngine;
 public class ElectricEffect : BaseEffect {
 
     [Header("References")]
-    [SerializeField] private Overlay electricOverlay;
     private CharacterHorizontalMovement charMovement;
     private CharacterLadder charLadder;
     private Health health;
-    private Coroutine resetEffectCoroutine;
 
     [Header("Settings")]
     [SerializeField] private bool affectSpeed;
@@ -27,7 +25,7 @@ public class ElectricEffect : BaseEffect {
         charLadder = GetComponent<CharacterLadder>();
         health = GetComponent<Health>();
 
-        electricOverlay.HideOverlay(); // hide electric overlay by default
+        overlay.HideOverlay(); // hide electric overlay by default
 
         if (affectSpeed && charMovement)
             prevMoveSpeed = charMovement.MovementSpeed; // store initial movement speed
@@ -70,7 +68,7 @@ public class ElectricEffect : BaseEffect {
         if (affectDamageImmunity && health)
             health.ImmuneToDamage = true; // enable player immunity to  (however they are not immune to water/drown damage)
 
-        electricOverlay.ShowOverlay(); // show electric overlay
+        overlay.ShowOverlay(); // show electric overlay
 
         if (resetEffectCoroutine != null) StopCoroutine(resetEffectCoroutine); // stop previous effect coroutine if it exists
         resetEffectCoroutine = StartCoroutine(ResetEffect(duration)); // start effect coroutine
@@ -101,7 +99,7 @@ public class ElectricEffect : BaseEffect {
         if (affectSpeed && charMovement)
             charMovement.MovementSpeed = prevMoveSpeed;
 
-        electricOverlay.HideOverlay(); // hide electric overlay
+        overlay.HideOverlay(); // hide electric overlay
 
     }
 }

@@ -5,9 +5,7 @@ using UnityEngine;
 public class BurnEffect : BaseEffect {
 
     [Header("References")]
-    [SerializeField] private Overlay burnOverlay;
     private Health health;
-    private Coroutine resetEffectCoroutine;
 
     private void Start() {
 
@@ -15,13 +13,13 @@ public class BurnEffect : BaseEffect {
 
         if (!health) Debug.LogError("Health component not found on " + gameObject.name + " object.");
 
-        burnOverlay.HideOverlay(); // hide burn overlay by default
+        overlay.HideOverlay(); // hide burn overlay by default
 
     }
 
     public void AddEffect(GameObject instigator, float damage, int ticks, float duration, float invincibilityDuration, Vector3 damageDirection, bool instantTick) {
 
-        burnOverlay.ShowOverlay(); // show burn overlay
+        overlay.ShowOverlay(); // show burn overlay
 
         if (resetEffectCoroutine != null) StopCoroutine(resetEffectCoroutine); // stop previous effect coroutine if it exists
         resetEffectCoroutine = StartCoroutine(HandleBurn(instigator, damage, ticks, duration, invincibilityDuration, damageDirection, instantTick)); // start effect coroutine
@@ -51,7 +49,7 @@ public class BurnEffect : BaseEffect {
         if (resetEffectCoroutine != null) StopCoroutine(resetEffectCoroutine); // stop effect coroutine if it exists
         resetEffectCoroutine = null; // reset effect coroutine
 
-        burnOverlay.HideOverlay(); // hide burn overlay
+        overlay.HideOverlay(); // hide burn overlay
 
     }
 }

@@ -5,10 +5,8 @@ using UnityEngine;
 public class SlowEffect : BaseEffect {
 
     [Header("References")]
-    [SerializeField] private Overlay slowOverlay;
     private CharacterHorizontalMovement charMovement;
     private CharacterJump charJump;
-    private Coroutine resetEffectCoroutine;
 
     [Header("Settings")]
     [SerializeField] private bool affectSpeed;
@@ -20,7 +18,7 @@ public class SlowEffect : BaseEffect {
 
         charMovement = GetComponent<CharacterHorizontalMovement>();
         charJump = GetComponent<CharacterJump>();
-        slowOverlay.HideOverlay(); // hide slow overlay by default
+        overlay.HideOverlay(); // hide slow overlay by default
 
         // store initial movement speed if character can move and effect affects movement speed
         if (affectSpeed && charMovement)
@@ -43,7 +41,7 @@ public class SlowEffect : BaseEffect {
                 if (prevSpeed * movementMultiplier < charMovement.MovementSpeed) { // only set if new movement speed is slower than current movement speed
 
                     charMovement.MovementSpeed *= movementMultiplier; // set new movement speed
-                    slowOverlay.ShowOverlay(); // show slow overlay
+                    overlay.ShowOverlay(); // show slow overlay
 
                 }
             }
@@ -53,7 +51,7 @@ public class SlowEffect : BaseEffect {
                 if (prevJump * jumpMultiplier < charJump.JumpHeight) { // only set if new jump height is lower than current jump height
 
                     charJump.JumpHeight *= jumpMultiplier; // set new jump height
-                    slowOverlay.ShowOverlay(); // show slow overlay
+                    overlay.ShowOverlay(); // show slow overlay
 
                 }
             }
@@ -63,7 +61,7 @@ public class SlowEffect : BaseEffect {
 
                 prevSpeed = charMovement.WalkSpeed; // store current movement speed each time before slow effect
                 charMovement.MovementSpeed *= movementMultiplier; // set new movement speed
-                slowOverlay.ShowOverlay(); // show slow overlay
+                overlay.ShowOverlay(); // show slow overlay
 
             }
 
@@ -71,7 +69,7 @@ public class SlowEffect : BaseEffect {
 
                 prevJump = charJump.JumpHeight; // store current jump height each time before slow effect
                 charJump.JumpHeight *= jumpMultiplier; // set new jump height
-                slowOverlay.ShowOverlay(); // show slow overlay
+                overlay.ShowOverlay(); // show slow overlay
 
             }
         }
@@ -100,7 +98,7 @@ public class SlowEffect : BaseEffect {
         if (affectJump && charJump)
             charJump.JumpHeight = prevJump;
 
-        slowOverlay.HideOverlay(); // hide slow overlay
+        overlay.HideOverlay(); // hide slow overlay
 
     }
 }
