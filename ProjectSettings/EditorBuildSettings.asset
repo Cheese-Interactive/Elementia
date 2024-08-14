@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/dua stan's scene.unity
     guid: fb6e40e16cbc3a7438382ec3dda2e69f
   - enabled: 1
-    path: Assets/Scenes/arianas.unity
+    path: Assets/Scenes/MainLevel.unity
     guid: 80179417471493b4b81291af6edf50dc
   - enabled: 1
     path: Assets/Scenes/LoadingScreen.unity
