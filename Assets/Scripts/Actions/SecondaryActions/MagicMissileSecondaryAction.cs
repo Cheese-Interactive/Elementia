@@ -48,6 +48,8 @@ public class MagicMissileSecondaryAction : SecondaryAction {
 
     private void StartReset() {
 
+        if (isResetting) return; // make sure player is not already resetting
+
         isResetting = true;
 
         prevWeapon = playerController.GetCurrentWeapon(); // store previous weapon
@@ -92,7 +94,6 @@ public class MagicMissileSecondaryAction : SecondaryAction {
             gameManager.CancelResets(); // cancel resets
 
         isResetting = false;
-
         StartCooldown(); // start cooldown
 
     }

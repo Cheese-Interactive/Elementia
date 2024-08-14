@@ -9,6 +9,7 @@ public class WeaponSelector : MMPersistentBase {
     [SerializeField] private Transform hotbar;
     private PlayerController playerController;
     private WeaponDatabase weaponDatabase;
+    private CooldownManager cooldownManager;
 
     [Header("Slots")]
     [SerializeField] private Image primaryWeaponFill;
@@ -57,6 +58,8 @@ public class WeaponSelector : MMPersistentBase {
     }
 
     private void Start() {
+
+        cooldownManager = FindObjectOfType<CooldownManager>();
 
         // if there is no data loaded, load default weapons
         if (!isDataLoaded)
@@ -183,6 +186,7 @@ public class WeaponSelector : MMPersistentBase {
 
     public void ResetCooldownValues() {
 
+        cooldownManager.ClearCooldownData(); // clear all cooldown data
         primaryCooldownMeter.SetValue(Color.white, float.NaN, 0f);
         secondaryCooldownMeter.SetValue(Color.white, float.NaN, 0f);
 
