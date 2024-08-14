@@ -9,12 +9,13 @@ public class Collectible : MMPersistentBase {
     [Header("References")]
     protected ItemPicker itemPicker;
     protected bool isCollected;
+    private PlayerController playerController;
     private GameManager gameManager;
 
     [Header("Settings")]
     [SerializeField] private bool isRequired;
 
-    [Header("MM Feedbacks")]
+    [Header("Feedback")]
     [SerializeField] private MMF_Player onCollectFeedback;
 
     [Serializable]
@@ -26,17 +27,19 @@ public class Collectible : MMPersistentBase {
 
     protected void Awake() {
 
-        gameManager = FindObjectOfType<GameManager>();
         itemPicker = GetComponent<ItemPicker>();
+        gameManager = FindObjectOfType<GameManager>();
         itemPicker.OnCollect += OnCollect;
 
     }
+
+    protected void Start() => playerController = FindObjectOfType<PlayerController>();
 
     protected void OnDestroy() => itemPicker.OnCollect -= OnCollect;
 
     protected virtual void OnCollect(ItemPicker collectible) {
 
-        onCollectFeedback.PlayFeedbacks(FindObjectOfType<PlayerController>().transform.position);
+        onCollectFeedback.PlayFeedbacks(playerController.transform.position);
         isCollected = true;
         gameManager.CheckVictory();
         gameManager.RefreshInventoryLayouts();

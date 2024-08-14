@@ -18,11 +18,19 @@ public class OverlayParticles : MonoBehaviour {
 
     private void Update() => transform.position = target.position;
 
-    public void HideParticle() {
+    public void HideParticles(bool destroyParticlesOnHide) {
 
-        ParticleSystem.MainModule main = overlayParticle.main;
-        main.loop = false; // set loop to false so particle will stop emitting new particles
-        main.stopAction = ParticleSystemStopAction.Destroy; // set stop action to destroy so particle will be destroyed after it stops (one last round of particles will be emitted)
+        if (destroyParticlesOnHide) {
 
+            Destroy(gameObject); // destroy particles immediately
+
+        } else {
+
+            // stop emitting new particles and destroy particle after it stops
+            ParticleSystem.MainModule main = overlayParticle.main;
+            main.loop = false; // set loop to false so particle will stop emitting new particles
+            main.stopAction = ParticleSystemStopAction.Destroy; // set stop action to destroy so particle will be destroyed after it stops (one last round of particles will be emitted)
+
+        }
     }
 }

@@ -8,6 +8,9 @@ public class Overlay : MonoBehaviour {
     private OverlayParticles currParticles;
     private SpriteMask spriteMask;
 
+    [Header("Settings")]
+    [SerializeField][Tooltip("If true, particles will be destroyed immediately on hide. If false, particles will finish their current loop then be destroyed on hide.")] private bool destroyParticlesOnHide;
+
     private void Start() => spriteMask = GetComponent<SpriteMask>();
 
     private void Update() {
@@ -26,7 +29,7 @@ public class Overlay : MonoBehaviour {
 
         gameObject.SetActive(true);
 
-        if (particlesPrefab && !currParticles) { // if the particle prefab exists and there are no current particles
+        if (!currParticles) { // make sure there no current particles
 
             currParticles = Instantiate(particlesPrefab, transform.position, Quaternion.identity);
             currParticles.Initialize(transform);
@@ -38,8 +41,9 @@ public class Overlay : MonoBehaviour {
 
         gameObject.SetActive(false);
 
+        // hide particles if they exist
         if (currParticles)
-            currParticles.HideParticle();
+            currParticles.HideParticles(destroyParticlesOnHide);
 
     }
 }

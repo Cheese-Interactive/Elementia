@@ -18,7 +18,6 @@ public class MagicMissileSecondaryAction : SecondaryAction {
 
     [Header("Feedback")]
     [SerializeField] private MMF_Player onUseFeedback;
-    [SerializeField] private MMF_Player onDoneFeedback;
 
     private void Start() {
 
@@ -95,7 +94,6 @@ public class MagicMissileSecondaryAction : SecondaryAction {
             gameManager.CancelResets(); // cancel resets
 
         isResetting = false;
-        onDoneFeedback.PlayFeedbacks(); //yay
         StartCooldown(); // start cooldown
 
     }

@@ -6,11 +6,10 @@ using UnityEngine;
 public class Generator : MonoBehaviour {
 
     [Header("Reference")]
-    [SerializeField] private FieldType fieldType;
     [SerializeField] private GameObject field;
-    [SerializeField] private Collider2D rectangleFieldCollider;
-    [SerializeField] private Collider2D circleFieldCollider;
+    [SerializeField] private Collider2D fieldCollider; // must be serialized for gizmos
     private SpriteRenderer fieldSpriteRenderer;
+    private Animator animator;
     private GameManager gameManager;
     private Coroutine fieldCoroutine;
     private Tweener fieldTweener;
@@ -29,15 +28,19 @@ public class Generator : MonoBehaviour {
     [Header("Feedbacks")]
     [SerializeField] private MMF_Player activationFeedback;
     [SerializeField] private MMF_Player deactivationFeedback;
-    //[SerializeField] private MMF_Player playingFeedback;
 
     [Header("Debug")]
+    [SerializeField] private Color fieldVisualizerColor;
     [SerializeField] private Color fieldOutlineVisualizerColor;
 
     private void Start() {
 
+        animator = GetComponent<Animator>();
+
         field.SetActive(false); // deactivate the field by default
+
         fieldSpriteRenderer = field.GetComponent<SpriteRenderer>();
+        fieldCollider = field.GetComponent<Collider2D>();
         gameManager = FindObjectOfType<GameManager>();
 
         fieldSpriteRenderer.color = new Color(fieldSpriteRenderer.color.r, fieldSpriteRenderer.color.g, fieldSpriteRenderer.color.b, 0f); // set field opacity to 0
@@ -60,6 +63,10 @@ public class Generator : MonoBehaviour {
         activationFeedback.PlayFeedbacks(transform.position);
         if (fieldTweener != null && fieldTweener.IsActive()) fieldTweener.Kill(); // kill field tweener if it is active
         fieldCoroutine = StartCoroutine(HandleField());
+
+        // set generator to activated state
+        animator.SetBool("isOverheated", false);
+        animator.SetBool("isActivated", true);
 
     }
 
@@ -84,39 +91,30 @@ public class Generator : MonoBehaviour {
 
     private IEnumerator HandleCooldown() {
 
+        // set generator to overheat/cooldown state
+        animator.SetBool("isActivated", false);
+        animator.SetBool("isOverheated", true);
         deactivationFeedback.PlayFeedbacks(transform.position);
+
         yield return new WaitForSeconds(coolingDuration);
+
+        // set generator to idle state
+        animator.SetBool("isActivated", false);
+        animator.SetBool("isOverheated", false);
+
         cooldownCoroutine = null;
 
     }
 
     private void OnDrawGizmos() {
 
+        // draw outline
         Gizmos.color = fieldOutlineVisualizerColor;
+        Gizmos.DrawWireSphere(transform.position, fieldCollider.bounds.size.x / 2f);
 
-        if (fieldType == FieldType.Rectangle) {
+        // draw field
+        Gizmos.color = fieldVisualizerColor;
+        Gizmos.DrawSphere(transform.position, fieldCollider.bounds.size.x / 2f);
 
-            if (!rectangleFieldCollider.gameObject.activeInHierarchy || circleFieldCollider.gameObject.activeInHierarchy) { // if rectangle collider is not active or circle collider is active
-
-                circleFieldCollider.gameObject.SetActive(false); // deactivate circle collider
-                rectangleFieldCollider.gameObject.SetActive(true); // activate rectangle collider
-
-            }
-
-            Gizmos.DrawWireCube(transform.position, rectangleFieldCollider.bounds.size);
-
-        }
-        else if (fieldType == FieldType.Circle) {
-
-            if (!circleFieldCollider.gameObject.activeInHierarchy || rectangleFieldCollider.gameObject.activeInHierarchy) { // if circle collider is not active or rectangle collider is active
-
-                rectangleFieldCollider.gameObject.SetActive(false); // deactivate rectangle collider
-                circleFieldCollider.gameObject.SetActive(true); // activate circle collider
-
-            }
-
-            Gizmos.DrawWireSphere(transform.position, circleFieldCollider.bounds.size.x / 2f);
-
-        }
     }
 }

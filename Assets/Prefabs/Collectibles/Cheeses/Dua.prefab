@@ -241,7 +241,7 @@ MonoBehaviour:
       data:
         Active: 1
         UniqueID: -625330160
-        Label: IceShoot
+        Label: CollectSound
         ChannelMode: 0
         Channel: 0
         MMChannelDefinition: {fileID: 0}
@@ -317,7 +317,7 @@ MonoBehaviour:
       data:
         Active: 1
         UniqueID: -2029024823
-        Label: Instantiate Object
+        Label: CollectParticles
         ChannelMode: 0
         Channel: 0
         MMChannelDefinition: {fileID: 0}

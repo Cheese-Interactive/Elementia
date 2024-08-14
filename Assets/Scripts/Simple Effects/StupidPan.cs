@@ -7,9 +7,7 @@ public class StupidPan : MonoBehaviour {
     [SerializeField] Vector3 dest;
     [SerializeField] float duration;
 
-    private void Start() {
-        StartCoroutine(LerpTo(dest));
-    }
+    private void Start() => StartCoroutine(LerpTo(dest));
 
     private IEnumerator LerpTo(Vector3 target) {
 

@@ -9,7 +9,12 @@ public class WeaponCollectible : Collectible {
     [Header("Settings")]
     [SerializeField] private WeaponData weaponData;
 
-    private void Start() => weaponSelector = FindObjectOfType<WeaponSelector>();
+    protected new void Start() {
+
+        base.Start();
+        weaponSelector = FindObjectOfType<WeaponSelector>();
+
+    }
 
     protected override void OnCollect(ItemPicker collectible) {
 

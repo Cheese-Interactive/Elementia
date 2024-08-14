@@ -28,7 +28,7 @@ public class ElectricSecondaryAction : SecondaryAction {
 
     private void OnTriggerEnter2D(Collider2D collision) {
 
-        if (enabled && collision.gameObject.activeInHierarchy && collision.gameObject.CompareTag("Generator")) // make sure action is enabled, collider is active, and collider is a generator
+        if (enabled && hasEffect && collision.gameObject.activeInHierarchy && collision.gameObject.CompareTag("Generator")) // make sure action is enabled, effect is active, collider is active, and collider is a generator
             collision.gameObject.GetComponent<Generator>()?.Activate();
 
     }

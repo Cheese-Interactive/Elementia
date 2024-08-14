@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class CamFovZone : MonoBehaviour {
 
+    [Header("References")]
     private GameObject player;
     private CameraController cam;
 
@@ -10,17 +11,20 @@ public class CamFovZone : MonoBehaviour {
     [SerializeField] private float minFov;
     [SerializeField] private float maxFov;
 
-    void Start() {
+    private void Start() {
+
         player = FindObjectOfType<PlayerController>().gameObject;
         cam = FindObjectOfType<CameraController>();
+
     }
 
-    void OnTriggerEnter2D(Collider2D col) {
+    private void OnTriggerEnter2D(Collider2D col) {
+
         if (col.gameObject.Equals(player)) {
+
             cam.MinimumZoom = minFov;
             cam.MaximumZoom = maxFov;
 
         }
     }
-
 }

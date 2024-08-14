@@ -5189,7 +5189,7 @@ MonoBehaviour:
       data:
         Active: 1
         UniqueID: 481606936
-        Label: Corgi Engine Sound
+        Label: CollectSound
         ChannelMode: 0
         Channel: 0
         MMChannelDefinition: {fileID: 0}
@@ -5265,7 +5265,7 @@ MonoBehaviour:
       data:
         Active: 1
         UniqueID: 1597266797
-        Label: Instantiate Object
+        Label: CollectParticles
         ChannelMode: 0
         Channel: 0
         MMChannelDefinition: {fileID: 0}

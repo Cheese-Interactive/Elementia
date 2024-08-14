@@ -574,6 +574,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 484395999368391840}
   particlesPrefab: {fileID: 0}
+  destroyParticlesOnHide: 0
 --- !u!1 &4049341806652901108
 GameObject:
   m_ObjectHideFlags: 0
@@ -758,6 +759,7 @@ MonoBehaviour:
   spriteRenderer: {fileID: 0}
   particlesPrefab: {fileID: -4201613225417754529, guid: d1807e8966862cf4a9ef66fcab3dd872,
     type: 3}
+  destroyParticlesOnHide: 1
 --- !u!1 &6340531845314296799
 GameObject:
   m_ObjectHideFlags: 0
@@ -911,6 +913,7 @@ MonoBehaviour:
   spriteRenderer: {fileID: 484395999368391840}
   particlesPrefab: {fileID: -1872994188514054959, guid: 0601bdcd5dd84f442bcfb24058ef174b,
     type: 3}
+  destroyParticlesOnHide: 0
 --- !u!1 &6648653148736329909
 GameObject:
   m_ObjectHideFlags: 0
