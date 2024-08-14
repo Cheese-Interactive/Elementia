@@ -57,6 +57,7 @@ public class Generator : MonoBehaviour {
         if (fieldCoroutine != null || cooldownCoroutine != null) return; // return if field is active or generator is cooling down
 
         field.SetActive(true); // activate field
+        activationFeedback.PlayFeedbacks(transform.position);
         if (fieldTweener != null && fieldTweener.IsActive()) fieldTweener.Kill(); // kill field tweener if it is active
         fieldCoroutine = StartCoroutine(HandleField());
 
@@ -83,6 +84,7 @@ public class Generator : MonoBehaviour {
 
     private IEnumerator HandleCooldown() {
 
+        deactivationFeedback.PlayFeedbacks(transform.position);
         yield return new WaitForSeconds(coolingDuration);
         cooldownCoroutine = null;
 

@@ -12793,6 +12793,8 @@ MonoBehaviour:
   minMovementThreshold: 0.1
   defaultWeapons:
   - {fileID: 11400000, guid: 3224215c3a45c564ca37fef85f48c954, type: 2}
+  - {fileID: 11400000, guid: 08c47dfd8be2ccf408b6f3f7f3c9ee2a, type: 2}
+  - {fileID: 11400000, guid: 6f8080ba3b2a54c459fdce6bcff4b454, type: 2}
   blankWeapon: {fileID: 4237984674334015922, guid: 0ac9e707aeb2bee41aeef1440418596a,
     type: 3}
   interactLayer:
@@ -12942,6 +12944,7 @@ MonoBehaviour:
   resetDuration: 1.2
   resetWaitDuration: 0.2
   onUseFeedback: {fileID: 7644175962019327701}
+  onDoneFeedback: {fileID: 0}
 --- !u!114 &8881875236129953771
 MonoBehaviour:
   m_ObjectHideFlags: 0
