@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class WeaponSelector : MMPersistentBase {
 
     [Header("References")]
+    [SerializeField] private Transform hotbar;
     private PlayerController playerController;
     private WeaponDatabase weaponDatabase;
     private CooldownManager cooldownManager;
@@ -13,7 +14,9 @@ public class WeaponSelector : MMPersistentBase {
     [Header("Slots")]
     [SerializeField] private Image primaryWeaponFill;
     [SerializeField] private Image secondaryWeaponFill;
-    [SerializeField] private WeaponSlot[] slots;
+    [SerializeField][Range(1, 9)] private int slotCount; // must be limited to 9 because of number keybinds
+    [SerializeField] private WeaponSlot slotPrefab;
+    private WeaponSlot[] slots;
     private int currSlotIndex;
     private int placementIndex; // index of the slot to place the weapon
 
@@ -40,9 +43,17 @@ public class WeaponSelector : MMPersistentBase {
     // runs before OnLoad()
     private void Awake() {
 
-        slotData = new WeaponData[slots.Length]; // initialize the slot data array
         playerController = FindObjectOfType<PlayerController>(); // initialize player controller here because it is used in OnLoad()
         weaponDatabase = FindObjectOfType<WeaponDatabase>(); // initialize weapon database here because it is used in OnLoad()
+
+        slots = new WeaponSlot[slotCount]; // initialize the slots array
+        slotData = new WeaponData[slots.Length]; // initialize the slot data array
+
+        // instantiate slots
+        for (int i = 0; i < slots.Length; i++)
+            slots[i] = Instantiate(slotPrefab, hotbar); // instantiate slot prefab
+
+        LayoutRebuilder.ForceRebuildLayoutImmediate(hotbar.GetComponent<RectTransform>()); // force rebuild layout to update the hotbar layout
 
     }
 
