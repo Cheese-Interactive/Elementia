@@ -13,7 +13,7 @@ public class WeaponSelector : MMPersistentBase {
     [Header("Slots")]
     [SerializeField] private Image primaryWeaponFill;
     [SerializeField] private Image secondaryWeaponFill;
-    [SerializeField] private int slotCount;
+    [SerializeField][Range(1, 9)] private int slotCount; // must be limited to 9 because of number keybinds
     [SerializeField] private WeaponSlot slotPrefab;
     private WeaponSlot[] slots;
     private int currSlotIndex;
