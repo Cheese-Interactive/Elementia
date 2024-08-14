@@ -1,3 +1,4 @@
+using DG.Tweening;
 using MoreMountains.CorgiEngine;
 using UnityEngine;
 
@@ -20,6 +21,12 @@ public class PlayerController : EntityController {
     [SerializeField] private LayerMask interactLayer; // layer mask for interactable objects
     [SerializeField] private float interactRadius;
     private InteractIndicator interactIndicator;
+
+    [Header("Death Shake")]
+    [SerializeField] private float deathShakeDuration;
+    [SerializeField] private float deathShakeStrength;
+    [SerializeField] private int deathShakeVibrato;
+    [SerializeField] private float deathShakeRandomness;
 
     private new void Awake() {
 
@@ -315,6 +322,7 @@ public class PlayerController : EntityController {
         ResetAllAnimations(); // reset all animations
         weaponSelector.ResetCooldownValues(); // reset cooldown values
         gameManager.ResetAllResettables(levelManager.RespawnDelay); // reset all resettables
+        Camera.main.DOShakePosition(deathShakeDuration, deathShakeStrength, deathShakeVibrato, deathShakeRandomness, true); // shake camera on death
 
     }
 
