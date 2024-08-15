@@ -497,6 +497,7 @@ MonoBehaviour:
   collectibleInventoryDisplay: {fileID: 2155200155271703298}
   keyInventory: {fileID: 5939521045866148279}
   keyInventoryDisplay: {fileID: 6720565074409211535}
+  skyboxMaterial: {fileID: 2100000, guid: 8ac3150122a9aee4fb6d9bb36c58827e, type: 2}
 --- !u!1 &1161608660580208155
 GameObject:
   m_ObjectHideFlags: 0

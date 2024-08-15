@@ -9,6 +9,9 @@ public class GameCore : MonoBehaviour {
     [SerializeField] private Inventory keyInventory;
     [SerializeField] private InventoryDisplay keyInventoryDisplay;
 
+    [Header("Skybox")]
+    [SerializeField] private Material skyboxMaterial;
+
     private void Start() {
 
         // force rebuild the layout of the inventory displays

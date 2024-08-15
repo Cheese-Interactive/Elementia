@@ -4,8 +4,8 @@ using UnityEngine;
 public class StupidPan : MonoBehaviour {
 
     [Header("Customization")]
-    [SerializeField] Vector3 dest;
-    [SerializeField] float duration;
+    [SerializeField] private Vector3 dest;
+    [SerializeField] private float duration;
 
     private void Start() => StartCoroutine(LerpTo(dest));
 
