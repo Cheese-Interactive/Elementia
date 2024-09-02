@@ -1,5 +1,6 @@
 using DG.Tweening;
 using MoreMountains.CorgiEngine;
+using System.Collections;
 using UnityEngine;
 
 public class PlayerController : EntityController {
@@ -20,7 +21,7 @@ public class PlayerController : EntityController {
     [Header("Interacting")]
     [SerializeField] private LayerMask interactLayer; // layer mask for interactable objects
     [SerializeField] private float interactRadius;
-    private InteractIndicator interactIndicator;
+    private UIManager uiManager;
 
     [Header("Death Shake")]
     [SerializeField] private float deathShakeDuration;
@@ -60,8 +61,8 @@ public class PlayerController : EntityController {
 
         gameManager = FindObjectOfType<GameManager>();
         levelManager = FindObjectOfType<LevelManager>();
-        interactIndicator = FindObjectOfType<InteractIndicator>(true);
-        interactIndicator.Initialize(); // initialize interact indicator
+        uiManager = FindObjectOfType<UIManager>(true);
+        uiManager.Initialize(); // initialize interact indicator
 
     }
 
@@ -80,7 +81,6 @@ public class PlayerController : EntityController {
         SecondaryAction secondaryAction = null;
 
         #region ACTIONS
-
         if (weaponSelector.GetCurrentWeapon()) { // make sure slot has a weapon in it
 
             primaryAction = currWeaponPair.GetPrimaryAction();
@@ -129,7 +129,6 @@ public class PlayerController : EntityController {
 
             }
         }
-
         #endregion
 
         #region WEAPON SWITCHING
@@ -167,11 +166,9 @@ public class PlayerController : EntityController {
 
             }
         }
-
         #endregion
 
         #region INTERACTING
-
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, interactRadius, interactLayer); // get all colliders in interact radius
         bool interactableFound = false; // flag to check if interactable object is found
 
@@ -183,12 +180,12 @@ public class PlayerController : EntityController {
 
                 if (!interactable.IsInteractable()) continue; // skip object if it's not interactable
 
-                interactIndicator.Show(); // show interact indicator
+                uiManager.ShowInteractIndicator(); // show interact indicator
 
                 if (Input.GetKeyDown(KeyCode.E)) { // interact key pressed
 
                     interactable.Interact(); // interact with object
-                    interactIndicator.OnInteract();
+                    uiManager.OnInteract();
 
                 }
 
@@ -199,14 +196,11 @@ public class PlayerController : EntityController {
         }
 
         if (!interactableFound) // no interactable object found
-            interactIndicator.Hide(); // hide interact indicator
-
+            uiManager.HideInteractIndicator(); // hide interact indicator
         #endregion
 
         #region CLIMBING
-
         anim.SetBool("isClimbing", charLadder.CurrentLadderClimbingSpeed.magnitude > 0f); // play climbing animation only when player is climbing (to prevent animation from playing player is still on the ladder)
-
         #endregion
 
     }
@@ -231,8 +225,25 @@ public class PlayerController : EntityController {
 
     }
 
-    #region UTILITIES
+    protected override void OnDeath() {
 
+        base.OnDeath();
+        SetWeaponAimEnabled(false); // disable weapon aiming
+        ResetAllAnimations(); // reset all animations
+        weaponSelector.ResetCooldownValues(); // reset cooldown values
+        gameManager.ResetAllResettables(levelManager.RespawnDelay); // reset all resettables
+        Camera.main.DOShakePosition(deathShakeDuration, deathShakeStrength, deathShakeVibrato, deathShakeRandomness, true); // shake camera on death
+
+    }
+
+    protected override void OnRespawn() {
+
+        base.OnRespawn();
+        SetWeaponAimEnabled(true); // enable weapon aiming
+
+    }
+
+    #region WEAPONS
     // IMPORTANT: DO NOT USE THIS METHOD TO ADD WEAPONS, USE WEAPON SELECTOR ONE INSTEAD
     public void AddWeapon(WeaponData weaponData) {
 
@@ -289,8 +300,9 @@ public class PlayerController : EntityController {
         if (weaponData) { // make sure weapon exists
 
             currWeaponPair = weaponDatabase.GetWeaponPair(weaponData); // update current weapon pair
-            Weapon currWeapon = currWeaponPair.GetWeapon(); // set new weapon
-            charWeaponHandler.ChangeWeapon(currWeapon, currWeapon.WeaponID); // change weapon
+            Weapon newWeapon = currWeaponPair.GetWeapon(); // set new weapon
+            print(newWeapon.name);
+            charWeaponHandler.ChangeWeapon(newWeapon, newWeapon.WeaponID); // change weapon
 
             PrimaryAction primaryAction = currWeaponPair.GetPrimaryAction(); // get primary action
             SecondaryAction secondaryAction = currWeaponPair.GetSecondaryAction(); // get secondary action
@@ -310,35 +322,18 @@ public class PlayerController : EntityController {
 
         }
     }
+    #endregion
 
+    #region UTILITIES
     public Weapon GetCurrentWeapon() => currWeaponPair.GetWeapon();
 
     public WeaponData[] GetDefaultWeapons() => defaultWeapons;
-
-    protected override void OnDeath() {
-
-        base.OnDeath();
-        SetWeaponAimEnabled(false); // disable weapon aiming
-        ResetAllAnimations(); // reset all animations
-        weaponSelector.ResetCooldownValues(); // reset cooldown values
-        gameManager.ResetAllResettables(levelManager.RespawnDelay); // reset all resettables
-        Camera.main.DOShakePosition(deathShakeDuration, deathShakeStrength, deathShakeVibrato, deathShakeRandomness, true); // shake camera on death
-
-    }
-
-    protected override void OnRespawn() {
-
-        base.OnRespawn();
-        SetWeaponAimEnabled(true); // enable weapon aiming
-
-    }
 
     // IMPORTANT: RESPAWN METHOD GETS CALLED AT THE BEGINNING OF THE GAME, SO THE WEAPON IS ALREADY BEING UPDATED AT THE START
 
     public Vector2 GetDirectionRight() => character.IsFacingRight ? transform.right : -transform.right;
 
     public bool IsDead() => isDead;
-
     #endregion
 
 }

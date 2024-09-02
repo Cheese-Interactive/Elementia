@@ -224,7 +224,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5206930746566404265}
   - component: {fileID: 6524467831800907828}
-  - component: {fileID: 8043544325344972347}
   - component: {fileID: 963257553132184721}
   m_Layer: 0
   m_Name: Aura
@@ -300,19 +299,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &8043544325344972347
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3016606344381137045}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ba7fed33dcb0544b8265a25c51eafe2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rotAmount: 0.3
 --- !u!95 &963257553132184721
 Animator:
   serializedVersion: 5
@@ -323,7 +309,7 @@ Animator:
   m_GameObject: {fileID: 3016606344381137045}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 4862a0d3e69692b43b0c9c20ee24a45d, type: 2}
+  m_Controller: {fileID: 9100000, guid: 1c31fe9f1af46bd4dab74327a31ab6d1, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

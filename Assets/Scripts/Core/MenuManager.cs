@@ -28,6 +28,9 @@ public class MenuManager : MonoBehaviour {
 
         anim = GetComponent<Animator>();
 
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
         // setup button listeners
         playButton.onClick.AddListener(Play);
         resetDataButton.onClick.AddListener(ResetData);

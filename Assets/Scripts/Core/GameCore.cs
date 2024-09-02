@@ -1,6 +1,5 @@
 using MoreMountains.InventoryEngine;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class GameCore : MonoBehaviour {
 
@@ -11,14 +10,6 @@ public class GameCore : MonoBehaviour {
 
     [Header("Skybox")]
     [SerializeField] private Material skyboxMaterial;
-
-    private void Start() {
-
-        // force rebuild the layout of the inventory displays
-        LayoutRebuilder.ForceRebuildLayoutImmediate(collectibleInventoryDisplay.GetComponent<RectTransform>());
-        LayoutRebuilder.ForceRebuildLayoutImmediate(keyInventoryDisplay.GetComponent<RectTransform>());
-
-    }
 
     public InventoryDisplay GetCollectibleInventoryDisplay() => collectibleInventoryDisplay;
 

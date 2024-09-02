@@ -8,11 +8,13 @@ public class DataManager : MonoBehaviour {
     [Header("References")]
     private Character playerCharacter;
     private LevelManager levelManager;
+    private GameManager gameManager;
 
     private void Start() {
 
         playerCharacter = FindObjectOfType<PlayerController>().GetComponent<Character>();
         levelManager = FindObjectOfType<LevelManager>();
+        gameManager = FindObjectOfType<GameManager>();
 
         LoadData();
 
@@ -27,9 +29,7 @@ public class DataManager : MonoBehaviour {
         MMGameEvent.Trigger("Save"); // save all data
 
         #region CHECKPOINT
-
         MMSaveLoadManager.Save(levelManager.CurrentCheckPoint.GetComponent<UUID>().ID, "checkpoints.dat", "Data/" + SceneManager.GetActiveScene().name); // save the current checkpoint guid
-
         #endregion
 
         Debug.Log("Data saved.");
@@ -43,7 +43,6 @@ public class DataManager : MonoBehaviour {
         MMGameEvent.Trigger("Load"); // load all data
 
         #region CHECKPOINT
-
         object checkpointObj = MMSaveLoadManager.Load(typeof(string), "checkpoints.dat", "Data/" + SceneManager.GetActiveScene().name);
 
         if (checkpointObj != null) {
@@ -61,8 +60,9 @@ public class DataManager : MonoBehaviour {
                 }
             }
         }
-
         #endregion
+
+        gameManager.CheckLevelComplete(); // check if the level is complete when data is loaded
 
         Debug.Log("Data loaded.");
 

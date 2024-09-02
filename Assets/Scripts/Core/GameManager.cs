@@ -4,31 +4,26 @@ using MoreMountains.Tools;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
 
     [Header("References")]
+    [SerializeField] private string mainMenuSceneName;
     private PlayerController playerController;
     private DataManager dataManager;
     private CooldownManager cooldownManager;
     private GameCore gameCore;
+    private UIManager uiManager;
     private List<PhysicsObject> objectsToReset;
     private Coroutine sceneLoadCoroutine;
-
-    [Header("UI References")]
-    [SerializeField] private CanvasGroup loadingScreen;
-
-    [Header("Settings")]
-    [SerializeField] private float loadingScreenFadeDuration;
-    private List<Collectible> requiredCollectibles;
-    private List<KeyCollectible> keyCollectibles;
     private bool isLevelComplete;
     private bool isCooldownsEnabled;
 
     [Header("Collectible Inventory")]
     [SerializeField] private int collectibleRows;
     [SerializeField] private int collectibleColumns;
+    private List<Collectible> requiredCollectibles;
+    private List<KeyCollectible> keyCollectibles;
     private Inventory keyInventory;
     private InventoryDisplay collectibleInventoryDisplay;
     private RectTransform collectibleInventoryTransform;
@@ -39,7 +34,13 @@ public class GameManager : MonoBehaviour {
     private InventoryDisplay keyInventoryDisplay;
     private RectTransform keyInventoryTransform;
 
+    [Header("End Zone")]
+    [SerializeField] private float levelCompleteDelay;
+
     [Header("Pausing")]
+    [SerializeField] private float timeScaleUnpauseDuration; // lerping to original time scale | unpausing
+    [SerializeField] private float timeScalePauseDuration; // lerping to 0 | pausing
+    private Tweener timeScaleTweener;
     private bool isPaused;
 
     private void Start() {
@@ -48,6 +49,7 @@ public class GameManager : MonoBehaviour {
         dataManager = FindObjectOfType<DataManager>();
         gameCore = FindObjectOfType<GameCore>();
         cooldownManager = FindObjectOfType<CooldownManager>();
+        uiManager = FindObjectOfType<UIManager>();
 
         // get the collectible inventory display and transform
         collectibleInventoryDisplay = gameCore.GetCollectibleInventoryDisplay();
@@ -91,7 +93,7 @@ public class GameManager : MonoBehaviour {
 
         isCooldownsEnabled = true; // enable cooldowns by default
 
-        HideLoadingScreen(); // hide the loading screen when game starts
+        RefreshInventoryLayouts(); // refresh the inventory layouts
 
     }
 
@@ -123,18 +125,18 @@ public class GameManager : MonoBehaviour {
 
     }
 
-    public void CheckVictory() {
+    public void CheckLevelComplete() {
 
-        if (isLevelComplete) // if the level is already complete, return
-            return;
+        if (isLevelComplete) return; // if the level is already complete, return
 
         // check if all required collectibles have been collected
         foreach (Collectible collectible in requiredCollectibles)
             if (!collectible.IsCollected())
                 return;
 
+        Debug.Log("Level Complete!");
+
         // if all required collectibles have been collected, set the level as complete
-        print("Level Complete!");
         isLevelComplete = true;
 
     }
@@ -153,13 +155,6 @@ public class GameManager : MonoBehaviour {
 
     public bool HasKey() => keyInventory.NumberOfFilledSlots > 0;
 
-    public void RefreshInventoryLayouts() {
-
-        LayoutRebuilder.ForceRebuildLayoutImmediate(collectibleInventoryTransform);
-        LayoutRebuilder.ForceRebuildLayoutImmediate(keyInventoryTransform);
-
-    }
-
     public void LoadScene(string sceneName) {
 
         if (sceneLoadCoroutine != null) StopCoroutine(sceneLoadCoroutine); // stop the previous scene load coroutine if it exists
@@ -170,63 +165,82 @@ public class GameManager : MonoBehaviour {
     private IEnumerator HandleSceneLoad(string sceneName) {
 
         dataManager.SaveData(); // IMPORTANT: save data before loading a new scene
-        ShowLoadingScreen(); // show the loading screen before loading the scene
-        yield return new WaitForSeconds(loadingScreenFadeDuration); // wait for the loading screen to fade in
+        uiManager.ShowLoadingScreen(); // show the loading screen before loading the scene
+        yield return new WaitForSeconds(uiManager.GetLoadingScreenFadeDuration()); // wait for the loading screen to fade in
         MMSceneLoadingManager.LoadScene(sceneName);
 
     }
 
-    public void ShowLoadingScreen() {
+    public void ShowLevelCompleteScreen() {
 
-        // enable the loading screen and fade it in
-        loadingScreen.alpha = 0f;
-        loadingScreen.gameObject.SetActive(true);
-        loadingScreen.DOFade(1f, loadingScreenFadeDuration);
+        if (isPaused) TogglePause(); // unpause the game if it is paused to close the pause menu
+        uiManager.ShowLevelCompleteScreen(); // show the level complete screen
 
     }
 
-    private void HideLoadingScreen() {
-
-        // fade out the loading screen and then disable it
-        loadingScreen.alpha = 1f;
-        loadingScreen.gameObject.SetActive(true);
-        loadingScreen.DOFade(0f, loadingScreenFadeDuration).OnComplete(() => loadingScreen.gameObject.SetActive(false));
-
-    }
-
+    #region PAUSING
     public void TogglePause() {
 
-        if (isPaused)
-            UnpauseGame();
-        else
-            PauseGame();
+        if (isLevelComplete) return; // if the level is complete, return (don't allow pausing when the level is complete)
+
+        if (isPaused) UnpauseGame();
+        else PauseGame();
 
     }
 
+    // TODO: deal with if pause menu is open and game is completed
     public void PauseGame() {
 
         if (isPaused) return; // if the game is already paused, return
 
-        playerController.SetWeaponAimEnabled(false); // disable weapon aiming (to hide reticle)
-        playerController.DisableCoreScripts(); // disable core scripts
-        Time.timeScale = 0f;
-        isPaused = true;
+        if (timeScaleTweener != null && timeScaleTweener.IsActive()) timeScaleTweener.Kill(); // kill previous tween if it exists
 
+        timeScaleTweener = DOVirtual.Float(Time.timeScale, 0f, timeScalePauseDuration, value => Time.timeScale = value).SetUpdate(true).OnComplete(() => {
+
+            playerController.SetWeaponAimEnabled(false); // disable weapon aiming (to hide reticle)
+            playerController.DisableCoreScripts(); // disable core scripts
+            isPaused = true;
+
+        });
     }
 
     public void UnpauseGame() {
 
         if (!isPaused) return; // if the game is not paused, return
 
-        playerController.EnableCoreScripts(); // enable core scripts
-        playerController.SetWeaponAimEnabled(true); // enable weapon aiming (to show reticle)
-        Time.timeScale = 1f;
-        isPaused = false;
+        if (timeScaleTweener != null && timeScaleTweener.IsActive()) timeScaleTweener.Kill(); // kill previous tween if it exists
 
+        timeScaleTweener = DOVirtual.Float(Time.timeScale, 1f, timeScaleUnpauseDuration, value => Time.timeScale = value).SetUpdate(true).OnComplete(() => {
+
+            playerController.EnableCoreScripts(); // enable core scripts
+            playerController.SetWeaponAimEnabled(true); // enable weapon aiming (to show reticle)
+            isPaused = false;
+
+        });
     }
+    #endregion
+
+    #region UTILITIES
+    public string GetMainMenuSceneName() => mainMenuSceneName;
 
     public bool IsCooldownsEnabled() => isCooldownsEnabled;
 
     public bool IsPaused() => isPaused;
+
+    public float GetLevelCompleteDelay() => levelCompleteDelay;
+
+    public float GetTimeScaleUnpauseDuration() => timeScaleUnpauseDuration;
+
+    public float GetTimeScalePauseDuration() => timeScalePauseDuration;
+
+    public bool IsLevelComplete() => isLevelComplete;
+
+    public void RefreshInventoryLayouts() {
+
+        uiManager.RebuildLayout(collectibleInventoryTransform);
+        uiManager.RebuildLayout(keyInventoryTransform);
+
+    }
+    #endregion
 
 }

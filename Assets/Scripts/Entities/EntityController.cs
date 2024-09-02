@@ -91,7 +91,6 @@ public class EntityController : MonoBehaviour {
     }
 
     #region UTILITIES
-
     public void EnableCoreScripts() {
 
         if (corgiController)
@@ -231,7 +230,6 @@ public class EntityController : MonoBehaviour {
     }
 
     public bool IsGrounded() => corgiController.State.IsGrounded;
-
     #endregion
 
 }

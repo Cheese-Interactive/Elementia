@@ -72,15 +72,12 @@ public class Generator : MonoBehaviour {
 
     private IEnumerator HandleField() {
 
-        gameManager.SetCooldownsEnabled(false); // disable cooldowns
-
         fieldTweener = fieldSpriteRenderer.DOColor(targetFieldColor, fadeInDuration).SetEase(Ease.InExpo); // fade in field
         yield return new WaitForSeconds(activateDuration - fadeOutDuration); // wait till start of fade out
         fieldTweener = fieldSpriteRenderer.DOColor(startColor, fadeOutDuration).SetEase(Ease.OutExpo); // fade out field
         yield return new WaitForSeconds(fadeOutDuration); // wait for fade out to finish
 
         field.SetActive(false);
-        gameManager.SetCooldownsEnabled(true); // re-enable cooldowns
 
         fieldCoroutine = null;
 
